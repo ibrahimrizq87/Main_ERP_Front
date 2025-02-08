@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_PRICE_CATEGORY' | translate }}</h5>
+        <span class="text-muted">
+            {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'PRICE_CATEGORY' | translate }}
+        </span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPriceCategory">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'CATEGORIES_LIST' | translate }}</span>
+            <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
+            <input
+            class="form-control search w-25"
+            type="search"
+            placeholder="{{ 'SEARCH' | translate }}"
+            aria-label="Search"
+            [(ngModel)]="searchQuery" 
+            (input)="onSearch()" 
+          />
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'CATEGORY_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let category of filteredCategories; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ category.name }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCategory', category.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CATEGORY' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)" title="{{ 'DELETE_CATEGORY' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

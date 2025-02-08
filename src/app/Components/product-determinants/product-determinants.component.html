@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_PRODUCT_DETERMINANTS' | translate }}</h5>
+        <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'DETERMINANTS' | translate }}</span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductDeterminant"> 
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a> 
+</div>  
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'DETERMINANTS_LIST' | translate }}</span>
+            <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search" [(ngModel)]="searchTerm" (input)="searchDeterminants()">
+        </div>
+    </div> 
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'DETERMINANTS' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the Groups array to display each group -->
+            <tr *ngFor="let determinant of filteredDeterminants; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ determinant.determinant }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,56 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'MANAGE_VENDOR' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'VENDOR' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_VENDOR' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <div class="container">
+      <form action="">
+          <div class="row">
+              <!-- Personal Detail Card -->
+              <div class="col-md-12">
+                  <div class="card shadow em-card rounded-lg">
+                      <div class="card-header bg-white text-black rounded-top pt-3 ">
+                          <h5 class="large-text">{{ 'ADDITIONAL_INFORMATION' | translate }}</h5>
+                      </div>
+                      <div class="card-body pb-5">
+                          <div class="row">
+                              <div class="form-group col-md-6">
+                                  <label class="form-label large-text">{{ 'PHONE' | translate }}</label>
+                                  <input type="text" class="form-control" placeholder="{{ 'ENTER_ANOTHER_PHONE_NUMBER' | translate }}" />
+                              </div>
+                              <h6 class="mt-4 large-text">{{ 'ADDRESS' | translate }}</h6>
+                              <div class="form-group col-md-6">
+                                  <label class="form-label large-text">{{ 'SELECT_CITY' | translate }}</label>
+                                  <select class="form-control">
+                                      <option>{{ 'SELECT_CITY' | translate }}</option>
+                                      <option>{{ 'CITY_1' | translate }}</option>
+                                      <option>{{ 'CITY_2' | translate }}</option>
+                                  </select>
+                              </div>
+                              <div class="form-group col-md-6">
+                                  <label class="form-label large-text">{{ 'SELECT_COUNTRY' | translate }}</label>
+                                  <select class="form-control">
+                                      <option>{{ 'SELECT_COUNTRY' | translate }}</option>
+                                      <option>{{ 'COUNTRY_1' | translate }}</option>
+                                      <option>{{ 'COUNTRY_2' | translate }}</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-around w-25">
+              <div class="mt-4 mb-4">
+                  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/createCustomer">
+                      <button type="button" class="btn btn-primary px-4 large-text">{{ 'BACK' | translate }}</button>
+                  </a>
+              </div>
+              <div class="mt-4 mb-4">
+                  <button type="button" class="btn btn-primary px-4 large-text">{{ 'SAVE' | translate }}</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>

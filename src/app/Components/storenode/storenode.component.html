@@ -1,0 +1,39 @@
+<!-- <div class="store-node">
+    <span class="toggle-button" (click)="toggleChildren()">
+      {{ store.showChildren ? '-' : '+' }}
+    </span>
+    <span class="store-name">{{ store.name }} ({{ store.manager }})</span>
+  </div>
+  
+  <div class="store-children" *ngIf="store.showChildren && store.child?.length">
+    <ng-container *ngFor="let child of store.child">
+      <app-storenode [store]="child"></app-storenode>
+    </ng-container>
+  </div> -->
+  <div class="store-node d-flex align-items-center justify-content-between">
+    <div>
+      <span class="toggle-button" (click)="toggleChildren()">
+        {{ store.showChildren ? '-' : '+' }}
+      </span>
+      <span class="store-name">{{ store.name_ar }}</span>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons d-flex justify-content-around gap-2 align-items-center">
+      <a class="nav-link" [routerLink]="['/dashboard/showStore', store.id]" routerLinkActive="active">
+        <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+      </a>
+      <a class="nav-link" [routerLink]="['/dashboard/updateStore', store.id]" routerLinkActive="active">
+        <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+      </a>
+      <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteStore(store.id)"></i>
+    </div>
+  </div>
+  
+  <div class="store-children" *ngIf="store.showChildren && store.child?.length">
+    <ng-container *ngFor="let child of store.child">
+      <app-storenode [store]="child" (delete)="deleteStore($event)"></app-storenode>
+    </ng-container>
+  </div>
+  
+  

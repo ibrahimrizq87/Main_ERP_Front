@@ -1,0 +1,13 @@
+<div class="account-node">
+    <span class="toggle-button" (click)="toggleChildren()">
+      {{ account.showChildren ? '-' : '+' }}
+    </span>
+    <span class="account-name">{{ account.name_ar }}</span>
+  </div>
+  
+  <div class="account-children" *ngIf="account.showChildren && account.child?.length">
+    <ng-container *ngFor="let child of account.child">
+      <app-accountnode [account]="child"></app-accountnode>
+    </ng-container>
+  </div>
+  

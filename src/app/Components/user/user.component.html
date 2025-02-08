@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>Manage Users</h5>
+        <span class="text-muted">Dashboard <i class="fa-solid fa-angle-right"></i> User</span>
+    </div>
+    <a class="nav-link" routerLink="/dashboard/addUser">
+      <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+  </div>
+  
+  <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">Users List</span>
+            <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search">
+        </div>
+    </div>
+  
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">Username</th>
+                <th class="bg-light" scope="col">Password </th>
+                <th class="bg-light" scope="col">Role</th>
+                
+                <th class="bg-light" scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ user.userName }}</td>
+                <td>{{ user.password }}</td>
+               
+                <td>{{ user.role }}</td>
+               
+               
+                  <td >
+                    <div class="d-flex justify-content-around align-items-center">
+                    <a class="nav-link" [routerLink]="['/dashboard/showUser', user.id]">
+                      <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+                    </a>
+                    <a class="nav-link" [routerLink]="['/dashboard/updateUser', user.id]">
+                      <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteUser(user.id)"></i>
+                   </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>

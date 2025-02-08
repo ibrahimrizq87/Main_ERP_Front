@@ -1,0 +1,88 @@
+
+<div class="mt-3 mb-3">
+  <h5>{{ 'ACCOUNT_DETAILS' | translate }}</h5>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'ACCOUNT' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'SHOW_ACCOUNT' | translate }}</span>
+</div>
+
+<div class="mt-4 mb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow em-card rounded-lg">
+          <div class="card-header bg-white text-black rounded-top pt-3">
+            <h5>{{ 'PERSONAL_DETAILS' | translate }}</h5>
+          </div>
+          <div class="card-body pb-5">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NAME_AR' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.name_ar }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NAME_EN' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.name_en }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CREATOR' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.creator.user_name }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CURRENCY' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.currency }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'GROUP' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.group.name }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'TYPE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.type }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PARENT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.parent_id }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NET_BALANCE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.net_balance }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NET_CREDIT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.net_cridet }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NET_DEBIT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.net_debit }}</p>
+                </div>
+              </div>
+            </div>
+            <h6 class="mt-4">{{ 'ADDITIONAL_INFORMATION' | translate }}</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'LAST_TRANSACTION' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.last_transaction || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'LAST_UPDATE_CREATOR' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.last_update_creator || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 mb-4">
+      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/accounting">
+        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+      </a>
+    </div>
+  </div>
+</div> 

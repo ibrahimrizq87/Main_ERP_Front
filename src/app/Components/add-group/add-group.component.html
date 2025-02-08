@@ -1,0 +1,42 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'MANAGE_GROUP' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'GROUP' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_GROUP' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+<form [formGroup]="groupForm" (ngSubmit)="handleForm()">
+  <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3 ">
+              <h5 class="large-text">{{ 'ADD_GROUP' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name" class="form-label large-text">{{ 'GROUP_NAME' | translate }}</label>
+                  <input id="name" formControlName="name" type="text" class="form-control" placeholder="{{ 'ENTER_GROUP_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="groupForm.get('name')?.errors && groupForm.get('name')?.touched">
+                    <p *ngIf="groupForm.get('name')?.getError('required')">{{ 'GROUP_NAME_REQUIRED' | translate }}</p>
+                  </div>
+                  <h6 class="mt-4 large-text">{{ 'GROUP_PARENT (IF NEEDED)' | translate }} </h6>
+                  <div class="form-group col-md-6">
+                      <select class="form-control" formControlName="group_id">
+                        <option>{{ 'SELECT_GROUP' | translate }}</option>
+                        <option *ngFor="let group of groups" [value]="group.id">{{ group.name }}</option>
+                      </select>
+                  </div>
+                </div>   
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4">
+          <button [disabled]="groupForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+          </button>
+       </div>
+      </div>
+    </div>
+  </form>
+</div>

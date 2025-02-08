@@ -1,0 +1,340 @@
+<div class="mt-3 mb-3">
+  <h5>{{ 'MANAGE_SALES_BILLS' | translate }}</h5>
+  <span class="text-muted">
+    {{ 'DASHBOARD' | translate }}
+    <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+    {{ 'SALES_BILLS' | translate }}
+    <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+    {{ 'CREATE_BILL' | translate }}
+  </span>
+</div>
+
+<div class="mt-4 mb-4">
+  <form [formGroup]="saleForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>{{ 'SALES_BILL_DETAILS' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+
+                <!-- Bill Type -->
+                <div class="form-group col-md-6">
+                  <label for="type" class="form-label">{{ 'BILL_TYPE' | translate }}</label>
+                  <select id="type" formControlName="type" class="form-control" (change)="onTypeChange($event)">
+                    <option value="sale">{{ 'SALE' | translate }}</option>
+                    <option value="return">{{ 'RETURN' | translate }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="saleForm.get('type')?.errors && saleForm.get('type')?.touched">
+                    <p *ngIf="saleForm.get('type')?.hasError('required')">{{ 'BILL_TYPE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Invoice Date -->
+                <div class="form-group col-md-6">
+                  <label for="invoice_date" class="form-label">{{ 'INVOICE_DATE' | translate }}</label>
+                  <input id="invoice_date" formControlName="invoice_date" type="date" class="form-control" />
+                  <div class="alert alert-danger" *ngIf="saleForm.get('invoice_date')?.errors && saleForm.get('invoice_date')?.touched">
+                    <p *ngIf="saleForm.get('invoice_date')?.hasError('required')">{{ 'INVOICE_DATE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Due Date -->
+                <div class="form-group col-md-6">
+                  <label for="due_date" class="form-label">{{ 'DUE_DATE' | translate }}</label>
+                  <input id="due_date" formControlName="due_date" type="date" class="form-control" />
+                  <div class="alert alert-danger" *ngIf="saleForm.get('due_date')?.errors && saleForm.get('due_date')?.touched">
+                    <p *ngIf="saleForm.get('due_date')?.hasError('required')">{{ 'DUE_DATE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Tax Type -->
+                <div class="form-group col-md-6">
+                  <label for="tax_type" class="form-label">{{ 'TAX_TYPE' | translate }}</label>
+                  <select id="tax_type" formControlName="tax_type" class="form-control">
+                    <option value="included">{{ 'INCLUDED' | translate }}</option>
+                    <option value="excluded">{{ 'EXCLUDED' | translate }}</option>
+                    <option value="exempt">{{ 'EXEMPT' | translate }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="saleForm.get('tax_type')?.errors && saleForm.get('tax_type')?.touched">
+                    <p *ngIf="saleForm.get('tax_type')?.hasError('required')">{{ 'TAX_TYPE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Entity
+                <div class="form-group col-md-6">
+                  <label for="entity" class="form-label">Entity</label>
+                  <input id="entity" formControlName="entity" type="text" class="form-control" placeholder="Enter Entity" />
+                </div> -->
+
+                <!-- Purchased From -->
+                <!-- <div class="form-group col-md-6">
+                  <label for="purchased_from_id" class="form-label">{{ 'PURCHASED_FROM' | translate }}</label> -->
+                <!-- <div class="form-group col-md-6">
+                  <label for="purchased_from_id" class="form-label">Purchased From</label>
+                  <select id="purchased_from_id" formControlName="purchased_from_id" class="form-control">
+                    <option *ngFor="let supplier of Suppliers" [value]="supplier.id">{{ supplier.name_ar }}</option>
+                  </select>
+                </div> -->
+                <div class="form-group col-md-6">
+                  <label class="form-label">{{ 'SELECT_DELEGATES' | translate }}</label>
+                  <select class="form-control" formControlName="delegate_id">
+                    <option>{{ 'SELECT_DELEGATES' | translate }}</option>
+                    <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name_ar }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label">{{ 'SELECT_CUSTOMERS' | translate }}</label>
+                  <select class="form-control" formControlName="customer_id">
+                    <option>{{ 'SELECT_CUSTOMER' | translate }}</option>
+                    <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name_ar }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown" />
+                    {{ 'SHOW_CASH_ACCOUNTS' | translate }}
+                  </label>
+                  <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value">
+                    <label class="form-label">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                    <select class="form-control" formControlName="cash_id">
+                      <option value="">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</option>
+                      <option *ngFor="let cashAccount of cashAccounts" [value]="cashAccount.id">{{ cashAccount.name_ar }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                  <!-- <div class="form-group col-md-6">
+                  <label class="form-label">Select CashAccounts</label>
+                  <select class="form-control" formControlName="cash_id">
+                    <option>Select CashAccounts</option>
+                    <option *ngFor="let cashAccount of cashAccounts" [value]="cashAccount.id">{{ cashAccount.name_ar }}</option>
+                  </select>
+                </div> -->
+
+                <!-- Store -->
+                <div class="form-group col-md-6">
+                  <label for="store_id" class="form-label">{{ 'STORE' | translate }}</label>
+                  <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)">
+                    <option *ngFor="let store of stores" [value]="store.id">{{ store.name_ar }}</option>
+                  </select>
+                </div>
+
+                <!-- Currency -->
+                <div class="form-group col-md-6">
+                  <label for="currency_id" class="form-label">{{ 'CURRENCY' | translate }}</label>
+                  <select id="currency_id" formControlName="currency_id" class="form-control">
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                  </select>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-group col-md-12">
+                  <label for="notes" class="form-label">{{ 'NOTES' | translate }}</label>
+                  <textarea id="notes" formControlName="notes" class="form-control" placeholder="{{ 'ENTER_NOTES' | translate }}..." rows="3"></textarea>
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="address" class="form-label">{{ 'ADDRESS' | translate }}</label>
+                  <textarea id="address" formControlName="address" class="form-control" placeholder="{{ 'ENTER_ADDRESS' | translate }}..." rows="3"></textarea>
+                </div>
+
+                  <!-- <div class="form-group col-md-12">
+
+                <div formArrayName="items" class="mt-4">
+                  <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                    <div class="row mb-3">
+                      
+                      <div class="form-group col-md-4">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input formControlName="quantity" type="number" class="form-control" placeholder="Enter Quantity" />
+                        <div class="alert alert-danger" *ngIf="item.get('quantity')?.errors && item.get('quantity')?.touched">
+                          <p *ngIf="item.get('quantity')?.hasError('required')">Quantity is required</p>
+                        </div>
+                      </div>
+
+                      
+                      
+
+                   
+                      <div class="form-group col-md-4">
+                        <label for="product_id" class="form-label">Product</label>
+                      
+                        <select
+                        formControlName="product_id"
+                        class="form-control"
+                         (change)="onProductChange($event, i)"
+                         >
+                        <option *ngFor="let product of Products" [value]="product.id">{{ product.name_ar }}</option>
+                        </select>
+                      </div>
+                      
+                      <div class="form-group col-md-4">
+                        <label for="total_price" class="form-label">Total Price</label>
+                        <input
+                          type="text" formControlName="total_price"
+                          step="0.01"
+                          class="form-control"
+                          placeholder="Enter Total Price"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="saleForm.get('total_price')?.errors && saleForm.get('total_price')?.touched"
+                        >
+                          <p *ngIf="saleForm.get('total_price')?.hasError('required')">
+                            Total Price is required
+                          </p>
+                        </div>
+                      </div>
+                      
+
+                     
+                      <div class="col-md-12">
+                        <button type="button" class="btn btn-danger" (click)="removeItem(i)">
+                          <i class="fa-solid fa-trash"></i> Remove Item
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              
+                <div class="mt-3">
+                  <button type="button" class="btn btn-success" (click)="addItem()">
+                    <i class="fa-solid fa-plus"></i> Add Item
+                  </button>
+                </div>
+
+              </div> -->
+               
+                <!-- Items -->
+                <div class="form-group col-md-12">
+                  <div formArrayName="items" class="mt-4">
+                    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3">
+                      <div class="row">
+                        <!-- Product Selection -->
+                        <div class="col-md-12">
+                          <label for="product_id">{{ 'SELECT_PRODUCT' | translate }}</label>
+                          <div *ngIf="selectedType == 'purchase'">
+                            <select formControlName="product_id" class="form-control custom-select" (change)="onProductChange($event, i)">
+                               <!-- <div *ngIf="selectedType == 'return'">
+                            <option *ngFor="let product of Products" [value]="product.id">{{ product.name_ar }}</option>
+
+                          </div> -->
+                              <option *ngFor="let product of Products" [value]="product.id">
+                                {{ product.product.name_ar }} | {{ product.amount }} | 
+                                {{ product.productDeterminant[0]?.productDetermiant.determinant.determinant || 'N/A' }} | 
+                                {{ product.productDeterminant[0]?.productDetermiant.value || 'N/A' }}
+
+                              </option>
+                            </select>
+                          </div>
+                          <div *ngIf="selectedType == 'return'">
+                            <select formControlName="product_id" class="form-control custom-select" (change)="onProductChange($event, i)">
+                               <!-- <div *ngIf="selectedType == 'return'">
+                            <option *ngFor="let product of Products" [value]="product.id">{{ product.name_ar }}</option>
+
+                          </div> -->
+                              <option *ngFor="let product of Products" [value]="product.id">{{ product.product.name_ar }}
+                                <span *ngIf="product.productDeterminant?.productDetermiant?.value">
+                                  {{ product.productDeterminant.productDetermiant.value }}ddd
+                                </span>
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <!-- <div class="col-md-2">
+                        <label for="quantity">Quantity</label>
+                        <input formControlName="quantity" type="number" class="form-control" />
+                      </div> -->
+                        <!-- Amount -->
+                        <div class="col-md-2">
+                          <label for="amount">{{ 'AMOUNT' | translate }}</label>
+                          <input formControlName="amount" type="number" class="form-control" (change)="onAmountChange(i)" />
+                        </div>
+
+                        <!-- Total Price -->
+                        <div class="col-md-2">
+                          <label for="total_price">{{ 'TOTAL_PRICE' | translate }}</label>
+                          <input formControlName="total_price" type="number" class="form-control" />
+                        </div>
+
+                        <!-- Determinants -->
+                        <!-- <div class="col-md-12 mt-3" *ngIf="item.get('determinants')?.value?.length">
+                          <label class="d-block">{{ 'DETERMINANTS' | translate }}</label>
+                          <div *ngFor="let determinant of item.get('determinants')?.value; let idx = index" class="mb-2">
+                            <label>{{ determinant.determinantName }}</label>
+                            <select
+                              [id]="'determinant-' + determinant.determinantId"
+                              (change)="onDeterminantValueSelect(determinant.determinantId, i, $event)"
+                              class="form-control custom-select"
+                              [formControlName]="'determinant-' + determinant.determinantId"
+                            >
+                              <option
+                                *ngFor="let value of determinant.determinantValues"
+                                [value]="value.id"
+                                [selected]="value.id === determinant.selectedValue"
+                              >
+                                {{ value.value }}
+                              </option>
+                            </select>
+                          </div>
+                        </div> -->
+
+                        <!-- Dynamic Inputs -->
+                        <div class="form-group col-md-12 mt-4">
+                          <label>{{ 'BARCODES' | translate }}</label>
+                          <div formArrayName="dynamicInputs">
+                            <div *ngFor="let dynamicInput of getDynamicInputs(item).controls; let j = index">
+                              <div class="d-flex align-items-center mb-2">
+                                <input
+                                  [formControlName]="j"
+                                  type="text"
+                                  class="form-control me-2"
+                                  placeholder="{{ 'BARCODE' | translate }} {{ j + 1 }}"
+                                />
+                                <button type="button" class="btn btn-warning" (click)="disableInput(i, j)">
+                                  {{ 'OVERRIDE' | translate }}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Remove Item -->
+                        <div class="col-md-12">
+                          <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
+                            <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Add Item -->
+                  <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
+                    <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="msgError && msgError.length > 0" class="alert alert-danger">
+        <ul>
+          <li *ngFor="let error of msgError">{{ error }}</li>
+        </ul>
+      </div>
+      <!-- <p *ngIf="msgError" class="alert alert-danger">{{msgError}}</p> -->
+      <div class="mt-4 mb-4">
+        <button [disabled]="saleForm.invalid" type="submit" class="btn btn-primary px-4">
+          <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

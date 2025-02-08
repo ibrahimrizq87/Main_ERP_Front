@@ -1,0 +1,51 @@
+<div class="mt-3 mb-3">
+  <h5>{{ 'ADD_BANKS' | translate }}</h5>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'BANKS' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'ADD_BANK' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="bankForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>{{ 'ADD_BANK' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name_ar" class="form-label">{{ 'BANK_NAME_AR' | translate }}</label>
+                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="bankForm.get('name_ar')?.errors && bankForm.get('name_ar')?.touched">
+                    <p *ngIf="bankForm.get('name_ar')?.getError('required')">{{ 'ARABIC_NAME_REQUIRED' | translate }}</p>
+                    <p *ngIf="bankForm.get('name_ar')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="name_en" class="form-label">{{ 'BANK_NAME_EN' | translate }}</label>
+                  <input id="name_en" formControlName="name_en" type="text" class="form-control" placeholder="{{ 'ENTER_ENGLISH_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="bankForm.get('name_en')?.errors && bankForm.get('name_en')?.touched">
+                    <p *ngIf="bankForm.get('name_en')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label">{{ 'SELECT_TYPE' | translate }}</label>
+                  <select class="form-control" formControlName="type_bank">
+                    <option>{{ 'SELECT_TYPE' | translate }}</option>
+                    <option value="local">{{ 'LOCAL' | translate }}</option>
+                    <option value="foreign">{{ 'FOREIGN' | translate }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4">
+          <button [disabled]="bankForm.invalid" type="submit" class="btn btn-primary px-4">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

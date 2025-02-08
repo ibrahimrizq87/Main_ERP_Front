@@ -1,0 +1,102 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'ADD_CHECK_TRANSACTION' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CHECKS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>{{ 'ADD_CHECK' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="checkForm" (ngSubmit)="handleForm()">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card shadow em-card rounded-lg">
+                      <div class="card-header bg-white text-black rounded-top pt-3">
+                          <h5 class="large-text">{{ 'ADD_CHECK' | translate }}</h5>
+                      </div>
+                      <div class="card-body pb-5">
+                          <div class="row">
+
+                              <div class="form-group col-md-6">
+                                  <label for="due_date" class="form-label large-text">{{ 'DUE_DATE' | translate }}</label>
+                                  <input id="due_date" formControlName="due_date" type="date" class="form-control" />
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="check_number" class="form-label large-text">{{ 'CHECK_NUMBER' | translate }}</label>
+                                  <input id="check_number" formControlName="check_number" type="text" class="form-control"
+                                      placeholder="{{ 'CHECK_NUMBER' | translate }}" />
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}</label>
+                                  <input id="amount" formControlName="amount" type="number" step="0.01" class="form-control"
+                                      placeholder="{{ 'AMOUNT' | translate }}" />
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
+                                  <input id="notes" formControlName="notes" type="text" class="form-control" placeholder="{{ 'NOTES' | translate }}" />
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="type" class="form-label large-text">{{ 'TYPE' | translate }}</label>
+                                  <select id="type" formControlName="type" (change)="onTypeChange($event)" class="form-control">
+                                      <option value="incoming">{{ 'INCOMING' | translate }}</option>
+                                      <option value="outgoing">{{ 'OUTGOING' | translate }}</option>
+                                      <option value="endorsed">{{ 'ENDORSED' | translate }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="payed_to_id" class="form-label large-text">{{ 'PAYED_TO' | translate }}</label>
+                                  <select id="payed_to_id" formControlName="payed_to_id" class="form-control">
+                                      <option *ngFor="let account of pay_to_accounts" [value]="account.id">{{ account.name_ar }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="bank_id" class="form-label large-text">{{ 'BANK' | translate }}</label>
+                                  <select id="bank_id" formControlName="bank_id" (change)="onBankChange($event)" class="form-control">
+                                      <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.aribic_name }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="source_account_id" class="form-label large-text">{{ 'SOURCE_ACCOUNT' | translate }}</label>
+                                  <select id="source_account_id" formControlName="source_account_id" class="form-control">
+                                      <option *ngFor="let account of source_accounts" [value]="account.id">{{ account.name_ar }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
+                                  <select id="currency_id" formControlName="currency_id" class="form-control">
+                                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="bank_branch_id" class="form-label large-text">{{ 'BANK_BRANCH' | translate }}</label>
+                                  <select id="bank_branch_id" formControlName="bank_branch_id" class="form-control">
+                                      <option *ngFor="let branch of bankBranches" [value]="branch.id">{{ branch.name_branch }}</option>
+                                  </select>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="bank_account_id" class="form-label large-text">{{ 'BANK_ACCOUNT' | translate }}</label>
+                                  <select id="bank_account_id" formControlName="bank_account_id" class="form-control">
+                                      <option *ngFor="let account of bankAccounts" [value]="account.id">{{ account.account_number }}</option>
+                                  </select>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-4 mb-4">
+                  <button [disabled]="checkForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+                      <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+                  </button>
+              </div>
+          </div>
+      </div>
+  </form>
+</div>

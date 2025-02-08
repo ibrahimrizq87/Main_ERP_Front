@@ -1,0 +1,46 @@
+<div class="mt-3 mb-3">
+  <h5>{{ 'MANAGE_GROUP' | translate }}</h5>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'GROUP' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_GROUP' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="groupForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>{{ 'ADD_GROUP' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name" class="form-label">{{ 'GROUP_NAME' | translate }}</label>
+                  <input id="name" formControlName="name" type="text" class="form-control" placeholder="{{ 'ENTER_GROUP_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="groupForm.get('name')?.errors && groupForm.get('name')?.touched">
+                    <p *ngIf="groupForm.get('name')?.getError('required')">{{ 'GROUP_NAME_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+                <div *ngIf="parent_id > -1">
+                  <h6 class="mt-4">{{ 'GROUP_PARENT' | translate }}</h6>
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'SELECT_PARENT' | translate }}</label>
+                    <select class="form-control" formControlName="group_id">
+                      <option>{{ 'SELECT_GROUP' | translate }}</option>
+                      <option *ngFor="let groupCurrent of groups" [value]="groupCurrent.id">{{ groupCurrent.name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+          <button [disabled]="groupForm.invalid" type="submit" class="btn btn-primary px-4">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

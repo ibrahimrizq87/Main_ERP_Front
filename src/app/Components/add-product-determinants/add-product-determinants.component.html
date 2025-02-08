@@ -1,0 +1,35 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'ADD_DETERMINANT' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'DETERMINANTS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_DETERMINANT' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+<form [formGroup]="determinantForm" (ngSubmit)="handleForm()">
+  <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'ADD_DETERMINANT' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="determinant" class="form-label large-text">{{ 'DETERMINANT' | translate }}</label>
+                  <input id="determinant" formControlName="determinant" type="text" class="form-control"  required />
+                  <div class="alert alert-danger" *ngIf="determinantForm.get('determinant')?.errors && determinantForm.get('determinant')?.touched">
+                    <p *ngIf="determinantForm.get('determinant')?.getError('required')">{{ 'DETERMINANT_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4">
+          <button [disabled]="determinantForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

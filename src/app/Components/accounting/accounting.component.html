@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5>{{ 'MANAGE_ACCOUNTING' | translate }}</h5>
+      <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'ACCOUNTING' | translate }}</span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" (click)="addAccount()">
+      <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a> 
+  </div>
+  
+  <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'ACCOUNTS_LIST' | translate }}</span>
+            <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
+            <input
+            [(ngModel)]="searchTerm"
+            class="form-control search w-25"
+            type="search"
+            placeholder="{{ 'SEARCH' | translate }}"
+            aria-label="Search"
+          />
+        </div>
+    </div> 
+  
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th class="bg-light" scope="col">#</th>
+          <th class="bg-light" scope="col">{{ 'NAME' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'BALANCE' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'GROUP' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'TYPE' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accounts; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ account.name_ar }}</td>
+          <td>{{ account.net_balance }}</td>
+          <td>{{ account.group?.name }}</td>
+          <td>{{ account.type }}</td>
+          <td class="d-flex justify-content-around align-items-center">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showAccount', account.id]">
+              <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+            </a>
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateAccount', account.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+            </a>
+            <i *ngIf="!account.hasChildren" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteAccount(account.id)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

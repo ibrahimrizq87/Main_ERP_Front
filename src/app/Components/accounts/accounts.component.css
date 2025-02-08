@@ -1,0 +1,22 @@
+.account-hierarchy-container {
+    background-color: #f3f7fa; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .account-hierarchy {
+    /* max-height: 600px; */
+    overflow-y: auto; 
+    padding: 10px;
+  }
+  
+  
+  .form-label {
+    font-size: 1.2em;
+    color: #0056b3;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+  }
+  

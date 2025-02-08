@@ -1,0 +1,105 @@
+<div class="mt-4 mb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow em-card rounded-lg">
+          <div class="card-header bg-white text-black rounded-top pt-3">
+            <h5>{{ 'PRODUCT_INFORMATION' | translate }}</h5>
+          </div>
+          <div class="card-body pb-5">
+            <div class="row">
+              <!-- Left column for product details -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_NAME_AR' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.name_ar || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_NAME_EN' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.name_en || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PURCHASE_PRICE' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.purchase_price || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_DIMENSION' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.product_dimension || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'UNIT' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.unit.unit || 'N/A' }}</p>
+                </div>
+              </div>
+
+              <!-- Right column for product image -->
+              <div class="col-md-6 text-center">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_IMAGE' | translate }}:</label>
+                  <div class="image-container mt-3">
+                    <img 
+                      [src]="storeData?.image ? storeData.image : 'images/image.jpg'" 
+                      alt="Product Image" 
+                      class="img-fluid rounded shadow" 
+                      style="max-width: 100%; max-height: 200px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Prices Section -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mt-4">
+                  <h5 class="fw-bold">{{ 'PRODUCT_PRICES' | translate }}:</h5>
+                  <div *ngIf="storeData?.product_prices?.length; else noPrices">
+                    <div *ngFor="let price of storeData.product_prices" class="mb-3">
+                      <p class="mb-1">
+                        <strong>{{ 'PRICE' | translate }}:</strong> {{ price?.price || 'N/A' }}
+                      </p>
+                      <p class="mb-1">
+                        <strong>{{ 'CURRENCY_NAME' | translate }}:</strong> {{ price?.currency?.currency_name_ar || 'N/A' }}
+                      </p>
+                      <p class="mb-1">
+                        <strong>{{ 'PRICE_CATEGORY' | translate }}:</strong> {{ price?.price_category?.name || 'N/A' }}
+                      </p>
+                      <hr />
+                    </div>
+                  </div>
+                  <ng-template #noPrices>
+                    <p class="text-muted">{{ 'NO_PRICES_AVAILABLE' | translate }}</p>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="mt-4">
+                  <h5 class="fw-bold">{{ 'PRODUCT_DETERMINANTS' | translate }}:</h5>
+                  <div *ngIf="storeData?.determinants?.length; else noDeterminants">
+                    <div *ngFor="let determinant of storeData.determinants" class="mb-3">
+                      <p class="mb-1">
+                        <strong>{{ 'DETERMINANT' | translate }}:</strong> {{ determinant?.determinant?.determinant || 'N/A' }}
+                      </p>
+                      <p class="mb-1">
+                        <strong>{{ 'VALUE' | translate }}:</strong> {{ determinant?.value || 'N/A' }}
+                      </p>
+                      <hr />
+                    </div>
+                  </div>
+                  <ng-template #noDeterminants>
+                    <p class="text-muted">{{ 'NO_DETERMINANTS_AVAILABLE' | translate }}</p>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 mb-4">
+      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/products">
+        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+      </a>
+    </div>
+  </div>
+</div>

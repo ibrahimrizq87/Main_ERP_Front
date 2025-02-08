@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5 class="large-text">{{ 'MANAGE_ORDERS' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>  {{ 'ORDERS' | translate }}</span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addOrder">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+<!-- enum('in-process','pending','in-transit','completed')  -->
+<div class="d-flex justify-content-around align-items-center w-50">
+  <button class="btn bg-warning rounded btn1" (click)="loadOrders('in-process')">{{ 'IN_PROCESS' | translate }}</button>
+  <button class="btn bg-primary rounded btn1" (click)="loadOrders('pending')">{{ 'PENDING' | translate }}</button>
+  <button class="btn bg-secondary rounded btn1" (click)="loadOrders('in-transit')">{{ 'IN_TRANSIT' | translate }}</button>
+  <button class="btn bg-success rounded btn1" (click)="loadOrders('completed')">{{ 'COMPLETED' | translate }}</button>
+</div>
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold large-text">{{ 'PURCHASES_LIST' | translate }}</span>
+      <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'ORDER_DATE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ARRIVAL_DATE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'TAX_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ order.order_date }}</td>
+        <td>{{ order.arrival_date || 'N/A' }}</td>
+        <td>{{ order.tax_type }}</td>     
+        <td>
+          <div class="d-flex justify-content-around align-items-center">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showOrder', order.id]">
+              <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
+            </a>
+            <i
+              class="fa-regular fa-clock btn1 bg-warning rounded"
+              (click)="changeStatus(order.id, order.status)"
+              title="{{ 'CHANGE_STATUS' | translate }}"
+            ></i>
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateOrder', order.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+            </a>
+            <i
+              class="fa-solid fa-trash-can btn1 bg-danger rounded"
+              (click)="deleteOrder(order.id)"
+              title="{{ 'DELETE' | translate }}"
+            ></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

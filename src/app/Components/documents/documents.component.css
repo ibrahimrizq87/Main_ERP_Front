@@ -1,0 +1,36 @@
+span {
+    font-size: 12px ;
+}
+.iconPlus{
+    background-color: #145388;
+    padding: 11px;
+    font-size: 10px;
+
+}
+.vendortable{
+    background-color: #FFFFFF;
+}
+.search{
+    width:20%;
+}
+.search {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    max-width: 300px;
+}
+.btn1{
+    color:white;
+    padding: 5px;
+}
+
+
+
+thead {
+    background-color:black !important;
+}
+tr,th,td{
+    text-align: center;
+}
+i{
+    cursor:pointer
+}

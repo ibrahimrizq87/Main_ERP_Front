@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5 class="large-text">{{ 'MANAGE_SALES' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'SALES' | translate }}</span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addSale">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold large-text">{{ 'SALES_LIST' | translate }}</span>
+      <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'BILL_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'TAX_TYPE' | translate }}</th>
+        <!-- <th class="bg-light" scope="col">Image</th> -->
+        <!-- <th class="bg-light" scope="col">Amount</th> -->
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of sales; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ sale.type }}</td>
+        <td>{{ sale.invoice_date || 'N/A' }}</td>
+        <td>{{ sale.tax_type }}</td>
+        <!-- <td>
+          <img [src]="product.image" alt="{{ product.name_ar }}" width="50" height="50" />
+        </td> -->
+        <!-- <td>
+          <img 
+            [src]="product.image ? product.image : 'images/image.jpg'" 
+            alt="{{ product.name_ar || 'Default Product' }}" 
+            width="50" 
+            height="50" 
+          />
+        </td> -->
+        <!-- <td>{{ product.amount }}</td> -->
+        <td>
+          <div class="d-flex justify-content-around align-items-center">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showSale', sale.id]">
+              <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
+            </a>
+            <i class="fa-regular fa-clock btn1 bg-warning rounded" title="{{ 'CHANGE_STATUS' | translate }}"
+            
+            (click)="changeStatus(sale.id)"
+            ></i>
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+            </a>
+            <i
+              class="fa-solid fa-trash-can btn1 bg-danger rounded"
+              (click)="deleteSale(sale.id)"
+              title="{{ 'DELETE' | translate }}"
+            ></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

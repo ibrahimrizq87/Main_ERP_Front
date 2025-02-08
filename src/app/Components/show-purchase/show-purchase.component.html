@@ -1,0 +1,80 @@
+<div class="mt-4 mb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>Purchase Details</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <!-- Left column for general details -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">Type:</label>
+                    <p class="text-muted">{{ storeData?.type || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Status:</label>
+                    <p class="text-muted">{{ storeData?.status || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Invoice Date:</label>
+                    <p class="text-muted">{{ storeData?.invoice_date || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Due Date:</label>
+                    <p class="text-muted">{{ storeData?.due_date || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Tax Type:</label>
+                    <p class="text-muted">{{ storeData?.tax_type || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Notes:</label>
+                    <p class="text-muted">{{ storeData?.notes || 'N/A' }}</p>
+                  </div>
+                </div>
+  
+                <!-- Right column for related entities -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">Purchased From:</label>
+                    <p class="text-muted">{{ storeData?.purchased_from?.name_en || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Delegate:</label>
+                    <p class="text-muted">{{ storeData?.delegate?.name_en || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Store:</label>
+                    <p class="text-muted">{{ storeData?.store?.name_en || 'N/A' }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="fw-bold">Currency:</label>
+                    <p class="text-muted">{{ storeData?.currency?.currency_name_en || 'N/A' }}</p>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Dynamic Sections -->
+              <div class="row">
+                <div class="col-md-12">
+                  <h5 class="fw-bold">Additional Details:</h5>
+                  <p><strong>Ledger No:</strong> {{ storeData?.ledger_no || 'N/A' }}</p>
+                  <p><strong>Manual Reference:</strong> {{ storeData?.manual_reference || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="mt-4 mb-4">
+        <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/purchases">
+          <button type="button" class="btn btn-primary px-4">Back</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  

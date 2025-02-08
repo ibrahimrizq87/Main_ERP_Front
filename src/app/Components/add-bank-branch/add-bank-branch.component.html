@@ -1,0 +1,142 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'ADD_BANK_BRANCHES' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>  {{ 'BANK_BRANCHES' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>  {{ 'ADD_BRANCH' | translate }} </span>
+</div>
+<div class="mt-4 mb-4">
+<form [formGroup]="bankBranchForm" (ngSubmit)="handleForm()">
+  <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'ADD_BANK_BRANCH' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+              
+                <div class="form-group col-md-6">
+                  <label for="name_branch" class="form-label large-text">{{ 'BANK_BRANCH_NAME' | translate }}</label>
+                  <input id="name_branch" formControlName="name_branch" type="text" class="form-control" placeholder="{{ 'ENTER_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="bankBranchForm.get('name_branch')?.errors && bankBranchForm.get('name_branch')?.touched">
+                    <p *ngIf="bankBranchForm.get('name_branch')?.getError('required')">{{ 'BRANCH_NAME_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="phone" class="form-label large-text">{{ 'PHONE' | translate }}</label>
+                  <input id="phone" formControlName="phone" type="text" class="form-control" placeholder="{{ 'ENTER_PHONE_NUMBER' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="bankBranchForm.get('phone')?.errors && bankBranchForm.get('phone')?.touched">
+                    <p *ngIf="bankBranchForm.get('phone')?.getError('required')">{{ 'PHONE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="fax" class="form-label large-text">{{ 'FAX' | translate }}</label>
+                  <input id="fax" formControlName="fax" type="text" class="form-control" placeholder="{{ 'ENTER_FAX' | translate }}" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'SELECT_BANK' | translate }}</label>
+                  <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('bankModal')">
+                    {{ selectedBank ? selectedBank.aribic_name  : ('SELECT_BANK' | translate) }}
+                  </button>
+                  <input type="hidden" formControlName="bank_id" [value]="selectedBank?.id" />
+                </div>
+                
+                <!-- Bank Selection Modal -->
+                <div class="modal fade" id="bankModal" tabindex="-1" aria-labelledby="bankModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title large-text" id="bankModalLabel">{{ 'SELECT_BANK' | translate }}</h5>
+                        <button type="button" class="btn-close" (click)="closeModal('bankModal')"></button>
+                      </div>
+                      <div class="modal-body">
+                        <ul class="list-group">
+                          <li
+                            *ngFor="let bank of banks"
+                            class="list-group-item list-group-item-action"
+                            (click)="selectBank(bank, 'bankModal')"
+                          >
+                            {{ bank.aribic_name  }}
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal('bankModal')">{{ 'CLOSE' | translate }}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+              
+                  <h6 class="mt-4 large-text">{{ 'ADDRESS' | translate }}</h6>
+                  
+               <div class="row">
+                  <div class="form-group col-md-6">
+                    <label class="form-label large-text">{{ 'SELECT_COUNTRY_AND_CITY' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('cityModal')">
+                      {{ selectedCity ? selectedCity.city : ('SELECT_COUNTRY_AND_CITY' | translate) }}
+                    </button>
+                    <input type="hidden" formControlName="city_id" [value]="selectedCity?.id" />
+                    <div class="alert alert-danger" *ngIf="bankBranchForm.get('city_id')?.errors && bankBranchForm.get('city_id')?.touched">
+                      <p *ngIf="bankBranchForm.get('city_id')?.hasError('required')">{{ 'CITY_REQUIRED' | translate }}</p>
+                    </div>
+                  </div>
+                  
+                  <!-- City Selection Modal -->
+                  <div class="modal fade" id="cityModal" tabindex="-1" aria-labelledby="cityModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title large-text" id="cityModalLabel">{{ 'SELECT_COUNTRY_AND_CITY' | translate }}</h5>
+                          <button type="button" class="btn-close" (click)="closeModal('cityModal')"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div *ngFor="let country of countries" class="mb-3">
+                            <h6>{{ country }}</h6>
+                            <ul class="list-group">
+                              <li
+                                *ngFor="let city of citiesByCountry[country]"
+                                class="list-group-item list-group-item-action"
+                                (click)="selectCity(city, 'cityModal')"
+                              >
+                                {{ city.city }}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" (click)="closeModal('cityModal')">{{ 'CLOSE' | translate }}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group col-md-6">
+                      <label for="address" class="form-label large-text">{{ 'ADDRESS' | translate }}</label>
+                      <input id="address" formControlName="address" type="text" class="form-control" placeholder="{{ 'ENTER_ADDRESS' | translate }}" />
+                       <div class="alert alert-danger" *ngIf="bankBranchForm.get('address')?.errors && bankBranchForm.get('address')?.touched">
+                          <p *ngIf="bankBranchForm.get('address')?.hasError('required')">{{ 'ADDRESS_REQUIRED' | translate }}</p>
+                       </div>
+                  </div>
+              </div>
+
+          </div> 
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="notes" class="form-label large-text">{{ 'NOTE' | translate }}</label>
+                    <textarea id="notes" formControlName="notes" class="form-control" placeholder="{{ 'ENTER_NOTE' | translate }}" rows="3"></textarea>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4">
+          <button [disabled]="bankBranchForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

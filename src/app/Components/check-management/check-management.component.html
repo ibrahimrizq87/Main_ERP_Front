@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+      <h5>{{ 'MANAGE_CHECKS' | translate }}</h5>
+      <span class="text-muted">
+          {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CHECKS' | translate }}
+      </span>
+  </div>
+  <a class="btn btn-info" routerLinkActive="active" routerLink="/dashboard/check-operation">
+      {{ 'CHECK_OPERATION' | translate }}
+  </a>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addcheck">
+      <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="fw-bold">{{ 'CHECKS_LIST' | translate }}</span>
+          <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+      </div>
+  </div>
+
+  <table class="table mt-3">
+      <thead>
+          <tr>
+              <th class="bg-light" scope="col">#</th>
+              <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'TYPE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let check of checks; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ check.check_number }}</td>
+              <td>{{ check.type }}</td>
+              <td>{{ check.amount }}</td>
+              <td>{{ check.source_account.name_ar }}</td>
+              <td>{{ check.payed_to.name_ar }}</td>
+              <td>{{ check.due_date }}</td>
+              <td class="d-flex justify-content-around align-items-center">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/check', check.id]">
+                      <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CHECK' | translate }}"></i>
+                  </a>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

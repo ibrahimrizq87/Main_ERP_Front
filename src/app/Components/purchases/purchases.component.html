@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5>{{ 'MANAGE_PURCHASES' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PURCHASES' | translate }}</span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPurchase">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+<a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/approvedPurchases']">
+  <i class="btn1 bg-success rounded">{{ 'APPROVED_PURCHASES' | translate }}</i>
+</a>
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'PURCHASES_LIST' | translate }}</span>
+      <input 
+      class="form-control search w-25" 
+      type="search" 
+      placeholder="{{ 'SEARCH' | translate }}"
+      aria-label="Search"
+      [(ngModel)]="searchTerm" 
+      (input)="filterPurchases()">
+      <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'BILL_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'TAX_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let purchase of filteredPurchases; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ purchase.type }}</td>
+        <td>{{ purchase.invoice_date || 'N/A' }}</td>
+        <td>{{ purchase.tax_type }}</td>
+        <td>
+          <div class="d-flex justify-content-around align-items-center">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
+              <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+            </a>
+            <i class="fa-regular fa-clock btn1 bg-warning rounded" (click)="changeStatus(purchase.id)"></i>
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updatePurchase', purchase.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+            </a>
+            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deletePurchase(purchase.id)"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

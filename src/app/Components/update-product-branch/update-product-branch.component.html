@@ -1,0 +1,68 @@
+
+Copy
+<div class="mt-3 mb-3">
+    <h5>{{ 'ADD_PRODUCT_BRANCH' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'BRANCHES' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'CREATE_BRANCH' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="branchForm" (ngSubmit)="handleForm()">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow em-card rounded-lg">
+              <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5>{{ 'ADD_BRANCH' | translate }}</h5>
+              </div>
+              <div class="card-body pb-5">
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="amount" class="form-label">{{ 'AMOUNT' | translate }}</label>
+                    <input id="amount" formControlName="amount" type="number" class="form-control" placeholder="{{ 'AMOUNT' | translate }}" required />
+                    <div class="alert alert-danger" *ngIf="branchForm.get('amount')?.errors && branchForm.get('amount')?.touched">
+                      <p *ngIf="branchForm.get('amount')?.getError('required')">{{ 'AMOUNT_REQUIRED' | translate }}</p>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="price" class="form-label">{{ 'PRICE' | translate }}</label>
+                    <input id="price" formControlName="price" type="number" class="form-control" placeholder="{{ 'PRICE' | translate }}" required />
+                    <div class="alert alert-danger" *ngIf="branchForm.get('price')?.errors && branchForm.get('price')?.touched">
+                      <p *ngIf="branchForm.get('price')?.getError('required')">{{ 'PRICE_REQUIRED' | translate }}</p>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'SELECT_PRODUCT' | translate }}</label>
+                    <select class="form-control" formControlName="product_id">
+                      <option>{{ 'SELECT_PRODUCT' | translate }}</option>
+                      <option *ngFor="let product of products" [value]="product.id">{{ product.product_name_ar }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'SELECT_STORE' | translate }}</label>
+                    <select class="form-control" formControlName="store_id">
+                      <option>{{ 'SELECT_STORE' | translate }}</option>
+                      <ng-container *ngFor="let parent of hierarchicalAccounts">
+                        <option [ngValue]="parent.id">{{ parent.name_en }}</option>
+                        <ng-container *ngFor="let child of parent.children">
+                          <option [ngValue]="child.id">&nbsp;&nbsp;{{ child.name_en }}</option>
+                          <ng-container *ngFor="let subChild of child.children">
+                            <option [ngValue]="subChild.id">&nbsp;&nbsp;&nbsp;&nbsp;{{ subChild.name_en }}</option>
+                            <!-- Continue nesting for deeper levels if needed -->
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+            <button [disabled]="branchForm.invalid" type="submit" class="btn btn-primary px-4">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+</div>

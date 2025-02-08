@@ -1,0 +1,80 @@
+<div class="mt-4 mb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow em-card rounded-lg">
+          <div class="card-header bg-white text-black rounded-top pt-3">
+            <h5>{{ 'PRODUCT_INFORMATION' | translate }}</h5>
+          </div>
+          <div class="card-body pb-5">
+            <div class="row">
+              <!-- Left column for product details -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_NAME_ARABIC' | translate }}:</label>
+                  <p class="text-muted">
+                    {{ storeData?.product?.name_ar || 'N/A' }}
+                  </p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_NAME_ENGLISH' | translate }}:</label>
+                  <p class="text-muted">
+                    {{ storeData?.product?.name_en || 'N/A' }}
+                  </p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_DIMENSION' | translate }}:</label>
+                  <p class="text-muted">
+                    {{ storeData?.product?.product_dimension || 'N/A' }}
+                  </p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'AMOUNT' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.amount || 'N/A' }}</p>
+                </div>
+              </div>
+
+              <!-- Right column for product image -->
+              <div class="col-md-6 text-center">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PRODUCT_IMAGE' | translate }}:</label>
+                  <div class="image-container mt-3">
+                    <img
+                      [src]="storeData?.product?.image"
+                      alt="Product Image"
+                      class="img-fluid rounded shadow"
+                      style="max-width: 100%; max-height: 200px;"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'OVERRIDE' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.override || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.created_at || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4 mb-4 text-center">
+      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/productBranch">
+        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+      </a>
+    </div>
+  </div>
+</div> 

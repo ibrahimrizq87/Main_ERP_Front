@@ -1,0 +1,75 @@
+#dashboard{
+    background-color: #F8FAF9;
+}
+.logoimg{
+    width:100px;
+}
+.sidebar {
+    background-color: #FFFFFF;
+    height: 100vh;
+    overflow:auto;
+   
+    padding-top: 10px;
+    border-right: 1px solid #ddd;
+}
+.nav-item{
+    cursor: pointer;
+}
+.sidebar .nav-link {
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 15px;
+    transition: all 0.3s ease; 
+}
+.icon{
+    padding: 8px;
+    background-color: #FFFFFF;
+    border-radius: 20%;
+}
+
+.sidebar .nav-link:hover, .nav-link.active {
+    background-color: #145388;
+    color: white !important;
+  .nav-link{
+    color: white !important; 
+  }
+    .icon{
+       
+        padding: 8px;
+        background-color: #FFFFFF;
+        color:black !important;
+        border-radius: 20% !important;
+    }
+
+}
+.nested{
+    margin-left: 40px !important;
+  
+}
+.nested-inside{
+    margin-left: 10px !important;
+  
+}
+.nested-inside a{
+    font-size: 13px !important;
+    font-weight: 500 !important;
+} 
+
+.nested a{
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+.nested .nav-link:hover, .nav-link.active {
+   
+background-color: transparent !important;
+color:#145388  !important;
+font-weight: bold !important;
+
+}
+.profile-content {
+    background-color: #FDFEFE;
+}
+
+

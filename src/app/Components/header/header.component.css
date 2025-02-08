@@ -1,0 +1,17 @@
+.logoimg{
+    width:11%;
+}
+.dropdown{
+    background-color: #F5F5F5;
+}
+.navbar{
+    background-color: #FFFFFF;
+}
+.dropdown-menu {
+    display: none;
+  }
+  
+.dropdown-menu.show {
+    display: block;
+  }
+  

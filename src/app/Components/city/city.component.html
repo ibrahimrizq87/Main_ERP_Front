@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'manageCity.manage_city' | translate }}</h5>
+        <span class="text-muted">{{ 'manageCity.dashboard' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'manageCity.cities' | translate }}</span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCity">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'manageCity.cities_list' | translate }}</span>
+            <!-- <input class="form-control search w-25" type="search" placeholder="{{ 'manageCity.search_placeholder' | translate }}" aria-label="Search"> -->
+            <input 
+            class="form-control search w-25" 
+            type="search" 
+            [(ngModel)]="searchQuery" 
+            (input)="onSearch()" 
+            placeholder="{{ 'manageCity.search_placeholder' | translate }}" 
+            aria-label="Search">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'manageCity.country_name' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'manageCity.city_name' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'manageCity.actions' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let city of filteredCities; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ city.country }}</td>
+                <td>{{ city.city }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCity',city.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.edit' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCity(city.id)" title="{{ 'manageCity.delete' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

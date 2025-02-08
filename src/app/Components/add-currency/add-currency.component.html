@@ -1,0 +1,84 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'MANAGE_CURRENCY' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CURRENCY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CURRENCY' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+<form  [formGroup]="currencyForm" (ngSubmit)="handleForm()">
+  <div class="container">
+      <div class="row">
+      
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3 ">
+              <h5 class="large-text">{{ 'ADD_CURRENCY' | translate }}</h5>
+            </div>
+          
+            <div class="card-body pb-5">
+
+              <div class="row">
+
+                <div class="form-group col-md-6">
+                  <label for="currency_name_ar"  class="form-label large-text">{{ 'ARABIC_NAME' | translate }}</label>
+                  <input id="currency_name_ar" formControlName="currency_name_ar" type="text" class="form-control" placeholder="{{ 'ARABIC_NAME' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('currency_name_ar')?.errors && currencyForm.get('currency_name_ar')?.touched">
+                    <p *ngIf="currencyForm.get('currency_name_ar')?.getError('required')">{{ 'ARABIC_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('currency_name_ar')?.getError('maxLength')">maxLength is 255 </p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="currency_name_en"  class="form-label large-text">{{ 'ENGLISH_NAME' | translate }}</label>
+                  <input id="currency_name_en" formControlName="currency_name_en" type="text" class="form-control" placeholder="{{ 'ENGLISH_NAME' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('currency_name_en')?.errors && currencyForm.get('currency_name_en')?.touched">
+                    <p *ngIf="currencyForm.get('currency_name_en')?.getError('required')">{{ 'ENGLISH_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('currency_name_en')?.getError('maxLength')">maxLength is 255 </p>
+                  </div>
+                </div>
+               
+                <div class="form-group col-md-6">
+                  <label for="derivative_name_ar"  class="form-label large-text">{{ 'ARABIC_DERIVATIVE_NAME' | translate }}</label>
+                  <input id="derivative_name_ar" formControlName="derivative_name_ar" type="text" class="form-control" placeholder="{{ 'ARABIC_DERIVATIVE_NAME' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('derivative_name_ar')?.errors && currencyForm.get('derivative_name_ar')?.touched">
+                    <p *ngIf="currencyForm.get('derivative_name_ar')?.getError('required')">{{ 'ARABIC_DERIVATIVE_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('derivative_name_ar')?.getError('maxLength')">maxLength is 255 </p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="derivative_name_en"  class="form-label large-text">{{ 'ENGLISH_DERIVATIVE_NAME' | translate }}</label>
+                  <input id="derivative_name_en" formControlName="derivative_name_en" type="text" class="form-control" placeholder="{{ 'ENGLISH_DERIVATIVE_NAME' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('derivative_name_en')?.errors && currencyForm.get('derivative_name_en')?.touched">
+                    <p *ngIf="currencyForm.get('derivative_name_en')?.getError('required')">{{ 'ENGLISH_DERIVATIVE_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('derivative_name_en')?.getError('maxLength')">maxLength is 255 </p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="abbreviation"  class="form-label large-text">{{ 'ABBREVIATION' | translate }}</label>
+                  <input id="abbreviation" formControlName="abbreviation" type="text" class="form-control" placeholder="{{ 'ABBREVIATION' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('abbreviation')?.errors && currencyForm.get('abbreviation')?.touched">
+                    <p *ngIf="currencyForm.get('abbreviation')?.getError('required')">{{ 'ABBREVIATION' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('abbreviation')?.getError('maxLength')">maxLength is 10</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="value"  class="form-label large-text">{{ 'VALUE' | translate }}</label>
+                  <input id="value" formControlName="value" type="number" class="form-control" placeholder="{{ 'VALUE' | translate }}" required/>
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('value')?.errors && currencyForm.get('value')?.touched">
+                    <p *ngIf="currencyForm.get('value')?.getError('required')">{{ 'VALUE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+              
+              
+              </div>   
+              
+            </div>
+         
+          </div>
+        </div>
+        <div class=" mt-4 mb-4">
+          <button [disabled]="currencyForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          </button>
+       </div>
+      </div>
+    </div>
+  </form>
+</div>

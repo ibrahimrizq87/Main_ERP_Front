@@ -1,0 +1,166 @@
+<div class="mt-3 mb-3">
+  <h5 class="large-text">{{ 'MANAGE_PURCHASES_ORDERS' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>  {{ 'PURCHASES_ORDERS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i>  {{ 'CREATE_ORDER' | translate }}</span>
+</div>
+
+<div class="mt-4 mb-4">
+  <form [formGroup]="orderForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'PURCHASES_ORDER_DETAILS' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <!-- Order Date -->
+                <div class="form-group col-md-6">
+                  <label for="order_date" class="form-label large-text">{{ 'ORDER_DATE' | translate }}</label>
+                  <input id="order_date" formControlName="order_date" type="date" class="form-control" />
+                  <div class="alert alert-danger" *ngIf="orderForm.get('order_date')?.errors && orderForm.get('order_date')?.touched">
+                    <p *ngIf="orderForm.get('order_date')?.hasError('required')">{{ 'ORDER_DATE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Arrival Date -->
+                <div class="form-group col-md-6">
+                  <label for="arrival_date" class="form-label large-text">{{ 'ARRIVAL_DATE' | translate }}</label>
+                  <input id="arrival_date" formControlName="arrival_date" type="date" class="form-control" />
+                </div>
+
+                <!-- Tax Type -->
+                <div class="form-group col-md-6">
+                  <label for="tax_type" class="form-label large-text">{{ 'TAX_TYPE' | translate }}</label>
+                  <select id="tax_type" formControlName="tax_type" class="form-control">
+                    <option value="included">{{ 'INCLUDED' | translate }}</option>
+                    <option value="excluded">{{ 'EXCLUDED' | translate }}</option>
+                    <option value="exempt">{{ 'EXEMPT' | translate }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('tax_type')?.errors && orderForm.get('tax_type')?.touched">
+                    <p *ngIf="orderForm.get('tax_type')?.hasError('required')">{{ 'TAX_TYPE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Ordered From -->
+                <div class="form-group col-md-6">
+                  <label for="ordered_from_id" class="form-label large-text">{{ 'ORDERED_FROM' | translate }}</label>
+                  <select id="ordered_from_id" formControlName="ordered_from_id" class="form-control">
+                    <option *ngFor="let orderFrom of OrdersFrom" [value]="orderFrom.id">{{ orderFrom.name_ar }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('ordered_from_id')?.errors && orderForm.get('ordered_from_id')?.touched">
+                    <p *ngIf="orderForm.get('ordered_from_id')?.hasError('required')">{{ 'ORDERED_FROM' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Select Delegates -->
+                <div class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'SELECT_DELEGATES' | translate }}</label>
+                  <select class="form-control" formControlName="delegate_id">
+                    <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name_ar }}</option>
+                  </select>
+                </div>
+
+                <!-- Store -->
+                <div class="form-group col-md-6">
+                  <label for="store_id" class="form-label large-text">{{ 'STORE' | translate }}</label>
+                  <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)">
+                    <option *ngFor="let store of stores" [value]="store.id">{{ store.name_ar }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('store_id')?.errors && orderForm.get('store_id')?.touched">
+                    <p *ngIf="orderForm.get('store_id')?.hasError('required')">{{ 'STORE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Currency -->
+                <div class="form-group col-md-6">
+                  <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
+                  <select id="currency_id" formControlName="currency_id" class="form-control">
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('currency_id')?.errors && orderForm.get('currency_id')?.touched">
+                    <p *ngIf="orderForm.get('currency_id')?.hasError('required')">{{ 'CURRENCY' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-group col-md-12">
+                  <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
+                  <textarea id="notes" formControlName="notes" class="form-control" placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('notes')?.errors && orderForm.get('notes')?.touched">
+                    <p *ngIf="orderForm.get('notes')?.getError('minLength')">{{ 'MIN_LENGTH_3' | translate }}</p>
+                    <p *ngIf="orderForm.get('notes')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Address -->
+                <div class="form-group col-md-12">
+                  <label for="address" class="form-label large-text">{{ 'ADDRESS' | translate }}</label>
+                  <textarea id="address" formControlName="address" class="form-control" placeholder="{{ 'ADDRESS' | translate }}..." rows="3"></textarea>
+                  <div class="alert alert-danger" *ngIf="orderForm.get('address')?.errors && orderForm.get('address')?.touched">
+                    <p *ngIf="orderForm.get('address')?.getError('minLength')">{{ 'MIN_LENGTH_3' | translate }}</p>
+                    <p *ngIf="orderForm.get('address')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                  </div>
+                </div>
+
+                <!-- Items -->
+                <div class="form-group col-md-12">
+                  <div formArrayName="items" class="mt-4">
+                    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3">
+                      <div class="row">
+                        <!-- Product Selection -->
+                        <div class="col-md-4">
+                          <label for="product_id">{{ 'PRODUCT' | translate }}</label>
+                          <select formControlName="product_id" class="form-control custom-select" (change)="onProductChange($event, i)">
+                            <option *ngFor="let product of Products" [value]="product.id">{{ product.name_ar }}</option>
+                          </select>
+                        </div>
+
+                        <!-- Amount -->
+                        <div class="col-md-2">
+                          <label for="amount">{{ 'QUANTITY' | translate }}</label>
+                          <input formControlName="amount" type="number" class="form-control" />
+                        </div>
+
+                        <!-- Total Price -->
+                        <div class="col-md-2">
+                          <label for="total_price">{{ 'TOTAL_PRICE' | translate }}</label>
+                          <input formControlName="total_price" type="number" class="form-control" />
+                        </div>
+
+                        <!-- Remove Item -->
+                        <div class="col-md-12">
+                          <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
+                            <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Add Item -->
+                  <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
+                    <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="msgError && msgError.length > 0" class="alert alert-danger">
+          <ul>
+            <li *ngFor="let error of msgError">{{ error }}</li>
+          </ul>
+        </div>
+
+        <div class="mt-4 mb-4">
+          <button [disabled]="orderForm.invalid" type="submit" class="btn btn-primary px-4">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>

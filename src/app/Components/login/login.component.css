@@ -1,0 +1,48 @@
+
+#home {
+    background-size: cover;
+    background-position:center center;
+    overflow: auto;
+    background-image: url('/images/bg_login.jpeg');
+}
+h2{
+    font-weight: 600;
+    font-size: 28px;
+}
+label{
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    background-color: #FFFFFF !important;
+}
+
+.card .input-group-text {
+    border: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.card .form-control {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.card .btn-success {
+    background-color: #6FD943 !important ;
+    border-color: #6FD943 !important;
+    border-radius: 5px;
+}
+.input-group .bg-success{
+    background-color: #6FD943 !important ;  
+}
+.forget{
+    color:#6FD943 !important ; 
+    text-decoration: none !important;
+    font-weight: 400;
+    font-size: 14px;
+}
+

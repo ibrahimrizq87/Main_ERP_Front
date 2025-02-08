@@ -1,0 +1,87 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_CUSTOMER' | translate }}</h5>
+        <span class="text-muted">
+            {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CUSTOMER' | translate }}
+        </span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/createCustomer">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'CUSTOMER_LIST' | translate }}</span>
+            <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'USERNAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'PHONE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'CURRENCY' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'GROUP' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark1</td>
+                <td>Mark</td>
+                <td>01201242302</td>
+                <td>pound</td>
+                <td>group1</td>
+                <td class="d-flex justify-content-around align-items-center">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/showCustomer">
+                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/updateCustomer">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" title="{{ 'DELETE_CUSTOMER' | translate }}"></i>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Mark1</td>
+                <td>Mark</td>
+                <td>01201242302</td>
+                <td>pound</td>
+                <td>group2</td>
+                <td class="d-flex justify-content-around align-items-center">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/showCustomer">
+                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/updateCustomer">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" title="{{ 'DELETE_CUSTOMER' | translate }}"></i>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Mark1</td>
+                <td>Mark</td>
+                <td>01201242302</td>
+                <td>pound</td>
+                <td>group3</td>
+                <td class="d-flex justify-content-around align-items-center">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/showCustomer">
+                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/updateCustomer">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CUSTOMER' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" title="{{ 'DELETE_CUSTOMER' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

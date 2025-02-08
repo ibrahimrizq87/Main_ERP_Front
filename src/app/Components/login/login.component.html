@@ -1,0 +1,54 @@
+<section id="home" class="vh-100">
+    <app-header></app-header>
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="home-info mx-auto text-white">
+            <form id="loginForm" [formGroup]="loginForm" (ngSubmit)="handleForm()">
+                <div class="card bg-light text-dark shadow-lg rounded-4" style="min-width: 400px; max-width: 400px; margin: 80px auto;">
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <h2 class="mb-3">{{ 'LOGIN' | translate }}</h2>
+                        </div>
+                        <div class="custom-login-form">
+                            <div class="form-group">
+                                <label for="user_name" class="form-label">{{ 'USER_NAME' | translate }}</label>
+                                <div class="input-group">
+                                    <div class="input-group-text bg-success text-white">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <input type="text" formControlName="user_name" class="form-control" id="user_name" placeholder="{{ 'USER_NAME' | translate }}" required>
+                                </div>
+                                <div class="alert alert-danger" *ngIf="loginForm.get('user_name')?.errors && loginForm.get('user_name')?.touched">
+                                    <p *ngIf="loginForm.get('user_name')?.getError('required')">{{ 'USERNAME_REQUIRED' | translate }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">{{ 'PASSWORD' | translate }}</label>
+                                <div class="input-group">
+                                    <div class="input-group-text bg-success text-white">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <input type="password" formControlName="password" class="form-control" id="password" placeholder="{{ 'PASSWORD' | translate }}" required>
+                                </div>
+                                <div class="alert alert-danger" *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched">
+                                    <p *ngIf="loginForm.get('password')?.getError('required')">{{ 'PASSWORD_REQUIRED' | translate }}</p>
+                                    <p *ngIf="loginForm.get('password')?.getError('minlength')">{{ 'PASSWORD_MIN_LENGTH' | translate }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                    <span><a href="#" tabindex="0" class="text-success forget">{{ 'FORGOT_PASSWORD' | translate }}</a></span>
+                                </div>
+                            </div>
+                            <p *ngIf="msgError && msgError.length>0" class="alert alert-danger">{{ msgError }}</p>
+                            <div class="d-grid">
+                                <button [disabled]="loginForm.invalid" type="submit" class="btn btn-success btn-block">
+                                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'LOGIN' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

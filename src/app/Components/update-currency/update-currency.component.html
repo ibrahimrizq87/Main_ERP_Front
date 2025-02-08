@@ -1,0 +1,76 @@
+<div class="mt-3 mb-3">
+  <h5>{{ 'MANAGE_CURRENCY' | translate }}</h5>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'CURRENCY' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_CURRENCY' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="currencyForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>{{ 'UPDATE_CURRENCY' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="currency_name_ar" class="form-label">{{ 'ARABIC_NAME' | translate }}</label>
+                  <input id="currency_name_ar" formControlName="currency_name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_CURRENCY_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('currency_name_ar')?.errors && currencyForm.get('currency_name_ar')?.touched">
+                    <p *ngIf="currencyForm.get('currency_name_ar')?.getError('required')">{{ 'ARABIC_NAME_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('currency_name_ar')?.getError('maxLength')">{{ 'MAX_LENGTH_IS_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="currency_name_en" class="form-label">{{ 'ENGLISH_NAME' | translate }}</label>
+                  <input id="currency_name_en" formControlName="currency_name_en" type="text" class="form-control" placeholder="{{ 'ENTER_CURRENCY_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('currency_name_en')?.errors && currencyForm.get('currency_name_en')?.touched">
+                    <p *ngIf="currencyForm.get('currency_name_en')?.getError('required')">{{ 'ENGLISH_NAME_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('currency_name_en')?.getError('maxLength')">{{ 'MAX_LENGTH_IS_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="derivative_name_ar" class="form-label">{{ 'ARABIC_DERIVATIVE_NAME' | translate }}</label>
+                  <input id="derivative_name_ar" formControlName="derivative_name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_DERIVATIVE_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('derivative_name_ar')?.errors && currencyForm.get('derivative_name_ar')?.touched">
+                    <p *ngIf="currencyForm.get('derivative_name_ar')?.getError('required')">{{ 'ARABIC_DERIVATIVE_NAME_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('derivative_name_ar')?.getError('maxLength')">{{ 'MAX_LENGTH_IS_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="derivative_name_en" class="form-label">{{ 'ENGLISH_DERIVATIVE_NAME' | translate }}</label>
+                  <input id="derivative_name_en" formControlName="derivative_name_en" type="text" class="form-control" placeholder="{{ 'ENTER_DERIVATIVE_NAME' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('derivative_name_en')?.errors && currencyForm.get('derivative_name_en')?.touched">
+                    <p *ngIf="currencyForm.get('derivative_name_en')?.getError('required')">{{ 'ENGLISH_DERIVATIVE_NAME_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('derivative_name_en')?.getError('maxLength')">{{ 'MAX_LENGTH_IS_255' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="abbreviation" class="form-label">{{ 'ABBREVIATION' | translate }}</label>
+                  <input id="abbreviation" formControlName="abbreviation" type="text" class="form-control" placeholder="{{ 'ENTER_ABBREVIATION' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('abbreviation')?.errors && currencyForm.get('abbreviation')?.touched">
+                    <p *ngIf="currencyForm.get('abbreviation')?.getError('required')">{{ 'ABBREVIATION_REQUIRED' | translate }}</p>
+                    <p *ngIf="currencyForm.get('abbreviation')?.getError('maxLength')">{{ 'MAX_LENGTH_IS_10' | translate }}</p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="value" class="form-label">{{ 'VALUE' | translate }}</label>
+                  <input id="value" formControlName="value" type="number" class="form-control" placeholder="{{ 'ENTER_VALUE' | translate }}" required />
+                  <div class="alert alert-danger" *ngIf="currencyForm.get('value')?.errors && currencyForm.get('value')?.touched">
+                    <p *ngIf="currencyForm.get('value')?.getError('required')">{{ 'VALUE_REQUIRED' | translate }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+          <button [disabled]="currencyForm.invalid" type="submit" class="btn btn-primary px-4">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'UPDATE' | translate }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

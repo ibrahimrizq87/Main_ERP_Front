@@ -1,0 +1,8 @@
+<div class="form-group col-md-12 account-hierarchy-container">
+  <label class="form-label">{{ 'ACCOUNT_HIERARCHY' | translate }}</label>
+  <div class="account-hierarchy">
+    <ng-container *ngFor="let account of hierarchicalAccounts">
+      <app-accountnode [account]="account"></app-accountnode>
+    </ng-container>
+  </div>
+</div>

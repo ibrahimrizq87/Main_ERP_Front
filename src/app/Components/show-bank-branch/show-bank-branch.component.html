@@ -1,0 +1,74 @@
+<div class="mt-4 mb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow em-card rounded-lg">
+          <div class="card-header bg-white text-black rounded-top pt-3">
+            <h5>{{ 'BANK_BRANCH_INFORMATION' | translate }}</h5>
+          </div>
+          <div class="card-body pb-5">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'BANK_NAME_AR' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.bank?.name_ar }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'BANK_NAME_EN' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.bank?.name_en }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'BRANCH_NAME' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.name_branch }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PHONE_NUMBER' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.phone }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'FAX' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.fax }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CITY' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.city_id?.country }},{{ bankBranch?.city_id?.city }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'ADDRESS' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.address }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NOTES' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.notes || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+            <h6 class="mt-4">{{ 'ADDITIONAL_INFORMATION' | translate }}</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'LAST_UPDATE' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.last_update || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'LAST_UPDATED_BY' | translate }}:</label>
+                  <p class="text-muted">{{ bankBranch?.last_update_creator || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 mb-4">
+      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/bankBranch">
+        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+      </a>
+    </div>
+  </div>
+</div>
