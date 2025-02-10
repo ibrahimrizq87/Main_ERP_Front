@@ -73,3 +73,19 @@ font-weight: bold !important;
 }
 
 
+.nested-inside {
+    border-left: 2px solid #ccc;
+    padding-left: 10px;  /* Reduced spacing */
+  }
+  
+  .nav-link {
+    transition: background-color 0.3s ease;
+    padding: 6px 10px;  /* Tightened padding for a more compact look */
+    font-size: 14px;    /* Slightly smaller font for better alignment */
+  }
+  
+  .nav-link:hover {
+    background-color: #e9ecef; /* Subtle hover effect */
+    border-radius: 3px;
+  }
+  

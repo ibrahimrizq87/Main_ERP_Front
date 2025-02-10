@@ -36,12 +36,13 @@ export class LoginComponent {
 
       this._UserService.setLogin(formData).subscribe({
         next: (response) => {
-          console.log(response);
+          // console.log(response);
           if (response) {
             this.isLoading = false;
 
           
-            localStorage.setItem('Token', response.token);
+            localStorage.setItem('Token', response.data.token);
+            alert(response.message);
 
             // Call saveUserData() to decode and store the access_token
             // this._UserService.saveUserData();

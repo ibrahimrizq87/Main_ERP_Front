@@ -2,36 +2,66 @@ import { Injectable } from '@angular/core';
 import { throwError, Observable, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  private baseURL = environment.apiUrl;
-  constructor(private _HttpClient: HttpClient) {
+  private baseURL = environment.apiUrl+'/general/accounts';
+  constructor(private _HttpClient: HttpClient, private translate: TranslateService) {
   }
-  private handleError(error: any) {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
 
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
+  
 
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
+  private getHeaders(): HttpHeaders {
+    const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar');  
+    console.log('lang ',currentLang);
+
+    return new HttpHeaders({
+      'Accept-Language': currentLang
+    });
+  }
+
+  
+
+  private getHeadersWithToken(): HttpHeaders {
+    const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar'); 
+    const token = localStorage.getItem('Token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': currentLang
+    });
   }
   getData(): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/getData`, { headers }).pipe(
-      catchError(this.handleError));
+    return this._HttpClient.get(`${this.baseURL}`, { headers: this.getHeadersWithToken()  });
+  }
+  getAllMainAccounts(): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.get(`${this.baseURL}/get-all-main`, { headers: this.getHeadersWithToken()  });
+  }
+
+
+  getAllHasChildren(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/accounts-has-children/get-all`, { headers: this.getHeadersWithToken()  });
+  }
+
+
+
+
+  getAllAccounts(): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.get(`${this.baseURL}`, { headers: this.getHeadersWithToken()  });
   }
   getAccountById(id: string): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/accounting/${id}`, { headers }).pipe(
-      catchError(this.handleError));
+    return this._HttpClient.get(`${this.baseURL}/accounting/${id}`, { headers });
   }
 
   addAccount(accountData: FormData): Observable<any> {
@@ -52,8 +82,7 @@ export class AccountService {
   viewAllAccounts(): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/accounting`, { headers }).pipe(
-      catchError(this.handleError));
+    return this._HttpClient.get(`${this.baseURL}`, { headers });
   }
 
   getAccountsByParent(id: string): Observable<any> {
@@ -65,9 +94,7 @@ export class AccountService {
   showAccountById(id: any): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(this.baseURL + "/accounting/" + id, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.get(this.baseURL + "/accounting/" + id, { headers });
   }
 
   getParentForDocument(parent: number[], parent_company: number[]): Observable<any> {
@@ -89,18 +116,14 @@ export class AccountService {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     accountData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/accounting/${accountId}`, accountData, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.post(`${this.baseURL}/accounting/${accountId}`, accountData, { headers });
   }
 
   deleteAccount(accountId: number): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this._HttpClient.delete(`${this.baseURL}/accounting/${accountId}`, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.delete(`${this.baseURL}/accounting/${accountId}`, { headers });
   }
 
 

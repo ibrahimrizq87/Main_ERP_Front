@@ -1,4 +1,39 @@
 {
+    "mainAccountNav": {
+      "children": "الأطفال",
+      "delete_child": "حذف الطفل",
+      "add_child": "إضافة فرع",
+      "child_title": "عنوان الفرع",
+      "child_title_placeholder": "أدخل عنوان الفرع...",
+      "choose_account": "اختر الحساب",
+      "cancel": "إلغاء",
+      "selectAccount": "اختر الحساب",
+      "searchAccount": "ابحث عن الحساب...",
+      "accountName": "اسم الحساب",
+      "create": "إنشاء إعداد التنقل للحساب الرئيسي",
+      "title": "العنوان",
+      "enterTitle": "أدخل العنوان",
+      "titleRequired": "العنوان مطلوب.",
+      "order": "الترتيب",
+      "enterOrder": "أدخل الترتيب",
+      "orderRequired": "الترتيب مطلوب ويجب أن يكون رقمًا.",
+      "save": "حفظ",
+      "list": "قائمة إعدادات التنقل للحساب الرئيسي",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },  
+  
+    "System_Setting": {
+      "account": "إعداد حسابات",
+      "general_setting": "إعدادات عامة"
+    }
+  
+,
+  "System_Setting_Nav": {
+  "SystemSetting": "إعدادات النظام",
+  "Account_Setting": "إعدادات الحساب"
+},
+
   "LANGUAGE": "اللغة",
   "ACCOUNT_GROUP": "مجموعة الحساب",
   "MANAGE_ACCOUNTING": "إدارة المحاسبة",

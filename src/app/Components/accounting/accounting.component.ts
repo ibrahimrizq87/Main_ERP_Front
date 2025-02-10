@@ -39,53 +39,11 @@ export class AccountingComponent implements OnInit {
     this.loadAccounts();
   }
  
-  // getParams() {
-  //   this.route.paramMap.subscribe(params => {
-  //     this.type = params.get('type');
-  //   });
-  // }
-  // loadAccounts(): void {
-  //   if (this.type == 'all'){
-  //     this._AccountService.viewAllAccounts().subscribe({
-  //       next: (response) => {
-  //         if (response) {
-  //           console.log(response)
-  //           const accounts = response.data;
-  //           accounts.forEach((account: { hasChildren: any; id: any; }) => {
-  //             account.hasChildren = accounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-  //           });
-    
-  //           this.accounts = accounts;
-  //         }
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //       }
-  //     });
-  //   }else{
-  //     this._AccountService.getAccountsByParent(this.type||'').subscribe({
-  //       next: (response) => {
-  //         if (response) {
-  //           console.log(response)
-  //           const accounts = response.data;
-  //           accounts.forEach((account: { hasChildren: any; id: any; }) => {
-  //             account.hasChildren = accounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-  //           });
-    
-  //           this.accounts = accounts;
-  //         }
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //       }
-  //     });
-  //   }
-
-  // }
   loadAccounts(): void {
     if (this.type === 'all') {
       this._AccountService.viewAllAccounts().subscribe({
         next: (response) => {
+          console.log(response);
           if (response) {
             const accounts = response.data;
             accounts.forEach((account: { hasChildren: any; id: any }) => {

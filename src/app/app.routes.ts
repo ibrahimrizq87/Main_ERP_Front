@@ -85,6 +85,10 @@ import { AddUserComponent } from './Components/add-user/add-user.component';
 import { UpdateUserComponent } from './Components/update-user/update-user.component';
 import { ShowUserComponent } from './Components/show-user/show-user.component';
 import { AddDocumentComponent } from './Components/add-document/add-document.component';
+import { SystemSettingsComponent } from './Components/system-settings/system-settings.component';
+import { AccountSettingsComponent } from './Components/account-settings/account-settings.component';
+import { GeneralSettingsComponent } from './Components/general-settings/general-settings.component';
+
 
 export const routes: Routes = [
     {path:"",component:LoginComponent},
@@ -92,7 +96,13 @@ export const routes: Routes = [
     {path:"dashboard",component:DashboardComponent,children:[
         
         {path:"vendor",component:VendorComponent},
-       
+        
+        {path:"system-settings",component:SystemSettingsComponent,children:[
+            {path:"account-setting",component:AccountSettingsComponent},
+            {path:"general-setting",component:GeneralSettingsComponent},
+
+        ]},
+
         {path:"check-operation",component:CheckOperationsComponent},
         
         {path:"addPurchase",component:AddPurchaseComponent},

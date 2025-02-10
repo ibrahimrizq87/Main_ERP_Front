@@ -1,0 +1,168 @@
+<!-- <div class="container mt-4">
+    <h5>{{ 'mainAccountNav.list' | translate }}</h5>
+    <div *ngFor="let setting of settings" class="card mb-3 shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <h6 class="mb-0 me-3">{{ setting.title }}</h6>
+            <span class="text-muted">{{ 'mainAccountNav.order' | translate }}: {{ setting.order }}</span>
+          </div>
+          <div>
+            <button (click)="addChild(setting)" class="btn btn-sm btn-success me-2">
+                <i class="fas fa-edit"></i> {{ 'mainAccountNav.add_child' | translate }}
+              </button>
+
+            <button (click)="editSetting(setting)" class="btn btn-sm btn-warning me-2">
+              <i class="fas fa-edit"></i> {{ 'mainAccountNav.edit' | translate }}
+            </button>
+            <button (click)="deleteSetting(setting.id)" class="btn btn-sm btn-danger">
+              <i class="fas fa-trash"></i> {{ 'mainAccountNav.delete' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+  </div> -->
+
+  <div class="container mt-4">
+    <h5>{{ 'mainAccountNav.list' | translate }}</h5>
+    
+    <div *ngFor="let setting of settings" class="card mb-3 shadow-sm">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <h6 class="mb-0 me-3">{{ setting.title }}</h6>
+          <span class="text-muted">{{ 'mainAccountNav.order' | translate }}: {{ setting.order }}</span>
+        </div>
+        <div>
+          <button (click)="toggleChildForm(setting.id)" class="btn btn-sm btn-success me-2">
+            <i class="fas fa-plus"></i> {{ 'mainAccountNav.add_child' | translate }}
+          </button>
+          <button (click)="editSetting(setting)" class="btn btn-sm btn-warning me-2">
+            <i class="fas fa-edit"></i> {{ 'mainAccountNav.edit' | translate }}
+          </button>
+          <button (click)="deleteSetting(setting.id)" class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i> {{ 'mainAccountNav.delete' | translate }}
+          </button>
+        </div>
+      </div>
+
+
+      <div *ngIf="setting.children.length>0" class="card-body bg-light">
+        <h6 class="mb-2">{{ 'mainAccountNav.children' | translate }}</h6>
+        <div *ngFor="let child of setting.children" class="child-card p-2 mb-2 border rounded d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ child.title }}</strong>
+            <p class="mb-0">
+              {{ getLocalizedAccountName(child.account) }}
+            </p>
+          </div>
+          <button (click)="deleteChild(child.id)" class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i> {{ 'mainAccountNav.delete_child' | translate }}
+          </button>
+        </div>
+      </div>
+
+
+      
+      <!-- Child Form -->
+      <div *ngIf="showChildFormId === setting.id" class="card-body bg-light mt-2">
+        <form (ngSubmit)="addChild(setting)">
+          <div class="mb-3">
+            <label for="childTitle" class="form-label">{{ 'mainAccountNav.child_title' | translate }}</label>
+            <input type="text" id="childTitle" [(ngModel)]="childTitle" name="childTitle" class="form-control" placeholder="{{ 'mainAccountNav.child_title_placeholder' | translate }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="account" class="form-label">{{ 'mainAccountNav.choose_account' | translate }}</label>
+            <a (click)="openModal('shiftModal')"    class="btn btn-outline-info" >
+              {{selectedAccount? selectedAccount.name : 'اختر الحساب'}}
+            </a>
+          </div>
+          <button type="submit" class="btn btn-primary">{{ 'mainAccountNav.save' | translate }}</button>
+          <button type="button" (click)="toggleChildForm(null)" class="btn btn-secondary">{{ 'mainAccountNav.cancel' | translate }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+
+<div class="container mt-4">
+    <h5>{{ 'mainAccountNav.create' | translate }}</h5>
+    <form [formGroup]="mainAccountForm" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-3">
+        <label for="title">{{ 'mainAccountNav.title' | translate }}</label>
+        <input
+          id="title"
+          formControlName="title"
+          type="text"
+          class="form-control"
+          [placeholder]="'mainAccountNav.enterTitle' | translate"
+          required
+        />
+        <div class="alert alert-danger mt-2" *ngIf="isSubmited && mainAccountForm.get('title')?.invalid">
+          {{ 'mainAccountNav.titleRequired' | translate }}
+        </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="order">{{ 'mainAccountNav.order' | translate }}</label>
+        <select
+          id="order"
+          formControlName="order"
+          class="form-select"
+          required
+        >
+        <option *ngFor="let num of numbers" [value]="num">
+            {{ selectedSetting? num - 1: num }}
+          </option>
+          
+        </select>
+        <div class="alert alert-danger mt-2" *ngIf="isSubmited && mainAccountForm.get('order')?.invalid">
+          {{ 'mainAccountNav.orderRequired' | translate }}
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">
+        <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'mainAccountNav.save' | translate }}
+      </button>
+    </form>
+  </div>
+  
+
+
+    <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Search Input -->
+            <input
+              type="text"
+              class="form-control mb-3"
+              [placeholder]="'mainAccountNav.searchAccount' | translate"
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearchChange()"
+            />
+    
+            <!-- Accounts Table -->
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)" style="cursor: pointer;">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ account.name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    

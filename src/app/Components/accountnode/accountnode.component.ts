@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 interface Account {
   id: string;
-  name_ar: string;
-  name_en?: string;
+  name:string
+  ;
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;

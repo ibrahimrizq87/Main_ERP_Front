@@ -1,0 +1,14 @@
+.child-card {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+  }
+  
+  .child-card:hover {
+    background-color: #e9ecef;
+  }
+  
+  .child-card p {
+    font-size: 13px;
+    color: #6c757d;
+  }
+  

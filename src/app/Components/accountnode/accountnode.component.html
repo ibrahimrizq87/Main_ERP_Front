@@ -2,7 +2,7 @@
     <span class="toggle-button" (click)="toggleChildren()">
       {{ account.showChildren ? '-' : '+' }}
     </span>
-    <span class="account-name">{{ account.name_ar }}</span>
+    <span class="account-name">{{ account.name }}</span>
   </div>
   
   <div class="account-children" *ngIf="account.showChildren && account.child?.length">

@@ -1,4 +1,45 @@
 {
+
+
+  
+    "mainAccountNav": {
+          "children": "Children",
+    "delete_child": "Delete Child",
+      "add_child": "Add Child",
+      "child_title": "Child Title",
+      "child_title_placeholder": "Enter child title...",
+      "choose_account": "Choose Account",
+      "cancel": "Cancel",
+      "create": "Create Main Account Navigation Setting",
+      "title": "Title",
+      "enterTitle": "Enter title",
+      "titleRequired": "Title is required.",
+      "order": "Order",
+      "enterOrder": "Enter order",
+      "orderRequired": "Order is required and must be a number.",
+      "save": "Save",
+      "list": "List of Main Account Navigation Settings",
+      "edit": "Edit",
+      "delete": "Delete",
+      "selectAccount": "Select Account",
+      "searchAccount": "Search for an account...",
+      "accountName": "Account Name"
+    }
+  ,
+  
+    "System_Setting": {
+      "account": "Account Setting",
+      "general_setting": "General Setting"
+    }
+  ,
+  
+
+  "System_Setting_Nav":{
+    "SystemSetting": "System Setting",
+    "Account_Setting": "System Setting"
+  },
+
+
   "ACCOUNT_GROUP": "Account Group",
   "MANAGE_ACCOUNTING": "Manage Accounting",
   "ACCOUNTS_LIST": "Accounts List",

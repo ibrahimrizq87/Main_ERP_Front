@@ -7,8 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 interface Account {
   id: string;
-  name_ar: string;
-  name_en?: string;
+  name: string;
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;
@@ -41,12 +40,12 @@ export class AccountsComponent implements OnInit {
 
   loadGroups(): void {
 
-    this._AccountService.getData().subscribe({
+    this._AccountService.getAllMainAccounts().subscribe({
       next: (response) => {
         if (response) {
-          this.groups = response.group;
-          this.parentAccounts = response.accounts;
-          this.currencies = response.currencies;
+          console.log(response);
+
+          this.parentAccounts = response.data;
           this.hierarchicalAccounts = this.buildAccountHierarchy(this.parentAccounts);
         }
       },
