@@ -47,10 +47,10 @@ export class UpdateCurrencyComponent implements OnInit {
           const currencyData = response.data ; 
           console.log(currencyData)
           this.currencyForm.patchValue({
-            currency_name_ar:currencyData.currency_name_ar,
-            currency_name_en:currencyData.currency_name_en,
-            derivative_name_ar:currencyData.derivative_name_ar,
-            derivative_name_en:currencyData.derivative_name_en,
+            currency_name_ar:currencyData.name_langs.ar,
+            currency_name_en:currencyData.name_langs.en,
+            derivative_name_ar:currencyData.derivative_name_langs.ar,
+            derivative_name_en:currencyData.derivative_name_langs.en,
             abbreviation:currencyData.abbreviation,
             value:currencyData.value
            
@@ -69,13 +69,19 @@ export class UpdateCurrencyComponent implements OnInit {
       this.isLoading = true;
 
       const formData = new FormData();
-      formData.append('currency_name_ar', this.currencyForm.get('currency_name_ar')?.value);
-      formData.append('currency_name_en', this.currencyForm.get('currency_name_en')?.value);
-      formData.append('derivative_name_ar', this.currencyForm.get('derivative_name_ar')?.value);
-      formData.append('derivative_name_en', this.currencyForm.get('derivative_name_en')?.value);
+      // formData.append('currency_name_ar', this.currencyForm.get('currency_name_ar')?.value);
+      // formData.append('currency_name_en', this.currencyForm.get('currency_name_en')?.value);
+      // formData.append('derivative_name_ar', this.currencyForm.get('derivative_name_ar')?.value);
+      // formData.append('derivative_name_en', this.currencyForm.get('derivative_name_en')?.value);
+      // formData.append('abbreviation', this.currencyForm.get('abbreviation')?.value);
+      // formData.append('value', this.currencyForm.get('value')?.value);
+
+      formData.append('name[en]', this.currencyForm.get('currency_name_en')?.value);
+      formData.append('name[ar]', this.currencyForm.get('currency_name_ar')?.value);
+      formData.append('derivative_name[en]', this.currencyForm.get('derivative_name_en')?.value);
+      formData.append('derivative_name[ar]', this.currencyForm.get('derivative_name_ar')?.value);
       formData.append('abbreviation', this.currencyForm.get('abbreviation')?.value);
       formData.append('value', this.currencyForm.get('value')?.value);
-      formData.append('user_id', '1'); 
       const currency_id = this.route.snapshot.paramMap.get('id');
       
       if (currency_id) {

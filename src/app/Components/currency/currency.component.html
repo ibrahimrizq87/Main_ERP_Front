@@ -29,8 +29,8 @@
         <thead>
             <tr>
                 <th class="bg-light" scope="col">#</th>
-                <th class="bg-light" scope="col">{{ 'CURRENCY_NAME_AR' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'DERIVATIVE_NAME_AR' | translate }}</th>
+                <th class="bg-light" scope="col">{{ '_CURRENCY_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ '_DERIVATIVE_NAME' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ABBREVIATION' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'VALUE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
@@ -39,8 +39,8 @@
         <tbody>
             <tr *ngFor="let currency of filteredCurrencies; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ currency.currency_name_ar }}</td>
-                <td>{{ currency.derivative_name_ar }}</td>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.derivative_name }}</td>
                 <td>{{ currency.abbreviation }}</td>
                 <td>{{ currency.value }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">

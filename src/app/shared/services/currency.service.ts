@@ -2,59 +2,52 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
 
   private baseURL = environment.apiUrl;
-  constructor(private _HttpClient: HttpClient) { 
+  constructor(private _HttpClient: HttpClient , private translate: TranslateService) { 
   }
-  private handleError(error: any) {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-     
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-     
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
+  
+
+  private getHeaders(): HttpHeaders {
+    const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar');  
+    console.log('lang ',currentLang);
+
+    return new HttpHeaders({
+      'Accept-Language': currentLang
+    });
   }
-  addCurrency(currencyData: FormData): Observable<any> {
+
+  
+
+  private getHeadersWithToken(): HttpHeaders {
+    const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar'); 
     const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/currencies`, currencyData ,{ headers }).pipe(
-      catchError(this.handleError));
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': currentLang
+    });
+  }
+
+
+  addCurrency(currencyData: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/currencies`, currencyData ,{ headers: this.getHeadersWithToken()  });
   }
   viewAllCurrency(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/currencies`,{ headers });
+    return this._HttpClient.get(`${this.baseURL}/general/currencies`,{ headers: this.getHeadersWithToken()  });
   }
   getCurrencyById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/currencies/"+id, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.get(this.baseURL+"/general/currencies/"+id, { headers: this.getHeadersWithToken()  });
   }
   updateCurrency(currencyId: string, currencyData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     currencyData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/currencies/${currencyId}`, currencyData, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.post(`${this.baseURL}/general/currencies/${currencyId}`, currencyData, { headers: this.getHeadersWithToken()  });
   }
   deleteCurrency(currencyId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/currencies/${currencyId}`, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.delete(`${this.baseURL}/general/currencies/${currencyId}`, { headers: this.getHeadersWithToken()  });
   }
 }

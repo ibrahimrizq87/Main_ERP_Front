@@ -2,44 +2,54 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable} from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PriceService {
 
-  private baseURL = environment.apiUrl;
-  constructor(private _HttpClient: HttpClient) { 
-  }
+ private baseURL = environment.apiUrl;
+   constructor(private _HttpClient: HttpClient , private translate: TranslateService) { 
+   }
+   
+ 
+   private getHeaders(): HttpHeaders {
+     const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar');  
+     console.log('lang ',currentLang);
+ 
+     return new HttpHeaders({
+       'Accept-Language': currentLang
+     });
+   }
+ 
+   
+ 
+   private getHeadersWithToken(): HttpHeaders {
+     const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar'); 
+     const token = localStorage.getItem('Token');
+     return new HttpHeaders({
+       'Authorization': `Bearer ${token}`,
+       'Accept-Language': currentLang
+     });
+   }
+
+
 
   addCategory(categoryData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/price-categories`, categoryData ,{ headers })
+    return this._HttpClient.post(`${this.baseURL}/general/price-categories`, categoryData ,{ headers: this.getHeadersWithToken() })
   }
   viewAllCategory(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/price-categories`,{ headers })
+    return this._HttpClient.get(`${this.baseURL}/general/price-categories`,{ headers: this.getHeadersWithToken() })
   }
   getCategoryById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/price-categories/"+id, { headers })
-   
+    return this._HttpClient.get(this.baseURL+"/general/price-categories/"+id, { headers: this.getHeadersWithToken() })
   }
   updateCategory(categoryId: string, cityData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     cityData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/price-categories/${categoryId}`, cityData, { headers })
+    return this._HttpClient.post(`${this.baseURL}/general/price-categories/${categoryId}`, cityData, { headers: this.getHeadersWithToken() })
   }
   deleteCategory(categoryId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/price-categories/${categoryId}`, { headers })
+    return this._HttpClient.delete(`${this.baseURL}/general/price-categories/${categoryId}`, { headers: this.getHeadersWithToken() })
   }
 }

@@ -16,7 +16,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class AddCurrencyComponent {
   msgError: string = '';
   isLoading: boolean = false;
-  
+  isSubmited = false;
+
   constructor(private _CurrencyService:CurrencyService , private _Router: Router) {}
 
   currencyForm: FormGroup = new FormGroup({
@@ -31,19 +32,20 @@ export class AddCurrencyComponent {
   });
 
   handleForm() {
-   
+    this.isSubmited = true;
     if (this.currencyForm.valid) {
     
       this.isLoading = true;
 
       const formData = new FormData();
-      formData.append('currency_name_ar', this.currencyForm.get('currency_name_ar')?.value);
-      formData.append('currency_name_en', this.currencyForm.get('currency_name_en')?.value);
-      formData.append('derivative_name_ar', this.currencyForm.get('derivative_name_ar')?.value);
-      formData.append('derivative_name_en', this.currencyForm.get('derivative_name_en')?.value);
+
+      formData.append('name[en]', this.currencyForm.get('currency_name_en')?.value);
+      formData.append('name[ar]', this.currencyForm.get('currency_name_ar')?.value);
+      formData.append('derivative_name[en]', this.currencyForm.get('derivative_name_en')?.value);
+      formData.append('derivative_name[ar]', this.currencyForm.get('derivative_name_ar')?.value);
       formData.append('abbreviation', this.currencyForm.get('abbreviation')?.value);
       formData.append('value', this.currencyForm.get('value')?.value);
-      formData.append('user_id', '1'); 
+      
 
       this._CurrencyService.addCurrency(formData).subscribe({
       
