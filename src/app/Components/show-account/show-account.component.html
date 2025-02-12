@@ -12,46 +12,43 @@
           <div class="card-header bg-white text-black rounded-top pt-3">
             <h5>{{ 'PERSONAL_DETAILS' | translate }}</h5>
           </div>
-          <div class="card-body pb-5">
+          <!-- <div class="card-body pb-5">
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'NAME_AR' | translate }}:</label>
-                  <p class="text-muted">{{ accountData.name_ar }}</p>
-                </div>
-                <div class="mb-3">
+                  <p class="text-muted">{{ accountData.name }}</p>
+                </div> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'NAME_EN' | translate }}:</label>
                   <p class="text-muted">{{ accountData.name_en }}</p>
-                </div>
-                <div class="mb-3">
+                </div> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'CREATOR' | translate }}:</label>
                   <p class="text-muted">{{ accountData.creator.user_name }}</p>
-                </div>
-                <div class="mb-3">
+                </div> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'CURRENCY' | translate }}:</label>
                   <p class="text-muted">{{ accountData.currency }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'GROUP' | translate }}:</label>
-                  <p class="text-muted">{{ accountData.group.name }}</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3">
+                </div> -->
+            
+              <!-- </div>
+              <div class="col-md-6"> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'TYPE' | translate }}:</label>
                   <p class="text-muted">{{ accountData.type }}</p>
-                </div>
-                <div class="mb-3">
+                </div> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'PARENT' | translate }}:</label>
                   <p class="text-muted">{{ accountData.parent_id }}</p>
-                </div>
-                <div class="mb-3">
+                </div> -->
+                <!-- <div class="mb-3">
                   <label class="fw-bold">{{ 'NET_BALANCE' | translate }}:</label>
-                  <p class="text-muted">{{ accountData.net_balance }}</p>
+                  <p class="text-muted">{{ accountData.current_balance }}</p>
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'NET_CREDIT' | translate }}:</label>
-                  <p class="text-muted">{{ accountData.net_cridet }}</p>
+                  <p class="text-muted">{{ accountData.net_credit }}</p>
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'NET_DEBIT' | translate }}:</label>
@@ -60,21 +57,103 @@
               </div>
             </div>
             <h6 class="mt-4">{{ 'ADDITIONAL_INFORMATION' | translate }}</h6>
-            <div class="row">
-              <div class="col-md-6">
+            <div class="row"> -->
+              <!-- <div class="col-md-6">
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'LAST_TRANSACTION' | translate }}:</label>
                   <p class="text-muted">{{ accountData.last_transaction || 'N/A' }}</p>
                 </div>
-              </div>
-              <div class="col-md-6">
+              </div> -->
+              <!-- <div class="col-md-6">
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'LAST_UPDATE_CREATOR' | translate }}:</label>
                   <p class="text-muted">{{ accountData.last_update_creator || 'N/A' }}</p>
                 </div>
+              </div> -->
+            <!-- </div>
+          </div> -->
+
+          <div class="card-body pb-5">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'ID' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.id || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NAME' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.name || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CURRENT_BALANCE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.current_balance | currency:'ISR' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'BALANCE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.start_balance | currency:'ISR' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NET_CREDIT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.net_credit | currency:'ISR' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'NET_DEBIT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.net_debit | currency:'ISR' }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'TYPE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.type || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'FINANCIAL_CONDITION' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.financial_condition || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CREATOR' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.creator.name || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CURRENCY' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.currency.name || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'PARENT ACCOUNT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.parent.name || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.created_at || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'UPDATED_AT' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.updated_at || 'N/A' }}</p>
+                </div>
+              </div>
+            </div>
+          
+            <h6 class="mt-4">{{ 'ADDITIONAL_INFORMATION' | translate }}</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CURRENCY ABBREVIATION' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.currency.abbreviation || 'N/A' }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'DERIVATIVE NAME' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.currency.derivative_name || 'N/A' }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'CURRENCY VALUE' | translate }}:</label>
+                  <p class="text-muted">{{ accountData.currency.value || 'N/A' }}</p>
+                </div>
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>

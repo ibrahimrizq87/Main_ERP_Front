@@ -124,7 +124,7 @@
                   <div *ngIf="accountNav.children.length > 0">
                     
                   <li class="nav-item"  *ngFor="let child of accountNav.children">
-                    <a class="nav-link" (click)="accounting(child.id.toString())">
+                    <a class="nav-link" (click)="accounting(child.account.id.toString())">
                       <i class="fa-solid fa-money-bill me-2"></i> {{ child.title }} 
                     </a>
                   </li>

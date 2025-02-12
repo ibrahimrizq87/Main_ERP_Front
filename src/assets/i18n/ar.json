@@ -1,4 +1,15 @@
 {
+  "UPDATED_AT": "تم التحديث في",
+  "PARENT ACCOUNT": "الحساب الرئيسي",
+  "CURRENCY ABBREVIATION": "اختصار العملة",
+  "DERIVATIVE NAME": "الاسم المشتق",
+  "CURRENCY VALUE": "قيمة العملة",
+  "CURRENT_BALANCE": "الرصيد الحالي",
+  "NET_DEBIT": "صافي المدين",
+  "NET_CREDIT": "صافي الدائن",
+  "FINANCIAL_CONDITION": "الحالة المالية"
+
+  ,
     "mainAccountNav": {
       "children": "الأطفال",
       "delete_child": "حذف الطفل",
@@ -112,7 +123,7 @@
   "CURRENCY": "العملة",
   "SEARCH": "بحث...",
   "NAME": "الاسم",
-  "BALANCE": "الرصيد",
+  "BALANCE": "رصيد اول المده",
   "TYPE": "النوع",
   "ACTIONS": "الإجراءات",
   "NAME_AR": "الاسم بالعربية",
@@ -541,8 +552,7 @@
   "CREATOR": "المنشئ",
   "PARENT": "الأب",
   "NET_BALANCE": "الرصيد الصافي",
-  "NET_CREDIT": "الائتمان الصافي",
-  "NET_DEBIT": "الخصم الصافي",
+
   "LAST_TRANSACTION": "آخر عملية",
   "LAST_UPDATE_CREATOR": "آخر تحديث بواسطة",
   "BANK_BRANCH_INFORMATION": "معلومات فرع البنك",

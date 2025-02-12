@@ -1,1 +1,35 @@
-<p>general-settings works!</p>
+<ul class="navbar-nav mb-2 mb-lg-0">
+    <li class="nav-item dropdown rounded">
+      <a 
+        class="nav-link dropdown-toggle" 
+        role="button" 
+        (click)="toggleLanguageDropdown()"
+        aria-expanded="false"
+      >
+        {{ 'LANGUAGE' | translate }}
+
+      </a>
+      <ul 
+        class="dropdown-menu" 
+        [class.show]="isLanguageDropdownOpen"
+        [attr.aria-hidden]="!isLanguageDropdownOpen"
+      >
+        <li>
+          <a 
+            class="dropdown-item" 
+            (click)="switchLanguage('ar')"
+          >
+            عربى
+          </a>
+        </li>
+        <li>
+          <a 
+            class="dropdown-item" 
+            (click)="switchLanguage('en')"
+          >
+            English
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>

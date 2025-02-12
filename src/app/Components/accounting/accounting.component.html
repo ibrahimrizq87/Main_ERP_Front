@@ -30,18 +30,24 @@
           <th class="bg-light" scope="col">#</th>
           <th class="bg-light" scope="col">{{ 'NAME' | translate }}</th>
           <th class="bg-light" scope="col">{{ 'BALANCE' | translate }}</th>
-          <th class="bg-light" scope="col">{{ 'GROUP' | translate }}</th>
-          <th class="bg-light" scope="col">{{ 'TYPE' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'CURRENT_BALANCE' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'NET_DEBIT' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'NET_CREDIT' | translate }}</th>
+          <th class="bg-light" scope="col">{{ 'FINANCIAL_CONDITION' | translate }}</th>
+
           <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let account of accounts; let i = index">
           <th scope="row">{{ i + 1 }}</th>
-          <td>{{ account.name_ar }}</td>
-          <td>{{ account.net_balance }}</td>
-          <td>{{ account.group?.name }}</td>
-          <td>{{ account.type }}</td>
+          <td>{{ account.name }}</td>
+          <td>{{ account.start_balance }}</td>
+          <td>{{ account.current_balance }}</td>
+          <td>{{ account.net_debit }}</td>
+          <td>{{ account.net_credit }}</td>
+          <td>{{ account.financial_condition }}</td>
+
           <td class="d-flex justify-content-around align-items-center">
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showAccount', account.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>

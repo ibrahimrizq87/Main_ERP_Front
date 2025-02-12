@@ -1,5 +1,14 @@
 {
-
+  "UPDATED_AT": "Updated At",
+  "PARENT ACCOUNT": "Parent Account",
+  "CURRENCY ABBREVIATION": "Currency Abbreviation",
+  "DERIVATIVE NAME": "Derivative Name",
+  "CURRENCY VALUE": "Currency Value"
+  ,
+  "CURRENT_BALANCE": "Current Balance",
+  "NET_CREDIT": "Net Credit",
+  "NET_DEBIT": "Net Debit",
+  "FINANCIAL_CONDITION": "Financial Condition",
 
   
     "mainAccountNav": {
@@ -117,7 +126,7 @@
   "CURRENCY": "Currency",
   "SEARCH": "Search...",
   "NAME": "Name",
-  "BALANCE": "Balance",
+  "BALANCE": "Start Balance",
   "TYPE": "Type",
   "ACTIONS": "Actions",
   "NAME_AR": "Name in Arabic",
@@ -545,8 +554,7 @@
   "CREATOR": "Creator",
   "PARENT": "Parent",
   "NET_BALANCE": "Net Balance",
-  "NET_CREDIT": "Net Credit",
-  "NET_DEBIT": "Net Debit",
+
   "LAST_TRANSACTION": "Last Transaction",
   "LAST_UPDATE_CREATOR": "Last Update Creator",
   "BANK_BRANCH_INFORMATION": "Bank Branch Information",
