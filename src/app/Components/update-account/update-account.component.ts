@@ -6,6 +6,7 @@ import { AccountService } from '../../shared/services/account.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GroupService } from '../../shared/services/group.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CurrencyService } from '../../shared/services/currency.service';
 
 interface Account {
   id: string;
@@ -22,6 +23,8 @@ interface Account {
   styleUrl: './update-account.component.css'
 })
 export class UpdateAccountComponent implements OnInit{
+  submitted: boolean = false;
+
   msgError: string = '';
   msgSuccess:string ='';
   isLoading: boolean = false;
@@ -35,34 +38,48 @@ export class UpdateAccountComponent implements OnInit{
   accountForm: FormGroup;
   parent_id :string ='';
   
-  constructor(private _AccountService: AccountService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute,private _GroupService:GroupService) {
+  constructor(    private _CurrencyService: CurrencyService,
+    private _AccountService: AccountService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute,private _GroupService:GroupService) {
     this.accountForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required]),
       name_en: this.fb.control(null),
       net_balance: this.fb.control(null, [Validators.required, Validators.min(0)]),
-      // type: this.fb.control(null, [Validators.required]),
-      // groups: this.fb.control(this.selectedGroup),
+      net_credit: this.fb.control(null, [Validators.required, Validators.min(0)]),
+      net_debit: this.fb.control(null, [Validators.required, Validators.min(0)]),
+
+      can_delete: [false] ,
+
+      
       currency_id: this.fb.control(this.selectedCurrency),
-      // parent_id: [null]
+      
     });
   }
     ngOnInit(): void {
-      this.loadGroups();
-      this.loadGroupsType();
+      this.loadCurrency()
     const accountId = this.route.snapshot.paramMap.get('id'); 
     if (accountId) {
       this.fetchAccountData(accountId);
     }
   }
-  loadGroups(): void {
-    this._AccountService.getData().subscribe({
+
+  // onTypeChange(event: any) {
+  //   const selectedType = event.target.value;
+  //   this.isBranchSelected = selectedType === 'branch';
+
+  //   if (this.isBranchSelected) {
+  //     this.accountForm.get('parent_id')?.setValidators([Validators.required]);
+  //   } else {
+  //     this.accountForm.get('parent_id')?.clearValidators();
+  //     this.accountForm.get('parent_id')?.setValue(null);
+  //   }
+  //   this.accountForm.get('parent_id')?.updateValueAndValidity();
+  // }
+  loadCurrency(): void {
+    this._CurrencyService.viewAllCurrency().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response)
-          // this.groups = response.group;
-          this.parentAccounts = response.accounts;
-          this.currencies = response.currencies;
-          this.hierarchicalAccounts = this.buildAccountHierarchy(this.parentAccounts);
+          console.log(response);
+          this.currencies = response.data;
         }
       },
       error: (err) => {
@@ -70,72 +87,55 @@ export class UpdateAccountComponent implements OnInit{
       }
     });
   }
-  loadGroupsType(): void {
-    this._GroupService.groupsType('account').subscribe({
-      next: (response: any) => {  // Explicit type for response
-        console.log(response);
-        this.groups = response.data;
-      },
-      error: (err: any) => {  // Explicit type for error
-        console.error(err);
-      }
-    });
-  }
-  buildAccountHierarchy(accounts: Account[]): any[] {
-    return accounts.map(account => ({
-      ...account,
-      children: account.child ? this.buildAccountHierarchy(account.child) : []
-    }));
-  }
-  onTypeChange(event: any) {
-    const selectedType = event.target.value;
-    this.isBranchSelected = selectedType === 'branch';
-
-    if (this.isBranchSelected) {
-      this.accountForm.get('parent_id')?.setValidators([Validators.required]);
-    } else {
-      this.accountForm.get('parent_id')?.clearValidators();
-      this.accountForm.get('parent_id')?.setValue(null);
-    }
-    this.accountForm.get('parent_id')?.updateValueAndValidity();
-  }
-
     fetchAccountData(accountId: string): void {
-    this._AccountService.showAccountById(accountId).subscribe({
+    this._AccountService.showAccountByIdAllInfo(accountId).subscribe({
       next: (response) => {
         if (response) {
           const accountData = response.data ; 
           console.log(accountData)
-          this.parent_id = accountData.parent_id;
+          this.parent_id = accountData.parent.id;
           this.accountForm.patchValue({
-            name_ar:accountData.name_ar,
-            name_en:accountData.name_en,
-            net_balance:accountData.net_balance,
-            type:accountData.type,
-            groups:accountData.group,
-            currency_id:accountData.currency,
+            name_ar:accountData.name_lang.ar,
+            name_en:accountData.name_lang.en,
+            net_balance:accountData.start_balance,
+            currency_id:accountData.currency.id,
+            net_credit:accountData.net_credit,
+            net_debit:accountData.net_debit,
+            can_delete:accountData.can_delete,
+
+            
 
           });
         }
       },
       error: (err: HttpErrorResponse) => {
         this.msgError = err.error.error;
+        alert('can not fetch account data');
       }
     });
   }
   handleForm() {
+    this.submitted =true;
     if (this.accountForm.valid) {
       this.isLoading = true;
       const formData = new FormData();
-      formData.append('name_ar', this.accountForm.get('name_ar')?.value);
-      formData.append('name_en', this.accountForm.get('name_en')?.value || '');
-      formData.append('net_balance', this.accountForm.get('net_balance')?.value);
+      formData.append('name[ar]', this.accountForm.get('name_ar')?.value);
+      formData.append('name[en]', this.accountForm.get('name_en')?.value || '');
+      formData.append('start_balance', this.accountForm.get('net_balance')?.value);
       formData.append('currency_id', this.accountForm.get('currency_id')?.value || '');
+      // console.log(formData);
+      // return;
+      if(this.accountForm.get('can_delete')?.value){
+        formData.append('can_delete', '1');
+
+      }else{
+        formData.append('can_delete', '0');
+
+      }
+
       // formData.append('group_id', this.accountForm.get('groups')?.value || '');
       // formData.append('type', this.accountForm.get('type')?.value);
-      if (this.isBranchSelected) {
-        formData.append('parent_id', this.accountForm.get('parent_id')?.value);
-      }
+     
       const accountID = this.route.snapshot.paramMap.get('id');
       
       if (accountID) {

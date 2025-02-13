@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -28,7 +28,8 @@ export class AddDocumentComponent {
   parent_accounts_company: any;
 
   type: string | null = '';
-  constructor(private route: ActivatedRoute
+  constructor(private router: Router,
+    private route: ActivatedRoute
     , private fb: FormBuilder,
     private _AccountService: AccountService,
     private _PaymentDocumentService: PaymentDocumentService
@@ -170,6 +171,7 @@ export class AddDocumentComponent {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.router.navigate(['/dashboard/document/' + this.type ]);
 
           }
         },

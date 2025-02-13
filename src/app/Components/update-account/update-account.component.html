@@ -6,7 +6,7 @@
   <form [formGroup]="accountForm" (ngSubmit)="handleForm()">
     <div class="container">
       <div class="row">
-        <!-- Personal Detail Card -->
+
         <div class="col-md-12">
           <div class="card shadow em-card rounded-lg">
             <div class="card-header bg-white text-black rounded-top pt-3 ">
@@ -17,7 +17,7 @@
                 <div class="form-group col-md-6">
                   <label for="name_ar" class="form-label">{{ 'NAME_AR' | translate }}</label>
                   <input id="name_ar" formControlName="name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_NAME' | translate }}" />
-                  <div class="alert alert-danger" *ngIf="accountForm.get('name_ar')?.errors && accountForm.get('name_ar')?.touched">
+                  <div class="alert alert-danger" *ngIf="accountForm.get('name_ar')?.errors && submitted">
                     <p *ngIf="accountForm.get('name_ar')?.hasError('required')">{{ 'ARABIC_NAME_REQUIRED' | translate }}</p>
                   </div>
                 </div>
@@ -30,52 +30,50 @@
                 <div class="form-group col-md-6">
                   <label for="net_balance" class="form-label">{{ 'BALANCE' | translate }}</label>
                   <input id="net_balance" formControlName="net_balance" type="number" class="form-control" placeholder="{{ 'ENTER_BALANCE' | translate }}" />
-                  <div class="alert alert-danger" *ngIf="accountForm.get('net_balance')?.errors && accountForm.get('net_balance')?.touched">
+                  <div class="alert alert-danger" *ngIf="accountForm.get('net_balance')?.errors && submitted">
                     <p *ngIf="accountForm.get('net_balance')?.hasError('required')">{{ 'BALANCE_REQUIRED' | translate }}</p>
                     <p *ngIf="accountForm.get('net_balance')?.hasError('min')">{{ 'MIN_IS_0' | translate }}</p>
                   </div>
                 </div>
 
-                <!-- <div class="form-group col-md-6">
-                  <label class="form-label">{{ 'SELECT_GROUP' | translate }}</label>
-                  <select class="form-control" formControlName="groups">
-                    <option>{{ 'SELECT_GROUP' | translate }}</option>
-                    <option *ngFor="let group of groups" [value]="group.id">{{ group.name }}</option>
-                  </select>
-                </div> -->
+
+                <div class="form-group col-md-6">
+                  <label for="net_credit" class="form-label">{{ 'NET_CREDIT' | translate }}</label>
+                  <input id="net_credit" formControlName="net_credit" type="number" class="form-control" placeholder="{{ 'NET_CREDIT' | translate }}" />
+                  <div class="alert alert-danger" *ngIf="accountForm.get('net_credit')?.errors && submitted">
+                    <p *ngIf="accountForm.get('net_credit')?.hasError('required')">{{ 'NET_CREDIT' | translate }}</p>
+                    <p *ngIf="accountForm.get('net_credit')?.hasError('min')">{{ 'MIN_IS_0' | translate }}</p>
+                  </div>
+                </div>
+
+
+                <div class="form-group col-md-6">
+                  <label for="net_debit" class="form-label">{{ 'NET_DEBIT' | translate }}</label>
+                  <input id="net_debit" formControlName="net_debit" type="number" class="form-control" placeholder="{{ 'NET_DEBIT' | translate }}" />
+                  <div class="alert alert-danger" *ngIf="accountForm.get('net_debit')?.errors && submitted">
+                    <p *ngIf="accountForm.get('net_debit')?.hasError('required')">{{ 'NET_DEBIT' | translate }}</p>
+                    <p *ngIf="accountForm.get('net_debit')?.hasError('min')">{{ 'MIN_IS_0' | translate }}</p>
+                  </div>
+                </div>
+               
                 <div class="form-group col-md-6">
                   <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
                   <select class="form-control" formControlName="currency_id">
                     <option>{{ 'SELECT_CURRENCY' | translate }}</option>
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_en }}</option>
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                   </select>
                 </div>
-               
-                <!-- <div class="form-group col-md-6">
-                  <label class="form-label">{{ 'SELECT_TYPE' | translate }}</label>
-                  <select class="form-control" formControlName="type" (change)="onTypeChange($event)">
-                    <option>{{ 'SELECT_TYPE' | translate }}</option>
-                    <option value="main">{{ 'MAIN' | translate }}</option>
-                    <option value="branch">{{ 'BRANCH' | translate }}</option>
-                  </select>
-                </div> -->
-    
- <!-- <div class="form-group col-md-6" *ngIf="isBranchSelected">
-  <label class="form-label">{{ 'SELECT_PARENT_BRANCH' | translate }}</label>
-  <select class="form-control" formControlName="parent_id">
-    <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option>
-    <ng-container *ngFor="let parent of hierarchicalAccounts">
-      <option [ngValue]="parent.id">{{ parent.name_ar }}</option>
-      <ng-container *ngFor="let child of parent.children">
-        <option [ngValue]="child.id">&nbsp;&nbsp;{{ child.name_ar }}</option>
-        <ng-container *ngFor="let subChild of child.children">
-          <option [ngValue]="subChild.id">&nbsp;&nbsp;&nbsp;&nbsp;{{ subChild.name_ar }}</option>
-         
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </select>
-</div> -->
+
+                <div class="form-group col-md-12">
+                  <div class="form-check">
+                    <label for="can_delete" class="form-check-label">{{ 'CAN_DELETE' | translate }}</label>
+                    <br>
+                    <input id="can_delete" formControlName="can_delete" type="checkbox" class="form-check-input ms-2" />
+                  </div>
+                
+                </div>
+            
+ 
               </div>
             </div>
           </div>
@@ -84,7 +82,7 @@
 
     
       <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
-        <button [disabled]="accountForm.invalid" type="submit" class="btn btn-primary px-4">
+        <button  type="submit" class="btn btn-primary px-4">
           <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'UPDATE' | translate }} </button>
         <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
       </div>

@@ -42,7 +42,7 @@
                 <div class="form-group col-md-6">
                   <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
                   <select id="currency_id" formControlName="currency_id" class="form-control">
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                   </select>
                 </div>
 
@@ -89,7 +89,7 @@
                         <div class="form-group col-md-3">
                           <label for="account" class="form-label large-text">{{ 'ACCOUNT' | translate }}</label>
                           <select formControlName="account" class="form-control" (change)="onAccountChange($event , i)">
-                            <option *ngFor="let account of accounts" [value]="account.id">{{ account.name_ar }}</option>
+                            <option *ngFor="let account of accounts" [value]="account.id">{{ account.name }}</option>
                           </select>
                         </div>
                 

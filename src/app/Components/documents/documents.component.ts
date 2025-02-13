@@ -23,7 +23,7 @@ export class DocumentsComponent {
   compony_accounts: any;
   notes: any;
   currencies: any;
-
+  status ='waiting';
   delegates: any;
   creators: any;
   parent_accounts: any;
@@ -47,7 +47,11 @@ export class DocumentsComponent {
 
 
   
-  
+  changeStatus(status:string){
+this.status = status;
+this.loadAllDocuments();
+
+  }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const newType = params.get('type');
@@ -121,7 +125,7 @@ export class DocumentsComponent {
       this.type = 'debit_notification';
 
     }
-    this._PaymentDocumentService.getDocumentsByType(this.type || '').subscribe({
+    this._PaymentDocumentService.getDocumentsByType(this.type || '' , this.status).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);

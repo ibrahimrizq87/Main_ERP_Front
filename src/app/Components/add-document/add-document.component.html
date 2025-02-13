@@ -40,7 +40,7 @@
                     </label>
   
                     <select id="from_to_account" formControlName="from_to_account" class="form-control">
-                      <option *ngFor="let account of accounts" [value]="account.id">{{ account.name_ar }}</option>
+                      <option *ngFor="let account of accounts" [value]="account.id">{{ account.name }}</option>
                     </select>
                   </div>
   
@@ -54,7 +54,7 @@
   }}
                     </label>
                     <select id="from_to_account_company" formControlName="from_to_account_company" class="form-control">
-                      <option *ngFor="let account of compony_accounts" [value]="account.id">{{ account.name_ar }}</option>
+                      <option *ngFor="let account of compony_accounts" [value]="account.id">{{ account.name }}</option>
                     </select>
                   </div>
   
@@ -70,7 +70,7 @@
                   <div class="form-group col-md-6">
                     <label for="currency_id" class="form-label">Currency</label>
                     <select id="currency_id" formControlName="currency_id" class="form-control">
-                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                     </select>
                   </div>
   

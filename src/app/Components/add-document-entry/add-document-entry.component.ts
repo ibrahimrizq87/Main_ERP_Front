@@ -85,6 +85,16 @@ export class AddDocumentEntryComponent implements OnInit {
    }
   loadDelegates() {
     
+    this._AccountService.getAccountsByParent('623').subscribe({
+      next: (response) => {
+        if (response) {
+          this.delegates = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
   loadAccounts() { 
     this._AccountService.getAllChildren().subscribe({

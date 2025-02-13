@@ -34,17 +34,15 @@ export class AccountService {
       'Accept-Language': currentLang
     });
   }
+
+
+
   getData(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/general/accounts`, { headers: this.getHeadersWithToken()  });
   }
   getAllMainAccounts(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/general/accounts/get-all-main`, { headers: this.getHeadersWithToken()  });
   }
-
 
   getAllHasChildren(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/accounts/accounts-has-children/get-all`, { headers: this.getHeadersWithToken()  });
@@ -54,23 +52,44 @@ export class AccountService {
     return this._HttpClient.post(`${this.baseURL}/admin/accounts`, accountData, { headers: this.getHeadersWithToken() })
   }
 
-
   getAccountsByParent(id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/accounts/get-children/${id}`, { headers: this.getHeadersWithToken() })
   }
+
   showAccountById(id: any): Observable<any> {
     return this._HttpClient.get(this.baseURL + "/general/accounts/" + id, { headers: this.getHeadersWithToken()  });
   }
+
   showAccountByIdAllInfo(id: any): Observable<any> {
     return this._HttpClient.get(this.baseURL + "/general/accounts/get-all-info/" + id, { headers: this.getHeadersWithToken()  });
   }
 
+  deleteAccount(accountId: number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/admin/accounts/${accountId}`, { headers: this.getHeadersWithToken()  });
+  }
+  // getParentForDocument(parent: number[], parent_company: number[]): Observable<any> {
+  //   return this._HttpClient.post(this.baseURL + "  ",
+  //     { "parent": parent, 'parent_company': parent_company }, { headers });
+  // }
+
+  getAllChildren(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/all-children`, { headers: this.getHeadersWithToken()  });
+  }
+
+  getParentForDocument(parent: number[], parent_company: number[]): Observable<any> {
+    return this._HttpClient.post(this.baseURL + "/general/accounts/get-accounts-for-document",
+      { "parent": parent, 'parent_company': parent_company }, { headers: this.getHeadersWithToken() });
+  }
+
+  
   
 
+  updateAccount(accountId: string, accountData: FormData): Observable<any> {
+    accountData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/accounts/${accountId}`, accountData, { headers: this.getHeadersWithToken() });
+  }
 
   getAllAccounts(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}`, { headers: this.getHeadersWithToken()  });
   }
   getAccountById(id: string): Observable<any> {
@@ -78,13 +97,6 @@ export class AccountService {
   }
 
 
-
-
-  getAllChildren(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/accounts/all-children`, { headers });
-  }
 
 
   viewAllAccounts(): Observable<any> {
@@ -96,12 +108,7 @@ export class AccountService {
  
 
 
-  getParentForDocument(parent: number[], parent_company: number[]): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(this.baseURL + "/accounting/barent/document",
-      { "parent": parent, 'parent_company': parent_company }, { headers });
-  }
+  
 
 
 
@@ -111,19 +118,9 @@ export class AccountService {
     return this._HttpClient.post(this.baseURL + "/accounting/cheldren/byIds",
       { "parent": parent }, { headers });
   }
-  updateAccount(accountId: string, accountData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    accountData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/accounting/${accountId}`, accountData, { headers });
-  }
 
-  deleteAccount(accountId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this._HttpClient.delete(`${this.baseURL}/accounting/${accountId}`, { headers });
-  }
+
 
 
   getAccountByParentAndBank(accountId: number , parentId:number): Observable<any> {
