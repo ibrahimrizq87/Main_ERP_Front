@@ -14,13 +14,18 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class DocumentEntryComponent implements OnInit {
   DocumentEntry: any[] = [];
+  status ='waiting';
 
   constructor(private _DocumentService: DocumentService , private router: Router) {}
 
   ngOnInit(): void {
     this.loadDocumentEntry();
   }
-
+  changeStatus(status:string){
+    this.status = status;
+    this.loadDocumentEntry();
+    
+      }
   loadDocumentEntry(): void {
     this._DocumentService.viewAllDocumentEntry().subscribe({
       next: (response) => {

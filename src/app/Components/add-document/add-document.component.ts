@@ -1,27 +1,32 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators ,FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from '../../shared/services/account.service';
 import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Modal } from 'bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+// import { FormBuilder, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 @Component({
   selector: 'app-add-document',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,TranslateModule , FormsModule],
   templateUrl: './add-document.component.html',
   styleUrl: './add-document.component.css'
 })
 export class AddDocumentComponent {
   transactionForm: FormGroup;
   isLoading = false;
-  accounts: any;
-  compony_accounts: any;
+  accounts:Account [] = [];
+  compony_accounts: Account [] = [];
   notes: any;
   currencies: any;
 
-  delegates: any;
+  delegates: Account [] = [];
   creators: any;
   parent_accounts: any;
 
@@ -63,6 +68,7 @@ export class AddDocumentComponent {
   
   ngOnInit(): void {
     this.getParams();
+    this.loadDelegates();
 
   }
 
@@ -128,7 +134,19 @@ export class AddDocumentComponent {
     }
 
   }
-
+  loadDelegates() {
+    
+    this._AccountService.getAccountsByParent('623').subscribe({
+      next: (response) => {
+        if (response) {
+          this.delegates = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
   getAccounts(parent: number[], parent_company: number[]) {
     this._AccountService.getParentForDocument(parent, parent_company).subscribe({
       next: (response) => {
@@ -187,4 +205,99 @@ export class AddDocumentComponent {
 
 
 
+
+
+  // for pop up
+  filteredAccounts: Account[] = [];
+  selectedPopUP:string ='';
+  searchQuery: string = '';
+  selectedAccount:Account | null= null;
+  selecteddelegateAccount:Account | null= null;
+
+  selectedcompanyAccount:Account | null= null;
+
+  selectAccount(account:Account){
+    
+    if(this.selectedPopUP  == 'company'){
+      this.selectedcompanyAccount = account;
+      this.transactionForm.patchValue({'from_to_account_company':account.id})
+    }else if (this.selectedPopUP  == 'delegate'){
+      this.selecteddelegateAccount = account;
+      this.transactionForm.patchValue({'delegate_id':account.id})
+
+    }else{
+      this.selectedAccount = account;
+      this.transactionForm.patchValue({'from_to_account':account.id})
+
+    }
+    this.closeModal('shiftModal');
+  }
+
+
+
+  removeCurrentDelegate(){
+    this.selecteddelegateAccount =null;
+   this.transactionForm.patchValue({'delegate_id':null});
+  }
+
+    closeModal(modalId: string) {
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+    }
+  
+    openModal(modalId: string , type:string) {
+
+      this.selectedPopUP = type;
+      if(type == 'company'){
+        this.filteredAccounts = this.compony_accounts;
+      }else if (type == 'delegate'){
+        this.filteredAccounts =this.delegates;
+      }else{
+        this.filteredAccounts =this.accounts;
+
+      }
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = new Modal(modalElement);
+        modal.show();
+      }
+    }
+  
+
+    
+  onSearchChange(){
+
+  
+    if(this.selectedPopUP == 'company'){
+      this.filteredAccounts = this.compony_accounts.filter(account =>
+        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+  
+    }else if (this.selectedPopUP == 'delegate'){
+      this.filteredAccounts = this.delegates.filter(account =>
+        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }else{
+      this.filteredAccounts = this.accounts.filter(account =>
+        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+      }
+   
+  }
+
+
+}
+
+
+
+
+interface Account {
+  id: string;
+  name: string;
+  parent_id?: string;
+  child?: Account[];
+  showChildren?: boolean;
 }

@@ -15,6 +15,6 @@ export class EntryDocumentService {
   addEntryDocument(entryData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/entry_documents`, entryData,{ headers })
+    return this._HttpClient.post(`${this.baseURL}/general/entry-documents`, entryData,{ headers })
   }
 }

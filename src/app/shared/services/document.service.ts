@@ -14,17 +14,17 @@ export class DocumentService {
   addDocumentEntry(documentEntryData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/entry_documents`, documentEntryData ,{ headers })
+    return this._HttpClient.post(`${this.baseURL}/general/entry-documents`, documentEntryData ,{ headers })
   }
   viewAllDocumentEntry(): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/entry_documents`,{ headers })
+    return this._HttpClient.get(`${this.baseURL}/general/entry-documents`,{ headers })
   }
   deleteDocument(documentId: number): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this._HttpClient.delete(`${this.baseURL}/entry_documents/${documentId}`, { headers })
+    return this._HttpClient.delete(`${this.baseURL}/general/entry-documents/${documentId}`, { headers })
   }
 }

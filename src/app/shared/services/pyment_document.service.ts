@@ -42,7 +42,14 @@ export class PaymentDocumentService {
     return this._HttpClient.get(`${this.baseURL}/general/payment-documents/by-type/`+type+'/'+status,{ headers: this.getHeadersWithToken() });
   }
 
+  getDocumentById(id:string ): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/`+id,{ headers: this.getHeadersWithToken() });
+  }
 
+  updateDocumentById(id:string ,documentData: FormData): Observable<any> {
+    documentData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/payment-documents/`+id, documentData,{ headers: this.getHeadersWithToken() });
+  }
 
   viewAllDocuments(): Observable<any> {
     const token = localStorage.getItem('Token');

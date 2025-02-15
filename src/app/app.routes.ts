@@ -88,6 +88,8 @@ import { AddDocumentComponent } from './Components/add-document/add-document.com
 import { SystemSettingsComponent } from './Components/system-settings/system-settings.component';
 import { AccountSettingsComponent } from './Components/account-settings/account-settings.component';
 import { GeneralSettingsComponent } from './Components/general-settings/general-settings.component';
+import { ShowPaymentDocumentComponent } from './Components/show-payment-document/show-payment-document.component';
+import { UpdatePaymentDocumentComponent } from './Components/update-payment-document/update-payment-document.component';
 
 
 export const routes: Routes = [
@@ -110,7 +112,11 @@ export const routes: Routes = [
         {path:"approvedPurchases",component:ApprovedPurchasesComponent},
         {path:"updatePurchase/:id",component:UpdatePurchaseComponent},
         {path:"showPurchase/:id",component:ShowPurchaseComponent},
+        {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
+        {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
 
+        
+        
         {path:"addcheck",component:AddCheckComponent},
         
         {path:"check/:id",component:ViewCheckComponent},

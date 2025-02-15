@@ -21,6 +21,7 @@ export class GeneralSettingsComponent {
   switchLanguage(lang: string) {
     this.currentLang = lang;
     this.translate.use(lang);
+    localStorage.setItem('lang' ,lang );
     //this.updateIcons();
     // this.setLanguageDirection(lang);
     this.isLanguageDropdownOpen = false;
