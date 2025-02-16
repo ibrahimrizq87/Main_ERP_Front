@@ -96,6 +96,18 @@
               {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent}, -->
                 <td >
                   <div class="d-flex justify-content-around align-items-center">
+                    <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,document.id)">
+                      approve
+                    </a>
+                    <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',document.id)">
+                      reject
+                    </a>
+                    <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',document.id)">
+                      waiting
+                    </a>
+
+
+
                   <a class="nav-link" [routerLink]="['/dashboard/showPaymentDocument', document.id]">
                     <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
                   </a>

@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+
 interface Account {
   id: string;
-  name:string
-  ;
+  name:string;
+  type:string;
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;
@@ -11,7 +14,7 @@ interface Account {
 @Component({
   selector: 'app-accountnode',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule , RouterModule],
   templateUrl: './accountnode.component.html',
   styleUrl: './accountnode.component.css'
 })

@@ -246,7 +246,7 @@ export class UpdatePaymentDocumentComponent {
             next: (response) => {
               this.isLoading = false;
               if (response) {
-                this.router.navigate(['/dashboard/document/' + this.type ]);
+                this.router.navigate(['/dashboard/document/' + this.type +'/'+ this.paymentDocument?.status]);
     
               }
             },
@@ -360,6 +360,7 @@ export class UpdatePaymentDocumentComponent {
       creator_id: number;
       currency_id: number;
       date: string;
+      status:string;
       delegate: Account | null;
       from_to_account: Account;
       from_to_account_company: Account;

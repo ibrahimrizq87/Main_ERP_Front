@@ -49,9 +49,15 @@
                 <!-- Delegate -->
                 <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
-                  <select id="delegate_id" formControlName="delegate_id" class="form-control">
+                  <!-- <select id="delegate_id" formControlName="delegate_id" class="form-control">
                     <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name }}</option>
-                  </select>
+                  </select> -->
+                  <br>
+                  <a (click)="openModal('shiftModal' , 'delegate' , -1)" class="btn btn-outline-info">
+                    {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
+                  </a>
+                  <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
+
                 </div>
 
                 <!-- Note -->
@@ -88,9 +94,16 @@
                         <!-- Account -->
                         <div class="form-group col-md-3">
                           <label for="account" class="form-label large-text">{{ 'ACCOUNT' | translate }}</label>
-                          <select formControlName="account" class="form-control" (change)="onAccountChange($event , i)">
+                          <br>
+                          <!-- <select formControlName="account" class="form-control" (change)="onAccountChange($event , i)">
                             <option *ngFor="let account of accounts" [value]="account.id">{{ account.name }}</option>
-                          </select>
+                          </select> -->
+
+                          <a (click)="openModal('shiftModal' , 'account' , i)" class="btn btn-outline-info">
+                            {{getAccountById(i)? getAccountById(i).name : 'اختر الحساب'}}
+                          </a>
+
+
                         </div>
                 
                         <!-- Remove Item Button -->
@@ -130,4 +143,40 @@
       </div>
     </div>
   </form>
+</div>
+
+
+
+
+<div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ i + 1 }}</td>
+              <td>{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

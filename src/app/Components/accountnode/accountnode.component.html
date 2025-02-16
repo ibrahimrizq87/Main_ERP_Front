@@ -1,13 +1,19 @@
 <div class="account-node">
-    <span class="toggle-button" (click)="toggleChildren()">
+    <span *ngIf="account.type != 'has_children'" class="toggle-button" (click)="toggleChildren()">
       {{ account.showChildren ? '-' : '+' }}
     </span>
     <span class="account-name">{{ account.name }}</span>
+    <a *ngIf="account.type === 'has_children'" class="btn btn-info" [routerLink]="'/dashboard/accounting/' + account.id">
+      الحسابات الفرعية
+    </a>
+    
   </div>
   
   <div class="account-children" *ngIf="account.showChildren && account.child?.length">
     <ng-container *ngFor="let child of account.child">
       <app-accountnode [account]="child"></app-accountnode>
     </ng-container>
+
+
   </div>
   

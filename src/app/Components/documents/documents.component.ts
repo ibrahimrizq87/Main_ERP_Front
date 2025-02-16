@@ -32,7 +32,6 @@ export class DocumentsComponent {
   filteredCities: any[] = []; 
   searchQuery: string = ''; 
   parent_accounts_company: any;
-
   type: string | null = '';
   constructor(private route: ActivatedRoute
     , private fb: FormBuilder,
@@ -49,12 +48,54 @@ export class DocumentsComponent {
   
   changeStatus(status:string){
 this.status = status;
+this.router.navigate([`/dashboard/document/${this.type}/${status}`]);
 this.loadAllDocuments();
 
   }
+  ManageChangeStatus(status:string , id:string){
+
+      this._PaymentDocumentService.UpdateDocumentStatus(id ,status ).subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadAllDocuments()
+
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
+  deleteDocument( id:string){
+    if (confirm('Are you sure you want to delete this Document?')) {
+
+    this._PaymentDocumentService.deleteDocument(id  ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadAllDocuments()
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+}
+  
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const newType = params.get('type');
+      const newStatus = params.get('status');
+      console.log(newStatus);
+      if (newStatus && this.status !== newStatus) {
+
+  
+          this.status = newStatus;
+        
+        
+      }
+
       if (this.type !== newType) {
         this.type = newType;
         this.onParamChange();
@@ -90,14 +131,15 @@ this.loadAllDocuments();
 
   }
   get addDocumentRouterLink(): string {
+    console.log('type',this.type);
     if (this.type === 'receipt') {
       return '/dashboard/addDocument/receipt';
     }  if (this.type === 'payment') {
       return '/dashboard/addDocument/payment';
-    } if (this.type =='creditNote') {
-      return '/dashboard/addDocument/creditNote';
-    }  if (this.type == 'debitNote') {
-      return '/dashboard/addDocument/debitNote';
+    } if (this.type =='credit_note') {
+      return '/dashboard/addDocument/credit_note';
+    }  if (this.type == 'debit_note') {
+      return '/dashboard/addDocument/debit_note';
     }
     return '/dashboard/addDocument';
   }
@@ -119,12 +161,11 @@ this.loadAllDocuments();
   loadAllDocuments(): void {
 
 
-    if (this.type == 'creditNote'){
-      this.type = 'credit_notification';
-    }else if (this.type ==  'debitNote'){
-      this.type = 'debit_notification';
-
-    }
+    // if (this.type == 'credit_note'){
+    //   this.type = 'credit_note';
+    // }else if (this.type ==  'debit_note'){
+    //   this.type = 'debit_note';
+    // }
     this._PaymentDocumentService.getDocumentsByType(this.type || '' , this.status).subscribe({
       next: (response) => {
         if (response) {
@@ -140,22 +181,22 @@ this.loadAllDocuments();
   }
  
 
-  deleteDocument(documentId: number): void {
-    if (confirm('Are you sure you want to delete this Document?')) {
-      this._PaymentDocumentService.deleteDocument(documentId).subscribe({
-        next: (response) => {
-          if (response) {
-            this.router.navigate([`/dashboard/document/${this.type}`]);
-            this.loadAllDocuments();
-          }
-        },
-        error: (err) => {
-          console.error(err);
-          alert('An error occurred while deleting the User.');
-        }
-      });
-    }
-  }
+  // deleteDocument(documentId: number): void {
+  //   if (confirm('Are you sure you want to delete this Document?')) {
+  //     this._PaymentDocumentService.deleteDocument(documentId).subscribe({
+  //       next: (response) => {
+  //         if (response) {
+  //           this.router.navigate([`/dashboard/document/${this.type}`]);
+  //           this.loadAllDocuments();
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //         alert('An error occurred while deleting the User.');
+  //       }
+  //     });
+  //   }
+  // }
 
 
 }

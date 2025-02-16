@@ -113,13 +113,13 @@ export class AddDocumentComponent {
         this.handlePayment();
         break;
 
-      case 'creditNote':
-        this.type = 'credit_notification';
+      case 'credit_note':
+        this.type = 'credit_note';
         this.handleCreditNote();
         break;
 
-      case 'debitNote':
-        this.type = 'debit_notification';
+      case 'debit_note':
+        this.type = 'debit_note';
 
         this.handleDebitNote();
         break;
@@ -130,6 +130,7 @@ export class AddDocumentComponent {
 
       default:
         alert('wrong document type please try to select a document');
+        this.router.navigate(['/dashboard/document/' + this.type ]);
         break;
     }
 
@@ -189,7 +190,7 @@ export class AddDocumentComponent {
         next: (response) => {
           this.isLoading = false;
           if (response) {
-            this.router.navigate(['/dashboard/document/' + this.type ]);
+            this.router.navigate(['/dashboard/document/' + this.type +'/waiting']);
 
           }
         },

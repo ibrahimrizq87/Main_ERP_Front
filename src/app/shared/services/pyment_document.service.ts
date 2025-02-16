@@ -50,6 +50,20 @@ export class PaymentDocumentService {
     documentData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/general/payment-documents/`+id, documentData,{ headers: this.getHeadersWithToken() });
   }
+  approveDocument(id:string ): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/approve-document/`+id,{ headers: this.getHeadersWithToken() });
+  }
+  rejectDocument(id:string ): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/reject-document/`+id,{ headers: this.getHeadersWithToken() });
+  }
+  UpdateDocumentStatus(id:string,status:string ): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/update-status/${id}/${status}`,{ headers: this.getHeadersWithToken() });
+  }
+  deleteDocument(id:string ): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/payment-documents/${id}`,{ headers: this.getHeadersWithToken() });
+  }
+  
+  // old //
 
   viewAllDocuments(): Observable<any> {
     const token = localStorage.getItem('Token');
@@ -58,10 +72,5 @@ export class PaymentDocumentService {
   }
 
   
-  deleteDocument(documentId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/payment_documents/${documentId}`, { headers })
-  }
+
 }

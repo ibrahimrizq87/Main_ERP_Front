@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators ,FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { AccountService } from '../../shared/services/account.service';
@@ -8,13 +8,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EntryDocumentService } from '../../shared/services/entry-documnet.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { Modal } from 'bootstrap';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-add-document-entry',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule,TranslateModule
+    CommonModule,TranslateModule,FormsModule
   ],
   templateUrl: './add-document-entry.component.html',
   styleUrls: ['./add-document-entry.component.css']
@@ -24,20 +26,19 @@ export class AddDocumentEntryComponent implements OnInit {
   entryForm: FormGroup;
   isLoading = false;
   currencies: any = []; 
-  delegates: any = [];
+  delegates: Account [] = [];
   documents: any = []; // Sample data for documents
-  accounts: any = [];  // Sample data for accounts
+  accounts: Account [] = [];  // Sample data for accounts
   totalDebit = 0;
   totalCredit = 0;
   totalDifference = 0;
   totalType = '';
-
-
+  selectedAccounts: { index: number; account: Account }[] = [];
   constructor(private fb: FormBuilder,
     private _CurrencyService:CurrencyService,
     private _AccountService:AccountService,
         private _Router: Router,
-    
+        private cdr: ChangeDetectorRef,
     private _EntryDocument :EntryDocumentService
   ) {
     this.entryForm = this.fb.group({
@@ -119,21 +120,28 @@ export class AddDocumentEntryComponent implements OnInit {
     const entryItem = this.entryForm.get('entryItems') as FormArray;
     const amount = entryItem.at(index).get('amount')?.value;
     const type = entryItem.at(index).get('type')?.value;
-    const selectedAccountId = entryItem.at(index).get('account')?.value;
+    const selectedAccountId = (entryItem.at(index).get('account')?.value).id;
 
 
 
     const isDuplicate = this.entryItems.controls.some((item, i) => {
       if (i !== index) {  
-        const accountId = item.get('account')?.value;
+        const accountId = (item.get('account')?.value).id;
         const type = item.get('type')?.value;
         return accountId === selectedAccountId && type !== selectedType;
       }
       return false;
     });
-  
+    // value="debit">{{ 'DEBIT' | translate }}</option>
+    // <option value="credit">
     if (isDuplicate) {
-      entryItem.at(index).get('account')?.setValue(null); 
+      if(selectedType == 'debit'){
+        entryItem.at(index).get('type')?.setValue('credit'); 
+
+      }else{
+        entryItem.at(index).get('type')?.setValue('debit'); 
+
+      }
 
       alert('You cannot choose the same account with a different type (debit/credit)!');
       return;
@@ -164,7 +172,9 @@ export class AddDocumentEntryComponent implements OnInit {
     const entryItem = this.fb.group({
       amount: ['', Validators.required],
       type: ['debit', Validators.required],
-      account: ['', Validators.required]
+      account: ['', Validators.required],
+
+      
     });
     this.entryItems.push(entryItem);
   }
@@ -197,7 +207,7 @@ export class AddDocumentEntryComponent implements OnInit {
           amount: item.get('amount')?.value || ''
         };
       
-        formData.append(`entryItems[${index}][account]`, entryData.account);
+        formData.append(`entryItems[${index}][account_id]`, entryData.account.id);
         formData.append(`entryItems[${index}][type]`, entryData.type);
         formData.append(`entryItems[${index}][amount]`, entryData.amount);
       });
@@ -225,19 +235,21 @@ export class AddDocumentEntryComponent implements OnInit {
   
 
 
+  getAccountById(index:number){
+    const entryItem = this.entryForm.get('entryItems') as FormArray;
+    const selectedAccount = entryItem.at(index).get('account')?.value;
+    return selectedAccount;
+  }
 
-onAccountChange(event: Event, index: number) {
-  const selectedAccountId = (event.target as HTMLSelectElement).value;
+onAccountChange(selectedaccountID: string, index: number) {
   const entryItem = this.entryForm.get('entryItems') as FormArray;
   const selectedType = entryItem.at(index).get('type')?.value;
-console.log(selectedType);
-console.log(selectedAccountId);
 
   const isDuplicate = this.entryItems.controls.some((item, i) => {
     if (i !== index) {  
-      const accountId = item.get('account')?.value;
+      const accountId = (item.get('account')?.value).id;
       const type = item.get('type')?.value;
-      return accountId === selectedAccountId && type !== selectedType;
+      return accountId === selectedaccountID && type !== selectedType;
     }
     return false;
   });
@@ -246,6 +258,9 @@ console.log(selectedAccountId);
     entryItem.at(index).get('account')?.setValue(null); 
     alert('You cannot choose the same account with a different type (debit/credit)!');
   }
+
+
+  return isDuplicate;
 }
 
 calculateTotals() {
@@ -270,7 +285,108 @@ calculateTotals() {
     }
     });
   }
-}
+
+  
 
 
+  filteredAccounts: Account[] = [];
+    selectedPopUP:string ='';
+    searchQuery: string = '';
+    selectedAccount:Account | null= null;
+    selecteddelegateAccount:Account | null= null;
+  popUpIndex = -1;
+    selectedcompanyAccount:Account | null= null;
+  
+    selectAccount(account:Account){
+      const entryItem = this.entryForm.get('entryItems') as FormArray;
+    
+      if(this.selectedPopUP  == 'account'){
+        const isDoublicated = this.onAccountChange(account.id , this.popUpIndex);
+        if(isDoublicated){
+          this.closeModal('shiftModal');
+          return;
+        }
+        entryItem.at(this.popUpIndex).get('account')?.setValue(account); 
+        entryItem.at(this.popUpIndex).get('account_name')?.setValue(account.name); 
 
+      }else if (this.selectedPopUP  == 'delegate'){
+        this.selecteddelegateAccount = account;
+        this.entryForm.patchValue({'delegate_id':account.id})
+  
+      }
+      // const accomdkdcd =entryItem.at(this.popUpIndex).get('account')?.value;
+      // console.log('here 1',account);
+      //       console.log('here 2',      accomdkdcd         );
+
+            this.cdr.detectChanges();
+
+      this.closeModal('shiftModal');
+
+    }
+  
+  
+  
+    removeCurrentDelegate(){
+      this.selecteddelegateAccount =null;
+     this.entryForm.patchValue({'delegate_id':null});
+    }
+  
+
+
+      closeModal(modalId: string) {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = Modal.getInstance(modalElement);
+          modal?.hide();
+        }
+      }
+    
+
+      openModal(modalId: string , type:string ,index:number) {
+        this.selectedPopUP = type;
+        this.popUpIndex = index;
+        const entryItem = this.entryForm.get('entryItems') as FormArray;
+        if(type == 'account'){
+          this.filteredAccounts =this.accounts;
+        }else if (type == 'delegate'){
+          this.filteredAccounts =this.delegates;
+        }
+        // console.log('hrerererer');
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = new Modal(modalElement);
+          modal.show();
+        }
+      }
+    
+  
+      
+    onSearchChange(){
+  
+    
+      if(this.selectedPopUP == 'account'){
+        this.filteredAccounts = this.accounts.filter(account =>
+          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+    
+      }else if (this.selectedPopUP == 'delegate'){
+        this.filteredAccounts = this.delegates.filter(account =>
+          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+     
+    }
+  
+  
+  }
+  
+  
+  
+  
+  interface Account {
+    id: string;
+    name: string;
+    parent_id?: string;
+    child?: Account[];
+    showChildren?: boolean;
+  }

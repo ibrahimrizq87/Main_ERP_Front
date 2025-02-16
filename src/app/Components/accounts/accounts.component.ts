@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 interface Account {
   id: string;
   name: string;
+  type: string;
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;

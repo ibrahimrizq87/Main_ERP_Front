@@ -124,7 +124,7 @@ export const routes: Routes = [
         {path:"createVendor",component:CreateVendorComponent},
         //   {path:"document/:type",component:AddDocumentComponent},
         {path:"addDocument/:type",component:AddDocumentComponent},
-        {path:"document/:type",component:DocumentsComponent},
+        {path:"document/:type/:status",component:DocumentsComponent},
         {path:"check",component:CheckManagementComponent},
 
         {path:"documentEntry",component:DocumentEntryComponent},
