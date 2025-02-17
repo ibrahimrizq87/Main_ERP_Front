@@ -1,0 +1,182 @@
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'MANAGE_ENTRY_DOCUMENTS' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'ENTRY_DOCUMENTS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_DOCUMENT' | translate }}</span>
+  </div>
+  <div class="mt-4 mb-4">
+    <form [formGroup]="entryForm" (ngSubmit)="handleSubmit()">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow em-card rounded-lg">
+              <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5 class="large-text">{{ 'DOCUMENT_DETAILS' | translate }}</h5>
+              </div>
+              <div class="card-body pb-5">
+                <div class="row">
+                  
+                  <!-- Manual Reference -->
+                  <div class="form-group col-md-6">
+                    <label for="manual_reference" class="form-label large-text">{{ 'MANUAL_REFERENCE' | translate }}</label>
+                    <input id="manual_reference" formControlName="manual_reference" type="text" class="form-control" placeholder="{{ 'MANUAL_REFERENCE' | translate }}" />
+                    <div class="alert alert-danger" *ngIf="entryForm.get('manual_reference')?.touched && entryForm.get('manual_reference')?.hasError('maxLength')">
+                      Max length is 255 characters.
+                    </div>
+                  </div>
+                  
+                  <!-- Date -->
+                  <div class="form-group col-md-6">
+                    <label for="date" class="form-label large-text">{{ 'DATE' | translate }}</label>
+                    <input id="date" formControlName="date" type="date" class="form-control" />
+                    <div class="alert alert-danger" *ngIf="entryForm.get('date')?.touched && entryForm.get('date')?.hasError('required')">
+                      {{ 'DATE' | translate }} {{ 'IS_REQUIRED' | translate }}.
+                    </div>
+                  </div>
+  
+                  <!-- Organization -->
+                  <div class="form-group col-md-6">
+                    <label for="organization" class="form-label large-text">{{ 'ORGANIZATION' | translate }}</label>
+                    <input id="organization" formControlName="organization" type="text" class="form-control" placeholder="{{ 'ORGANIZATION' | translate }}" />
+                  </div>
+                  
+                  <!-- Currency -->
+                  <div class="form-group col-md-6">
+                    <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
+                    <select id="currency_id" formControlName="currency_id" class="form-control">
+                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
+                    </select>
+                  </div>
+  
+                  <!-- Delegate -->
+                  <div class="form-group col-md-6">
+                    <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
+                    <!-- <select id="delegate_id" formControlName="delegate_id" class="form-control">
+                      <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name }}</option>
+                    </select> -->
+                    <br>
+                    <a (click)="openModal('shiftModal' , 'delegate' , -1)" class="btn btn-outline-info">
+                      {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
+                    </a>
+                    <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
+  
+                  </div>
+  
+                  <!-- Note -->
+                  <div class="form-group col-md-12">
+                    <label for="note" class="form-label large-text">{{ 'NOTE' | translate }}</label>
+                    <textarea id="note" formControlName="note" class="form-control" rows="3" placeholder="{{ 'NOTE' | translate }}"></textarea>
+                    <div class="alert alert-danger" *ngIf="entryForm.get('note')?.touched && entryForm.get('note')?.hasError('maxLength')">
+                      {{ 'MAX_LENGTH_255' | translate }}
+                    </div>
+                  </div>
+  
+                  <div class="form-group col-md-12">
+                    <div formArrayName="entryItems" class="mt-4">
+                      <div *ngFor="let item of entryItems.controls; let i = index" [formGroupName]="i">
+                        <div class="row mb-3">
+                          <!-- Amount -->
+                          <div class="form-group col-md-3">
+                            <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}</label>
+                            <input formControlName="amount" type="number"   (input)="calculateTotals()"  class="form-control" placeholder="{{ 'AMOUNT' | translate }}" />
+                            <div class="alert alert-danger" *ngIf="item.get('amount')?.errors && item.get('amount')?.touched">
+                              <p *ngIf="item.get('amount')?.hasError('required')">{{ 'AMOUNT' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                            </div>
+                          </div>
+                  
+                          <!-- Type -->
+                          <div class="form-group col-md-3">
+                            <label for="type" class="form-label large-text">{{ 'TYPE' | translate }}</label>
+                            <select formControlName="type" class="form-control" (change)="onTypeChange($event , i)">
+                              <option  value="debit">{{ 'DEBIT' | translate }}</option>
+                              <option value="credit">{{ 'CREDIT' | translate }}</option>
+                            </select>
+                          </div>
+                  
+                          <!-- Account -->
+                          <div class="form-group col-md-3">
+                            <label for="account" class="form-label large-text">{{ 'ACCOUNT' | translate }}</label>
+                            <br>
+                            <!-- <select formControlName="account" class="form-control" (change)="onAccountChange($event , i)">
+                              <option *ngFor="let account of accounts" [value]="account.id">{{ account.name }}</option>
+                            </select> -->
+  
+                            <a (click)="openModal('shiftModal' , 'account' , i)" class="btn btn-outline-info">
+                              {{getAccountById(i)? getAccountById(i).name : 'اختر الحساب'}}
+                            </a>
+  
+  
+                          </div>
+                  
+                          <!-- Remove Item Button -->
+                          <div class="col-md-3 mt-2">
+                            <button type="button" class="btn btn-danger" (click)="removeEntryItem(i)">
+                              <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <!-- Add Item Button -->
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-success" (click)="addEntryItem()">
+                        <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
+                      </button>
+                    </div>
+  
+                    <div class="mt-4 text-center">
+                      <p><strong>{{ 'TOTAL_DEBIT' | translate }}:</strong> {{ totalDebit | number:'1.2-2' }}</p>
+                      <p><strong>{{ 'TOTAL_CREDIT' | translate }}:</strong> {{ totalCredit | number:'1.2-2' }}</p>
+                      <p><strong>{{ 'DIFFERENCE' | translate }}:</strong> {{ totalDifference }} || {{ totalType }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Submit Button -->
+          <div class="mt-4 mb-4">
+            <button [disabled]="entryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+  
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+  
+  
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+                style="cursor: pointer;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ account.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -23,6 +23,11 @@
                 <div class="form-group col-md-6">
                   <label for="city" class="form-label">{{ 'addCity.city_name' | translate }}</label>
                   <input id="city" formControlName="city" type="text" class="form-control" [placeholder]="'addCity.enter_city_name' | translate" required />
+                  <!-- <select class="form-control" (change)="onCurrencyChange($event)"   formControlName="currency_id">
+                    <option>{{ 'SELECT_CURRENCY' | translate }}</option>
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
+                    </option>
+                  </select> -->
                   <div class="alert alert-danger" *ngIf="cityForm.get('city')?.errors && cityForm.get('city')?.touched">
                     <p *ngIf="cityForm.get('city')?.getError('required')">{{ 'addCity.city_required' | translate }}</p>
                   </div>

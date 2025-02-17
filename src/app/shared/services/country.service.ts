@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
-export class CityService {
+export class CountryService {
  
   
   private baseURL = environment.apiUrl;
@@ -37,32 +37,25 @@ export class CityService {
      }
   
  
-  addCity(cityData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/city`, cityData ,{ headers:this.getHeadersWithToken() });
+  addCountry(cityData: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/countries`, cityData ,{ headers:this.getHeadersWithToken() });
   }
 
 
-  viewAllCities(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/city`,{ headers:this.getHeadersWithToken() });
+  viewAllcountries(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/countries`,{ headers:this.getHeadersWithToken() });
   }
-  getCityById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/city/"+id, { headers });
+  deleteCountry(cityId: number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/countries/${cityId}`, { headers:this.getHeadersWithToken()  });
   }
-  updateCity(cityId: string, cityData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  getCountryById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/countries/"+id, { headers:this.getHeadersWithToken() });
+  }
+  updateCountry(cityId: string, cityData: FormData): Observable<any> {
     cityData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/city/${cityId}`, cityData, { headers });
+    return this._HttpClient.post(`${this.baseURL}/general/countries/${cityId}`, cityData, { headers:this.getHeadersWithToken()  });
   }
 
-  deleteCity(cityId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/city/${cityId}`, { headers });
-  }
+
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentService } from '../../shared/services/document.service';
-import { Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { EntryDocumentService } from '../../shared/services/entry-documnet.service';
 
 @Component({
   selector: 'app-document-entry',
@@ -16,18 +16,44 @@ export class DocumentEntryComponent implements OnInit {
   DocumentEntry: any[] = [];
   status ='waiting';
 
-  constructor(private _DocumentService: DocumentService , private router: Router) {}
+  constructor(private _EntryDocumentService: EntryDocumentService , private router: Router , 
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadDocumentEntry();
+    this.route.paramMap.subscribe(params => {
+      const newStatus = params.get('status');
+      if (newStatus && this.status !== newStatus) {
+          this.status = newStatus;
+ 
+      }
+    });
+
+    this.loadDocumentEntry(this.status);
   }
+
+  ManageChangeStatus(status:string , id:string){
+
+    this._EntryDocumentService.UpdateEntryDocumentStatus(id ,status ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadDocumentEntry(this.status);
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+}
   changeStatus(status:string){
     this.status = status;
-    this.loadDocumentEntry();
+    this.router.navigate([`/dashboard/documentEntry/${status}`]);
+    this.loadDocumentEntry(status);
     
       }
-  loadDocumentEntry(): void {
-    this._DocumentService.viewAllDocumentEntry().subscribe({
+  loadDocumentEntry(status:string): void {
+    this._EntryDocumentService.viewAllDocumentEntry(status).subscribe({
       next: (response) => {
         if (response) {
 
@@ -43,11 +69,10 @@ export class DocumentEntryComponent implements OnInit {
  
   deleteDocument(documentId: number): void {
     if (confirm('Are you sure you want to delete this Document?')) {
-      this._DocumentService.deleteDocument(documentId).subscribe({
+      this._EntryDocumentService.deleteEntryDocument(documentId).subscribe({
         next: (response) => {
           if (response) {
-            this.router.navigate(['/dashboard/documentEntry']);
-            this.loadDocumentEntry();
+            this.loadDocumentEntry(this.status);
           }
         },
         error: (err:HttpErrorResponse) => {

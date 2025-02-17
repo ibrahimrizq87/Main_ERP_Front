@@ -1,4 +1,32 @@
 {
+
+  "addCountry": {
+    "country_name_en": "اسم البلد بالإنجليزية",
+    "country_name_ar": "اسم البلد بالعربية",
+    "enter_country_name_en": "أدخل اسم البلد بالإنجليزية",
+    "enter_country_name_ar": "أدخل اسم البلد بالعربية",
+    "manage_country": "إدارة البلد",
+    "dashboard": "لوحة القيادة",
+    "country": "بلد",
+    "create_country": "إنشاء بلد",
+    "add_country": "إضافة بلد",
+    "country_name": "اسم البلد",
+    "enter_country_name": "أدخل اسم البلد",
+    "country_required": "اسم البلد مطلوب.",
+    "save": "حفظ"
+},
+  "manageCountry": {
+    "manage_country": "إدارة البلد",
+    "dashboard": "لوحة القيادة",
+    "countries": "الدول",
+    "countries_list": "قائمة الدول",
+    "search_placeholder": "ابحث عن دولة...",
+    "country_name": "اسم البلد",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف"
+},
+
   "UPDATED_AT": "تم التحديث في",
   "PARENT ACCOUNT": "الحساب الرئيسي",
   "CURRENCY ABBREVIATION": "اختصار العملة",

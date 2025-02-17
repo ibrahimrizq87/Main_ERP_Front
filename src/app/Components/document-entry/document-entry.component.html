@@ -86,7 +86,19 @@
                 <td>{{ entry.amount }}</td>
                 <td>{{ entry.value }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCurrency', entry.id]">
+
+                  <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,entry.id)">
+                    approve
+                  </a>
+                  <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',entry.id)">
+                    reject
+                  </a>
+                  <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',entry.id)">
+                    waiting
+                  </a>
+
+
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateEntryDocument', entry.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
                     </a>
                     <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>

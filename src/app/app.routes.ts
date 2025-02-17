@@ -90,7 +90,11 @@ import { AccountSettingsComponent } from './Components/account-settings/account-
 import { GeneralSettingsComponent } from './Components/general-settings/general-settings.component';
 import { ShowPaymentDocumentComponent } from './Components/show-payment-document/show-payment-document.component';
 import { UpdatePaymentDocumentComponent } from './Components/update-payment-document/update-payment-document.component';
-
+import { UpdateEntryDocumentComponent } from './Components/update-entry-document/update-entry-document.component';
+import { CountriesComponent } from './Components/countries/countries.component';
+import { ShowCountryComponent } from './Components/show-country/show-country.component';
+import { UpdateCountryComponent } from './Components/update-country/update-country.component';
+import { AddCountryComponent } from './Components/add-country/add-country.component';
 
 export const routes: Routes = [
     {path:"",component:LoginComponent},
@@ -114,20 +118,23 @@ export const routes: Routes = [
         {path:"showPurchase/:id",component:ShowPurchaseComponent},
         {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
         {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
+        {path:"updateEntryDocument/:id",component:UpdateEntryDocumentComponent},
+
+        {path:"countries",component:CountriesComponent},
+        {path:"showCountry/:id",component:ShowCountryComponent},
+        {path:"updateCountry/:id",component:UpdateCountryComponent},
+        {path:"addCountry",component:AddCountryComponent},
 
         
-        
-        {path:"addcheck",component:AddCheckComponent},
-        
+        {path:"addcheck",component:AddCheckComponent},        
         {path:"check/:id",component:ViewCheckComponent},
-
         {path:"createVendor",component:CreateVendorComponent},
         //   {path:"document/:type",component:AddDocumentComponent},
         {path:"addDocument/:type",component:AddDocumentComponent},
         {path:"document/:type/:status",component:DocumentsComponent},
         {path:"check",component:CheckManagementComponent},
 
-        {path:"documentEntry",component:DocumentEntryComponent},
+        {path:"documentEntry/:status",component:DocumentEntryComponent},
         {path:"addDocumentEntry",component:AddDocumentEntryComponent},
 
 

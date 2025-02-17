@@ -37,9 +37,9 @@
         <tbody>
             <tr *ngFor="let bank of filteredBanks; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ bank.aribic_name }}</td>
-                <td>{{ bank.english_name }}</td>
-                <td>{{ bank.type_bank }}</td>
+                <td>{{ bank.name_langs.ar }}</td>
+                <td>{{ bank.name_langs.en }}</td>
+                <td>{{ bank.type         }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBank', bank.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_BANK' | translate }}"></i>

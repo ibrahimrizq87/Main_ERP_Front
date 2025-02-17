@@ -44,9 +44,9 @@ export class UpdateBankComponent implements OnInit {
           const bankData = response.data ; 
           console.log(bankData)
           this.bankForm.patchValue({
-            name_ar: bankData.aribic_name,
-            name_en: bankData.english_name,
-            type_bank:bankData.type_bank
+            name_ar: bankData.name_langs.ar,
+            name_en: bankData.name_langs.en,
+            type_bank:bankData.type
           });
         }
       },
@@ -60,9 +60,9 @@ export class UpdateBankComponent implements OnInit {
       this.isLoading = true;
   
       const bankData = new FormData();
-      bankData.append('name_ar', this.bankForm.get('name_ar')?.value);
-      bankData.append('name_en', this.bankForm.get('name_en')?.value);
-      bankData.append('type_bank', this.bankForm.get('type_bank')?.value);
+      bankData.append('name[ar]', this.bankForm.get('name_ar')?.value);
+      bankData.append('name[en]', this.bankForm.get('name_en')?.value);
+      bankData.append('type', this.bankForm.get('type_bank')?.value);
     
     
       const bankId = this.route.snapshot.paramMap.get('id');

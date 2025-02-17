@@ -1,5 +1,5 @@
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators ,FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyService } from '../../shared/services/currency.service';
@@ -7,21 +7,20 @@ import { AccountService } from '../../shared/services/account.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EntryDocumentService } from '../../shared/services/entry-documnet.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
-
 @Component({
-  selector: 'app-add-document-entry',
+  selector: 'app-update-entry-document',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,TranslateModule,FormsModule
   ],
-  templateUrl: './add-document-entry.component.html',
-  styleUrls: ['./add-document-entry.component.css']
+  templateUrl: './update-entry-document.component.html',
+  styleUrl: './update-entry-document.component.css'
 })
-export class AddDocumentEntryComponent implements OnInit {
+export class UpdateEntryDocumentComponent {
 
   entryForm: FormGroup;
   isLoading = false;
@@ -33,12 +32,44 @@ export class AddDocumentEntryComponent implements OnInit {
   totalCredit = 0;
   totalDifference = 0;
   totalType = '';
+
+   entryDocument: EntryDocument = {
+    id: 0,
+    date: "",
+    manual_reference: null,
+    note: null,
+    organization: null,
+    updated_at: "",
+    status:"",
+    currency: {
+        id: 0,
+        name: "",
+    },
+    delegate: {
+        id: '0',
+        name: "",
+    },
+    creator: {
+        id: 0,
+        name: "",
+        email: null,
+        phone: null,
+        role: null,
+        image: null,
+        created_at: "",
+        updated_at: "",
+    },
+    entryDocumentItems: [],
+};
+
+
   selectedAccounts: { index: number; account: Account }[] = [];
   constructor(private fb: FormBuilder,
     private _CurrencyService:CurrencyService,
     private _AccountService:AccountService,
         private _Router: Router,
         private cdr: ChangeDetectorRef,
+            private route: ActivatedRoute,
     private _EntryDocument :EntryDocumentService
   ) {
     this.entryForm = this.fb.group({
@@ -57,9 +88,15 @@ export class AddDocumentEntryComponent implements OnInit {
 
 
   ngOnInit() {
+
+    const groupId = this.route.snapshot.paramMap.get('id'); 
+    if (groupId) {
+      this.loadEntryDocument(groupId);
+    }
     this.loadCurrencies();
     this.loadDelegates();
     this.loadAccounts();
+    // this.loadEntryDocument();
   }
 
   getTodayDate(): string {
@@ -84,6 +121,49 @@ export class AddDocumentEntryComponent implements OnInit {
     });
   
    }
+
+
+
+   loadEntryDocument(id:string) {
+    this._EntryDocument.getEntryDocumentById(id).subscribe({
+      next: (response) => {
+        if (response) {
+        this.entryDocument = response.data ;
+
+        this.entryForm.patchValue({
+
+          manual_reference: this.entryDocument.manual_reference,
+          date: this.entryDocument.date,
+          // amount: ['', Validators.required],
+          organization: this.entryDocument.organization,
+          currency_id: this.entryDocument.currency.id,
+          delegate_id: this.entryDocument.delegate?.id,
+          note: this.entryDocument.note,
+          entryItems: []    
+        
+        });
+
+
+        
+        // console.log(this.entryDocument.entryDocumentItems);
+        // console.log(this.entryDocument);
+
+        this.entryDocument.entryDocumentItems.forEach((item) => {
+        this.addEntryItem(item);
+        });
+
+        this.selecteddelegateAccount = this.entryDocument.delegate;
+        this.calculateTotals();
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+
   loadDelegates() {
     
     this._AccountService.getAccountsByParent('623').subscribe({
@@ -168,14 +248,22 @@ export class AddDocumentEntryComponent implements OnInit {
 
     
   }
-  addEntryItem() {
-    const entryItem = this.fb.group({
-      amount: ['', Validators.required],
-      type: ['debit', Validators.required],
-      account: ['', Validators.required],
-
-      
-    });
+  addEntryItem(item:EntryDocumentItem|null =null) {
+    let entryItem;
+    if(item){
+      entryItem = this.fb.group({
+        amount: [item.amount, Validators.required],
+        type: [item.type, Validators.required],
+        account: [item.account, Validators.required],       
+      });
+    }else{
+       entryItem = this.fb.group({
+        amount: ['', Validators.required],
+        type: ['debit', Validators.required],
+        account: ['', Validators.required],       
+      });
+    }
+    
     this.entryItems.push(entryItem);
   }
 
@@ -183,7 +271,6 @@ export class AddDocumentEntryComponent implements OnInit {
   removeEntryItem(index: number) {
     this.entryItems.removeAt(index);
     this.calculateTotals();
-
   }
 
   // Handle form submission
@@ -215,11 +302,11 @@ export class AddDocumentEntryComponent implements OnInit {
       });
       
 
-      this._EntryDocument.addEntryDocument(formData).subscribe({
+      this._EntryDocument.updateEntryDocument(formData , this.entryDocument.id.toString()).subscribe({
         next: (response) => {
           this.isLoading = false;
           if (response) {
-            this._Router.navigate(['/dashboard/documentEntry/waiting']); 
+            this._Router.navigate(['/dashboard/documentEntry/'+this.entryDocument.status]); 
           }
         },
         error: (err: HttpErrorResponse) => {
@@ -388,7 +475,44 @@ calculateTotals() {
   interface Account {
     id: string;
     name: string;
-    parent_id?: string;
-    child?: Account[];
-    showChildren?: boolean;
   }
+
+
+interface Creator {
+    id: number;
+    name: string;
+    email: string | null;
+    phone: string | null;
+    role: string | null;
+    image: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+interface Currency {
+    id: number;
+    name: string;
+}
+
+
+interface EntryDocumentItem {
+    id: number;
+    amount: string;
+    type: 'debit' | 'credit';
+    account: Account;
+    created_at: string;
+}
+
+interface EntryDocument {
+    id: number;
+    date: string;
+    manual_reference: string | null;
+    note: string | null;
+    organization: string | null;
+    updated_at: string;
+    currency: Currency;
+    delegate: Account |null;
+    creator: Creator;
+    status:string;
+    entryDocumentItems: EntryDocumentItem[];
+}

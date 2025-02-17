@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'manageCountry.manage_country' | translate }}</h5>
+        <span class="text-muted">{{ 'manageCountry.dashboard' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'manageCountry.countries' | translate }}</span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCountry">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'manageCountry.countries_list' | translate }}</span>
+            <input 
+                class="form-control search w-25" 
+                type="search" 
+                [(ngModel)]="searchQuery" 
+                (input)="onSearch()" 
+                placeholder="{{ 'manageCountry.search_placeholder' | translate }}" 
+                aria-label="Search">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'manageCountry.country_name' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'manageCountry.actions' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let country of filteredCountries; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ country.name }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCountry', country.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCountry.edit' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCountry(country.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,31 @@
 {
+  "addCountry": {
+    "country_name_en": "English Country Name",
+    "country_name_ar": "Arabic Country Name",
+    "enter_country_name_en": "Enter English Country Name",
+    "enter_country_name_ar": "Enter Arabic Country Name",
+    "country_required": "This field is required",
+    "manage_country": "Manage Country",
+    "dashboard": "Dashboard",
+    "country": "Country",
+    "create_country": "Create Country",
+    "add_country": "Add Country",
+    "country_name": "Country Name",
+    "enter_country_name": "Enter Country Name",
+    "save": "Save"
+},
+
+  "manageCountry": {
+    "manage_country": "Manage Country",
+    "dashboard": "Dashboard",
+    "countries": "Countries",
+    "countries_list": "List of Countries",
+    "search_placeholder": "Search for a country...",
+    "country_name": "Country Name",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete"
+},
   "UPDATED_AT": "Updated At",
   "PARENT ACCOUNT": "Parent Account",
   "CURRENCY ABBREVIATION": "Currency Abbreviation",

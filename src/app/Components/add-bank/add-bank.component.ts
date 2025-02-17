@@ -36,9 +36,9 @@ export class AddBankComponent {
 
       const formData = new FormData();
     
-      formData.append('name_ar', this.bankForm.get('name_ar')?.value);
-      formData.append('name_en', this.bankForm.get('name_en')?.value);
-      formData.append('type_bank', this.bankForm.get('type_bank')?.value);
+      formData.append('name[ar]', this.bankForm.get('name_ar')?.value);
+      formData.append('name[en]', this.bankForm.get('name_en')?.value);
+      formData.append('type', this.bankForm.get('type_bank')?.value);
       
    
 
