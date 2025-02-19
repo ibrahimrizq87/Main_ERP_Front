@@ -99,15 +99,15 @@ export class AccountService {
 
 
 
-  viewAllAccounts(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}`, { headers });
+  getBankAccountAccounts(bankAccountId:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/get-bank-account-accounts/${bankAccountId}`, { headers: this.getHeadersWithToken()  });
   }
 
  
-
-
+  addBankAccountAccount(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/accounts/store-bank-account-account`,data, { headers: this.getHeadersWithToken()  });
+  }
+  
   
 
 

@@ -55,36 +55,32 @@ export class BankService {
   }
 
 
-  
-  viewAllBankBranches(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/banck_branch`,{ headers });
-  }
-  getBankBranchesByBank(id:string): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/banck_branch/byBank/${id}`,{ headers })
-  }
   addBankBranch(bankBranchData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/banck_branch`, bankBranchData ,{ headers });
+    return this._HttpClient.post(`${this.baseURL}/general/bank-branches`, bankBranchData ,{  headers:this.getHeadersWithToken() });
   }
-  deleteBankBranch(bankBranchId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.delete(`${this.baseURL}/banck_branch/${bankBranchId}`, { headers });
+
+  viewAllBankBranches(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/bank-branches`,{ headers:this.getHeadersWithToken() });
+  }
+
+  updateBankBranch(bankBranchId: string, bankBranchData: FormData): Observable<any> {
+    bankBranchData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/bank-branches/${bankBranchId}`, bankBranchData, { headers:this.getHeadersWithToken() });
   }
   showBankBranch(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(this.baseURL+"/banck_branch/"+id, { headers });
+    return this._HttpClient.get(this.baseURL+"/general/bank-branches/"+id, { headers:this.getHeadersWithToken() });
   }
-  updateBankBranch(bankBranchId: string, bankBranchData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    bankBranchData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/banck_branch/${bankBranchId}`, bankBranchData, { headers });
+
+  deleteBankBranch(bankBranchId: number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/bank-branches/${bankBranchId}`, { headers:this.getHeadersWithToken()  });
   }
+
+
+  
+  getBankBranchesByBank(id:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/bank-branches/get-all-by-bank/${id}`,{ headers:this.getHeadersWithToken() })
+  }
+
+
+
 }

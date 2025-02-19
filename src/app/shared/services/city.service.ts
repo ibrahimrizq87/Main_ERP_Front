@@ -38,31 +38,29 @@ export class CityService {
   
  
   addCity(cityData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/city`, cityData ,{ headers:this.getHeadersWithToken() });
+    return this._HttpClient.post(`${this.baseURL}/general/cities`, cityData ,{ headers:this.getHeadersWithToken() });
   }
 
 
   viewAllCities(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/city`,{ headers:this.getHeadersWithToken() });
+    return this._HttpClient.get(`${this.baseURL}/general/cities`,{ headers:this.getHeadersWithToken() });
   }
   getCityById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/city/"+id, { headers });
+    return this._HttpClient.get(this.baseURL+"/general/cities/"+id, {  headers:this.getHeadersWithToken() });
   }
   updateCity(cityId: string, cityData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     cityData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/city/${cityId}`, cityData, { headers });
+    return this._HttpClient.post(`${this.baseURL}/general/cities/${cityId}`, cityData, { headers:this.getHeadersWithToken()  });
   }
 
   deleteCity(cityId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this._HttpClient.delete(`${this.baseURL}/city/${cityId}`, { headers });
+    return this._HttpClient.delete(`${this.baseURL}/general/cities/${cityId}`, { headers:this.getHeadersWithToken() });
   }
+
+  viewAllcitiesByCountry(countryId: string): Observable<any> {
+  
+    return this._HttpClient.get(`${this.baseURL}/general/cities-by-country/${countryId}`, { headers:this.getHeadersWithToken() });
+  }
+  
 }

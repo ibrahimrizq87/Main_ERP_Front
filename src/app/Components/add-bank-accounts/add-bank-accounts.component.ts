@@ -154,12 +154,16 @@ export class AddBankAccountsComponent implements OnInit {
 
       const formData = new FormData();
     
-      formData.append('account_no', this.bankAccountForm.get('account_no')?.value);
+      formData.append('account_number', this.bankAccountForm.get('account_no')?.value);
       formData.append('bank_branch_id', this.bankAccountForm.get('bank_branch_id')?.value);
-      formData.append('bank_id', this.bankAccountForm.get('bank_id')?.value);
+      // formData.append('bank_id', this.bankAccountForm.get('bank_id')?.value);
       formData.append('currency_id', this.bankAccountForm.get('currency_id')?.value);
-      formData.append('name_ar', this.bankAccountForm.get('name_ar')?.value);
-      formData.append('name_en', this.bankAccountForm.get('name_en')?.value);
+      formData.append('name[ar]', this.bankAccountForm.get('name_ar')?.value);
+      formData.append('name[en]', this.bankAccountForm.get('name_en')?.value);
+
+
+
+
       this._BankAccountService.addBankAccounts(formData).subscribe({
         next: (response) => {
           console.log(response);

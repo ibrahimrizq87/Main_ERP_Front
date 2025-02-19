@@ -38,10 +38,10 @@
         <tbody>
             <tr *ngFor="let bankAccount of filterBankAccounts(); let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ bankAccount.account_no }}</td>
-                <td>{{ bankAccount.name_ar }}</td>
-                <td>{{ bankAccount.currency }}</td>
-                <td>{{ bankAccount.bank_branch.main_bank }}</td>
+                <td>{{ bankAccount.account_number }}</td>
+                <td>{{ bankAccount.name }}</td>
+                <td>{{ bankAccount.currency.name }}</td>
+                <td>{{ bankAccount.bank_branch.bank.name }}</td>
                 <td>{{ bankAccount.bank_branch.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBankAccount', bankAccount.id]">

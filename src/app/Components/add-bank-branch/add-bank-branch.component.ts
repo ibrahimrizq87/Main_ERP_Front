@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CityService } from '../../shared/services/city.service';
 import { Modal } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { CountryService } from '../../shared/services/country.service';
 @Component({
   selector: 'app-add-bank-branch',
   standalone: true,
@@ -25,13 +25,16 @@ export class AddBankBranchComponent implements OnInit {
   selectedCity:any;
   banks: any[] = []; 
   selectedBank: any;
-  
-  constructor(private _BankService:BankService ,private _Router: Router,private translate: TranslateService,private _CityService:CityService) {
+  isSubmited = false;
+  cities:City [] =[];
+  constructor(private _BankService:BankService
+    ,
+    private _CountryService:CountryService ,private _Router: Router,private translate: TranslateService,private _CityService:CityService) {
   
   }
   ngOnInit(): void {
-    this.loadCities();
     this.loadBanks();
+    this.loadCountries();
   }
 
   bankBranchForm: FormGroup = new FormGroup({
@@ -41,20 +44,46 @@ export class AddBankBranchComponent implements OnInit {
     city_id: new FormControl(null, [Validators.required]),
     address: new FormControl(null, [Validators.required]),
     notes :new FormControl(null),
-    bank_id: new FormControl(null, [Validators.required])
+    bank_id: new FormControl(null, [Validators.required]),
+    country_id: new FormControl(null)
   });
-  loadCities(): void {
-    this._CityService.viewAllCities().subscribe({
+  // loadCities(): void {
+  //   this._CityService.viewAllCities().subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         this.citiesByCountry = {};
+  //         response.data.forEach((city: any) => {
+  //           if (!this.citiesByCountry[city.country]) {
+  //             this.citiesByCountry[city.country] = [];
+  //           }
+  //           this.citiesByCountry[city.country].push(city);
+  //         });
+  //         this.countries = Object.keys(this.citiesByCountry);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
+
+  onBankChange(event:Event){
+
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedBank =selectedValue;
+    console.log( this.selectedCountry);
+  }
+  onCityChange(event:Event){
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedCity =selectedValue;
+  }
+  
+  loadCountries(): void {
+    this._CountryService.viewAllcountries().subscribe({
       next: (response) => {
         if (response) {
-          this.citiesByCountry = {};
-          response.data.forEach((city: any) => {
-            if (!this.citiesByCountry[city.country]) {
-              this.citiesByCountry[city.country] = [];
-            }
-            this.citiesByCountry[city.country].push(city);
-          });
-          this.countries = Object.keys(this.citiesByCountry);
+          console.log(response);
+          this.countries = response.data; 
         }
       },
       error: (err) => {
@@ -62,6 +91,32 @@ export class AddBankBranchComponent implements OnInit {
       }
     });
   }
+
+  onCountryChange(event:Event){
+
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedCountry =selectedValue;
+    this.loadCities( this.selectedCountry);
+
+
+  }
+  loadCities(id:string): void {
+    this._CityService.viewAllcitiesByCountry(id).subscribe({
+      next: (response) => {
+        if (response) {
+          this.cities = response.data; 
+          console.log(this.cities );
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+
   loadBanks(): void {
     this._BankService.viewAllBanks().subscribe({
       next: (response) => {
@@ -101,21 +156,29 @@ export class AddBankBranchComponent implements OnInit {
     this.bankBranchForm.get('city_id')?.setValue(city.id); // Update the form control value
     this.closeModal(modalId); // Close the modal
   }
+
   handleForm() {
-   
-    if (this.bankBranchForm.valid) {
+   this.isSubmited =true;
+    if (this.bankBranchForm.valid && this.selectedBank && this.selectedCity ) {
       this.isLoading = true;
 
       const formData = new FormData();
     
-      formData.append('name_branch', this.bankBranchForm.get('name_branch')?.value);
+      formData.append('name', this.bankBranchForm.get('name_branch')?.value);
       formData.append('phone', this.bankBranchForm.get('phone')?.value);
-      formData.append('fax', this.bankBranchForm.get('fax')?.value);
+      formData.append('fax', this.bankBranchForm.get('fax')?.value || '');
       formData.append('city_id', this.bankBranchForm.get('city_id')?.value);
-      formData.append('address', this.bankBranchForm.get('address')?.value);
-      formData.append('notes', this.bankBranchForm.get('notes')?.value);
-      formData.append('address', this.bankBranchForm.get('address')?.value);
+      formData.append('address_description', this.bankBranchForm.get('address')?.value);
+      formData.append('note', this.bankBranchForm.get('notes')?.value || '');
       formData.append('bank_id', this.bankBranchForm.get('bank_id')?.value);
+
+      // 'name'                 => 'required|string|max:255',
+      // 'phone'                => 'required|string|max:15',
+      // 'fax'                  => 'nullable|string|max:15',
+      // 'address_description'  => 'required|string',
+      // 'note'                 => 'nullable|string',
+      // 'city_id'              => 'required|exists:cities,id',
+      // 'bank_id'              => 'required|exists:banks,id',
    
 
       this._BankService.addBankBranch(formData).subscribe({
@@ -134,4 +197,8 @@ export class AddBankBranchComponent implements OnInit {
       });
     }
   }
+}
+interface City{
+  id:string;
+  name:string;
 }

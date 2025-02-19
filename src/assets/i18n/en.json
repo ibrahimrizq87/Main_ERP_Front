@@ -223,6 +223,7 @@
   "ACCOUNT_NAME_REQUIRED": "Account Name is Required",
   "BANK_ACCOUNT_NAME_EN": "Bank Account Name (EN)",
   "ENTER_ACCOUNT_ENGLISH_NAME": "Enter Account English Name",
+  "bank_required": "Bank is required.",
   "SELECT_BANK": "Select Bank",
   "SELECT_BANK_BRANCH": "Select Bank Branch",
   "fa-chevron-": "fa-chevron-right",

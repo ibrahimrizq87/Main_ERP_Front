@@ -23,13 +23,13 @@
           </li>
           <li class="nav-item">
             <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('Groups')">
+              <div class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Groups')">
                 <i class="fa-solid fa-layer-group"></i>
                 <span> {{'GROUPS_SYSTEM'  | translate}}</span>
                 <i [ngClass]="isDropdownOpen('Groups') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
               </div>
             </a>
-            <ul class="nav flex-column" *ngIf="isDropdownOpen('Groups')">
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Groups')">
               <li class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="group">{{ 'GROUP' | translate }}</a>
               </li>

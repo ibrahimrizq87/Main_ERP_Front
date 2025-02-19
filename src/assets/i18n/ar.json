@@ -223,6 +223,7 @@
   "BANK_ACCOUNT_NAME_EN": "اسم الحساب البنكي (EN)",
   "ENTER_ACCOUNT_ENGLISH_NAME": "أدخل اسم الحساب بالإنجليزية",
   "SELECT_BANK": "اختر البنك",
+  "bank_required": "البنك مطلوب.",
   "SELECT_BANK_BRANCH": "اختر فرع البنك",
   "fa-chevron-": "fa-chevron-left",
   "icon-class": "fa-angle-left",

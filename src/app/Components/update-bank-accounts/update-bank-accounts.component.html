@@ -6,59 +6,145 @@
   <form [formGroup]="bankAccountForm" (ngSubmit)="handleForm()">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
-              <h5>{{ 'UPDATE_BANK_ACCOUNT' | translate }}</h5>
+        
+
+        <div class="col-md-12 mt-4">
+
+          <div class="row">
+            
+
+          <div class="form-group col-md-6">
+            <label for="name_ar" class="form-label">{{ 'BANK_ACCOUNT_NAME_AR' | translate }}</label>
+            <input id="name_ar" formControlName="name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_ARABIC_NAME' | translate }}" required />
+            <div class="alert alert-danger" *ngIf="bankAccountForm.get('name_ar')?.errors && bankAccountForm.get('name_ar')?.touched">
+              <p *ngIf="bankAccountForm.get('name_ar')?.getError('required')">{{ 'ACCOUNT_NAME_REQUIRED' | translate }}</p>
             </div>
-            <div class="card-body pb-5">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="account_no" class="form-label">{{ 'BANK_ACCOUNT_NUMBER' | translate }}</label>
-                  <input id="account_no" formControlName="account_no" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_NUMBER' | translate }}" required />
-                  <div class="alert alert-danger" *ngIf="bankAccountForm.get('account_no')?.errors && bankAccountForm.get('account_no')?.touched">
-                    <p *ngIf="bankAccountForm.get('account_no')?.getError('required')">{{ 'ACCOUNT_NUMBER_REQUIRED' | translate }}</p>
-                    <p *ngIf="bankAccountForm.get('account_no')?.getError('minLength')">{{ 'MIN_OF_ACCOUNT_NUMBER_IS_8' | translate }}</p>
-                    <p *ngIf="bankAccountForm.get('account_no')?.getError('pattern')">{{ 'ACCOUNT_NUMBER_SHOULD_BE_0_TO_9' | translate }}</p>
-                  </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="name_en" class="form-label">{{ 'BANK_ACCOUNT_NAME_EN' | translate }}</label>
+            <input id="name_en" formControlName="name_en" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_ENGLISH_NAME' | translate }}" required />
+            <div class="alert alert-danger" *ngIf="bankAccountForm.get('name_en')?.errors && bankAccountForm.get('name_en')?.touched">
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="account_no" class="form-label">{{ 'BANK_ACCOUNT_NUMBER' | translate }}</label>
+            <input id="account_no" formControlName="account_no" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_NUMBER' | translate }}" required />
+            <div class="alert alert-danger" *ngIf="bankAccountForm.get('account_no')?.errors && bankAccountForm.get('account_no')?.touched">
+              <p *ngIf="bankAccountForm.get('account_no')?.getError('required')">{{ 'ACCOUNT_NUMBER_REQUIRED' | translate }}</p>
+              <p *ngIf="bankAccountForm.get('account_no')?.getError('minLength')">{{ 'MIN_OF_ACCOUNT_NUMBER_IS_8' | translate }}</p>
+              <p *ngIf="bankAccountForm.get('account_no')?.getError('pattern')">{{ 'ACCOUNT_NUMBER_SHOULD_BE_0_TO_9' | translate }}</p>
+            </div>
+          </div>
+
+          
+          <div class="form-group col-md-6">
+            <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+            <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('currencyModal')">
+              {{ selectedCurrency ? selectedCurrency.name : ('SELECT_CURRENCY' | translate) }}
+            </button>
+            <input type="hidden" formControlName="currency_id" [value]="selectedCurrency?.id" />
+          </div>
+          <!-- Currency Selection Modal -->
+          <div class="modal fade" id="currencyModal" tabindex="-1" aria-labelledby="currencyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="currencyModalLabel">{{ 'SELECT_CURRENCY' | translate }}</h5>
+                  <button type="button" class="btn-close" (click)="closeModal('currencyModal')"></button>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="name_ar" class="form-label">{{ 'BANK_ACCOUNT_NAME_AR' | translate }}</label>
-                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_ARABIC_NAME' | translate }}" required />
-                  <div class="alert alert-danger" *ngIf="bankAccountForm.get('name_ar')?.errors && bankAccountForm.get('name_ar')?.touched">
-                    <p *ngIf="bankAccountForm.get('name_ar')?.getError('required')">{{ 'ACCOUNT_NAME_REQUIRED' | translate }}</p>
-                  </div>
+                <div class="modal-body">
+                  <ul class="list-group">
+                    <li
+                      *ngFor="let currency of currencies"
+                      class="list-group-item list-group-item-action"
+                      (click)="selectCurrency(currency, 'currencyModal')"
+                    >
+                      {{ currency.name }}
+                    </li>
+                  </ul>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="name_en" class="form-label">{{ 'BANK_ACCOUNT_NAME_EN' | translate }}</label>
-                  <input id="name_en" formControlName="name_en" type="text" class="form-control" placeholder="{{ 'ENTER_ACCOUNT_ENGLISH_NAME' | translate }}" required />
-                  <div class="alert alert-danger" *ngIf="bankAccountForm.get('name_en')?.errors && bankAccountForm.get('name_en')?.touched">
-                  </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="closeModal('currencyModal')">{{ 'CLOSE' | translate }}</button>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="bank_id" class="form-label">{{ 'BANK' | translate }}</label>
-                  <select id="bank_id" formControlName="bank_id" (change)="onBankChange($event)" class="form-control">
-                    <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.aribic_name }}</option>
-                  </select>
+              </div>
+            </div>
+          </div>
+          <!-- Bank Selection -->
+          <div class="form-group col-md-6">
+            <label class="form-label">{{ 'SELECT_BANK' | translate }}</label>
+            <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('bankModal')">
+              {{ selectedBank ? selectedBank.name : ('SELECT_BANK' | translate) }}
+            </button>
+            <input type="hidden" formControlName="bank_id" [value]="selectedBank?.id" />
+          </div>
+          <!-- Bank Selection Modal -->
+          <div class="modal fade" id="bankModal" tabindex="-1" aria-labelledby="bankModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="bankModalLabel">{{ 'SELECT_BANK' | translate }}</h5>
+                  <button type="button" class="btn-close" (click)="closeModal('bankModal')"></button>
                 </div>
-                <div class="form-group col-md-6">
-                  <label class="form-label">{{ 'SELECT_BANK_BRANCH' | translate }}</label>
-                  <select class="form-control" formControlName="bank_branch_id">
-                    <option>{{ 'SELECT_BANK_BRANCH' | translate }}</option>
-                    <option *ngFor="let bankBranch of bankBranches" [value]="bankBranch.id">{{ bankBranch.name_branch }}</option>
-                  </select>
+                <div class="modal-body">
+                  <ul class="list-group">
+                    <li
+                      *ngFor="let bank of banks"
+                      class="list-group-item list-group-item-action"
+                      (click)="selectBank(bank, 'bankModal')"
+                    >
+                      {{ bank.name }}
+                    </li>
+                  </ul>
                 </div>
-                <div class="form-group col-md-6">
-                  <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
-                  <select class="form-control" formControlName="currency_id">
-                    <option>{{ 'SELECT_CURRENCY' | translate }}</option>
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
-                  </select>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="closeModal('bankModal')">{{ 'CLOSE' | translate }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bank Branch Selection -->
+          <div class="form-group col-md-6">
+            <label class="form-label">{{ 'SELECT_BANK_BRANCH' | translate }}</label>
+            <button
+              type="button"
+              class="btn btn-outline-primary w-100"
+              [disabled]="!selectedBank"
+              (click)="openModal('bankBranchModal')"
+            >
+              {{ selectedBankBranch ? selectedBankBranch.name : ('SELECT_BANK_BRANCH' | translate) }}
+            </button>
+            <input type="hidden" formControlName="bank_branch_id" [value]="selectedBankBranch?.id" />
+          </div>
+          <!-- Bank Branch Selection Modal -->
+          <div class="modal fade" id="bankBranchModal" tabindex="-1" aria-labelledby="bankBranchModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="bankBranchModalLabel">{{ 'SELECT_BANK_BRANCH' | translate }}</h5>
+                  <button type="button" class="btn-close" (click)="closeModal('bankBranchModal')"></button>
+                </div>
+                <div class="modal-body">
+                  <ul class="list-group">
+                    <li
+                      *ngFor="let bankBranch of bankBranches"
+                      class="list-group-item list-group-item-action"
+                      (click)="selectBankBranch(bankBranch, 'bankBranchModal')"
+                    >
+                      {{ bankBranch.name }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="closeModal('bankBranchModal')">{{ 'CLOSE' | translate }}</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+        
         <div class="col-md-12 mt-4">
           <div class="card shadow em-card rounded-lg">
             <div class="card-header bg-white text-black rounded-top pt-3">
@@ -68,23 +154,33 @@
               <div class="row">
                 <!-- Add Current Account -->
                 <div class="form-group col-md-12 d-flex align-items-center justify-content-between gap-2">
-                  <button type="button" class="btn btn-primary px-5 w-50" (click)="addAccount('113')" [disabled]="isAccountAdded('113')">{{ 'ADD_CURRENT_ACCOUNT' | translate }}</button>
-                  <input parent_id="113" formControlName="current" type="text" class="form-control" [(ngModel)]="additionalAccounts['113']" [disabled]="isAccountAdded('113')" placeholder="{{ 'ENTER_CURRENT_ACCOUNT_DETAILS' | translate }}" />
+                  <button type="button" class="btn btn-primary px-5 w-50" (click)="addAccount('113')" [disabled]="isAccountAdded('current')">{{ 'ADD_CURRENT_ACCOUNT' | translate }}</button>
+                  <input parent_id="113" formControlName="current_ar" type="text" class="form-control"  [disabled]="isAccountAdded('current')" placeholder="{{ 'ENTER_CURRENT_ACCOUNT_DETAILS' | translate }}" />
+                  <input parent_id="113" formControlName="current_en" type="text" class="form-control"  [disabled]="isAccountAdded('current')" placeholder="{{ 'ENTER_CURRENT_ACCOUNT_DETAILS' | translate }}" />
+                  <!-- <i class="fa-solid fa-trash-can btn1 bg-danger rounded p-2" *ngIf="isAccountAdded('current')" title="{{ 'DELETE_BANK' | translate }}"></i> -->
+
                 </div>
                 <!-- Add Collection Fee Account -->
                 <div class="form-group col-md-12 d-flex align-items-center mt-4 justify-content-between gap-2">
-                  <button type="button" class="btn btn-secondary px-5 w-50" (click)="addAccount('118')" [disabled]="isAccountAdded('118')">{{ 'ADD_COLLECTION_FEE_ACCOUNT' | translate }}</button>
-                  <input parent_id="118" formControlName="collectionFee" type="text" class="form-control" [(ngModel)]="additionalAccounts['118']" [disabled]="isAccountAdded('118')" placeholder="{{ 'ENTER_COLLECTION_FEE_ACCOUNT_DETAILS' | translate }}" />
+                  <button type="button" class="btn btn-secondary px-5 w-50" (click)="addAccount('118')" [disabled]="isAccountAdded('collection_fee')">{{ 'ADD_COLLECTION_FEE_ACCOUNT' | translate }}</button>
+                  <input parent_id="118" formControlName="collectionFee_ar" type="text" class="form-control" [disabled]="isAccountAdded('collection_fee')" placeholder="{{ 'ENTER_COLLECTION_FEE_ACCOUNT_DETAILS' | translate }}" />
+                  <input parent_id="118" formControlName="collectionFee_en" type="text" class="form-control" [disabled]="isAccountAdded('collection_fee')" placeholder="{{ 'ENTER_COLLECTION_FEE_ACCOUNT_DETAILS' | translate }}" />
+                  <!-- <i class="fa-solid fa-trash-can btn1 bg-danger rounded p-2" *ngIf="isAccountAdded('collection_fee')" title="{{ 'DELETE_BANK' | translate }}"></i> -->
+
                 </div>
                 <!-- Add Payment Fee -->
                 <div class="form-group col-md-12 d-flex align-items-center mt-4 justify-content-between gap-2">
-                  <button type="button" class="btn btn-success px-5 w-50" (click)="addAccount('211')" [disabled]="isAccountAdded('211')">{{ 'ADD_PAYMENT_FEE' | translate }}</button>
-                  <input parent_id="211" formControlName="paymentFee" type="text" class="form-control" [(ngModel)]="additionalAccounts['211']" [disabled]="isAccountAdded('211')" placeholder="{{ 'ENTER_PAYMENT_FEE_ACCOUNT_DETAILS' | translate }}" />
+                  <button type="button" class="btn btn-success px-5 w-50" (click)="addAccount('211')" [disabled]="isAccountAdded('payment_fee')">{{ 'ADD_PAYMENT_FEE' | translate }}</button>
+                  <input parent_id="211" formControlName="paymentFee_ar" type="text" class="form-control"  [disabled]="isAccountAdded('payment_fee')" placeholder="{{ 'ENTER_PAYMENT_FEE_ACCOUNT_DETAILS' | translate }}" />
+                  <input parent_id="211" formControlName="paymentFee_en" type="text" class="form-control"  [disabled]="isAccountAdded('payment_fee')" placeholder="{{ 'ENTER_PAYMENT_FEE_ACCOUNT_DETAILS' | translate }}" />
+
                 </div>
                 <!-- Add Saving Account -->
                 <div class="form-group col-md-12 d-flex align-items-center mt-4 justify-content-between gap-2">
-                  <button type="button" class="btn btn-warning px-5 w-50" (click)="addAccount('119')" [disabled]="isAccountAdded('119')">{{ 'ADD_SAVING_ACCOUNT' | translate }}</button>
-                  <input parent_id="119" formControlName="saving" type="text" class="form-control" [(ngModel)]="additionalAccounts['119']" [disabled]="isAccountAdded('119')" placeholder="{{ 'ENTER_SAVING_ACCOUNT_DETAILS' | translate }}" />
+                  <button type="button" class="btn btn-warning px-5 w-50" (click)="addAccount('119')" [disabled]="isAccountAdded('saving')">{{ 'ADD_SAVING_ACCOUNT' | translate }}</button>
+                  <input parent_id="119" formControlName="saving_ar" type="text" class="form-control" [disabled]="isAccountAdded('saving')" placeholder="{{ 'ENTER_SAVING_ACCOUNT_DETAILS' | translate }}" />
+                  <input parent_id="119" formControlName="saving_en" type="text" class="form-control" [disabled]="isAccountAdded('saving')" placeholder="{{ 'ENTER_SAVING_ACCOUNT_DETAILS' | translate }}" />
+
                 </div>
               </div>
             </div>
