@@ -132,7 +132,7 @@ export const routes: Routes = [
         //   {path:"document/:type",component:AddDocumentComponent},
         {path:"addDocument/:type",component:AddDocumentComponent},
         {path:"document/:type/:status",component:DocumentsComponent},
-        {path:"check",component:CheckManagementComponent},
+        {path:"check_list/:status",component:CheckManagementComponent},
 
         {path:"documentEntry/:status",component:DocumentEntryComponent},
         {path:"addDocumentEntry",component:AddDocumentEntryComponent},

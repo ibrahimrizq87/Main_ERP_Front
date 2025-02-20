@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CheckService } from '../../shared/services/check.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common'; // Provides ngClass and other directives
 
@@ -17,8 +17,8 @@ export class ViewCheckComponent {
   checkId :string | null = null;
   constructor(
     private _CheckServic: CheckService,
-    private route: ActivatedRoute
-
+    private route: ActivatedRoute,
+    private _Router: Router,
   ) { }
 
 
@@ -27,7 +27,10 @@ export class ViewCheckComponent {
   }
 
 
+  back(){
+    this._Router.navigate(['/dashboard/check']);
 
+  }
 
   getParams() {
     this.route.paramMap.subscribe(params => {

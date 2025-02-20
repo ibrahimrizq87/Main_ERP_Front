@@ -13,6 +13,56 @@
   </a>
 </div>
 
+
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <!-- <li>
+          <a routerLinkActive="active-tab" (click)="changeStatus('waiting')" class="nav-link px-2">{{ 'WAITING' | translate }}</a>
+        </li>
+        <li>
+          <a routerLinkActive="active-tab" (click)="changeStatus('approved')" class="nav-link px-2">{{ 'APPROVED' | translate }}</a>
+        </li>
+        <li>
+          <a routerLinkActive="active-tab" (click)="changeStatus('rejected')" class="nav-link px-2">{{ 'REJECTED' | translate }}</a>
+        </li> -->
+  
+        <li>
+          <a 
+            (click)="changeStatus('waiting')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': status === 'waiting', 'inactive-tab': status !== 'waiting'}"
+          >
+            {{ 'WAITING' | translate }}
+          </a>
+        </li>
+        <li>
+          <a 
+            (click)="changeStatus('approved')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': status === 'approved', 'inactive-tab': status !== 'approved'}"
+          >
+            {{ 'APPROVED' | translate }}
+          </a>
+        </li>
+        <li>
+          <a 
+            (click)="changeStatus('rejected')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': status === 'rejected', 'inactive-tab': status !== 'rejected'}"
+          >
+            {{ 'REJECTED' | translate }}
+          </a>
+        </li>
+      </ul>
+      
+  
+    </header>
+  </div>
+  
+
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -40,10 +90,23 @@
               <td>{{ check.check_number }}</td>
               <td>{{ check.type }}</td>
               <td>{{ check.amount }}</td>
-              <td>{{ check.source_account.name_ar }}</td>
-              <td>{{ check.payed_to.name_ar }}</td>
+              <td>{{ check.source_account.name }}</td>
+              <td>{{ check.payed_to.name }}</td>
               <td>{{ check.due_date }}</td>
               <td class="d-flex justify-content-around align-items-center">
+
+                <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,check.id)">
+                    approve
+                  </a>
+                  <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',check.id)">
+                    reject
+                  </a>
+                  <a *ngIf="status == 'rejected' && check.number_of_moves<=1" class="btn btn-success" (click)="ManageChangeStatus('waiting',check.id)">
+                    waiting
+                  </a>
+
+                  <i class="fa-solid fa-trash-can btn1 bg-danger rounded" *ngIf="check.number_of_moves<=1" (click)="deleteCheck(check.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
+
                   <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/check', check.id]">
                       <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CHECK' | translate }}"></i>
                   </a>

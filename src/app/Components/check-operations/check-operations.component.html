@@ -24,7 +24,7 @@
                               <div *ngIf="needRequiredAccount" class="form-group col-md-6">
                                   <label class="form-label">{{ 'SELECT_ACCOUNT' | translate }}</label>
                                   <select class="form-control" formControlName="requiredAccount" (change)="onRequiredAccountChange($event)">
-                                      <option *ngFor="let account of requiredAcounts; let i = index" [value]="account.id">{{i}}: {{account.name_ar}}</option>
+                                      <option *ngFor="let account of requiredAcounts; let i = index" [value]="account.id">{{i}}: {{account.name}}</option>
                                   </select>
                               </div>
                               <div *ngIf="checks.length" class="form-group col-md-12">
@@ -52,13 +52,13 @@
                       <div class="card-body pb-5">
                           <div *ngFor="let item of entryItems" class="row">
                               <div class="col-md-5">
-                                  name: {{item.debitor.name_ar}} || id: {{item.debitor.id}}
+                                  name: {{item.debitor.name}} || id: {{item.debitor.id}}
                               </div>
                               <div class="col-md-2">
                                   {{item.amount}}
                               </div>
                               <div class="col-md-5">
-                                  name: {{item.creditor.name_ar}} || id: {{item.creditor.id}}
+                                  name: {{item.creditor.name}} || id: {{item.creditor.id}}
                               </div>
                           </div>
                       </div>
@@ -94,7 +94,7 @@
                               <div class="form-group col-md-6">
                                   <label for="currency_id" class="form-label">{{ 'CURRENCY' | translate }}</label>
                                   <select id="currency_id" formControlName="currency_id" class="form-control">
-                                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                                   </select>
                               </div>
                               <div class="form-group col-md-6">

@@ -76,8 +76,23 @@ private _CurrencyService:CurrencyService) {
 
   ngOnInit() {
     this.loadCurrencies();
-
+    this.loadDelegates()
   }
+
+  loadDelegates() {
+    this._AccountService.getAccountsByParent('623').subscribe({
+      next: (response) => {
+        if (response) {
+          this.delegates = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
   loadCurrencies(){
     this._CurrencyService.viewAllCurrency().subscribe({
       next: (response) => {
@@ -681,7 +696,7 @@ source_account:Account,
 
 interface Account {
   id:number,
-name_ar:number,
+name:string,
 }
 
 interface EntryItem {

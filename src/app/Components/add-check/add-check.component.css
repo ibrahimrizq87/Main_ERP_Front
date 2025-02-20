@@ -22,3 +22,11 @@ label{
     width: 3px;           
     background-color: #145388; 
   }
+
+
+  .form-group.col-md-2 {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+}

@@ -113,10 +113,7 @@ export class AccountService {
 
 
   getChildrenByParentIds(parent: number[]): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(this.baseURL + "/accounting/cheldren/byIds",
-      { "parent": parent }, { headers });
+    return this._HttpClient.post(this.baseURL + "/general/accounts/get-accounts-by-parent-list",{ "parent": parent }, { headers: this.getHeadersWithToken() });
   }
 
 
@@ -124,10 +121,8 @@ export class AccountService {
 
 
   getAccountByParentAndBank(accountId: number , parentId:number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this._HttpClient.get(`${this.baseURL}/account-banks/get-account-by-bank/${accountId}/${parentId}`, { headers });
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/get-account-by-bank-account/${accountId}/${parentId}`, { headers: this.getHeadersWithToken() });
     }
 
 
