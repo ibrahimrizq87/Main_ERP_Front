@@ -7,8 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
-export class StoreService {
-
+export class ProductCategoriesService {
     private baseURL = environment.apiUrl;
     constructor(private _HttpClient: HttpClient, private translate: TranslateService) {
     }
@@ -35,22 +34,30 @@ export class StoreService {
       });
     }
   
+  
 
-    
-  addStore(storeData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/stores`, storeData ,{ headers:this.getHeadersWithToken() });
+  
+  addProductCategory(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/product-categories`,data,{ headers:this.getHeadersWithToken() })
   }
-  getAllStores(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ headers:this.getHeadersWithToken() });
+
+  getAllProductCategories(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/product-categories`,{ headers:this.getHeadersWithToken() });
   }
-  deleteStore(storeId: number): Observable<any> {
-    return this._HttpClient.delete(`${this.baseURL}/general/stores/${storeId}`, { headers:this.getHeadersWithToken() });
+
+  deleteProductCategory(product_id:number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/product-categories/${product_id}`,{ headers:this.getHeadersWithToken() });
   }
-  showStoreById(id:any): Observable<any>{
-    return this._HttpClient.get(this.baseURL+"/general/stores/"+id, { headers:this.getHeadersWithToken()  });
+
+
+  getAllProductCategoryById(product_id:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/product-categories/${product_id}`,{ headers:this.getHeadersWithToken() });
   }
-  updateStore(store_id: string, storeData: FormData): Observable<any> {
-    storeData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/general/stores/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
+  updateProductCategory(product_id:string , productUnitData:FormData): Observable<any> {
+    productUnitData.append('_method', 'PUT');
+
+    return this._HttpClient.post(`${this.baseURL}/general/product-categories/${product_id}`,productUnitData,{ headers:this.getHeadersWithToken() });
   }
+
+
 }

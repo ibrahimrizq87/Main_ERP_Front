@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProductsService } from '../../shared/services/products.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductUnitsService } from '../../shared/services/product_units.service';
 
 @Component({
   selector: 'app-add-product-unit',
@@ -18,7 +18,7 @@ export class AddProductUnitComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _ProductsService:ProductsService ,private _Router: Router,private translate: TranslateService) {
+  constructor(private _ProductUnitsService:ProductUnitsService ,private _Router: Router,private translate: TranslateService) {
   
   }
 
@@ -34,10 +34,10 @@ export class AddProductUnitComponent {
 
       const formData = new FormData();
     
-      formData.append('unit', this.unitForm.get('unit')?.value);
+      formData.append('name', this.unitForm.get('unit')?.value);
    
 
-      this._ProductsService.addProductUnit(formData).subscribe({
+      this._ProductUnitsService.addProductUnit(formData).subscribe({
         next: (response) => {
           console.log(response);
           if (response) {

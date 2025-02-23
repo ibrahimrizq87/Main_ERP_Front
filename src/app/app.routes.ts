@@ -95,6 +95,10 @@ import { CountriesComponent } from './Components/countries/countries.component';
 import { ShowCountryComponent } from './Components/show-country/show-country.component';
 import { UpdateCountryComponent } from './Components/update-country/update-country.component';
 import { AddCountryComponent } from './Components/add-country/add-country.component';
+import { ProductCategoryComponent } from './Components/product-category/product-category.component';
+import { AddProductCategoryComponent } from './Components/add-product-category/add-product-category.component';
+import { UpdateProductCategoryComponent } from './Components/update-product-category/update-product-category.component';
+
 
 export const routes: Routes = [
     {path:"",component:LoginComponent},
@@ -119,7 +123,12 @@ export const routes: Routes = [
         {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
         {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
         {path:"updateEntryDocument/:id",component:UpdateEntryDocumentComponent},
+        {path:"productCategories",component:ProductCategoryComponent},
+        {path:"addCategory",component:AddProductCategoryComponent},
+        {path:"updateproductCategory/:id",component:UpdateProductCategoryComponent},
 
+        
+        
         {path:"countries",component:CountriesComponent},
         {path:"showCountry/:id",component:ShowCountryComponent},
         {path:"updateCountry/:id",component:UpdateCountryComponent},

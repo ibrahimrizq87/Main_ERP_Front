@@ -59,3 +59,24 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- <div class="container">
+  <div class="row">
+    <div *ngFor="let check of checkDocuments" class="col-md-4">
+      <div class="card">
+        <img [src]="check.frontImage" class="card-img-top" alt="Check Front">
+        <div class="card-body">
+          <h5 class="card-title">Check #{{ check.checkNumber }}</h5>
+          <p class="card-text"><strong>Amount:</strong> {{ check.amount }}</p>
+          <p class="card-text"><strong>Due Date:</strong> {{ check.dueDate }}</p>
+          <p class="card-text"><strong>Payed To:</strong> {{ check.payedTo }}</p>
+          <p class="card-text"><strong>Source Account:</strong> {{ check.sourceAccount }}</p>
+          <p class="card-text"><strong>Status:</strong> <span [ngClass]="getStatusClass(check.status)">{{ check.status }}</span></p>
+        </div>
+        <img [src]="check.backImage" class="card-img-bottom" alt="Check Back">
+      </div>
+    </div>
+  </div>
+</div> -->

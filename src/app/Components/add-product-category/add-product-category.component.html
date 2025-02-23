@@ -1,0 +1,61 @@
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'ADD_CATEGORY' | translate }}</h5>
+    <span class="text-muted large-text">
+      {{ 'DASHBOARD' | translate }} 
+      <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
+      {{ 'STORES' | translate }} 
+      <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
+      {{ 'CREATE_CATEGORY' | translate }}
+    </span>
+  </div>
+  
+  <div class="mt-4 mb-4">
+    <form [formGroup]="categoryForm" (ngSubmit)="handleForm()" enctype="multipart/form-data">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow em-card rounded-lg">
+              <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5 class="large-text">{{ 'ADD_CATEGORY' | translate }}</h5>
+              </div>
+              <div class="card-body pb-5">
+                <div class="row">
+
+                    <div class="form-group col-md-6">
+                    <label for="name" class="form-label large-text">{{ 'CATEGORY_NAME' | translate }}</label>
+                    <input id="name" formControlName="name" type="text" class="form-control" required />
+                    <div class="alert alert-danger" *ngIf="categoryForm.get('name')?.errors && categoryForm.get('name')?.touched">
+                      <p *ngIf="categoryForm.get('name')?.getError('required')">{{ 'CATEGORY_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
+                      <p *ngIf="categoryForm.get('name')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                    </div>
+                  </div>
+  
+
+                  <div class="form-group col-md-3">
+                    <input type="file" class="custom-file-input" id="image" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+                    <label for="image" class="btn btn-image">
+                      <i class="fa-solid fa-file-arrow-up"></i> {{ 'CHOOSE_FILE' | translate }}
+                    </label>
+                    <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
+                  </div>
+  
+
+                  <div class="form-group col-md-3" *ngIf="categoryImage">
+                    <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
+                  </div>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 mb-4">
+            <button [disabled]="categoryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  

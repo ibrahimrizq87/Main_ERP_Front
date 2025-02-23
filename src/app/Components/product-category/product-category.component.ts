@@ -3,34 +3,34 @@ import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { ProductUnitsService } from '../../shared/services/product_units.service';
+import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 
 @Component({
-  selector: 'app-product-unit',
+  selector: 'app-product-category',
   standalone: true,
   imports: [CommonModule,ReactiveFormsModule,FormsModule,RouterLinkActive,RouterModule ,TranslateModule],
-  templateUrl: './product-unit.component.html',
-  styleUrl: './product-unit.component.css'
+  templateUrl: './product-category.component.html',
+  styleUrl: './product-category.component.css'
 })
-export class ProductUnitComponent implements OnInit {
+export class ProductCategoryComponent {
 
-  units: any[] = []; 
-  filteredUnits: any[] = [];
+  categories: any[] = []; 
+  filteredCategories: any[] = [];
   searchTerm: string = '';
 
-  constructor(private _ProductUnitsService: ProductUnitsService, private router: Router) {}
+  constructor(private _ProductCategoriesService: ProductCategoriesService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadUnits(); 
   }
 
   loadUnits(): void {
-    this._ProductUnitsService.getAllProductUnits().subscribe({
+    this._ProductCategoriesService.getAllProductCategories().subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
-          this.units = response.data; 
-          this.filteredUnits = [...this.units];
+          this.categories = response.data; 
+          this.filteredCategories = [...this.categories];
         }
       },
       error: (err) => {
@@ -38,9 +38,9 @@ export class ProductUnitComponent implements OnInit {
       }
     });
   }
-  deleteUnit(unitId: number): void {
+  deleteCategory(unitId: number): void {
     if (confirm('Are you sure you want to delete this Unit?')) {
-      this._ProductUnitsService.deleteProductUnit(unitId).subscribe({
+      this._ProductCategoriesService.deleteProductCategory(unitId).subscribe({
         next: (response) => {
           if (response) {
             this.router.navigate(['/dashboard/productUnit']);
@@ -54,11 +54,11 @@ export class ProductUnitComponent implements OnInit {
       });
     }
   }
-  searchUnits(): void {
+  searchCategories(): void {
     if (this.searchTerm.trim() === '') {
-      this.filteredUnits = [...this.units];
+      this.filteredCategories = [...this.categories];
     } else {
-      this.filteredUnits = this.units.filter(unit =>
+      this.filteredCategories = this.categories.filter(unit =>
         unit.unit.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }

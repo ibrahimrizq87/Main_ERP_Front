@@ -4,8 +4,8 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
 
 interface Store {
   id: number;
-  name_ar: string;
-  manager: string;
+  name: string;
+  manager_name: string;
   child?: Store[];
   showChildren?: boolean;
 }

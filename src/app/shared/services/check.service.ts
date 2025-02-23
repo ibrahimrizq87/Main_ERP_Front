@@ -68,6 +68,9 @@ getChecksForOperations(type:number): Observable<any> {
   return this._HttpClient.get(`${this.baseURL}/general/checks/get-for-operations/${type}` ,{ headers:this.getHeadersWithToken()  });
 }
 
+AddOperationOnCheck(operationData:FormData): Observable<any> {
+  return this._HttpClient.post(`${this.baseURL}/general/checks/add-operation-on-check` ,operationData ,{ headers:this.getHeadersWithToken()  });
+}
 
 
 

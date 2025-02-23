@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common'; // Provides ngClass and other di
   styleUrl: './view-check.component.css'
 })
 export class ViewCheckComponent {
-
+  checkDocuments:any;
   check: any;
   checkId :string | null = null;
   constructor(
@@ -43,6 +43,7 @@ export class ViewCheckComponent {
       next: (response) => {
         if (response) {
           this.check = response.data;
+          this.checkDocuments = response.data;
           console.log(response);
         }
       },
@@ -51,5 +52,20 @@ export class ViewCheckComponent {
       }
     });
   }
+
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'approved':
+        return 'status-approved';
+      case 'pending':
+        return 'status-pending';
+      case 'rejected':
+        return 'status-rejected';
+      default:
+        return '';
+    }
+  }
+  
 }
 

@@ -7,7 +7,6 @@ import { GroupService } from '../../shared/services/group.service';
 import { CommonModule } from '@angular/common';
 import { CheckService } from '../../shared/services/check.service';
 import { CurrencyService } from '../../shared/services/currency.service';
-import { CheckOperationService } from '../../shared/services/check-operation.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -54,7 +53,6 @@ operations = [
     private route: ActivatedRoute
     , private router: Router, private fb: FormBuilder
     , private _GroupService: GroupService,
-    private _CheckOperationService: CheckOperationService,
   private _CheckService:CheckService,
 private _CurrencyService:CurrencyService) {
     this.checkOerationForm = this.fb.group({
@@ -139,6 +137,8 @@ console.log(this.selectedOperation);
                 check:this.selectedCheck,
                 creditor: this.selectedCheck.payed_to,
                 debitor: this.selectedAccount,
+                operation: this.selectedOperation,
+
                 // case:0   
                      });
               this.selectedCheck=null;
@@ -177,6 +177,8 @@ console.log(this.selectedOperation);
             check:this.selectedCheck,
             creditor: this.selectedCheck.payed_to,
             debitor: this.selectedAccount,
+            operation: this.selectedOperation,
+
             // case:-1    
                 });
           this.selectedCheck=null;
@@ -211,6 +213,8 @@ console.log(this.selectedOperation);
                 check:this.selectedCheck,
                 creditor:this.selectedAccount,
                 debitor: this.selectedCheck.source_account,
+                operation: this.selectedOperation,
+
                 // case:0    
                     });
               this.selectedCheck=null;
@@ -245,6 +249,8 @@ console.log(this.selectedOperation);
           check:this.selectedCheck,
           creditor:this.selectedCheck.payed_to,
           debitor:  this.selectedAccount,
+          operation: this.selectedOperation,
+
           // case:-1  
               });
         this.selectedCheck=null;
@@ -270,6 +276,8 @@ console.log(this.selectedOperation);
             check:this.selectedCheck,
             creditor: this.selectedAccount,
             debitor: this.selectedCheck.source_account,
+            operation: this.selectedOperation,
+
             // case:-1  
                   });
           this.selectedCheck=null;
@@ -295,6 +303,8 @@ console.log(this.selectedOperation);
             check:this.selectedCheck,
             creditor:this.selectedCheck.payed_to,
             debitor:  this.selectedAccount,
+            operation: this.selectedOperation,
+
             // case:-1     
                });
           this.selectedCheck=null;
@@ -321,6 +331,8 @@ console.log(this.selectedOperation);
           check:this.selectedCheck,
           creditor:this.selectedCheck.payed_to,
           debitor:this.selectedCheck.main_source,
+          operation: this.selectedOperation,
+
           // case:-1    
             });
         this.selectedCheck=null;
@@ -352,6 +364,8 @@ console.log(this.selectedOperation);
           check:this.selectedCheck,
           creditor: this.selectedCheck.payed_to,
           debitor: this.selectedAccount,
+          operation: this.selectedOperation,
+
           // case:-1   
              });
         this.selectedCheck=null;
@@ -377,6 +391,8 @@ console.log(this.selectedOperation);
             check:this.selectedCheck,
             creditor: this.selectedCheck.payed_to,
             debitor: this.selectedAccount,
+            operation: this.selectedOperation,
+
             // case:-1     
                });
           this.selectedCheck=null;
@@ -402,6 +418,8 @@ console.log(this.selectedOperation);
             check:this.selectedCheck,
             creditor: this.selectedCheck.payed_to,
             debitor: this.selectedCheck.source_account,
+            operation: this.selectedOperation,
+
             // case:-1
           });
           this.selectedCheck=null;
@@ -660,17 +678,21 @@ this.checks = response.data;
         formData.append(`entryItems[${index}][debitor]`, item.debitor.id);
         formData.append(`entryItems[${index}][amount]`, item.amount.toString());
         formData.append(`entryItems[${index}][check]`, item.check.id);
+        formData.append(`entryItems[${index}][operation]`, item.operation.toString());
+
+        // operation: this.selectedOperation,
+
         // if(item.case >= 0){
         //   formData.append(`entryItems[${index}][case]`, item.case.toString());
         // }
 
 
       });
-      this._CheckOperationService.AddOperationOnCheck(formData).subscribe({
+      this._CheckService.AddOperationOnCheck(formData).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response) {
-          this.router.navigate(['/dashboard/check']);
+          this.router.navigate(['/dashboard/check_list/waiting']);
         }
       },
       error: (err: HttpErrorResponse) => {
@@ -704,6 +726,6 @@ interface EntryItem {
 debitor:any,
 amount:number,
 check:any,
-// case:number
+operation:number
 }
 

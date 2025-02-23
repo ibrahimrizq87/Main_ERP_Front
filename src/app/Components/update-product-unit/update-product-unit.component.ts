@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProductsService } from '../../shared/services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductUnitsService } from '../../shared/services/product_units.service';
 
 @Component({
   selector: 'app-update-product-unit',
@@ -19,7 +19,7 @@ export class UpdateProductUnitComponent implements OnInit {
   isLoading: boolean = false;
   unitForm: FormGroup ;
     constructor(
-    private _ProductsService: ProductsService,
+    private _ProductUnitsService: ProductUnitsService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -36,13 +36,13 @@ export class UpdateProductUnitComponent implements OnInit {
     }
   }
   fetchProductsUnits(unitId: string): void {
-    this._ProductsService.getUnitById(unitId).subscribe({
+    this._ProductUnitsService.getAllProductUnitById(unitId).subscribe({
       next: (response) => {
         if (response) {
           const UnitsData = response.data ; 
           console.log(UnitsData)
           this.unitForm.patchValue({
-            unit: UnitsData.unit,
+            unit: UnitsData.name,
           });
         }
       },
@@ -56,13 +56,13 @@ export class UpdateProductUnitComponent implements OnInit {
       this.isLoading = true;
   
       const unitsData = new FormData();
-      unitsData.append('unit', this.unitForm.get('unit')?.value);
+      unitsData.append('name', this.unitForm.get('unit')?.value);
     
     
       const unitId = this.route.snapshot.paramMap.get('id');
       
       if (unitId) {
-        this._ProductsService.updateUnit(unitId, unitsData).subscribe({
+        this._ProductUnitsService.updateProductUnit(unitId, unitsData).subscribe({
           next: (response) => {
             this.isLoading = false;
             if (response) {
