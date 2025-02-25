@@ -2,27 +2,38 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
-  // products/get-determinants-by-product/{product_id}
-  private baseURL = environment.apiUrl;
-  constructor(private _HttpClient: HttpClient) { 
-  }
-  private handleError(error: any) {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
+   private baseURL = environment.apiUrl;
+     constructor(private _HttpClient: HttpClient, private translate: TranslateService) {
+     }
+   
      
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
+   
+     private getHeaders(): HttpHeaders {
+       const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar');  
+       console.log('lang ',currentLang);
+   
+       return new HttpHeaders({
+         'Accept-Language': currentLang
+       });
+     }
+   
      
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
-  }
-
+   
+     private getHeadersWithToken(): HttpHeaders {
+       const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar'); 
+       const token = localStorage.getItem('Token');
+       return new HttpHeaders({
+         'Authorization': `Bearer ${token}`,
+         'Accept-Language': currentLang
+       });
+     }
+   
 
   ////products
   getDeterminantByProduct(id:string): Observable<any> {
@@ -32,15 +43,37 @@ export class ProductsService {
   }
 
   addProduct(productData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/products`, productData ,{ headers }) ;
+    return this._HttpClient.post(`${this.baseURL}/general/products`, productData ,{ headers:this.getHeadersWithToken() }) ;
   }
   viewAllProducts(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/products`,{ headers });
+    return this._HttpClient.get(`${this.baseURL}/general/products`,{ headers:this.getHeadersWithToken()  });
   }
+
+
+  viewProductById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/products/"+id, { headers:this.getHeadersWithToken() });
+  }
+
+
+  deleteProductImage(imageId:number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/products/delete-product-image/${imageId}`,{ headers:this.getHeadersWithToken() });
+  }
+
+  deleteProductColor(colorId:number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/products/delete-product-color/${colorId}`,{ headers:this.getHeadersWithToken() });
+  }
+  updateProduct(productId: string, productData: FormData): Observable<any> {
+    productData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/products/${productId}`, productData, { headers:this.getHeadersWithToken() });
+  }
+
+    
+  deleteProduct(productId: number): Observable<any> {
+  
+    return this._HttpClient.delete(`${this.baseURL}/general/products/${productId}`, { headers:this.getHeadersWithToken() });
+  }
+
+
 
   getProductsByStore(storeID:string): Observable<any> {
     const token = localStorage.getItem('Token');
@@ -52,73 +85,48 @@ export class ProductsService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/stores/product-branchs/${storeID}`,{ headers });
   }
-  
-  deleteProduct(productId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/products/${productId}`, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
-  viewProductById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/products/"+id, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
-  updateProduct(productId: string, productData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    productData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/products/${productId}`, productData, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
 
 
   //// ProductUnits
 
 
-  addProductUnit(unitData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/products-units`, unitData ,{ headers }).pipe(
-      catchError(this.handleError));
-  }
-  viewProductUnits(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/products-units`,{ headers });
-  }
-  deleteUnit(unitId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  // addProductUnit(unitData: FormData): Observable<any> {
+  //   const token = localStorage.getItem('Token');
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   return this._HttpClient.post(`${this.baseURL}/products-units`, unitData ,{ headers }).pipe(
+  //     catchError(this.handleError));
+  // }
+  // viewProductUnits(): Observable<any> {
+  //   const token = localStorage.getItem('Token');
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   return this._HttpClient.get(`${this.baseURL}/products-units`,{ headers });
+  // }
+  // deleteUnit(unitId: number): Observable<any> {
+  //   const token = localStorage.getItem('Token');
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this._HttpClient.delete(`${this.baseURL}/products-units/${unitId}`, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
-  getUnitById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
+  //   return this._HttpClient.delete(`${this.baseURL}/products-units/${unitId}`, { headers }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+  // getUnitById(id:any): Observable<any>{
+  //   const token = localStorage.getItem('Token');
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this._HttpClient.get(this.baseURL+"/products-units/"+id, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
-  updateUnit(unitId: string, unitsData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    unitsData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/products-units/${unitId}`, unitsData, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
+  //   return this._HttpClient.get(this.baseURL+"/products-units/"+id, { headers }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+  // updateUnit(unitId: string, unitsData: FormData): Observable<any> {
+  //   const token = localStorage.getItem('Token');
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   unitsData.append('_method', 'PUT');
+  //   return this._HttpClient.post(`${this.baseURL}/products-units/${unitId}`, unitsData, { headers }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
 
 
   ////productBranch
@@ -145,17 +153,13 @@ export class ProductsService {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this._HttpClient.get(this.baseURL+"/products-branches/"+id, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.get(this.baseURL+"/products-branches/"+id, { headers });
   }
   updateBranch(unitId: string, unitsData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     unitsData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/products-branches/${unitId}`, unitsData, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    return this._HttpClient.post(`${this.baseURL}/products-branches/${unitId}`, unitsData, { headers });
   }
   ///////////////////////////determinane
 

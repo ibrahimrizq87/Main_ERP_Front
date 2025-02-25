@@ -15,159 +15,72 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="product_id" class="form-label large-text">{{ 'SELECT_PRODUCT' | translate }}</label>
-                  <select id="product_id" formControlName="product_id" (change)="onProductChange($event)"  class="form-control">
-                    <option *ngFor="let product of products" [value]="product.id">{{ product.name_ar }}</option>
+                  <select id="product_id" formControlName="product_id" (change)="onProductChange($event)"  class="form-control"
+                  [class.is-invalid]="!selectedProduct && isSubmited"
+                  >
+                    <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
                   </select>
-                </div>
-                <div class="form-group col-md-12">
-                  <label class="form-label large-text">{{ 'PRODUCT_DETERMINANTS' | translate }}</label>
-                  <div *ngFor="let determinant of productDeterminants" class="mb-4">
-                    <label>{{ determinant.determinantName }}</label>
-                    <select
-                      class="form-control"
-                      (change)="onValueSelect(determinant.determinantId, $event)"
-                    >
-                      <option value="" disabled selected>{{ 'SELECT_VALUE' | translate }}</option>
-                      <option *ngFor="let value of determinant.determinantValues" [value]="value.id">
-                        {{ value.value }}
-                      </option>
-                    </select>
+                  <div class="invalid-feedback" *ngIf="!selectedProduct && isSubmited">
+                    <p >
+                      {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    
                   </div>
+
                 </div>
+            
                 <div class="form-group col-md-6">
                   <label class="form-label large-text">{{ 'SELECT_STORE' | translate }}</label>
-                  <select class="form-control" formControlName="store_id">
-                    <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option>
-                    <ng-container *ngFor="let parent of hierarchicalAccounts">
-                      <option [ngValue]="parent.id">{{ parent.name_en }}</option>
-                      <ng-container *ngFor="let child of parent.children">
-                        <option [ngValue]="child.id">&nbsp;&nbsp;{{ child.name_en }}</option>
-                        <ng-container *ngFor="let subChild of child.children">
-                          <option [ngValue]="subChild.id">&nbsp;&nbsp;&nbsp;&nbsp;{{ subChild.name_en }}</option>
-                        </ng-container>
-                      </ng-container>
-                    </ng-container>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}</label>
-                  <input
-                    id="amount"
-                    formControlName="amount"
-                    type="number"
-                    class="form-control"
-                    required
-                  />
-                  <div
-                    class="alert alert-danger"
-                    *ngIf="branchForm.get('amount')?.errors && branchForm.get('amount')?.touched"
+                  <select  class="form-control" formControlName="store_id"
+                  [class.is-invalid]="!selectedStore && isSubmited"
+                  (change)="onStoreChange($event)"
                   >
-                    <p *ngIf="branchForm.get('amount')?.getError('required')">
-                      {{ 'AMOUNT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option>
+                    <option *ngFor="let value of stores" [value]="value.id">
+                      {{ value.name }}
+                    </option>
+      
+                  </select>
+
+                  <div class="invalid-feedback" *ngIf="!selectedStore && isSubmited">
+                    <p >
+                      {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </p>
+                    
                   </div>
                 </div>
-                <div class="form-group col-md-12 mt-4">
-                  <label class="form-label large-text">{{ 'DYNAMIC_INPUTS' | translate }}</label>
-                  <div *ngFor="let input of dynamicInputs.controls; let i = index" class="mb-3">
-                    <label>Input {{ i + 1 }}</label>
-                    <input
-                      [formControl]="input"
-                      type="text"
-                      class="form-control"
-                      placeholder="{{ 'ENTER_VALUE_FOR_INPUT' | translate }} {{ i + 1 }}"
-                      [disabled]="inputDisabled[i]"  
-                    />
 
+
+                <div *ngIf="productColors.length>0" class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'SELECT_COLOR' | translate }}</label>
+                  <select class="form-control" formControlName="color_id"
+                  [class.is-invalid]="!selectedColor && isSubmited"
+                  (change)="onColorChange($event)"
+                  >
+                    <!-- <option>{{ 'SELECT_COLOR' | translate }}</option> -->
+                    <option *ngFor="let value of productColors" [value]="value.id">
+                      {{ value.color }}
+                    </option>
+      
+                  </select>
+
+
+                  <div class="invalid-feedback" *ngIf="!selectedColor && isSubmited">
+                    <p >
+                      {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    
+                  </div>
 
                
-
-
-                    <div
-                      class="alert alert-danger"
-                      *ngIf="branchForm.get('amount')?.errors && branchForm.get('amount')?.touched"
-                    >
-                      <p *ngIf="branchForm.get('amount')?.getError('required')">
-                        Amount is Required
-                      </p>
-                    </div>
-                    <button type="button" class="btn btn-warning" (click)="disableInput(i)">
-                      {{ 'OVERRIDE' | translate }}
-                    </button>
-                  </div>
-
-                  <div class="form-group col-md-6">
-                    <label for="purchase_price" class="form-label">{{'PURCHASE_PRICE' | translate}}</label>
-                    <input
-                      id="purchase_price"
-                      formControlName="purchase_price"
-                      type="number"
-                      class="form-control"
-                      placeholder="{{'PURCHASE_PRICE' | translate }}"
-                      required
-                    />
-                
-                    <div
-                      class="alert alert-danger"
-                      *ngIf="branchForm.get('purchase_price')?.errors && branchForm.get('purchase_price')?.touched"
-                    >
-                      <p *ngIf="branchForm.get('purchase_price')?.getError('required')">
-                        {{'PURCHASE_PRICE_REQUIRED'| translate}}
-                      </p>
-                    </div>
-                  </div>
-                 <!-- Dynamic Inputs Section -->
-<!-- <div class="form-group col-md-12 mt-4">
-  <label class="form-label">Dynamic Inputs</label>
-  <div *ngFor="let input of dynamicInputs.controls; let i = index" class="mb-3">
-    <label>Input {{ i + 1 }}</label>
-    <div class="input-group">
-      <input
-        [formControl]="input"
-        type="text"
-        class="form-control"
-        placeholder="Enter value for input {{ i + 1 }}"
-        [attr.disabled]="inputDisabled[i] ? true : null" />
-      <button 
-        type="button" 
-        class="btn btn-warning ml-2" 
-        (click)="overrideInput(i)">
-        Override
-      </button>
-    </div>
-    <div class="alert alert-danger" *ngIf="input.errors && input.touched">
-      <p *ngIf="input.getError('required')">This field is required</p>
-    </div>
-  </div>
-</div> -->
-<!-- <div class="form-group col-md-12 mt-4">
-  <label class="form-label">{{'DYNAMIC_INPUTS' | translate}}</label>
-  <div *ngFor="let input of dynamicInputs.controls; let i = index" class="mb-3">
-    <label>Input {{ i + 1 }}</label>
-    <input
-      [formControl]="input"
-      type="text"
-      class="form-control"
-      placeholder="Enter value for input {{ i + 1 }}"
-      [disabled]="inputDisabled[i]"  
-    />
-    <div class="alert alert-danger" *ngIf="input.errors && input.touched">
-      <p *ngIf="input.getError('required')">This field is required</p>
-    </div>
-    <button type="button" class="btn btn-warning" (click)="disableInput(i)">
-      Override
-    </button>
-  </div>
-</div> -->
-
-                
-                </div>
+                </div>              
+            
               </div>
             </div>
           </div>
         </div>
         <div class="mt-4 mb-4">
-          <button [disabled]="branchForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+          <button  type="submit" class="btn btn-primary px-4 large-text">
             <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
           </button>
         </div>

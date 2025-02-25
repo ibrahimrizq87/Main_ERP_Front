@@ -14,194 +14,227 @@
             <div class="card-body pb-5">
               <div class="row">
                
-                <div class="form-group col-md-6">
+                <div class="col-md-6 mb-3">
                   <label for="name_ar" class="form-label large-text">{{ 'PRODUCT_ARABIC_NAME' | translate }}</label>
-                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control" placeholder="{{ 'PRODUCT_ARABIC_NAME' | translate }}" />
-                  <div class="alert alert-danger" *ngIf="productForm.get('name_ar')?.errors && productForm.get('name_ar')?.touched">
-                    <p *ngIf="productForm.get('name_ar')?.hasError('required')">{{ 'PRODUCT_ARABIC_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
-                    <p *ngIf="productForm.get('name_ar')?.hasError('maxLength')">{{ 'PRODUCT_ARABIC_NAME' | translate }} {{ 'MAX_LENGTH_255' | translate }}</p>
+                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control" 
+                         placeholder="{{ 'PRODUCT_ARABIC_NAME' | translate }}" 
+                         [class.is-invalid]="productForm.get('name_ar')?.invalid && isSubmited" />
+                
+                  <div class="invalid-feedback" *ngIf="productForm.get('name_ar')?.invalid && isSubmited">
+                    <p *ngIf="productForm.get('name_ar')?.hasError('required')">
+                      {{ 'PRODUCT_ARABIC_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    <p *ngIf="productForm.get('name_ar')?.hasError('maxLength')">
+                      {{ 'PRODUCT_ARABIC_NAME' | translate }} {{ 'MAX_LENGTH_255' | translate }}
+                    </p>
                   </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="product_name_en" class="form-label large-text">{{ 'PRODUCT_ENGLISH_NAME' | translate }}</label>
-                  <input id="product_name_en" formControlName="product_name_en" type="text" class="form-control" placeholder="{{ 'PRODUCT_ENGLISH_NAME' | translate }}" />
-                  <div class="alert alert-danger" *ngIf="productForm.get('product_name_en')?.errors && productForm.get('product_name_en')?.touched">
-                      <p *ngIf="productForm.get('product_name_en')?.hasError('maxLength')">{{ 'PRODUCT_ENGLISH_NAME' | translate }} {{ 'MAX_LENGTH_255' | translate }}</p>
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="purchase_price" class="form-label large-text">{{ 'PURCHASE_PRICE' | translate }}</label>
-                  <input id="purchase_price" formControlName="purchase_price" type="number" class="form-control" placeholder="{{ 'PURCHASE_PRICE' | translate }}" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label class="form-label large-text">{{ 'SELECT_DIMENSION' | translate }}</label>
-                  <select class="form-control" formControlName="product_dimension" >
-                    <option>{{ 'SELECT_DIMENSION' | translate }}</option>
-                    <option value="0D">0D</option>
-                    <option value="1D">1D</option>
-                    <option value="2D">2D</option>
-                    <option value="3D">3D</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label class="form-label large-text">{{ 'SELECT_UNIT' | translate }}</label>
-                  <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('unitModal')">
-                    {{ selectedUnit ? selectedUnit.unit : ('SELECT_UNIT' | translate) }}
-                  </button>
-                  <input type="hidden" formControlName="unit_id" [value]="selectedUnit?.id" />
                 </div>
                 
-                <!-- Unit Selection Modal -->
-                <div class="modal fade" id="unitModal" tabindex="-1" aria-labelledby="unitModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="unitModalLabel">{{ 'SELECT_UNIT' | translate }}</h5>
-                        <button type="button" class="btn-close" (click)="closeModal('unitModal')"></button>
-                      </div>
-                      <div class="modal-body">
-                        <ul class="list-group">
-                          <li
-                            *ngFor="let unit of units"
-                            class="list-group-item list-group-item-action"
-                            (click)="selectUnit(unit, 'unitModal')"
-                          >
-                            {{ unit.unit }}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" (click)="closeModal('unitModal')">{{ 'CLOSE' | translate }}</button>
-                      </div>
-                    </div>
+         
+
+                <div class="col-md-6 mb-3">
+                  <label for="product_name_en" class="form-label large-text">
+                    {{ 'PRODUCT_ENGLISH_NAME' | translate }}
+                  </label>
+                  
+                  <input id="product_name_en" formControlName="product_name_en" type="text" class="form-control" 
+                         placeholder="{{ 'PRODUCT_ENGLISH_NAME' | translate }}" 
+                         [class.is-invalid]="productForm.get('product_name_en')?.invalid && isSubmited" />
+                
+                  <div class="invalid-feedback" *ngIf="productForm.get('product_name_en')?.invalid && isSubmited">
+                    <p *ngIf="productForm.get('product_name_en')?.hasError('required')">
+                      {{ 'PRODUCT_ENGLISH_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    <p *ngIf="productForm.get('product_name_en')?.hasError('maxLength')">
+                      {{ 'PRODUCT_ENGLISH_NAME' | translate }} {{ 'MAX_LENGTH_255' | translate }}
+                    </p>
                   </div>
                 </div>
-                <div class="form-group text-center">
-                  <label for="image" class="form-label large-text"><i class="fa-solid fa-image"></i> {{ 'PRODUCT_IMAGE' | translate }} ({{"Optional"|translate}})</label>
-                  <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="image" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-                    <label for="image" class="btn btn-image">
-                      <i class="fa-solid fa-file-arrow-up"></i> {{ 'CHOOSE_FILE' | translate }}
-                    </label>
-                    <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
+                
+                
+                <div class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'SELECT_UNIT' | translate }}</label>
+                  <select class="form-control" formControlName="unit_id" (change)="onUnitChange($event)"
+                  [class.is-invalid]="!selectedUnit && isSubmited"
+                  >
+                    <option>{{ 'SELECT_UNIT' | translate }}</option>
+                    <option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</option>
+                    
+                  </select>
+                  <div class="invalid-feedback" *ngIf="!selectedUnit && isSubmited">
+                    <p >
+                      {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    
                   </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'SELECT_PRODUCT_CATEGORY' | translate }}</label>
+                  <select class="form-control" formControlName="product_category_id" (change)="onProductCategoryChange($event)"
+                  [class.is-invalid]="!selectedProductCategory && isSubmited"
+                  >
+                    <option>{{ 'SELECT_PRODUCT_CATEGORY' | translate }}</option>
+                    <option *ngFor="let unit of productCategories" [value]="unit.id">{{unit.name}}</option>
+                    
+                  </select>
+                  <div class="invalid-feedback" *ngIf="!selectedProductCategory && isSubmited">
+                    <p >
+                      {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="default_price" class="form-label large-text">
+                    {{ 'DEFULT_PRICE' | translate }}
+                  </label>
                   
+                  <input id="default_price" formControlName="default_price" type="number" class="form-control" 
+                         placeholder="{{ 'DEFULT_PRICE' | translate }}" 
+                         [class.is-invalid]="productForm.get('default_price')?.invalid && isSubmited" />
+                
+                  <div class="invalid-feedback" *ngIf="productForm.get('default_price')?.invalid && isSubmited">
+                    <p>
+                      {{ 'DEFULT_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </p>
+                    
+                  </div>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label for="coverImage" class="form-label large-text">
+                    {{ 'UPLOAD_IMAGE' | translate }}
+                  </label>
+                
+                  <input type="file" id="coverImage" class="form-control" 
+                         (change)="onFileCoverImageSelect($event)" 
+                         accept="image/*" 
+                         [class.is-invalid]="productForm.get('image')?.invalid && isSubmited" />
+                
+                  <div class="invalid-feedback" *ngIf="productForm.get('image')?.invalid && isSubmited">
+                    <p>
+                      {{ 'IMAGE_IS_REQUIRED' | translate }}
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 ">
+                  <label for="product_description" class="form-label large-text">
+                    {{ 'product_description' | translate }}
+                  </label>
+                  <textarea id="product_description" formControlName="product_description" class="form-control" placeholder="{{ 'ENTER_NOTE' | translate }}" rows="3"></textarea>
+
+        
+                 
+                </div>
+                <!-- <div class="col-md-6 ">
+                  <label for="product_description" class="form-label large-text">
+                    {{ 'product_description' | translate }}
+                  </label>
+                
+                  <textarea  id="product_description" class="form-control" 
+                        ></textarea>
+                 
+                </div> -->
+
+                <div class="form-group text-center">
                   <div formArrayName="prices">
-                    <div *ngFor="let price of prices.controls; let i = index" [formGroupName]="i" class="form-group col-md-12">
-                      <label class="form-label">{{ 'PRICE' | translate }} {{ i + 1 }}</label>
-                      <div class="input-group gap-1">
-                        
-                        <input type="number" class="form-control" formControlName="price" placeholder="{{'PRICE'| translate}}  " />
-                        <select class="form-control ms-2" formControlName="currency_id">
-                          <option>{{ 'SELECT_CURRENCY' | translate }}</option>
-                          <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
-                        </select>
-                        <!-- <div class="form-group col-md-3">
-                         
-                          <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('currencyModal')">
-                            {{ selectedCurrency ? selectedCurrency.currency_name_ar : 'Select Currency' }}
-                          </button>
-                          <input type="hidden" formControlName="currency_id" [value]="selectedCurrency?.id" />
+                    <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+
+                      <div class="card-header"> الاسعار </div>
+
+
+                      <div *ngFor="let price of prices.controls; let i = index"  [formGroupName]="i" class="col-sm-6 mt-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">{{price.get('price_category_name')?.value}}</h5>
+                            <input type="number" class="form-control" formControlName="price" placeholder="{{'PRICE'| translate}}  " />
+                          </div>
                         </div>
-                         -->
-                        <!-- Currency Selection Modal -->
-                        <!-- <div class="modal fade" id="currencyModal" tabindex="-1" aria-labelledby="currencyModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="currencyModalLabel">Select Currency</h5>
-                                <button type="button" class="btn-close" (click)="closeModal('currencyModal')"></button>
-                              </div>
-                              <div class="modal-body">
-                                <ul class="list-group">
-                                  <li
-                                    *ngFor="let currency of currencies"
-                                    class="list-group-item list-group-item-action"
-                                    (click)="selectCurrency(currency, 'currencyModal')"
-                                  >
-                                    {{ currency.currency_name_ar }}
-                                  </li>
-                                </ul>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" (click)="closeModal('currencyModal')">Close</button>
-                              </div>
-                            </div>
+                      </div>
+  
+                    </div>
+                  </div>
+
+
+                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+
+                    <div class="card-header"> صور المنتج </div>
+                    <!-- -->
+                    
+                    <div class="file-upload-container text-center">
+                      <label for="gallery" class="file-upload-label">
+                        <input type="file" id="gallery" class="file-upload-input" accept="image/*" multiple (change)="onFileSelect($event)">
+                        <i class="fa-solid fa-cloud-upload-alt"></i>
+                        <span>{{ 'CHOOSE_FILE' | translate }}</span>
+                      </label>
+                      <div class="preview-container" *ngIf="selectedFiles.length > 0">
+                        <div *ngFor="let file of selectedFiles" class="preview-item">
+                          <img [src]="file.preview" alt="Image Preview">
+                        </div>
+                      </div>
+
+                     
+                    </div>
+                    
+                    <div class="text-danger" *ngIf="selectedFiles.length == 0 && isSubmited" >
+                      <p>
+                        صور المنتج  {{ 'IS_REQUIRED' | translate }}
+                      </p>
+                      
+                    </div>
+                  </div>
+
+                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+
+                    <div class="card-header"> الوان المنتج </div>
+                    <div formArrayName="colors">
+                      <div *ngFor="let color of colors.controls; let i = index" [formGroupName]="i" class="row align-items-center g-2 mb-2 mt-2">
+    
+                        <!-- Color Name Input -->
+                        <!-- <div class="col-md-6">
+                          <input formControlName="color" type="text" class="form-control" placeholder="{{ 'COLOR_NAME' | translate }}" />
+                          <div *ngIf="color.get('color')?.invalid && color.get('color')?.touched" class="text-danger">
+                            {{ 'COLOR_NAME_IS_REQUIRED' | translate }}
                           </div>
                         </div> -->
 
-                         <select class="form-control ms-2" formControlName="price_category_id">
-                          <option> {{ 'SELECT_PRICE_CATEGORY' | translate }} </option>
-                          <option *ngFor="let priceCategory of priceCategories" [value]="priceCategory.id">{{ priceCategory.name }}</option>
-                        </select> 
-                        <!-- <div class="form-group col-md-3">
-                          <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('priceCategoryModal')">
-                            {{ selectedPriceCategory ? selectedPriceCategory.name : "Select Price Category" }}
-                          </button>
-                          <input type="hidden" formControlName="price_category_id" [value]="selectedPriceCategory?.id" />
-                        </div> -->
+                        <div class="col-md-6">
+                          <input formControlName="color" type="text" class="form-control" 
+                                 placeholder="{{ 'COLOR_NAME' | translate }}"
+                                 [class.is-invalid]="color.get('color')?.invalid && isSubmited" />
                         
-                        <!-- Price Category Selection Modal -->
-                        <!-- <div class="modal fade" id="priceCategoryModal" tabindex="-1" aria-labelledby="priceCategoryModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="priceCategoryModalLabel">Select Price Category</h5>
-                                <button type="button" class="btn-close" (click)="closeModal('priceCategoryModal')"></button>
-                              </div>
-                              <div class="modal-body">
-                                <ul class="list-group">
-                                  <li
-                                    *ngFor="let priceCategory of priceCategories"
-                                    class="list-group-item list-group-item-action"
-                                    (click)="selectPriceCategory(priceCategory, 'priceCategoryModal')"
-                                  >
-                                    {{ priceCategory.name }}
-                                  </li>
-                                </ul>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" (click)="closeModal('priceCategoryModal')">Close</button>
-                              </div>
-                            </div>
+                          <!-- Invalid Feedback Message -->
+                          <div class="invalid-feedback" *ngIf="color.get('color')?.invalid && isSubmited">
+                            {{ 'COLOR_NAME_IS_REQUIRED' | translate }}
                           </div>
-                        </div> -->
-                       
-                        <button type="button" class="btn btn-success ms-2" (click)="addPrice()">+</button>
-                        <button type="button" class="btn btn-danger ms-2" (click)="removePrice(i)">-</button>
+                        </div>
+                        
+                    
+                        <!-- Image Upload -->
+                        <div class="col-md-5">
+                          <input type="file" class="form-control" (change)="onFileColorSelect($event, i)" accept="image/*" />
+                          <div *ngIf="color.get('image')?.invalid && color.get('image')?.touched" class="text-danger">
+                            {{ 'IMAGE_IS_REQUIRED' | translate }}
+                          </div>
+
+
+                        </div>
+                    
+                        <!-- Remove Button -->
+                        <div class="col-md-1">
+                          <button type="button" class="btn btn-danger w-100" (click)="removeColor(i)">
+                            <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
+                          </button>
+                        </div>
+                    
                       </div>
-                      <div *ngIf="price.get('price')?.hasError('required') && price.get('price')?.touched" class="text-danger">
-                        {{ 'PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}.
-                      </div>
-                      <div *ngIf="price.get('currency_id')?.hasError('required') && price.get('currency_id')?.touched" class="text-danger">
-                        {{ 'CURRENCY' | translate }} {{ 'IS_REQUIRED' | translate }}.
-                      </div>
-                      <div *ngIf="price.get('price_category_id')?.hasError('required') && price.get('price_category_id')?.touched" class="text-danger">
-                        {{ 'PRICE_CATEGORY' | translate }} {{ 'IS_REQUIRED' | translate }}.
-                      </div>
+                    <button type="button" class="btn btn-success mt-2" (click)="addColor()">+ {{ 'ADD_COLOR' | translate }}</button>
+
                     </div>
-                  </div>
-                  <!-- 'determinants.*.determinant_id.required' => 'Each determinant must have a valid ID.',
-                  'determinants.*.value.required' => 'Each determinant must have a value.', -->
-                  <div formArrayName="determinants">
-                    <div *ngFor="let determinant of determinants.controls; let i = index" [formGroupName]="i" class="form-group col-md-12">
-                      <label class="form-label">  {{ 'SELECT_DETERMINANT' | translate }} {{ i + 1 }}</label>
-                      <div class="input-group">
-                        <select class="form-control" formControlName="determinant_id">
-                          <option>{{ 'SELECT_DETERMINANT' | translate }}</option>
-                          <option *ngFor="let determinant of determinantsarray" [value]="determinant.id">{{ determinant.determinant}}</option>
-                        </select>
-                        <input type="text" class="form-control  ms-2" formControlName="value" placeholder="{{ 'VALUE' | translate }}" />
-                        <button type="button" class="btn btn-success ms-2" (click)="addDeterminant()">+</button>
-                        <button type="button" class="btn btn-danger ms-2" (click)="removeDeterminant(i)">-</button>
-                      </div>
-                      <div *ngIf="determinant.get('determinant_id')?.hasError('required') && determinant.get('determinant_id')?.touched" class="text-danger">
-                      {{ 'DETERMINANT' | translate }} {{ 'IS_REQUIRED' | translate }}.
-                      </div>
-                      <div *ngIf="determinant.get('value')?.hasError('required') && determinant.get('value')?.touched" class="text-danger">
-                      {{ 'VALUE' | translate }} {{ 'IS_REQUIRED' | translate }}.
-                      </div>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -209,7 +242,7 @@
           </div>
         </div>
         <div class="mt-4 mb-4">
-          <button [disabled]="productForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+          <button  type="submit" class="btn btn-primary px-4 large-text">
             <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
           </button>
         </div>

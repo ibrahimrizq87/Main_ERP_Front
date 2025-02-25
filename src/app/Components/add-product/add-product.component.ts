@@ -6,9 +6,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { PriceService } from '../../shared/services/price.service';
-// import bootstrap from 'bootstrap';
-import { Modal } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductUnitsService } from '../../shared/services/product_units.service';
+import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 
 @Component({
   selector: 'app-add-product',
@@ -20,81 +20,86 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AddProductComponent implements OnInit {
   msgError: string = '';
   isLoading: boolean = false;
+  isSubmited=false;
   productForm: FormGroup;
   units: any[] = [];
-  selectedCurrency: any;
-  selectedPriceCategory: any ;
+  selectedFiles: any[] = [];
   selectedUnit: any ;
-  currencies: any[] = [];
-  determinantsarray: any[] = [];
-  priceCategories: any[] = [];
-  selectedDeterminant: any
-  readonly maxImageSize = 2048 * 1024;
+  selectedProductCategory: any ;
 
+  priceCategories: PriceCategory[] = [];
+  readonly maxImageSize = 2048 * 1024;
+productCategories :any;
+  
+  get colors(): FormArray {
+    return this.productForm.get('colors') as FormArray;
+  }
+  addColor() {
+    this.colors.push(this.fb.group({
+      color: [null,[Validators.required]],
+      image: [null],
+    }));
+  }
+  removeColor(index: number) {
+    this.colors.removeAt(index);
+  }
+  onFileSelect(event: any) {
+    if (event.target.files) {
+      this.selectedFiles = [];
+      for (let file of event.target.files) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.selectedFiles.push({ file, preview: e.target.result });
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+  onFileColorSelect(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.colors.at(index).patchValue({ image: file }); // Storing Base64
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private _ProductsService: ProductsService,
     private _CurrencyService: CurrencyService,
-    private _PriceService: PriceService
+    private _PriceService: PriceService,
+    private _ProductUnitsService:ProductUnitsService,
+    private _ProductCategoriesService:ProductCategoriesService
   ) {
     this.productForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
-      product_name_en: this.fb.control(null, [Validators.maxLength(255)]),
-      product_dimension: this.fb.control(null),
-      image: this.fb.control(null, [this.validateImage.bind(this)]), // Removed required validator
+      product_name_en: this.fb.control(null, [Validators.required,Validators.maxLength(255)]),
+      default_price :[null,[Validators.required]],
+      product_category_id:[null,[Validators.required]],
+
+      product_description:[null],
+      image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]), // Removed required validator
       unit_id: this.fb.control(null, [Validators.required]),
       prices: this.fb.array([]),
-      determinants: this.fb.array([]),
-      purchase_price:this.fb.control(null)
+      colors:  this.fb.array([]),
     });
-    this.addPrice();
-    this.addDeterminant();
+    // this.addPrice();
+    // this.addDeterminant();
   }
-  openModal(modalId: string) {
-    const modalElement = document.getElementById(modalId);
-    if (modalElement) {
-      const modal = new Modal(modalElement);
-      modal.show();
-    }
+  onProductCategoryChange(event:Event){
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedProductCategory =selectedValue;
+    // console.log(this.selectedUnit);
   }
-  
-  closeModal(modalId: string) {
-    const modalElement = document.getElementById(modalId);
-    if (modalElement) {
-      const modal = Modal.getInstance(modalElement);
-      modal?.hide();
-    }
+  onUnitChange(event:Event){
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedUnit =selectedValue;
+    // console.log(this.selectedUnit);
   }
-  // selectCurrency(currency: any, modalId: string) {
-  //   this.selectedCurrency = currency;
-  //   this.closeModal(modalId);
-  // }
-  // selectCurrency(currency: any, modalId: string) {
-  //   this.selectedCurrency = currency;
-  //   this.prices.at(this.prices.length - 1).patchValue({ currency_id: currency.id });
-  //   this.closeModal(modalId);
-  // }
-  // selectPriceCategory(priceCategory: any, modalId: string) {
-  //   this.selectedPriceCategory = priceCategory;
-  //   this.prices.at(this.prices.length - 1).patchValue({ price_category_id: priceCategory.id });
-  //   this.closeModal(modalId);
-  // }
-
-  selectUnit(unit: any, modalId: string) {
-    this.selectedUnit = unit;
-    this.productForm.get('unit_id')?.setValue(unit.id);
-    this.closeModal(modalId);
-  }
-  // selectPriceCategory(priceCategory: any, modalId: string) {
-  //   this.selectedPriceCategory = priceCategory;
-  //   this.closeModal(modalId);
-  // }
-  // selectDeterminant(determinant: any, modalId: string) {
-  //   this.selectedDeterminant = determinant;
-  //   this.determinants.at(this.determinants.length - 1).patchValue({ determinant_id: determinant.id });
-  //   this.closeModal(modalId);
-  // }
   get prices(): FormArray {
     return this.productForm.get('prices') as FormArray;
   }
@@ -105,11 +110,11 @@ export class AddProductComponent implements OnInit {
     }
   }
 
-  addPrice() {
+  addPrice(priceCategory:PriceCategory) {
     this.prices.push(this.fb.group({
       price: [null],
-      price_category_id: [null],
-      currency_id: [null]
+      price_category_id: [priceCategory.id],
+      price_category_name: [priceCategory.name],
     }));
   }
 
@@ -123,22 +128,20 @@ export class AddProductComponent implements OnInit {
     }
   }
 
-  addDeterminant() {
-    this.determinants.push(this.fb.group({
-      value: [null],
-      determinant_id: [null],
-    }));
-  }
+
 
   selectedFile: File | null = null;
 
-  onFileSelected(event: any): void {
+
+  onFileCoverImageSelect(event: any): void {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
       this.productForm.patchValue({ image: file });
     }
   }
+
+  
 
   validateImage(control: AbstractControl): ValidationErrors | null {
     const file = this.selectedFile;
@@ -158,16 +161,16 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUnits();
-    this.loadCurrencies();
     this.loadPriceCategories();
-    this.loadDeteminants();
+    this.loadProductCategories();
   }
 
   loadUnits(): void {
-    this._ProductsService.viewProductUnits().subscribe({
+    this._ProductUnitsService.getAllProductUnits().subscribe({
       next: (response) => {
         if (response) {
           this.units = response.data;
+          console.log('units:' ,this.units);
         }
       },
       error: (err) => {
@@ -176,11 +179,12 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-  loadCurrencies(): void {
-    this._CurrencyService.viewAllCurrency().subscribe({
+
+  loadProductCategories(): void {
+    this._ProductCategoriesService.getAllProductCategories().subscribe({
       next: (response) => {
         if (response) {
-          this.currencies = response.data;
+          this.productCategories = response.data;
         }
       },
       error: (err) => {
@@ -188,25 +192,18 @@ export class AddProductComponent implements OnInit {
       }
     });
   }
+
+
 
   loadPriceCategories(): void {
     this._PriceService.viewAllCategory().subscribe({
       next: (response) => {
         if (response) {
           this.priceCategories = response.data;
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
-
-  loadDeteminants(): void {
-    this._ProductsService.viewAllDeterminants().subscribe({
-      next: (response) => {
-        if (response) {
-          this.determinantsarray = response.data;
+          this.priceCategories.forEach((category)=>{
+            this.addPrice(category);
+          })
+          
         }
       },
       error: (err) => {
@@ -216,29 +213,46 @@ export class AddProductComponent implements OnInit {
   }
 
   handleForm() {
+    this.isSubmited =true;
     if (this.productForm.valid) {
       this.isLoading = true;
       const formData = new FormData();
 
-      formData.append('name_ar', this.productForm.get('name_ar')?.value);
-      formData.append('name_en', this.productForm.get('product_name_en')?.value);
-      formData.append('product_dimension', this.productForm.get('product_dimension')?.value);
-      if (this.selectedFile) {
-        formData.append('image', this.selectedFile);
-      }
-      formData.append('unit_id', this.productForm.get('unit_id')?.value);
-      formData.append('amount','0') ;
+      formData.append('name[ar]', this.productForm.get('name_ar')?.value);
+      formData.append('name[en]', this.productForm.get('product_name_en')?.value);
+      formData.append('product_unit_id', this.productForm.get('unit_id')?.value);
+      formData.append('product_category_id', this.productForm.get('unit_id')?.value);
+
+      formData.append('default_price', this.productForm.get('default_price')?.value);
+      formData.append('cover_image', this.productForm.get('image')?.value);
+      formData.append('description', this.productForm.get('product_description')?.value || '');
+
+
       this.prices.controls.forEach((priceControl, index) => {
-        formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
-        formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
-        formData.append(`prices[${index}][currency_id]`, priceControl.get('currency_id')?.value);
+        if(priceControl.get('price')?.value){
+
+          formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
+          formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
+        }
       });
 
-      this.determinants.controls.forEach((determinantControl, index) => {
-        formData.append(`determinants[${index}][value]`, determinantControl.get('value')?.value);
-        formData.append(`determinants[${index}][determinant_id]`, determinantControl.get('determinant_id')?.value);
+      this.colors.controls.forEach((priceControl, index) => {
+        formData.append(`colors[${index}][color]`, priceControl.get('color')?.value);
+        if(priceControl.get('image')?.value){
+          formData.append(`colors[${index}][image]`, priceControl.get('image')?.value);
+        }
+        
       });
-      formData.append('purchase_price', this.productForm.get('purchase_price')?.value);
+
+
+      if(this.selectedFiles.length>0){
+        this.selectedFiles.forEach((image , index)=>{
+          formData.append(`images[${index}][image]`, image.file);
+
+        });
+
+      }
+     
       this._ProductsService.addProduct(formData).subscribe({
         next: (response) => {
           this.isLoading = false;
@@ -253,4 +267,11 @@ export class AddProductComponent implements OnInit {
       });
     }
   }
+}
+
+
+interface PriceCategory{
+  id:number;
+  name:string;
+
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
-import { ProductsService } from '../../shared/services/products.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductBranchesService } from '../../shared/services/product_branches.service';
 
 @Component({
   selector: 'app-view-product-branch',
@@ -16,7 +16,7 @@ export class ViewProductBranchComponent implements OnInit {
   storeData: any;
 
   constructor(
-    private _ProductsService: ProductsService,
+    private _ProductBranchesService: ProductBranchesService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -29,10 +29,10 @@ export class ViewProductBranchComponent implements OnInit {
   }
 
   fetchProductData(productId: string): void {
-    this._ProductsService.getBranchById(productId).subscribe({
+    this._ProductBranchesService.viewProductBranchById(productId).subscribe({
       next: (response) => {
         console.log(response);
-        this.storeData = response?.productBranch || {};
+        this.storeData = response.data|| {};
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error fetching product data:', err.message);
