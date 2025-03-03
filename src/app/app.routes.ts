@@ -98,6 +98,12 @@ import { AddCountryComponent } from './Components/add-country/add-country.compon
 import { ProductCategoryComponent } from './Components/product-category/product-category.component';
 import { AddProductCategoryComponent } from './Components/add-product-category/add-product-category.component';
 import { UpdateProductCategoryComponent } from './Components/update-product-category/update-product-category.component';
+import { ProductMovesComponent } from './Components/product-moves/product-moves.component';
+import { AddProductMoveComponent } from './Components/add-product-move/add-product-move.component';
+import { UpdateProductMoveComponent } from './Components/update-product-move/update-product-move.component';
+import { UpdateAccountCategoriesComponent } from './Components/update-account-categories/update-account-categories.component';
+import { AccountCategoriesComponent } from './Components/account-categories/account-categories.component';
+import { AddAccountCategoryComponent } from './Components/add-account-category/add-account-category.component';
 
 
 export const routes: Routes = [
@@ -112,6 +118,15 @@ export const routes: Routes = [
             {path:"general-setting",component:GeneralSettingsComponent},
 
         ]},
+
+        
+        {path:"product-moves",component:ProductMovesComponent},
+        {path:"add-product-move",component:AddProductMoveComponent},
+        {path:"update-product-move",component:UpdateProductMoveComponent},
+
+        {path:"update-account-category/:id",component:UpdateAccountCategoriesComponent},
+        {path:"add-account-category/:type",component:AddAccountCategoryComponent},
+        {path:"account-categories/:type",component:AccountCategoriesComponent},
 
         {path:"check-operation",component:CheckOperationsComponent},
         

@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_DOCUMENT' | translate }}</h5>
+        <span class="text-muted">
+            {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'DOCUMENT_ENTRY' | translate }}
+        </span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-account-category/{{type}}">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li>
+          <a 
+            (click)="changeStatus('client')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': type === 'client', 'inactive-tab': type !== 'client'}"
+          >
+            {{ 'clients' | translate }}
+          </a>
+        </li>
+        <li>
+          <a 
+            (click)="changeStatus('vendor')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': type === 'vendor', 'inactive-tab': type !== 'vendor'}"
+          >
+            {{ 'vendors' | translate }}
+          </a>
+        </li>
+        <li>
+          <a 
+            (click)="changeStatus('delegate')" 
+            class="nav-link px-2"
+            [ngClass]="{'active-tab': type === 'delegate', 'inactive-tab': type !== 'delegate'}"
+          >
+            {{ 'delegates' | translate }}
+          </a>
+        </li>
+      </ul>
+      
+  
+    </header>
+  </div>
+  
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'DOCUMENT_LIST' | translate }}</span>
+            <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'CURRENCY_NAME_AR' | translate }}</th>  
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let entry of accountCategories; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ entry.name }}</td>
+
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+
+                  
+
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-account-category/'+entry.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

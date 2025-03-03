@@ -31,6 +31,7 @@ export class UpdateProductComponent implements OnInit {
     selectedProductCategory: any ;
     productPrices:ProductPrice[]=[];
     priceCategories: PriceCategory[] = [];
+    pricesAreValid=false;
     currentProductImage ='images/image.jpg';
     readonly maxImageSize = 2048 * 1024;
   productCategories :any;
@@ -78,8 +79,28 @@ export class UpdateProductComponent implements OnInit {
         }
       }
     }
-
-
+    addPriceRange(index: number) {
+      const priceControl = this.prices.at(index) as FormGroup;
+      const ranges = priceControl.get('ranges') as FormArray;
+      let last_price =0;
+      this.pricesAreValid = false;
+      if (ranges.length > 0) {
+        const lastRange = ranges.at(ranges.length - 1) as FormGroup;
+        last_price = lastRange.get('range_to')?.value;
+      }
+      
+      ranges.push(this.fb.group({
+        price: [null],
+        range_to: [null],
+        range_from: [last_price],
+  
+  
+      }));
+   }
+  
+    getRanges(index: number): FormArray {
+      return (this.prices.at(index).get('ranges') as FormArray);
+    }
     // fetchImage(url: string) {
     //   fetch(url)
     //     .then(response => response.blob()) 
@@ -155,20 +176,56 @@ export class UpdateProductComponent implements OnInit {
         this.prices.removeAt(index);
       }
     }
-  
-    addPrice(priceCategory:PriceCategory ,price:ProductPrice |null) {
+    createRangeGroup(price:ProductPrice): FormGroup {
+      return this.fb.group({
+          id: [price.id], // Price ID
+          range_from: [price.quantity_from], // Minimum quantity
+          range_to: [price.quantity_to], // Maximum quantity
+          price: [price.price], // Price value
+      });
+  }
+
+
+    addPrice(priceCategory:PriceCategory ,price:PriceCategory |null) {
       if(price != null){
-        this.prices.push(this.fb.group({
-          price: [price.price],
-          id:[price.id],
-          price_category_id: [priceCategory.id],
+
+          const priceForm = this.fb.group({
+            price_category_id: [priceCategory.id],
           price_category_name: [priceCategory.name],
-        }));
+          ranges: this.fb.array([]) 
+        });
+
+        this.prices.push(priceForm);
+
+        price.prices.forEach((item)=>{
+     const ranges = priceForm.get('ranges') as FormArray;
+     
+      
+      ranges.push(this.fb.group({
+        price: [item.price],
+        range_to: [item.quantity_to],
+        range_from: [item.quantity_from],
+  
+  
+      }));
+        })
+
+// this.fb.array(
+//             price.prices.map(price => this.createRangeGroup(price)) // Populate ranges
+//         ),
+
+        // const ranges = priceControl.get('ranges') as FormArray;
+
+
+
+
       }else{
         this.prices.push(this.fb.group({
-          price: [null],
+          // price: [null],
           price_category_id: [priceCategory.id],
           price_category_name: [priceCategory.name],
+          ranges: this.fb.array([]) 
+
         }));
       }
   
@@ -321,7 +378,33 @@ export class UpdateProductComponent implements OnInit {
         }
       });
     }
+    onPriceRangeChange(index: number ,rangeIndex: number, event: any) {
+      const priceControl = this.prices.at(index) as FormGroup;
+      const ranges = priceControl.get('ranges') as FormArray;
+       let from_value= event.target.value;  
+      if (ranges.length > rangeIndex+1) {
+        const lastRange = ranges.at(rangeIndex + 1) as FormGroup;
+        lastRange.patchValue({range_from: from_value} )
+      }
   
+      const range = ranges.at(rangeIndex) as FormGroup;
+  
+      if(range.get('range_from')?.value < range.get('range_to')?.value){
+        this.pricesAreValid =true;
+      }
+      // console.log(priceControl.get('price_category_id')?.value);
+
+  
+   }
+  
+    removeRange(index: number , rangeIndex: number) {
+      const priceControl = this.prices.at(index) as FormGroup;
+      const ranges = priceControl.get('ranges') as FormArray;
+      
+      if (ranges.length > 0) {
+        ranges.removeAt(rangeIndex);
+      }
+   }
   
     loadPriceCategories(): void {
       this._PriceService.viewAllCategory().subscribe({
@@ -335,7 +418,7 @@ export class UpdateProductComponent implements OnInit {
               let currentPrice =null;
 
               this.productPrices.forEach((price)=>{
-                if(price.priceCategory.id == category.id){
+                if(price.id == category.id){
                   currentPrice = price ;
                 }
               
@@ -376,19 +459,60 @@ export class UpdateProductComponent implements OnInit {
 
         }
   
-  
         this.prices.controls.forEach((priceControl, index) => {
-          if(priceControl.get('price')?.value){
+          const ranges = priceControl.get('ranges') as FormArray;
 
-            if(priceControl.get('id')?.value){
-              formData.append(`prices[${index}][id]`, priceControl.get('id')?.value);
 
-            }
+          
+
+            // if(ranges.length>0){
   
-            formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
-            formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
-          }
+              ranges.controls.forEach((rangeControl, index) => {
+                if(!rangeControl.get('price')?.value){
+                    alert('prices are invalid')
+                    return;
+                  
+                }
+
+
+                console.log('-----------------------------------------')
+
+                console.log( rangeControl.get('price')?.value)
+                console.log( rangeControl.get('range_from')?.value)
+                console.log( rangeControl.get('range_to')?.value)
+                console.log( priceControl.get('price_category_id')?.value)
+                console.log('-----------------------------------------')
+
+    
+                // $table->integer('quantity_from');
+                // $table->integer('quantity_to');
+    
+              formData.append(`prices[${index}][price]`, rangeControl.get('price')?.value);
+              formData.append(`prices[${index}][quantity_from]`, rangeControl.get('range_from')?.value);
+              formData.append(`prices[${index}][quantity_to]`, rangeControl.get('range_to')?.value);
+              formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
+              });
+    
+            
+
+          
+  
+ 
         });
+
+
+        // this.prices.controls.forEach((priceControl, index) => {
+        //   if(priceControl.get('price')?.value){
+
+        //     if(priceControl.get('id')?.value){
+        //       formData.append(`prices[${index}][id]`, priceControl.get('id')?.value);
+
+        //     }
+  
+        //     formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
+        //     formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
+        //   }
+        // });
   
         this.colors.controls.forEach((priceControl, index) => {
           if(priceControl.get('id')?.value){
@@ -434,16 +558,19 @@ export class UpdateProductComponent implements OnInit {
   interface PriceCategory{
     id:number;
     name:string;
+    prices:ProductPrice[];
   
   }
 
   interface ProductPrice{
     id:number;
+    quantity_from:number;
+    quantity_to:number;
     price:number;
     priceCategory:PriceCategory;
-  
   }
-
+  // quantity_from: [price.quantity_from], // Minimum quantity
+  //         quantity_to: [price.quantity_to], 
 
   interface ProductImage{
     id:number;

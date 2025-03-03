@@ -1,0 +1,264 @@
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'ADD_PRODUCT_BRANCH' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'BRANCHES' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_BRANCH' | translate }}</span>
+  </div>
+  <div class="mt-4 mb-4">
+  <form [formGroup]="branchForm" (ngSubmit)="handleForm()">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow em-card rounded-lg">
+              <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5 class="large-text">{{ 'ADD_BRANCH' | translate }}</h5>
+              </div>
+              <div class="card-body pb-5">
+
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label large-text">{{ 'MOVE_TYPE' | translate }}</label>
+                        <select  class="form-control" formControlName="type"
+                        (change)="onTypeChange($event)"
+                        >
+                          <option value="first_entry">ادخال اول المده</option>
+                          <option value="store">من مخزن لمخزن</option>
+                          <option value="lost">مفقودات</option>
+                          <option value="extra">زيادة</option>
+
+                        </select>
+                      </div>
+                </div>
+
+                <div class="row" *ngIf="selectedType == 'store'  || selectedType == 'lost' ">
+                    <h4>من مخزن</h4>
+                    <div class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_STORE' | translate }}</label>
+                      <select  class="form-control" formControlName="from_store"
+                      (change)="onStoreChange($event , 'from')"
+                      >
+                        <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option>
+                        <option *ngFor="let value of stores" [value]="value.id"
+                        [disabled]="toStore ==value.id "
+                        >
+                          {{ value.name }}
+                        </option>
+          
+                      </select>
+    
+                      <div class="invalid-feedback" *ngIf="!selectedStore && isSubmited">
+                        <p >
+                          {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                        </p>
+                        
+                      </div>
+                    </div>
+
+
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                        <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'from')">
+                          {{ fromSelectedBranch ? fromSelectedBranch.product.name : ('SELECT_CURRENCY' | translate) }}
+                        </button>
+                        <input type="hidden" formControlName="from_branch_id" [value]="fromSelectedBranch?.id" />
+                      </div>
+
+
+
+                      <div class="form-group col-md-6" *ngIf="fromSelectedBranch">
+                        <label class="form-label">{{ 'STOCK' | translate }} : {{fromSelectedBranch.stock}}</label>
+                        <br>
+                        <label class="form-label">{{ 'Total_Overrided' | translate }} : {{fromSelectedBranch.stock}}</label>
+                        <!-- <label class="form-label">{{ 'Total_OVerrided' | translate }} : {{fromSelectedBranch.stock}}</label> -->
+
+                      </div>
+
+
+
+  
+  
+                
+                </div>
+
+
+
+                <div class="row" *ngIf="selectedType == 'store'  || selectedType == 'extra' || selectedType == 'first_entry'  ">
+                    <h4>الى مخزن</h4>
+                    <div class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_STORE' | translate }}</label>
+                      <select  class="form-control" formControlName="to_store"
+                      (change)="onStoreChange($event, 'to')"                      >
+                        <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option>
+                        <option *ngFor="let value of stores" [value]="value.id"
+                        [disabled]="fromStore ==value.id">
+                          {{ value.name }}
+                        </option>
+          
+                      </select>
+    
+                      <div class="invalid-feedback" *ngIf="!selectedStore && isSubmited">
+                        <p >
+                          {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                        </p>
+                        
+                      </div>
+                    </div>
+  
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                        <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'to')">
+                          {{ toSelectedBranch ? toSelectedBranch.product.name : ('SELECT_CURRENCY' | translate) }}
+                        </button>
+                        <input type="hidden" formControlName="to_branch_id" [value]="toSelectedBranch?.id" />
+                      </div>
+
+
+                      <!-- <div class="form-group col-md-6" *ngIf="toSelectedBranch">
+                        <label class="form-label">{{ 'STOCK' | translate }} : {{toSelectedBranch.stock}}</label>
+                        <br>
+                        <label class="form-label">{{ 'Total_Overrided' | translate }} : {{toSelectedBranch.stock}}</label>
+
+                      </div> -->
+  
+  
+                  
+                </div>
+
+                <div class="row">
+
+
+
+                    <div class="col-md-6 mb-3">
+                        <label for="quantity" class="form-label large-text">
+                          {{ 'DEFULT_PRICE' | translate }}
+                        </label>
+                        
+                        <input id="quantity" formControlName="quantity" type="number" class="form-control" 
+                               placeholder="{{ 'DEFULT_PRICE' | translate }}" 
+                               [class.is-invalid]="branchForm.get('quantity')?.invalid && isSubmited"
+                               (input)="onQuantityChange($event)" 
+                                />
+                      
+                        <div class="invalid-feedback" *ngIf="branchForm.get('quantity')?.invalid && isSubmited">
+                          <p>
+                            {{ 'DEFULT_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                          </p>
+                          
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-6 mb-3" *ngIf="quantity>0 && selectedType != 'lost'">
+                        <label for="quantity" class="form-label large-text">
+                          {{ 'Override' | translate }}
+                        </label>
+                        
+                        <input id="override" formControlName="override" type="number" class="form-control" 
+                               placeholder="{{ 'DEFULT_PRICE' | translate }}" 
+                               (input)="onOverrideChange($event)" 
+                                />
+                      
+                      </div>
+
+
+                    <div class="col-md-6 mb-3" *ngIf="selectedType == 'store'">
+                      <label for="overrided_to_move" class="form-label large-text">
+                        {{ 'OVERRIDED_TO_BE_MOVED' | translate }}
+                      </label>
+                      
+                      <input id="overrided_to_move" formControlName="overrided_to_move" type="number" class="form-control" />
+                    
+                      
+                    </div>
+
+
+
+                      <div formArrayName="barcodeInputs" *ngIf="barcodeInputs.controls.length>0">
+                        <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+    
+                          <div class="card-header">  </div>
+                          <div *ngFor="let price of barcodeInputs.controls; let i = index"  [formGroupName]="i" class="col-sm-6 mt-2">
+                            <div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">Barcode for {{i}}</h5>
+                                <input type="text" class="form-control" formControlName="barcode" placeholder="{{'BARCODE'| translate}}"
+                                [class.is-invalid]="price.get('barcode')?.invalid && isSubmited" />
+
+
+                                <div class="invalid-feedback" *ngIf="price.get('barcode')?.invalid && isSubmited">
+                                    <p>
+                                      {{ 'BARCODE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                                    </p>
+                                    
+                                  </div>                    
+                              </div>
+                            </div>
+                          </div>
+      
+                        </div>
+                      </div>
+
+      
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 mb-4">
+            <button  type="submit" class="btn btn-primary px-4 large-text">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'SAVE' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+  <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Search Input -->
+          <input
+            type="text"
+            class="form-control mb-3"
+            [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange()"
+          />
+  
+          <!-- Accounts Table -->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>{{ 'ProductName' | translate }}</th>
+                <th>{{ 'BranchQuantity' | translate }}</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let branch of filteredBranches; let i = index" (click)="selectBranch(branch)" style="cursor: pointer;">
+                <td>{{branch.product.name }}</td>
+                <td>{{ branch.stock }}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

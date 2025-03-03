@@ -150,9 +150,63 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">{{price.get('price_category_name')?.value}}</h5>
-                            <input type="number" class="form-control" formControlName="price" placeholder="{{'PRICE'| translate}}  " />
+                            <!-- <input type="number" class="form-control" formControlName="price" placeholder="{{'PRICE'| translate}}  " /> -->
+
+                          <button type="button" class="btn btn-success mt-2" (click)="addPriceRange(i)">+</button>
+
+                          <!-- <div formArrayName="ranges">
+                            <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row">
+                              <input type="number" class="form-control col-md-6" formControlName="price" placeholder="Enter Range Price" />
+                              <input type="number" class="form-control col-md-6" formControlName="range_to" placeholder="Enter range_to Price" />
+
+                              <button type="button" class="btn btn-danger w-100" (click)="removeRange(i ,j)">
+                                <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
+                              </button>
+                            </div>
+                          </div> -->
+
+                          <div formArrayName="ranges" class="mt-2">
+                            <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row align-items-center g-2 mt-2">
+                              
+                              <!-- Range Price and Range To Side by Side -->
+                              <div class="col-md-4">
+                                <input type="number" class="form-control" formControlName="price" placeholder="Enter Range Price" />
+                              </div>
+
+                              <div class="col-md-2">
+                                <label for="">from: {{range.get('range_from')?.value}}</label>
+                              </div>
+                        
+                              <div class="col-md-4">
+                                <input type="number" class="form-control" formControlName="range_to" placeholder="Enter range_to Price"
+                                (input)="onPriceRangeChange(i,j, $event)" 
+                                [class.is-invalid]="range.get('range_from')?.value > range.get('range_to')?.value" 
+
+                                />
+
+                                <div class="invalid-feedback" *ngIf="range.get('range_from')?.value > range.get('range_to')?.value">
+                                  <p>
+                                    {{ 'TONUMBER_MUST_BE_BIGGER' | translate }}
+                                  </p>
+                                </div>
+                              </div>
+                        
+                              <!-- Remove Button -->
+                              <div class="col-md-2">
+                                <button type="button" class="btn btn-danger w-100" (click)="removeRange(i, j)">
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </div>
+                        
+                            </div>
                           </div>
                         </div>
+
+
+                        </div>
+
+
+
                       </div>
   
                     </div>

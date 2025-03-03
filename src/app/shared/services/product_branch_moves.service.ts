@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductBranchesService {
+export class ProductBranchMovesService {
    private baseURL = environment.apiUrl;
      constructor(private _HttpClient: HttpClient, private translate: TranslateService) {
      }
@@ -37,36 +37,33 @@ export class ProductBranchesService {
 
 
 
-  addProductBranch(productData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/product-branches`, productData ,{ headers:this.getHeadersWithToken() }) ;
+  addProductBranchMove(productData: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/product-branch-moves`, productData ,{ headers:this.getHeadersWithToken() }) ;
   }
-  viewAllProductBranches(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/product-branches`,{ headers:this.getHeadersWithToken()  });
-  }
-
-
-  viewProductBranchById(id:any): Observable<any>{
-    return this._HttpClient.get(this.baseURL+"/general/product-branches/"+id, { headers:this.getHeadersWithToken() });
+  viewAllProductBranchMoves(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/product-branch-moves`,{ headers:this.getHeadersWithToken()  });
   }
 
 
+  viewProductBranchMoveById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/product-branch-moves/"+id, { headers:this.getHeadersWithToken() });
+  }
 
 
-  updateProductBranch(productId: string, productData: FormData): Observable<any> {
+
+
+  updateProductBranchMove(productId: string, productData: FormData): Observable<any> {
     productData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/general/product-branches/${productId}`, productData, { headers:this.getHeadersWithToken() });
+    return this._HttpClient.post(`${this.baseURL}/general/product-branch-moves/${productId}`, productData, { headers:this.getHeadersWithToken() });
   }
 
     
-  deleteProductBranch(productId: number): Observable<any> {
+  deleteProductBranchMove(productId: number): Observable<any> {
   
-    return this._HttpClient.delete(`${this.baseURL}/general/product-branches/${productId}`, { headers:this.getHeadersWithToken() });
+    return this._HttpClient.delete(`${this.baseURL}/general/product-branch-moves/${productId}`, { headers:this.getHeadersWithToken() });
   }
 
 
-  getProductBranchByStoreId(storeId:any): Observable<any>{
-    return this._HttpClient.get(this.baseURL+"/general/product-branches/by-store/"+storeId, { headers:this.getHeadersWithToken() });
-  }
 
   
 

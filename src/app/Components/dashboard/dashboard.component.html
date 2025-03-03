@@ -135,6 +135,132 @@
                 
                 </ul>
               </li>
+            </ul>
+          </li>
+          
+
+
+
+
+
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('debitors')" style="cursor: pointer;">
+              <i class="fa-solid fa-user-group me-2"></i>
+              <span>الزمم</span>
+              <i [ngClass]="isDropdownOpen('debitors') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('debitors')">
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="accounts" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> العملاء
+                </a>
+              </li>
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="account-categories/client" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> التصنيفات
+                </a>
+              </li>
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="accounts" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{ 'ACCOUNTS' | translate }}
+                </a>
+              </li>
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="accounts" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{ 'ACCOUNTS' | translate }}
+                </a>
+              </li>
+
+
+
+
+              <!-- <li class="nav-item nested">
+                <a class="nav-link" routerLink="accounts" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{ 'ACCOUNTS' | translate }}
+                </a>
+              </li>
+               -->
+              <!-- <li class="nav-item nested" >
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('clients')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> العملاء</span>
+                  <i [ngClass]="isDropdownOpen('clients') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+                
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('clients')">
+                    
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> العملاء
+                    </a>
+                  </li>
+
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> تصنيفات العملاء
+                    </a>
+                  </li>
+                
+                </ul>
+              </li> -->
+<!-- 
+
+                <li class="nav-item nested" >
+                  <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('vendor')" style="cursor: pointer;">
+                    <span><i class="fa-solid fa-box me-2"></i> الموردين</span>
+                    <i [ngClass]="isDropdownOpen('vendor') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                  </a>
+
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('vendor')">
+                    
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> الموردين
+                    </a>
+                  </li>
+
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> تصنيفات الموردين
+                    </a>
+                  </li>
+                
+                </ul>
+
+              </li> -->
+
+
+              <!-- <li class="nav-item nested" >
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('delegate')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> المندوبين</span>
+                  <i [ngClass]="isDropdownOpen('delegate') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+
+
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('delegate')">
+                    
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> المندوبين
+                    </a>
+                  </li>
+
+                  <li class="nav-item" >
+                    <a class="nav-link" >
+                      <i class="fa-solid fa-money-bill me-2"></i> تصنيفات المندوبين
+                    </a>
+                  </li>
+                
+                </ul>
+              </li> -->
 
 
 
@@ -142,7 +268,9 @@
 
             </ul>
           </li>
-          
+
+
+
 
           <li class="nav-item">
             <a class="nav-link">
@@ -177,6 +305,12 @@
            -->
             </ul>
           </li>
+
+
+
+
+      
+
           <li class="nav-item">
 
             <a class="nav-link">

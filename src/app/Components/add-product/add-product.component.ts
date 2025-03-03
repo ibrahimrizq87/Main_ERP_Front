@@ -26,7 +26,7 @@ export class AddProductComponent implements OnInit {
   selectedFiles: any[] = [];
   selectedUnit: any ;
   selectedProductCategory: any ;
-
+  pricesAreValid=false;
   priceCategories: PriceCategory[] = [];
   readonly maxImageSize = 2048 * 1024;
 productCategories :any;
@@ -100,6 +100,70 @@ productCategories :any;
     this.selectedUnit =selectedValue;
     // console.log(this.selectedUnit);
   }
+
+
+  onPriceRangeChange(index: number ,rangeIndex: number, event: any) {
+    const priceControl = this.prices.at(index) as FormGroup;
+    const ranges = priceControl.get('ranges') as FormArray;
+     let from_value= event.target.value;  
+
+    if (ranges.length > rangeIndex+1) {
+      const lastRange = ranges.at(rangeIndex + 1) as FormGroup;
+      lastRange.patchValue({range_from: from_value} )
+    }
+
+    const range = ranges.at(rangeIndex) as FormGroup;
+
+    if(range.get('range_from')?.value < range.get('range_to')?.value){
+      this.pricesAreValid =true;
+    }
+
+ }
+
+
+  removeRange(index: number , rangeIndex: number) {
+    const priceControl = this.prices.at(index) as FormGroup;
+    const ranges = priceControl.get('ranges') as FormArray;
+    
+    if (ranges.length > 0) {
+      ranges.removeAt(rangeIndex);
+    }
+ }
+
+
+  addPriceRange(index: number) {
+    const priceControl = this.prices.at(index) as FormGroup;
+    const ranges = priceControl.get('ranges') as FormArray;
+    let last_price =0;
+    this.pricesAreValid = false;
+    if (ranges.length > 0) {
+      const lastRange = ranges.at(ranges.length - 1) as FormGroup;
+      last_price = lastRange.get('range_to')?.value;
+    }
+    
+    ranges.push(this.fb.group({
+      price: [null],
+      range_to: [null],
+      range_from: [last_price],
+
+
+    }));
+ }
+
+
+ getRanges(index: number): FormArray {
+  return (this.prices.at(index).get('ranges') as FormArray);
+}
+  // addPriceRange(){
+
+  //   this.prices.ranges.push(this.fb.group({
+  //     price: [null],
+  //     // price_category_id: [priceCategory.id],
+  //     // price_category_name: [priceCategory.name],
+  //     // ranges:  this.fb.array([]),
+  //   }));
+
+  // }
   get prices(): FormArray {
     return this.productForm.get('prices') as FormArray;
   }
@@ -115,6 +179,7 @@ productCategories :any;
       price: [null],
       price_category_id: [priceCategory.id],
       price_category_name: [priceCategory.name],
+      ranges:  this.fb.array([]),
     }));
   }
 
@@ -213,8 +278,16 @@ productCategories :any;
   }
 
   handleForm() {
+
+
+    if(!this.pricesAreValid){
+      alert('prices are invalid')
+      return;
+    }
     this.isSubmited =true;
     if (this.productForm.valid) {
+
+ 
       this.isLoading = true;
       const formData = new FormData();
 
@@ -229,10 +302,27 @@ productCategories :any;
 
 
       this.prices.controls.forEach((priceControl, index) => {
-        if(priceControl.get('price')?.value){
+        const ranges = priceControl.get('ranges') as FormArray;
 
-          formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
+        if(ranges.length>0){
+
+          ranges.controls.forEach((rangeControl, index) => {
+            if(!rangeControl.get('price')?.value){
+                alert('prices are invalid')
+                return;
+              
+            }
+           
+
+            // $table->integer('quantity_from');
+            // $table->integer('quantity_to');
+
+          formData.append(`prices[${index}][price]`, rangeControl.get('price')?.value);
+          formData.append(`prices[${index}][quantity_from]`, rangeControl.get('range_from')?.value);
+          formData.append(`prices[${index}][quantity_to]`, rangeControl.get('range_to')?.value);
           formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
+          });
+
         }
       });
 
