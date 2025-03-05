@@ -80,7 +80,7 @@ productCategories :any;
       product_name_en: this.fb.control(null, [Validators.required,Validators.maxLength(255)]),
       default_price :[null,[Validators.required]],
       product_category_id:[null,[Validators.required]],
-
+      need_serial: this.fb.control(false), 
       product_description:[null],
       image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]), // Removed required validator
       unit_id: this.fb.control(null, [Validators.required]),
@@ -294,19 +294,26 @@ productCategories :any;
       formData.append('name[ar]', this.productForm.get('name_ar')?.value);
       formData.append('name[en]', this.productForm.get('product_name_en')?.value);
       formData.append('product_unit_id', this.productForm.get('unit_id')?.value);
-      formData.append('product_category_id', this.productForm.get('unit_id')?.value);
+      formData.append('product_category_id', this.productForm.get('product_category_id')?.value);
 
       formData.append('default_price', this.productForm.get('default_price')?.value);
       formData.append('cover_image', this.productForm.get('image')?.value);
       formData.append('description', this.productForm.get('product_description')?.value || '');
+ 
+      
+
+      if(this.productForm.get('need_serial')?.value ){
+        formData.append('need_serial_number', '1');
+      } 
 
 
-      this.prices.controls.forEach((priceControl, index) => {
+      let counter = 0;
+      this.prices.controls.forEach((priceControl) => {
         const ranges = priceControl.get('ranges') as FormArray;
 
         if(ranges.length>0){
 
-          ranges.controls.forEach((rangeControl, index) => {
+          ranges.controls.forEach((rangeControl) => {
             if(!rangeControl.get('price')?.value){
                 alert('prices are invalid')
                 return;
@@ -317,10 +324,11 @@ productCategories :any;
             // $table->integer('quantity_from');
             // $table->integer('quantity_to');
 
-          formData.append(`prices[${index}][price]`, rangeControl.get('price')?.value);
-          formData.append(`prices[${index}][quantity_from]`, rangeControl.get('range_from')?.value);
-          formData.append(`prices[${index}][quantity_to]`, rangeControl.get('range_to')?.value);
-          formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
+          formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
+          formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
+          formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
+          formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
+          counter++;
           });
 
         }

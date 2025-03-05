@@ -18,7 +18,7 @@ export class AddAccountCategoryComponent {
  msgError: string = '';
   isLoading: boolean = false;
   type ='client';
-
+  isSubmited =false;
   constructor(private _AccountCategoriesService:AccountCategoriesService ,
         private _Router: Router,
         private translate: TranslateService,
@@ -52,7 +52,7 @@ export class AddAccountCategoryComponent {
 
 
   handleForm() {
-   
+   this.isSubmited = true;
     if (this.categoryForm.valid) {
       this.isLoading = true;
 

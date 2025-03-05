@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-add-purchase',
@@ -28,7 +29,7 @@ export class AddPurchaseComponent implements OnInit {
   isLoading: boolean = false;
  currencies:any;
 stores:any[]=[];
- Suppliers:any[]=[];
+ vendors:any[]=[];
  selectedType: string = 'purchase';
  selectedStore: string = '';
 
@@ -63,7 +64,7 @@ stores:any[]=[];
       // credit_account_id: ['', Validators.required],
       // items: this.fb.array([]),
       items: this.fb.array([this.createItem()]),
-      // supplier_id:[null],
+      supplier_id:[null],
       cash_id:[null],
       notes:[''],
       showCashAccountsDropdown: [false],
@@ -82,11 +83,14 @@ stores:any[]=[];
   }
 
 ngOnInit(): void {
+
+this.loadProducts();
 this.loadCurrencies();
 this.loadStores();
 this.loadSuppliers();
 this.loadDelegates();
 this.loadCashAccounts();
+
 this.purchasesBillForm.get('items')?.valueChanges.subscribe((items) => {
   console.log('Items:', items); // Log items to debug
   items.forEach((item: any, index: number) => {
@@ -107,7 +111,7 @@ loadSuppliers(): void {
           account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
         });
 
-        this.Suppliers = Suppliers;
+        this.vendors = Suppliers;
       }
     },
     error: (err) => {
@@ -179,7 +183,7 @@ onTypeChange(event: Event): void {
 
   itemsArray.clear();
   if (this.selectedStore){
-    this.loadProducts(this.selectedStore);
+    // this.loadProducts(this.selectedStore);
 
   }
 
@@ -188,41 +192,63 @@ onStoreChange(event: Event): void {
   const selectedValue = (event.target as HTMLSelectElement).value;
 
 this.selectedStore = selectedValue;
-this.loadProducts(this.selectedStore);
+// this.loadProducts(this.selectedStore);
 
 }
-loadProducts(store:string){
+// loadProducts(store:string){
   
 
-  if( this.selectedType == 'purchase'){
-    this._ProductsService.getProductsByStore(store).subscribe({
+//   if( this.selectedType == 'purchase'){
+//     this._ProductsService.getProductsByStore(store).subscribe({
+//       next: (response) => {
+//         if (response) {
+//           this.Products = response.products;
+//           console.log(this.Products);
+
+//         }
+//       },
+//       error: (err) => {
+//         console.error(err);
+//       },
+//     });
+//   }else  if (this.selectedType == 'return'){
+//     this._ProductsService.getProductBranchsByStore(store).subscribe({
+//       next: (response) => {
+//         if (response) {
+//           this.Products = response.products;
+//           console.log(this.Products);
+
+//         }
+//       },
+//       error: (err) => {
+//         console.error(err);
+//       },
+//     });
+//   }
+
+// }
+
+
+loadProducts(){
+  
+
+    this._ProductsService.viewAllProducts().subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.products;
-          console.log(this.Products);
+          this.Products = response.data;
 
+          console.log('products',this.Products );
+          this.filteredProducts = this.Products ;
         }
       },
       error: (err) => {
         console.error(err);
       },
     });
-  }else  if (this.selectedType == 'return'){
-    this._ProductsService.getProductBranchsByStore(store).subscribe({
-      next: (response) => {
-        if (response) {
-          this.Products = response.products;
-          console.log(this.Products);
-
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
-  }
+  
 
 }
+
 
 
 onProductChange(event: Event, index: number): void {
@@ -231,40 +257,40 @@ onProductChange(event: Event, index: number): void {
   const itemsArray = this.purchasesBillForm.get('items') as FormArray;
   const itemGroup = itemsArray.at(index) as FormGroup;
   if (this.selectedType == 'purchase'){
-    this.loadProductDeterminant(selectedProductId , itemGroup);
+    // this.loadProductDeterminant(selectedProductId , itemGroup);
 
   }
 
 }
 
-loadProductDeterminant(selectedProductId:string ,itemGroup:FormGroup){
-  this._ProductsService.getDeterminantByProduct(selectedProductId).subscribe({
-    next: (response) => {
-      if (response) {
-        const productDeterminants = this.getGroupedDeterminants(response.data);
+// loadProductDeterminant(selectedProductId:string ,itemGroup:FormGroup){
+//   this._ProductsService.getDeterminantByProduct(selectedProductId).subscribe({
+//     next: (response) => {
+//       if (response) {
+//         const productDeterminants = this.getGroupedDeterminants(response.data);
 
-        itemGroup.patchValue({
-          total_price: this.Products.find((product) => product.id === +selectedProductId)?.purchase_price,
-          determinants: productDeterminants,
-        });
+//         itemGroup.patchValue({
+//           total_price: this.Products.find((product) => product.id === +selectedProductId)?.purchase_price,
+//           determinants: productDeterminants,
+//         });
 
-        // Dynamically add form controls for determinants
-        productDeterminants.forEach((det) => {
-          if (!itemGroup.get('determinants.' + det.determinantId)) {
-            itemGroup.addControl('determinant-' + det.determinantId, this.fb.control(''));
-          }
-        });
+//         // Dynamically add form controls for determinants
+//         productDeterminants.forEach((det) => {
+//           if (!itemGroup.get('determinants.' + det.determinantId)) {
+//             itemGroup.addControl('determinant-' + det.determinantId, this.fb.control(''));
+//           }
+//         });
 
-        itemGroup.updateValueAndValidity();
+//         itemGroup.updateValueAndValidity();
 
-        this.cdr.detectChanges();
-      }
-    },
-    error: (err) => {
-      console.error(err);
-    },
-  });
-}
+//         this.cdr.detectChanges();
+//       }
+//     },
+//     error: (err) => {
+//       console.error(err);
+//     },
+//   });
+// }
 
 getGroupedDeterminants(productDeterminants: any[]): any[] {
   const grouped = new Map();
@@ -313,11 +339,12 @@ trackByDeterminantId(index: number, det: any): number {
 
 createItem(): FormGroup {
   return this.fb.group({
-    // quantity: ['', Validators.required],
+    price: ['', Validators.required],
     total_price: ['', Validators.required],
+
     product_id: ['', Validators.required],
-    determinants: [[]], // Store determinants for the product
-    amount: [null, Validators.required], // Ensure 'amount' is part of each item
+    colors: [], 
+    amount: [null, Validators.required], 
     dynamicInputs: this.fb.array([])
   });
 }
@@ -502,6 +529,149 @@ handleForm() {
     }
 }
 
+filteredAccounts: Account[] = [];
+selectedPopUP:string ='';
+searchQuery: string = '';
+selectedCashAccount:Account | null= null;
+selecteddelegateAccount:Account | null= null;
+selectedVendor:Account | null= null;
+
+ 
+    removeCurrentDelegate(){
+      this.selecteddelegateAccount =null;
+    //  this.entryForm.patchValue({'delegate_id':null});
+    }
+  
 
 
+      closeModal(modalId: string) {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = Modal.getInstance(modalElement);
+          modal?.hide();
+        }
+      }
+    
+
+      openModal(modalId: string , type:string ) {
+        this.selectedPopUP = type;
+        // this.popUpIndex = index;
+        // const entryItem = this.entryForm.get('entryItems') as FormArray;
+        if(type == 'cash'){
+          this.filteredAccounts =this.cashAccounts;
+        }else if (type == 'delegate'){
+          this.filteredAccounts =this.delegates;
+        }else if(type =='vendor'){
+          this.filteredAccounts =this.vendors;
+
+        }
+        // console.log('hrerererer');
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = new Modal(modalElement);
+          modal.show();
+        }
+      }
+    
+  
+
+      onSearchChange(){
+  
+    
+        if(this.selectedPopUP == 'cash'){
+          this.filteredAccounts = this.cashAccounts.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+      
+        }else if (this.selectedPopUP == 'delegate'){
+          this.filteredAccounts = this.delegates.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }else if (this.selectedPopUP == 'vendor'){
+          this.filteredAccounts = this.vendors.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }
+       
+      }
+    
+
+
+    selectAccount(account:Account){
+      // const entryItem = this.purchasesBillForm.get('entryItems') as FormArray;
+    
+      if(this.selectedPopUP  == 'cash'){
+        
+        
+        this.selectedCashAccount = account;
+
+      }else if (this.selectedPopUP  == 'delegate'){
+        this.selecteddelegateAccount = account;
+        // this.entryForm.patchValue({'delegate_id':account.id})
+  
+      }else if (this.selectedPopUP  == 'vendor'){
+        this.selectedVendor = account;
+        // this.entryForm.patchValue({'delegate_id':account.id})
+  
+      }
+      // const accomdkdcd =entryItem.at(this.popUpIndex).get('account')?.value;
+      // console.log('here 1',account);
+      //       console.log('here 2',      accomdkdcd         );
+
+            this.cdr.detectChanges();
+
+      this.closeModal('shiftModal');
+
+    }
+  
+    filteredProducts:any;
+
+    ProductsearchQuery ='';
+    selectedProduct:any;
+    onProductSearchChange(){
+
+    }
+    selectProduct(product:any){
+
+
+
+      const itemsArray = this.purchasesBillForm.get('items') as FormArray;
+      const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+    
+
+
+
+      this.closeProductModel();
+    }
+    productIndex:number=-1;
+    openProductModal(index:number){
+      this.productIndex =index;
+      const modalElement = document.getElementById('productModel');
+      if (modalElement) {
+        const modal = new Modal(modalElement);
+        modal.show();
+      }
+    }
+
+
+
+
+    closeProductModel() {
+      const modalElement = document.getElementById('productModel');
+      if (modalElement) {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+    }
+  
+}
+
+
+
+
+
+interface Account {
+  id: string;
+  name: string;
+  
 }

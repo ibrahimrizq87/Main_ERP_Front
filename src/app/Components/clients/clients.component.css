@@ -23,14 +23,13 @@ span {
     padding: 5px;
 }
 
-
+i{
+    cursor: pointer;
+}
 
 thead {
     background-color:black !important;
 }
 tr,th,td{
     text-align: center;
-}
-i{
-    cursor:pointer
 }

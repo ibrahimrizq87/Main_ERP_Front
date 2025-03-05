@@ -141,6 +141,22 @@ height="50"  >
                  
                 </div>
 
+
+
+
+
+
+                <div *ngIf="stock == 0" class="col-md-6 ">
+
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="need_serial" formControlName="need_serial">
+                    <label class="custom-control-label" for="need_serial">Dose this product need serial</label>
+                  </div>
+  
+  
+                  
+                </div>
+
                 <div class="form-group text-center">
                   <!-- <div formArrayName="prices">
                     <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >

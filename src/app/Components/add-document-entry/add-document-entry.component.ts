@@ -296,7 +296,7 @@ calculateTotals() {
     searchQuery: string = '';
     selectedAccount:Account | null= null;
     selecteddelegateAccount:Account | null= null;
-  popUpIndex = -1;
+    popUpIndex = -1;
     selectedcompanyAccount:Account | null= null;
   
     selectAccount(account:Account){

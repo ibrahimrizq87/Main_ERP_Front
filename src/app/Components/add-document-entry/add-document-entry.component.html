@@ -49,15 +49,11 @@
                 <!-- Delegate -->
                 <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
-                  <!-- <select id="delegate_id" formControlName="delegate_id" class="form-control">
-                    <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name }}</option>
-                  </select> -->
                   <br>
                   <a (click)="openModal('shiftModal' , 'delegate' , -1)" class="btn btn-outline-info">
                     {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
                   </a>
                   <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
-
                 </div>
 
                 <!-- Note -->

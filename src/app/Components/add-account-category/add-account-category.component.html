@@ -19,10 +19,16 @@
   
                   <div class="form-group col-md-6">
                     <label for="name"  class="form-label large-text">{{ 'CATEGORY_NAME' | translate }}</label>
-                    <input id="name" formControlName="name" type="text" class="form-control" placeholder="{{ 'CATEGORY_NAME' | translate }}" required/>
-                    <div class="alert alert-danger" *ngIf="categoryForm.get('name')?.errors && categoryForm.get('name')?.touched">
-                      <p *ngIf="categoryForm.get('name')?.getError('required')">{{ 'NAME_REQUIRED' | translate }}</p>
-                      <p *ngIf="categoryForm.get('name')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
+                    <input id="name" formControlName="name" type="text" class="form-control" placeholder="{{ 'CATEGORY_NAME' | translate }}" required
+                    [class.is-invalid]="categoryForm.get('name')?.invalid && isSubmited" 
+                    />
+                    <div class="invalid-feedback" *ngIf="categoryForm.get('name')?.invalid && isSubmited">
+                      <p *ngIf="categoryForm.get('name')?.hasError('required')">
+                        {{ 'NAME_REQUIRED' | translate }}
+                      </p>
+                      <p *ngIf="categoryForm.get('name')?.hasError('maxLength')">
+                        {{ 'MAX_LENGTH_255' | translate }}
+                      </p>
                     </div>
                   </div>
                 
@@ -33,7 +39,7 @@
             </div>
           </div>
           <div class=" mt-4 mb-4">
-            <button [disabled]="categoryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <button type="submit" class="btn btn-primary px-4 large-text">
               <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
             </button>
          </div>

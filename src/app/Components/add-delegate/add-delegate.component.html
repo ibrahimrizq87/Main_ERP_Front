@@ -1,0 +1,144 @@
+<p>add-delegate works!</p>
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'MANAGE_CATEGORY' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CATEGORY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
+  </div>
+  <div class="mt-4 mb-4">
+    <form [formGroup]="delegateForm" (ngSubmit)="handleForm()">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card shadow em-card rounded-lg">
+                <div class="card-header bg-white text-black rounded-top pt-3">
+                  <h5 class="large-text">{{ 'ADD_DELEGATE' | translate }}</h5>
+                </div>
+                
+                <div class="card-body pb-5">
+                  <div class="row">
+                    
+                    <!-- Name Arabic -->
+                    <div class="form-group col-md-6">
+                      <label for="nameAr" class="form-label large-text">{{ 'CATEGORY_NAME_AR' | translate }}</label>
+                      <input id="nameAr" formControlName="nameAr" type="text" class="form-control" required
+                        placeholder="{{ 'CATEGORY_NAME_AR' | translate }}"
+                        [class.is-invalid]="delegateForm.get('nameAr')?.invalid && isSubmitted" 
+                      />
+                      <div class="invalid-feedback" *ngIf="delegateForm.get('nameAr')?.invalid && isSubmitted">
+                        <p *ngIf="delegateForm.get('nameAr')?.hasError('required')">
+                          {{ 'NAME_REQUIRED' | translate }}
+                        </p>
+                        <p *ngIf="delegateForm.get('nameAr')?.hasError('maxlength')">
+                          {{ 'MAX_LENGTH_255' | translate }}
+                        </p>
+                      </div>
+                    </div>
+      
+                    <!-- Name English -->
+                    <div class="form-group col-md-6">
+                      <label for="nameEn" class="form-label large-text">{{ 'CATEGORY_NAME_EN' | translate }}</label>
+                      <input id="nameEn" formControlName="nameEn" type="text" class="form-control" required
+                        placeholder="{{ 'CATEGORY_NAME_EN' | translate }}"
+                        [class.is-invalid]="delegateForm.get('nameEn')?.invalid && isSubmitted" 
+                      />
+                      <div class="invalid-feedback" *ngIf="delegateForm.get('nameEn')?.invalid && isSubmitted">
+                        <p *ngIf="delegateForm.get('nameEn')?.hasError('required')">
+                          {{ 'NAME_REQUIRED' | translate }}
+                        </p>
+                        <p *ngIf="delegateForm.get('nameEn')?.hasError('maxlength')">
+                          {{ 'MAX_LENGTH_255' | translate }}
+                        </p>
+                      </div>
+                    </div>
+      
+                    <!-- Phone Number 1 -->
+                    <div class="form-group col-md-6">
+                      <label for="phone1" class="form-label large-text">{{ 'PHONE_NUMBER_1' | translate }}</label>
+                      <input id="phone1" formControlName="phone_number_1" type="text" class="form-control" required
+                        placeholder="{{ 'PHONE_NUMBER_1' | translate }}"
+                        [class.is-invalid]="delegateForm.get('phone_number_1')?.invalid && isSubmitted"
+                      />
+                      <div class="invalid-feedback" *ngIf="delegateForm.get('phone_number_1')?.invalid && isSubmitted">
+                        <p *ngIf="delegateForm.get('phone_number_1')?.hasError('required')">
+                          {{ 'PHONE_REQUIRED' | translate }}
+                        </p>
+                        <p *ngIf="delegateForm.get('phone_number_1')?.hasError('maxlength')">
+                          {{ 'MAX_LENGTH_255' | translate }}
+                        </p>
+                      </div>
+                    </div>
+      
+                    <!-- Phone Number 2 -->
+                    <div class="form-group col-md-6">
+                      <label for="phone2" class="form-label large-text">{{ 'PHONE_NUMBER_2' | translate }}</label>
+                      <input id="phone2" formControlName="phone_number_2" type="text" class="form-control"
+                        placeholder="{{ 'PHONE_NUMBER_2' | translate }}"
+                        [class.is-invalid]="delegateForm.get('phone_number_2')?.invalid && isSubmitted"
+                      />
+                      <div class="invalid-feedback" *ngIf="delegateForm.get('phone_number_2')?.invalid && isSubmitted">
+                        <p *ngIf="delegateForm.get('phone_number_2')?.hasError('maxlength')">
+                          {{ 'MAX_LENGTH_255' | translate }}
+                        </p>
+                      </div>
+                    </div>
+      
+                    <!-- Image Upload -->
+                    <div class="form-group col-md-6">
+                      <label for="image" class="form-label large-text">{{ 'IMAGE' | translate }}</label>
+                      <input id="image" type="file" class="form-control" (change)="onFileSelected($event)" />
+                      <small class="form-text text-muted">{{ 'ACCEPTED_FORMATS' | translate }}</small>
+                    </div>
+      
+                    <!-- Account Category -->
+                    <div class="form-group col-md-6">
+                      <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate }}</label>
+                      <select id="account_category_id" (change)="onCategoryChange($event)" formControlName="account_category_id" class="form-control"
+                      
+                      [class.is-invalid]="!selectedCaegory && isSubmitted"
+
+                      >
+                        <option *ngFor="let category of categories" [value]="category.id">
+                          {{ category.name }}
+                        </option>
+                      </select>
+                      <div class="invalid-feedback" *ngIf="!selectedCaegory && isSubmitted">
+                        <p *ngIf="delegateForm.get('account_category_id')?.hasError('required')">
+                          {{ 'CATEGORY_REQUIRED' | translate }}
+                        </p>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                        <select class="form-control" (change)="onCurrencyChange($event)"   formControlName="currency_id"
+                        [class.is-invalid]="isSubmitted && !selectedCurrency "
+                        
+                        >
+                          <option>{{ 'SELECT_CURRENCY' | translate }}</option>
+                          <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
+                          </option>
+                        </select>
+                        <div *ngIf="isSubmitted && !selectedCurrency " class="invalid-feedback">
+                         
+                         {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
+                        </div>                
+                      </div>
+
+
+                  </div>
+                </div>
+      
+             
+      
+              </div>
+              <div class="mt-4 mb-4">
+                <button type="submit" class="btn btn-primary px-4 large-text">
+                  <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      
+  </div>

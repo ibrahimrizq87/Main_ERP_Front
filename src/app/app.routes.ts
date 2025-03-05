@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './Components/login/login.component';
 import { NotfoundComponent } from './Components/notfound/notfound.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
-import { VendorComponent } from './Components/vendor/vendor.component';
 import { CustomerComponent } from './Components/customer/customer.component';
 import { SupplierComponent } from './Components/supplier/supplier.component';
 import { ShowVendorComponent } from './Components/show-vendor/show-vendor.component';
@@ -104,6 +103,13 @@ import { UpdateProductMoveComponent } from './Components/update-product-move/upd
 import { UpdateAccountCategoriesComponent } from './Components/update-account-categories/update-account-categories.component';
 import { AccountCategoriesComponent } from './Components/account-categories/account-categories.component';
 import { AddAccountCategoryComponent } from './Components/add-account-category/add-account-category.component';
+import { ClientsComponent } from './Components/clients/clients.component';
+import { AddClientsComponent } from './Components/add-clients/add-clients.component';
+import { DelegatesComponent } from './Components/delegates/delegates.component';
+import { AddDelegateComponent } from './Components/add-delegate/add-delegate.component';
+import { UpdateDelegateComponent } from './Components/update-delegate/update-delegate.component';
+import { VendorsComponent } from './Components/vendors/vendors.component';
+import { AddVendorComponent } from './Components/add-vendor/add-vendor.component';
 
 
 export const routes: Routes = [
@@ -111,7 +117,6 @@ export const routes: Routes = [
     {path:"login",component:LoginComponent},
     {path:"dashboard",component:DashboardComponent,children:[
         
-        {path:"vendor",component:VendorComponent},
         
         {path:"system-settings",component:SystemSettingsComponent,children:[
             {path:"account-setting",component:AccountSettingsComponent},
@@ -123,6 +128,20 @@ export const routes: Routes = [
         {path:"product-moves",component:ProductMovesComponent},
         {path:"add-product-move",component:AddProductMoveComponent},
         {path:"update-product-move",component:UpdateProductMoveComponent},
+
+        {path:"clients",component:ClientsComponent},
+        {path:"add-client",component:AddClientsComponent},
+        {path:"update-client",component:UpdateCityComponent},
+
+
+        {path:"vendors",component:VendorsComponent},
+        {path:"add-vendor",component:AddVendorComponent},
+        {path:"update-vendor",component:UpdateVendorComponent},
+        
+        {path:"delegates",component:DelegatesComponent},
+        {path:"add-delegate",component:AddDelegateComponent},
+        {path:"update-delegate/:id",component:UpdateDelegateComponent},
+
 
         {path:"update-account-category/:id",component:UpdateAccountCategoriesComponent},
         {path:"add-account-category/:type",component:AddAccountCategoryComponent},

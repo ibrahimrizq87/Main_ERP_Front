@@ -15,7 +15,7 @@
                 <div class="row">
   
                   <!-- Bill Type -->
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <label for="type" class="form-label large-text">{{ 'BILL_TYPE' | translate }}</label>
                     <select id="type" formControlName="type" class="form-control">
                       <option value="purchase">{{ 'PURCHASE' | translate }}</option>
@@ -24,7 +24,7 @@
                     <div class="alert alert-danger" *ngIf="purchasesBillForm.get('type')?.errors && purchasesBillForm.get('type')?.touched">
                       <p *ngIf="purchasesBillForm.get('type')?.hasError('required')">{{ 'BILL_TYPE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
                     </div>
-                  </div>
+                  </div> -->
   
                   <!-- Invoice Date -->
                   <div class="form-group col-md-6">
@@ -36,16 +36,16 @@
                   </div>
   
                   <!-- Due Date -->
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <label for="due_date" class="form-label large-text">{{ 'DUE_DATE' | translate }}</label>
                     <input id="due_date" formControlName="due_date" type="date" class="form-control" />
                     <div class="alert alert-danger" *ngIf="purchasesBillForm.get('due_date')?.errors && purchasesBillForm.get('due_date')?.touched">
                       <p *ngIf="purchasesBillForm.get('due_date')?.hasError('required')">{{ 'DUE_DATE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
                     </div>
-                  </div>
+                  </div> -->
   
                   <!-- Tax Type -->
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <label for="tax_type" class="form-label large-text">{{ 'TAX_TYPE' | translate }}</label>
                     <select id="tax_type" formControlName="tax_type" class="form-control">
                       <option value="included">{{ 'INCLUDED' | translate }}</option>
@@ -56,7 +56,7 @@
                       <p *ngIf="purchasesBillForm.get('tax_type')?.hasError('required')">{{ 'TAX_TYPE' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
                     </div>
                   </div>
-  
+   -->
                   <!-- Entity
                   <div class="form-group col-md-6">
                     <label for="entity" class="form-label">Entity</label>
@@ -65,36 +65,38 @@
   
                   <!-- Purchased From -->
                   <div class="form-group col-md-6">
-                    <label for="supplier_id" class="form-label large-text">{{ 'SUPPLIER' | translate }}</label>
+                    <!-- <label for="supplier_id" class="form-label large-text">{{ 'SUPPLIER' | translate }}</label>
                     <select id="supplier_id" formControlName="supplier_id" class="form-control">
                       <option *ngFor="let supplier of Suppliers" [value]="supplier.id">{{ supplier.name_ar }}</option>
-                    </select>
+                    </select> -->
+
+                    <label class="form-label">{{ 'SUPPLIER' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'vendor')">
+                      {{ selectedVendor ? selectedVendor.name : ('SUPPLIER' | translate) }}
+                    </button>
+                    <input type="hidden" formControlName="supplier_id" [value]="selectedVendor?.id" />
+
                   </div>
-                  <div class="form-group col-md-6">
+
+
+                  <!-- <div class="form-group col-md-6">
                     <label class="form-label large-text">{{ 'SELECT_DELEGATES' | translate }}</label>
                     <select class="form-control" formControlName="delegate_id">
                       <option>{{ 'SELECT_DELEGATES' | translate }}</option>
                       <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name_ar }}</option>
                     </select>
-                  </div>
+                  </div> -->
                   <div class="form-group col-md-6">
-                    <label class="form-check-label">
-                      <input 
-                        type="checkbox" 
-                        class="form-check-input" 
-                        formControlName="showCashAccountsDropdown"
-                      />
-                      {{ 'SHOW_CASH_ACCOUNTS' | translate }}
-                    </label>
-                 
-                  <div *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
-                    <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
-                    <select class="form-control" formControlName="cash_id">
-                      <option value="">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</option>
-                      <option *ngFor="let cashAccount of cashAccounts" [value]="cashAccount.id">{{ cashAccount.name_ar }}</option>
-                    </select>
+                    <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
+                    <br>
+                    <a (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
+                      {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
+                    </a>
+                    <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
                   </div>
-                </div>
+
+
+             
                   
                   <!-- <div class="form-group col-md-6">
                     <label class="form-label">Select CashAccounts</label>
@@ -108,7 +110,7 @@
                   <div class="form-group col-md-6">
                     <label for="store_id" class="form-label large-text">{{ 'STORE' | translate }}</label>
                     <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)">
-                      <option *ngFor="let store of stores" [value]="store.id">{{ store.name_ar }}</option>
+                      <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
                     </select>
                   </div>
   
@@ -116,7 +118,7 @@
                   <div class="form-group col-md-6">
                     <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
                     <select id="currency_id" formControlName="currency_id" class="form-control">
-                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.currency_name_ar }}</option>
+                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                     </select>
                   </div>
   
@@ -194,16 +196,18 @@
   
                 </div> -->
                 <div class="form-group col-md-12">
-                  <div formArrayName="items" class="mt-4">
-                    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3">
+                  <div formArrayName="items" class="mt-4 ">
+                    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3 border p-3 rounded">
                       <div class="row">
                 
                         <!-- Product Selection -->
                         <div class="col-md-4">
-                          <label for="product_id">{{ 'PRODUCT' | translate }}</label>
-                          <select formControlName="product_id" class="form-control custom-select" (change)="onProductChange($event, i)">
-                            <option *ngFor="let product of Products" [value]="product.id">{{ product.name_ar }}</option>
-                          </select>
+
+                          <label class="form-label">{{ 'PRODUCT' | translate }}</label>
+                          <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
+                            {{ selectedProduct ? selectedProduct.name : ('PRODUCT' | translate) }}
+                          </button>
+                          <input type="hidden" formControlName="product_id" [value]="selectedProduct?.id" />
                         </div>
                       
                         <!-- Quantity -->
@@ -218,12 +222,12 @@
                 
                         <!-- Total Price -->
                         <div class="col-md-2">
-                          <label for="total_price">{{ 'TOTAL_PRICE' | translate }}</label>
-                          <input formControlName="total_price" type="text" class="form-control" readonly />
+                          <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
+                          <input formControlName="price" type="text" class="form-control" readonly />
                         </div>
 
                    <!-- Determinants -->
-                         <div class="col-md-12 mt-3" *ngIf="item.get('determinants')?.value?.length">
+                         <!-- <div class="col-md-12 mt-3" *ngIf="item.get('determinants')?.value?.length">
                           <label class="d-block">{{ 'DETERMINANTS' | translate }}</label>
                           <div *ngFor="let determinant of item.get('determinants')?.value; let idx = index" class="mb-2">
                             <label>{{ determinant.determinantName }}</label>
@@ -242,13 +246,13 @@
                               </option>
                             </select>
                           </div>
-                        </div>
+                        </div> -->
                 
                         <!-- Amount -->
                        
                 
                         <!-- Dynamic Inputs -->
-                        <div class="form-group col-md-12 mt-4">
+                        <div class="form-group col-md-12 mt-4" >
                           <label>{{ 'BARCODES' | translate }}</label>
                           <div formArrayName="dynamicInputs">
                             <div *ngFor="let dynamicInput of getDynamicInputs(item).controls; let j = index">
@@ -281,10 +285,51 @@
                   <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
                     <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
                   </button>
+
+
+
+
+
+
+                  <div  class=" text-black bg-secoundry border rounded  row  mt-3" >
+                    <div class="card-header text-center">  الدفع </div>
+                   
+                    <div class="form-group col-md-6">
+                      <label class="form-check-label">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input" 
+                          formControlName="showCashAccountsDropdown"
+                        />
+                        {{ 'SHOW_CASH_ACCOUNTS' | translate }}
+                      </label>
+                   
+                    <div *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
+                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'cash')">
+                        {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
+                      </button>
+                      <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
+  
+                      <!-- <select class="form-control" formControlName="cash_id">
+                        <option value="">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</option>
+                        <option *ngFor="let cashAccount of cashAccounts" [value]="cashAccount.id">{{ cashAccount.name_ar }}</option>
+                      </select> -->
+                    </div>
+                  </div>
+                  
+                    
+                      </div>
+
+
                 </div>
                 
                 
              
+           
+
+
+               
                 
                 
                 
@@ -311,4 +356,86 @@
         </div>
       </div>
   </form>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ i + 1 }}</td>
+              <td>{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeProductModel()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Search Input -->
+        <input
+          type="text"
+          class="form-control mb-3"
+          [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="ProductsearchQuery"
+          (ngModelChange)="onProductSearchChange()"
+        />
+
+        <!-- Accounts Table -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>{{ 'ProductName' | translate }}</th>
+              <th>{{ 'BranchQuantity' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of filteredProducts; let i = index" (click)="selectProduct(product)" style="cursor: pointer;">
+              <td>{{product.name }}</td>
+              <td>{{product.stock }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
