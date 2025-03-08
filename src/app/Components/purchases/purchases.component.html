@@ -7,9 +7,53 @@
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
-<a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/approvedPurchases']">
+<!-- <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/approvedPurchases']">
   <i class="btn1 bg-success rounded">{{ 'APPROVED_PURCHASES' | translate }}</i>
-</a>
+</a> -->
+
+
+
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+
+      <li>
+        <a 
+          (click)="changeStatus('waiting')" 
+          class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'waiting', 'inactive-tab': status !== 'waiting'}"
+        >
+          {{ 'WAITING' | translate }}
+        </a>
+      </li>
+      <li>
+        <a 
+          (click)="changeStatus('approved')" 
+          class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'approved', 'inactive-tab': status !== 'approved'}"
+        >
+          {{ 'APPROVED' | translate }}
+        </a>
+      </li>
+      <li>
+        <a 
+          (click)="changeStatus('rejected')" 
+          class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'rejected', 'inactive-tab': status !== 'rejected'}"
+        >
+          {{ 'REJECTED' | translate }}
+        </a>
+      </li>
+    </ul>
+    
+
+  </header>
+</div>
+
+
+
+
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -29,24 +73,43 @@
     <thead>
       <tr>
         <th class="bg-light" scope="col">#</th>
-        <th class="bg-light" scope="col">{{ 'BILL_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'VENDOR' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
-        <th class="bg-light" scope="col">{{ 'TAX_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
+
         <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let purchase of filteredPurchases; let i = index">
         <th scope="row">{{ i + 1 }}</th>
-        <td>{{ purchase.type }}</td>
-        <td>{{ purchase.invoice_date || 'N/A' }}</td>
-        <td>{{ purchase.tax_type }}</td>
+        <td>{{ purchase.vendor.name.ar }}</td>
+        <td>{{ purchase.date || 'N/A' }}</td>
+        <td>{{ purchase.total }}</td>
+        <td>{{ purchase.payment_type }}</td>
+
         <td>
           <div class="d-flex justify-content-around align-items-center">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
-              <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+
+
+
+            <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,purchase.id)">
+              approve
             </a>
-            <i class="fa-regular fa-clock btn1 bg-warning rounded" (click)="changeStatus(purchase.id)"></i>
+            <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
+              reject
+            </a>
+            <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',purchase.id)">
+              waiting
+            </a>
+
+
+          
+
+
+
+
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updatePurchase', purchase.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
             </a>

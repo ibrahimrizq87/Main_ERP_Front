@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';  
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PurchasesService } from '../../shared/services/purchases.service';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -18,14 +18,53 @@ export class PurchasesComponent implements OnInit {
   purchases: any[] = []; 
   filteredPurchases: any[] = []; 
   searchTerm: string = '';
-  constructor(private _PurchasesService: PurchasesService, private router: Router) {}
 
+  status ='waiting';
+
+
+
+  constructor(private _PurchasesService: PurchasesService, private router: Router,
+        private route: ActivatedRoute
+    
+  ) {}
+
+  ManageChangeStatus(status:string ,id:string){
+    this._PurchasesService.UpdatePurchaseBillStatus(id ,status ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.loadPurchases(this.status);
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  changeStatus(status:string){
+    this.status = status;
+    this.router.navigate([`/dashboard/purchases/${status}`]);
+    this.loadPurchases(status);
+      }
+
+
+
+      // UpdatePurchaseBillStatus
   ngOnInit(): void {
-    this.loadPurchases(); 
+    this.route.paramMap.subscribe(params => {
+      const newStatus = params.get('status');
+      if (newStatus && this.status !== newStatus) {
+          this.status = newStatus;
+ 
+      }
+    });
+
+
+    this.loadPurchases(this.status); 
   }
 
-  loadPurchases(): void {
-    this._PurchasesService.getPurchaseBillsByStatus('pending').subscribe({
+  loadPurchases(status:string): void {
+    this._PurchasesService.getPurchaseBillsByStatus(status).subscribe({
       next: (response) => {
         if (response) {
           console.log(response.data);
@@ -55,7 +94,7 @@ export class PurchasesComponent implements OnInit {
         next: (response) => {
           if (response) {
             this.router.navigate(['/dashboard/purchases']);
-            this.loadPurchases();
+            this.loadPurchases(this.status);
           }
         },
         error: (err) => {
@@ -65,20 +104,20 @@ export class PurchasesComponent implements OnInit {
       });
     }
   }
-  changeStatus(purchaseId: number): void {
-    if (confirm('Are you sure you want to Approve this Purchase?')) {
-      this._PurchasesService.storeStatusOfPurchaseBill(purchaseId).subscribe({
-        next: (response) => {
-          if (response) {
-            this.router.navigate(['/dashboard/purchases']);
-            this.loadPurchases();
-          }
-        },
-        error: (err) => {
-          console.error(err);
-          alert('An error occurred while Approve the Purchase.');
-        }
-      });
-    }
-  }
+  // changeStatus(purchaseId: number): void {
+  //   if (confirm('Are you sure you want to Approve this Purchase?')) {
+  //     this._PurchasesService.storeStatusOfPurchaseBill(purchaseId).subscribe({
+  //       next: (response) => {
+  //         if (response) {
+  //           this.router.navigate(['/dashboard/purchases']);
+  //           this.loadPurchases();
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //         alert('An error occurred while Approve the Purchase.');
+  //       }
+  //     });
+  //   }
+  // }
 }

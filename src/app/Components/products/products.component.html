@@ -28,9 +28,11 @@
       <thead>
           <tr>
               <th class="bg-light" scope="col">#</th>
-              <th class="bg-light" scope="col">{{ 'PRODUCT_NAME_AR' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'PRODUCT_UNIT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'PRODUCT_DIMENSION' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+
+
               <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
           </tr>
@@ -38,17 +40,18 @@
       <tbody>
         <tr *ngFor="let product of filteredProducts; let i = index">
           <th scope="row">{{ i + 1 }}</th>
-          <td>{{ product.name_ar }}</td>
-          <td>{{ product.unit?.unit || 'N/A' }}</td>
-          <td>{{ product.product_dimension }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.product_unit?.name || 'N/A' }}</td>
+          <td>{{ product.stock || 'N/A' }}</td>
+
           <!-- <td>
 
             <img [src]="product.image" alt="{{ product.name_ar }}" width="50" height="50" />
           </td> -->
           <td>
             <img 
-              [src]="product.image ? product.image : 'images/image.jpg'" 
-              alt="{{ product.name_ar || 'Default Product' }}" 
+              [src]="product.cover_image ? product.cover_image : 'images/image.jpg'" 
+              alt="{{ product.name || 'Default Product' }}" 
               width="50" 
               height="50" 
             />

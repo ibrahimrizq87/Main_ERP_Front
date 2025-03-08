@@ -1,4 +1,16 @@
 {
+"PYMENT_TYPE":"نوع الدفع",
+  "SHOW_BRANCHES": "إظهار الفروع",
+  "HIDE_BRANCHES": "إخفاء الفروع",
+  "COLOR": "اللون",
+
+  "COLORS_AVAILABLE": "الألوان المتاحة",
+  "ADDITIONAL_IMAGES": "صور إضافية",
+  "PRICING": "التسعير",
+  "PRODUCT_DETAILS": "تفاصيل المنتج",
+
+  "STOCK_AVAILABLE": "المخزون المتاح",
+
 
   "addCountry": {
     "country_name_en": "اسم البلد بالإنجليزية",
@@ -241,7 +253,7 @@
   "ADD_CHECK": "إضافة شيك",
   "DUE_DATE": "تاريخ الاستحقاق",
   "CHECK_NUMBER": "رقم الشيك",
-  "AMOUNT": "المبلغ",
+  "AMOUNT": "الكمية",
   "NOTES": "ملاحظات (اختياري)",
   "PAYED_TO": "مدفوع لأمره",
   "BANK": "البنك",

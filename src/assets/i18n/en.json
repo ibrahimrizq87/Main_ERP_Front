@@ -1,4 +1,21 @@
 {
+
+
+  "PYMENT_TYPE":"Payment Type",
+
+  "SHOW_BRANCHES": "Show Branches",
+  "HIDE_BRANCHES": "Hide Branches",
+  "COLOR": "Color",
+
+  "COLORS_AVAILABLE": "Colors Available",
+  "ADDITIONAL_IMAGES": "Additional Images",
+  "PRICING": "Pricing",
+  "PRODUCT_DETAILS": "Product Details",
+  "STOCK_AVAILABLE": "Stock Available",
+ 
+
+
+
   "addCountry": {
     "country_name_en": "English Country Name",
     "country_name_ar": "Arabic Country Name",

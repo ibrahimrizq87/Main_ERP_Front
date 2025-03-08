@@ -150,7 +150,7 @@ export const routes: Routes = [
         {path:"check-operation",component:CheckOperationsComponent},
         
         {path:"addPurchase",component:AddPurchaseComponent},
-        {path:"purchases",component:PurchasesComponent},
+        {path:"purchases/:status",component:PurchasesComponent},
         {path:"approvedPurchases",component:ApprovedPurchasesComponent},
         {path:"updatePurchase/:id",component:UpdatePurchaseComponent},
         {path:"showPurchase/:id",component:ShowPurchaseComponent},

@@ -50,6 +50,10 @@ getCheckById(id:string): Observable<any> {
 
 
 
+getCheckByPayedToAccount(id:string): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/checks/get-check-by-payed-to-account/${id}` ,{ headers:this.getHeadersWithToken()  });
+}
+
 
 
 getCheckBystatus(status:string): Observable<any> {

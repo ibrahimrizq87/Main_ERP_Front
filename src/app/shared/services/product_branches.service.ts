@@ -49,8 +49,10 @@ export class ProductBranchesService {
     return this._HttpClient.get(this.baseURL+"/general/product-branches/"+id, { headers:this.getHeadersWithToken() });
   }
 
-
-
+  getProductBranchesByProductId(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/product-branches/by-product-id/"+id, { headers:this.getHeadersWithToken() });
+  }
+  
 
   updateProductBranch(productId: string, productData: FormData): Observable<any> {
     productData.append('_method', 'PUT');
