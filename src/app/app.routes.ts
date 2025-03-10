@@ -258,7 +258,7 @@ export const routes: Routes = [
         {path:"updateOrder/:id",component:UpdateOrderComponent},
         {path:"showOrder/:id",component:ShowOrderComponent},
          
-        {path:"sales",component:SalesComponent},
+        {path:"sales/:status",component:SalesComponent},
         {path:"addSale",component:AddsalesComponent},
         {path:"updateSale/:id",component:UpdateSalesComponent},
         {path:"showSale/:id",component:ShowSalesComponent},

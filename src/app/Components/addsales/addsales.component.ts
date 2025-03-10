@@ -1,76 +1,85 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { StoreService } from '../../shared/services/store.service';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { ProductsService } from '../../shared/services/products.service';
 import { AccountService } from '../../shared/services/account.service';
-import { PurchasesService } from '../../shared/services/purchases.service';
+// import { PurchasesService } from '../../shared/services/purchases.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { SalesService } from '../../shared/services/sales.service';
+import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { Modal } from 'bootstrap';
+import { CheckService } from '../../shared/services/check.service';
+import { CommonModule } from '@angular/common';
+import { ProductBranchesService } from '../../shared/services/product_branches.service';
+import { ClientService } from '../../shared/services/client.service';
+import { SalesService } from '../../shared/services/sales.service';
 @Component({
   selector: 'app-addsales',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,TranslateModule],
+  imports: [ReactiveFormsModule,CommonModule,FormsModule,TranslateModule],
   templateUrl: './addsales.component.html',
   styleUrl: './addsales.component.css'
 })
 export class AddsalesComponent  implements OnInit {
-private productSubscription: Subscription = Subscription.EMPTY;
-  // showCashAccountsDropdown: boolean = false
+
+  
+  private productSubscription: Subscription = Subscription.EMPTY;
+  isSubmited=false;
+  serialNumber:SerialNumber [] =[];
+  // neededSerialNumbers =0;
   saleForm: FormGroup;
   Products: any[] = [];
   msgError: any[] = [];
   isLoading: boolean = false;
- currencies:any;
- stores:any[]=[];
-//  Suppliers:any[]=[];
+  currencies:any;
+  stores:any[]=[];
+ vendors:any[]=[];
  selectedType: string = 'purchase';
  selectedStore: string = '';
- customers:any[]=[];
+ checks:any;
+
  delegates:any[]=[];
  cashAccounts:any[]=[];
  productDeterminants: any[] = [];
  dynamicInputs: FormArray<FormControl>; // Dynamic inputs array
  inputDisabled: boolean[] = []; // Tracks which inputs are disabled
  overrideCount: number = 0; 
+selectedCheck:any;
+ total = 0;
+ totalPayed =0;
+
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
     private _ProductsService:ProductsService,
+    private _ProductBranchesService:ProductBranchesService,
+    private _ClientService:ClientService,
+
     private _AccountService:AccountService,
     private _SalesService:SalesService,
     private _Router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _CheckService: CheckService
+
   ) {
     this.saleForm = this.fb.group({
-
-
-      type: ['sale', Validators.required],
-      status: 'pending',
-      numbering_type: ['null', [Validators.maxLength(255)]],
-      manual_reference: ['null', Validators.maxLength(255)],
       invoice_date: [this.getTodayDate()],
-      due_date: [null], //
-      // purchased_from_id: ['', Validators.required],
+      payed_price:[null],
+      vendor_id: ['', Validators.required],
       store_id: ['', Validators.required],
       currency_id: ['', Validators.required],
-     
-      // note: ['', Validators.maxLength(255)],
-      tax_type: ['included', Validators.required],
+      payment_type: ['cash'],
+      check_id: [''],
+      tax_type: 'included',
       delegate_id: [null],
-      customer_id: [null, Validators.required],
       // credit_account_id: ['', Validators.required],
       // items: this.fb.array([]),
       items: this.fb.array([this.createItem()]),
-      // supplier_id:[null],
+      supplier_id:[null],
       cash_id:[null],
       notes:[''],
-      address:[''],
       showCashAccountsDropdown: [false],
       // amount: new FormControl(null, [Validators.required]),
     });
@@ -86,41 +95,59 @@ private productSubscription: Subscription = Subscription.EMPTY;
     return `${year}-${month}-${day}`;
   }
 
+
+  loadChecks(){
+    this._CheckService.getCheckByPayedToAccount('112').subscribe({
+      next: (response) => {
+        if (response) {
+          const cashAccounts = response.data;
+      console.log("checks",cashAccounts)
+          this.checks = cashAccounts;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 ngOnInit(): void {
+
+// this.loadProducts();
 this.loadCurrencies();
 this.loadStores();
-// this.loadSuppliers();
+this.loadSuppliers();
 this.loadDelegates();
 this.loadCashAccounts();
-this.loadCustomers();
-this.saleForm.get('items')?.valueChanges.subscribe((items) => {
-  console.log('Items:', items); // Log items to debug
-  items.forEach((item: any, index: number) => {
-    if (item.amount) {
-      this.updateDynamicInputs(index, item.amount);
-    }
-  });
-});
-}
+this.loadChecks();
 
-// loadSuppliers(): void {
-//   this._AccountService.getAccountsByParent('621').subscribe({
-//     next: (response) => {
-//       if (response) {
-//         console.log("suppliers",response)
-//         const Suppliers = response.data;
-//         Suppliers.forEach((account: { hasChildren: any; id: any; }) => {
-//           account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-//         });
-
-//         this.Suppliers = Suppliers;
-//       }
-//     },
-//     error: (err) => {
-//       console.error(err);
+// this.purchasesBillForm.get('items')?.valueChanges.subscribe((items) => {
+//   console.log('Items:', items); // Log items to debug
+//   items.forEach((item: any, index: number) => {
+//     if (item.amount) {
+//       this.updateDynamicInputs(index, item.amount);
 //     }
 //   });
-// }
+// });
+}
+
+loadSuppliers(): void {
+  this._ClientService.getAllClients().subscribe({
+    next: (response) => {
+      if (response) {
+        console.log("suppliers",response)
+        // const Suppliers = response.data;
+        // Suppliers.forEach((account: { hasChildren: any; id: any; }) => {
+        //   account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
+        // });
+
+        this.vendors =response.data;
+      }
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
 loadDelegates(): void {
   this._AccountService.getAccountsByParent('623').subscribe({
     next: (response) => {
@@ -185,7 +212,7 @@ onTypeChange(event: Event): void {
 
   itemsArray.clear();
   if (this.selectedStore){
-    this.loadProducts(this.selectedStore);
+    // this.loadProducts(this.selectedStore);
 
   }
 
@@ -197,32 +224,68 @@ this.selectedStore = selectedValue;
 this.loadProducts(this.selectedStore);
 
 }
-loadProducts(store:string){
-  this._ProductsService.getProductBranchsByStore(store).subscribe({
-    next: (response) => {
-      if (response) {
-        this.Products = response.products;
-        console.log(this.Products);
+selectedCurrency:any;
+onCurrencyChange(event: Event): void {
+  const selectedValue = (event.target as HTMLSelectElement).value;
 
-        const productName =  this.Products[5].product.name_ar; // "iphone 15"
-const quantity = this.Products[5].amount;    // -2
-const determinant = this.Products[5].productDeterminant[0]?.productDetermiant.determinant.determinant; // "color"
-const determinantValue = this.Products[5].productDeterminant[0]?.productDetermiant.value; // "red"
-
-// Log the results
-console.log("Product Name:", productName);
-console.log("Quantity:", quantity);
-console.log("Determinant:", determinant);
-console.log("Determinant Value:", determinantValue);
-
-      }
-    },
-    error: (err) => {
-      console.error(err);
-    },
-  });
+this.selectedCurrency = selectedValue;
+// this.loadProducts(this.selectedStore);
 
 }
+// loadProducts(store:string){
+  
+
+//   if( this.selectedType == 'purchase'){
+//     this._ProductsService.getProductsByStore(store).subscribe({
+//       next: (response) => {
+//         if (response) {
+//           this.Products = response.products;
+//           console.log(this.Products);
+
+//         }
+//       },
+//       error: (err) => {
+//         console.error(err);
+//       },
+//     });
+//   }else  if (this.selectedType == 'return'){
+//     this._ProductsService.getProductBranchsByStore(store).subscribe({
+//       next: (response) => {
+//         if (response) {
+//           this.Products = response.products;
+//           console.log(this.Products);
+
+//         }
+//       },
+//       error: (err) => {
+//         console.error(err);
+//       },
+//     });
+//   }
+
+// }
+
+
+loadProducts(storeId:string){
+  
+
+    this._ProductBranchesService.getProductBranchByStoreId(storeId).subscribe({
+      next: (response) => {
+        if (response) {
+          this.Products = response.data;
+
+          console.log('product branches',this.Products );
+          this.filteredProducts = this.Products ;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  
+
+}
+
 
 
 onProductChange(event: Event, index: number): void {
@@ -266,95 +329,243 @@ onProductChange(event: Event, index: number): void {
 //   });
 // }
 
-// getGroupedDeterminants(productDeterminants: any[]): any[] {
-//   const grouped = new Map();
-//   productDeterminants.forEach((item) => {
-//     if (!grouped.has(item.determinant.id)) {
-//       grouped.set(item.determinant.id, {
-//         determinantId: item.determinant.id,
-//         determinantName: item.determinant.determinant,
-//         determinantValues: [],
-//       });
-//     }
-//     grouped.get(item.determinant.id).determinantValues.push({
-//       id: item.id,
-//       value: item.value,
-//     });
-//   });
-//   return Array.from(grouped.values());
-// }
+getGroupedDeterminants(productDeterminants: any[]): any[] {
+  const grouped = new Map();
+  productDeterminants.forEach((item) => {
+    if (!grouped.has(item.determinant.id)) {
+      grouped.set(item.determinant.id, {
+        determinantId: item.determinant.id,
+        determinantName: item.determinant.determinant,
+        determinantValues: [],
+      });
+    }
+    grouped.get(item.determinant.id).determinantValues.push({
+      id: item.id,
+      value: item.value,
+    });
+  });
+  return Array.from(grouped.values());
+}
 
-// onDeterminantValueSelect(determinantId: number, itemIndex: number, event: Event): void {
-//   const selectedValueId = Number((event.target as HTMLSelectElement).value);
-//   const selectedValueText = (event.target as HTMLSelectElement).options[(event.target as HTMLSelectElement).selectedIndex].text;
-//    console.log(selectedValueId)
-//    console.log(selectedValueText)
-//   const itemsArray = this.saleForm.get('items') as FormArray;
-//   const itemGroup = itemsArray.at(itemIndex) as FormGroup;
+onDeterminantValueSelect(determinantId: number, itemIndex: number, event: Event): void {
+  const selectedValueId = Number((event.target as HTMLSelectElement).value);
+  const selectedValueText = (event.target as HTMLSelectElement).options[(event.target as HTMLSelectElement).selectedIndex].text;
+   console.log(selectedValueId)
+   console.log(selectedValueText)
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  const itemGroup = itemsArray.at(itemIndex) as FormGroup;
 
-//   const determinants = itemGroup.get('determinants')?.value || [];
+  const determinants = itemGroup.get('determinants')?.value || [];
 
-//   const updatedDeterminants = determinants.map((det: any) =>
-//     det.determinantId === determinantId
-//       ? { ...det, selectedValue: selectedValueId, selectedValueText }
-//       : det
-//   );
+  const updatedDeterminants = determinants.map((det: any) =>
+    det.determinantId === determinantId
+      ? { ...det, selectedValue: selectedValueId, selectedValueText }
+      : det
+  );
 
-//   // Update the determinants array in the item
-//   itemGroup.patchValue({ determinants: updatedDeterminants });
+  // Update the determinants array in the item
+  itemGroup.patchValue({ determinants: updatedDeterminants });
 
-//   // Trigger change detection to immediately update the view
-//   this.cdr.detectChanges();
-// }
+  // Trigger change detection to immediately update the view
+  this.cdr.detectChanges();
+}
 
 trackByDeterminantId(index: number, det: any): number {
   return det.determinantId;
 }
+onColorChange(event:Event, index :number){
+
+  const selectedProductId = (event.target as HTMLSelectElement).value;
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  itemGroup.patchValue({color:selectedProductId});
+  console.log(itemGroup.get('color_id')?.value);
+  console.log(selectedProductId);
+
+}
 
 createItem(): FormGroup {
   return this.fb.group({
-    // quantity: ['', Validators.required],
-    total_price: ['', Validators.required],
+    amount: [null, Validators.required], 
+    overridePrice: [false],
+
+    price: ['', Validators.required],
+    priceRanges: [[]],
     product_id: ['', Validators.required],
-    amount: [null, Validators.required], // Ensure 'amount' is part of each item
-    dynamicInputs: this.fb.array([])
+    product: [null],
+    need_serial: [false], 
+    barcode:[null],
+    color: [null], 
+    productSerialNumbers:[[]], 
+    serialNumbers: [[]], 
+    neededSerialNumbers: [0],
+
+
+    // dynamicInputs: this.fb.array([])
+
+  });
+}
+searchTerm = new FormControl('');
+
+onBarcodeSelect(barcode: Event , index:number){ {
+  const selectedValue = (barcode.target as HTMLSelectElement).value;
+
+  const items = this.saleForm.get('items') as FormArray;
+  const item = items.at(index) as FormGroup;
+
+  const neededBars =item.get('neededSerialNumbers')?.value;
+  if(neededBars == 0){
+    item.patchValue({barcode: null});
+    return ;
+  }
+  let tempList =item.get('serialNumbers')?.value||[];
+let isdublicated =false;
+  tempList.forEach((item:any)=>{
+    if(item.barcode == selectedValue){
+      alert('هذا السيريال موجود بالفعل');
+      isdublicated = true;
+      return;
+    }
+  });
+
+
+if(isdublicated){
+  item.patchValue({barcode: null});
+
+  return;
+}
+  if(selectedValue){
+    tempList.push({barcode:selectedValue })
+    item.patchValue({serialNumbers: tempList});
+    console.log(tempList);
+    item.patchValue({barcode: null});
+    item.patchValue({neededSerialNumbers: neededBars -1});
+
+
+  }}
+}
+
+
+removeSerialNumber(serialNumber:string , index :number){
+  const items = this.saleForm.get('items') as FormArray;
+  const item = items.at(index) as FormGroup;
+  // const barcode =item.get('barcode')?.value;
+  const neededBars =item.get('neededSerialNumbers')?.value;
+
+  // let tempList =(item.get('serialNumbers')?.value).filter( item=> item.barcode != serialNumber);
+  const serialNumbers = item.get('serialNumbers')?.value;
+
+  if (serialNumbers && Array.isArray(serialNumbers)) {
+    const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+
+    item.patchValue({serialNumbers: tempList});
+        item.patchValue({neededSerialNumbers: neededBars +1});
+
+  } 
+
+    // item.patchValue({serialNumbers: tempList});
+    // console.log(tempList);
+    // item.patchValue({barcode: null});
+    // item.patchValue({neededSerialNumbers: neededBars -1});
+
+
+  
+
+}
+addParcode(index:number){
+  const items = this.saleForm.get('items') as FormArray;
+  const item = items.at(index) as FormGroup;
+
+  const barcode =item.get('barcode')?.value;
+  const neededBars =item.get('neededSerialNumbers')?.value;
+  if(neededBars == 0){
+  
+    return ;
+  }
+  let tempList =item.get('serialNumbers')?.value||[];
+
+  tempList.forEach(()=>{
+
+  });
+
+
+
+  if(barcode){
+    tempList.push({barcode:barcode })
+    item.patchValue({serialNumbers: tempList});
+    console.log(tempList);
+    item.patchValue({barcode: null});
+    item.patchValue({neededSerialNumbers: neededBars -1});
+
+
+  }
+
+}
+
+
+onAmountChange(index: number): void {
+ 
+  const items = this.saleForm.get('items') as FormArray;
+  const item = items.at(index) as FormGroup;
+  let amount = item.get('amount')?.value || 0;
+  const stock =item.get('product')?.value.stock;
+  const serialNumbers =item.get('serialNumbers')?.value.length || 0;
+
+  if(amount > stock){
+    amount = stock;
+    item.patchValue({amount:stock});
+  }
+  const priceRanges = item.get('priceRanges')?.value || [];
+  priceRanges.forEach((price:any)=>{
+    console.log('quantity_from',price.quantity_from);
+    console.log('quantity_to',price.quantity_to);
+
+    console.log('amount',amount);
+    if(price.quantity_from < amount && price.quantity_to >= amount ){
+      item.patchValue({price:price.price});
+    }
+  })
+  if(item.get('product')?.value?.product.need_serial_number){
+    if (typeof amount === 'number' && amount >= 0) {
+      item.patchValue({neededSerialNumbers:amount - serialNumbers})
+      
+    } else {
+      console.warn('Invalid amount:', amount);
+    }
+  }
+
+  this.onPrice();
+
+}
+payedAmount(){
+  if((this.saleForm.get('payed_price')?.value || 0) > this.total){
+    this.saleForm.patchValue({payed_price: this.total});
+  }
+  this.totalPayed =  (this.saleForm.get('payed_price')?.value || 0);
+}
+paymentTriggerChange(){
+if(!this.saleForm.get('showCashAccountsDropdown')?.value){
+this.totalPayed =0;
+}else{
+  this.totalPayed =  (this.saleForm.get('payed_price')?.value || 0);
+}}
+
+
+
+onPrice(){
+  this.total =0;
+  this.items.controls.forEach((itemControl) => {
+    const itemValue = itemControl.value;
+    console.log('amount' , itemValue.amount);
+    console.log('price' , itemValue.price);
+
+                if (itemValue) {
+                  this.total +=  (itemValue.amount || 0) *  (itemValue.price || 0);
+                  }
   });
 }
 
-updateDynamicInputs(index: number, amount: number): void {
-  const items = this.saleForm.get('items') as FormArray;
-  const item = items.at(index) as FormGroup;
-
-  let dynamicInputs = item.get('dynamicInputs') as FormArray<FormControl>;
-  if (!dynamicInputs) {
-    dynamicInputs = this.fb.array([]);
-    item.setControl('dynamicInputs', dynamicInputs);
-  }
-
-  const currentLength = dynamicInputs.length;
-  if (currentLength < amount) {
-    for (let i = currentLength; i < amount; i++) {
-      dynamicInputs.push(this.fb.control('', Validators.required));
-    }
-  } else if (currentLength > amount) {
-    for (let i = currentLength - 1; i >= amount; i--) {
-      dynamicInputs.removeAt(i);
-    }
-  }
-}
-
-onAmountChange(index: number): void {
-  const items = this.saleForm.get('items') as FormArray;
-  const item = items.at(index) as FormGroup;
-  const amount = item.get('amount')?.value || 0;
-
-  // Ensure the amount is always a valid number before passing it to updateDynamicInputs
-  if (typeof amount === 'number' && amount >= 0) {
-    this.updateDynamicInputs(index, amount);
-  } else {
-    console.warn('Invalid amount:', amount);
-  }
-}
+// isDisabled = true; // Change this condition dynamically
 
 
 disableInput(itemIndex: number, inputIndex: number): void {
@@ -372,24 +583,7 @@ disableInput(itemIndex: number, inputIndex: number): void {
 getDynamicInputs(item: AbstractControl): FormArray {
   return (item.get('dynamicInputs') as FormArray);
 }
-loadCustomers(): void {
-  this._AccountService.getAccountsByParent('611').subscribe({
-    next: (response) => {
-      if (response) {
-        console.log("customers",response)
-        const customers = response.data;
-        customers.forEach((account: { hasChildren: any; id: any; }) => {
-          account.hasChildren = customers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-        });
 
-        this.customers = customers;
-      }
-    },
-    error: (err) => {
-      console.error(err);
-    }
-  });
-}
 
 
 loadCurrencies(){
@@ -420,102 +614,367 @@ this._CurrencyService.viewAllCurrency().subscribe({
     this.items.removeAt(index);
   }
 
- 
-handleForm() {
-    if (this.saleForm.valid) {
-        this.isLoading = true;
+  onPaymentTypeChange(event:Event){
 
+  }
+handleForm() {
+
+  this.isSubmited =true;
+    if (this.saleForm.valid ) {
+        this.isLoading = true;
+        let error = false;
         const formData = new FormData();
 
-        // Add form values
-        formData.append('type', this.saleForm.get('type')?.value || '');
-        formData.append('status', "pending");
-        formData.append('numbering_type', this.saleForm.get('numbering_type')?.value || '');
-        formData.append('manual_reference', this.saleForm.get('manual_reference')?.value || '');
-        formData.append('invoice_date', this.saleForm.get('invoice_date')?.value || '');
-        formData.append('due_date', this.saleForm.get('due_date')?.value || '');
-        formData.append('store_id', this.saleForm.get('store_id')?.value || '');
-        formData.append('tax_type', this.saleForm.get('tax_type')?.value || '');
+    if(this.saleForm.get('showCashAccountsDropdown')?.value){
+      if(this.saleForm.get('cash_id')?.value && this.saleForm.get('payment_type')?.value == 'cash'){
+        formData.append('payed_to_account_id', this.saleForm.get('cash_id')?.value);
+        formData.append('payment_type', 'cash');
+      }else if(this.saleForm.get('check_id')?.value && this.saleForm.get('payment_type')?.value == 'check'){
+        formData.append('payment_type', 'check');
+        formData.append('check_id', this.saleForm.get('check_id')?.value);
+      }
+    }
+
+
+// 'items' => 'nullable|array',
+// 'items.*.product_branch_id' => 'required|exists:product_branches,id',
+// // 'items.*.product_id' => 'required|exists:products,id',
+// // 'items.*.product_color_id' => 'nullable|exists:product_colors,id',
+// 'items.*.quantity' =>'required|integer|min:1',
+// 'items.*.price' => 'required|numeric|min:0',
+// 'items.*.serial_numbers' => 'nullable|array',
+// 'items.*.serial_numbers.*.serial_number' => 'required|string',
+
+
+
+
+        formData.append('client_id', this.saleForm.get('vendor_id')?.value);
+        // console.log(this.saleForm.get('vendor_id')?.value);
+        if(this.selecteddelegateAccount){
+          formData.append('delegate_id', this.saleForm.get('delegate_id')?.value || '');
+        }
+        formData.append('store_id', this.saleForm.get('store_id')?.value );
         formData.append('currency_id', this.saleForm.get('currency_id')?.value || '');
-        // formData.append('purchased_from_id', this.saleForm.get('purchased_from_id')?.value || '');
-        formData.append('account_delegate_id', this.saleForm.get('delegate_id')?.value || '');
-        formData.append('account_client_id', this.saleForm.get('customer_id')?.value || '');
-        formData.append('box_id', this.saleForm.get('cash_id')?.value || '');
-        formData.append('note', this.saleForm.get('notes')?.value || '');
-        formData.append('address', this.saleForm.get('address')?.value || '');
-      
+        formData.append('invoice_date', this.saleForm.get('date')?.value);
+        formData.append('delegate_id', this.saleForm.get('delegate_id')?.value || '');
+       
+        formData.append('total',this.total.toString());
+        formData.append('total_payed',this.totalPayed.toString());
+
+        
+        formData.append('notes', this.saleForm.get('notes')?.value || '');
+        formData.append('date', this.saleForm.get('invoice_date')?.value );
+
+
+
         if (this.items && this.items.controls) {
+
+
+
             this.items.controls.forEach((itemControl, index) => {
                 const itemValue = itemControl.value;
 
-                if (itemValue) {
-                    formData.append(`products[${index}][product_id]`, itemValue.product_id || '');
-                    formData.append(`products[${index}][amount]`, itemValue.amount || '0');
-                    formData.append(`products[${index}][sale_price]`, itemValue.total_price || '0');
+                if(itemValue.neededSerialNumbers >0){
+                  alert('يجب ادخال كل السيريا المطلوب')
+                  error =true;
 
-                    // Handle determinants
-                    // if (itemValue.determinants && Array.isArray(itemValue.determinants)) {
-                    //   itemValue.determinants.forEach((det: any, detIndex: number) => {
-                    //     formData.append(
-                    //         `billItems[${index}][determinants][${detIndex}][product_determinant_id]`,
-                    //         det.selectedValue || ''  // Ensure it's not empty
-                    //     );
-                    //     formData.append(
-                    //         `billItems[${index}][determinants][${detIndex}][selectedValue]`,
-                    //         det.selectedValue || ''
-                    //     );
-                    //     console.log(`Determinant for item ${index}:`, det);  // Log determinant for debugging
-                    // });
-                    
+                  return;
+
+                }
+
+                if (itemValue) {
+                    formData.append(`items[${index}][product_branch_id]`, itemValue.product_id );
+                    formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
+                    formData.append(`items[${index}][price]`, itemValue.price || '0');
+
+                    // if(itemValue.colors.length>0){
+
+// if( itemValue.color_id){
+//   formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
+
+// }else{
+//   alert( 'لازم تضيف لون للمنتجات اللى ليها اللوان');
+//   error =true;
+//   return;
+// }
+
+
                     // }
 
-                    // Handle barcodes
-                    const barcodes = itemValue.dynamicInputs || [];
-                    if (Array.isArray(barcodes) && barcodes.length > 0) {
-                      barcodes.forEach((barcode: string) => {
-                          formData.append(`products[${index}][barcodes][]`, barcode || '');
-                      });
-                      console.log(`Barcodes for item ${index}:`, barcodes); // Log barcodes for debugging
-                  } else {
-                      // Do not append empty barcode field
-                      console.log(`No barcodes for item ${index}`);
-                  }
-                  
-                  const override = itemValue.amount -barcodes.length ;
-                    formData.append(`products[${index}][override]`, override.toString() || '0');
+                    const serialNumbers = itemControl.get('serialNumbers')?.value;
+
+if(serialNumbers.length>0){
+
+  serialNumbers.forEach((item :any ,internalIndex:number)=>{
+    formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode );
+
+  });
+
+}
+
+
+
+
+              
                 }
             });
         }
 
       
+if(!error){
 
-        this._SalesService.addSale(formData).subscribe({
-            next: (response) => {
-                if (response) {
-                    console.log(response);
-                    this.isLoading = false;
-                    this._Router.navigate(['/dashboard/sales']);
-                }
-            },
-           
-            error: (err: HttpErrorResponse) => {
-              this.isLoading = false;
-              this.msgError = [];
-          
-              if (err.error && err.error.errors) {
-                 
-                  for (const key in err.error.errors) {
-                      if (err.error.errors[key] instanceof Array) {
-                          this.msgError.push(...err.error.errors[key]);
-                      } else {
-                          this.msgError.push(err.error.errors[key]);
-                      }
-                  }
+  this._SalesService.addSale(formData).subscribe({
+    next: (response) => {
+        if (response) {
+            console.log(response);
+            this.isLoading = false;
+            this._Router.navigate(['/dashboard/sales']);
+        }
+    },
+   
+    error: (err: HttpErrorResponse) => {
+      this.isLoading = false;
+      this.msgError = [];
+  
+      if (err.error && err.error.errors) {
+         
+          for (const key in err.error.errors) {
+              if (err.error.errors[key] instanceof Array) {
+                  this.msgError.push(...err.error.errors[key]);
+              } else {
+                  this.msgError.push(err.error.errors[key]);
               }
-          
-              console.error(this.msgError); 
-          },
-          
-        });
+          }
+      }
+  
+      console.error(this.msgError); 
+  },
+  
+});
+}
+    }else{
+      Object.keys(this.saleForm.controls).forEach((key) => {
+        const control = this.saleForm.get(key);
+        if (control && control.invalid) {
+            console.log(`Invalid Field: ${key}`, control.errors);
+        }
+    });
+    }
+}
+
+filteredAccounts: any[] = [];
+selectedPopUP:string ='';
+searchQuery: string = '';
+selectedCashAccount:Account | null= null;
+selecteddelegateAccount:Account | null= null;
+selectedClient:any | null= null;
+
+ 
+    removeCurrentDelegate(){
+      this.selecteddelegateAccount =null;
+    //  this.entryForm.patchValue({'delegate_id':null});
+    }
+    onCheckSearchChange(){
       
-      }}}
+    }
+
+    selectcheck(check:any){
+      this.saleForm.patchValue({'check_id':check.id})
+      this.selectedCheck = check;
+      this.closeModal('checkModel');
+    }
+      closeModal(modalId: string) {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = Modal.getInstance(modalElement);
+          modal?.hide();
+        }
+      }
+    
+
+      openModal(modalId: string , type:string ) {
+        if(modalId == 'checkModel'){}else if(modalId =='shiftModal'){
+
+          this.selectedPopUP = type;
+          // this.popUpIndex = index;
+          // const entryItem = this.entryForm.get('entryItems') as FormArray;
+          if(type == 'cash'){
+            this.filteredAccounts =this.cashAccounts;
+          }else if (type == 'delegate'){
+            this.filteredAccounts =this.delegates;
+          }else if(type =='vendor'){
+            this.filteredAccounts =this.vendors;
+  
+          }
+
+
+        }
+      
+        // console.log('hrerererer');
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = new Modal(modalElement);
+          modal.show();
+        }
+      }
+    
+  
+
+      onSearchChange(){
+  
+    
+        if(this.selectedPopUP == 'cash'){
+          this.filteredAccounts = this.cashAccounts.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+      
+        }else if (this.selectedPopUP == 'delegate'){
+          this.filteredAccounts = this.delegates.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }else if (this.selectedPopUP == 'vendor'){
+          this.filteredAccounts = this.vendors.filter(account =>
+            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }
+       
+      }
+    
+
+
+    selectAccount(account:Account){
+      // const entryItem = this.purchasesBillForm.get('entryItems') as FormArray;
+    
+      if(this.selectedPopUP  == 'cash'){
+        
+        this.selectedCashAccount = account;
+        this.saleForm.patchValue({'cash_id':account.id})
+
+      }else if (this.selectedPopUP  == 'delegate'){
+        this.selecteddelegateAccount = account;
+        // this.entryForm.patchValue({'delegate_id':account.id})
+        this.saleForm.patchValue({'delegate_id':account.id})
+
+      }else if (this.selectedPopUP  == 'vendor'){
+        this.selectedClient = account;
+        this.saleForm.patchValue({'vendor_id':this.selectedClient.account.id});
+        console.log('selectedClient',this.selectedClient);
+      }
+
+            this.cdr.detectChanges();
+
+      this.closeModal('shiftModal');
+
+    }
+  
+    filteredProducts:any;
+
+    ProductsearchQuery ='';
+    selectedProduct:any;
+    onProductSearchChange(){
+
+    }
+
+
+    getSerialNumbers(productId:string , storeId:string , index:number){
+      console.log('productId',productId);
+      console.log('storeId',storeId);
+      this._ProductsService.getSerialNumbers(productId ,storeId).subscribe({
+        next: (response) => {
+          if (response) {
+            this.serialNumber = response.data;
+            const itemsArray = this.saleForm.get('items') as FormArray;
+            const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+            itemGroup.patchValue({productSerialNumbers: this.serialNumber});
+          
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+    }
+
+
+    selectProduct(product:any){
+      const itemsArray = this.saleForm.get('items') as FormArray;
+      const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+    
+      itemGroup.patchValue({product: product});
+      itemGroup.patchValue({product_id: product.id});
+      itemGroup.patchValue({color: product.product_color});
+
+      
+      product.product.prices.forEach((price:any)=>{
+        if(price.id == this.selectedClient.price_category.id){
+          itemGroup.patchValue({priceRanges: price.prices});
+          console.log('price ranges' , price.prices);
+          price.prices.forEach((price:any)=>{
+            if(price.quantity_from == 0){
+              itemGroup.patchValue({price: price.price});
+              return;
+            }
+          })
+        }
+      });
+
+
+      if(!itemGroup.get('price')?.value){
+        itemGroup.patchValue({price: product.product.default_price});
+      }
+
+      // itemGroup.patchValue({price: product});
+
+
+      this.getSerialNumbers(product.product.id ,this.selectedStore,this.productIndex );
+
+      if(product.colors){
+
+ if(product.colors.length>0){
+        
+  itemGroup.patchValue({colors: product.colors});
+
+      }
+      }
+    
+
+      this.closeProductModel();
+    }
+    productIndex:number=-1;
+    openProductModal(index:number){
+      this.productIndex =index;
+      const modalElement = document.getElementById('productModel');
+      if (modalElement) {
+        const modal = new Modal(modalElement);
+        modal.show();
+      }
+    }
+
+
+
+
+    closeProductModel() {
+      const modalElement = document.getElementById('productModel');
+      if (modalElement) {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+    }
+  
+}
+
+
+
+
+
+interface Account {
+  id: string;
+  name: string;
+  
+}
+
+
+interface SerialNumber {
+  serialNumber: string;
+  
+}

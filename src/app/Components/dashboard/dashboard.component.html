@@ -397,7 +397,7 @@
             </a>
             <ul *ngIf="isDropdownOpen('SALES')" class="nav flex-column nested">
               <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="sales">{{ 'sales_purchases.SALES_INVOICE' | translate }}</a>
+                <a class="nav-link" routerLinkActive="active" routerLink="sales/waiting">{{ 'sales_purchases.SALES_INVOICE' | translate }}</a>
               </li>
               
               
@@ -420,9 +420,9 @@
               <li class="nav-item nested-inside">
                 <a class="nav-link" routerLinkActive="active" routerLink="purchases/waiting">{{ 'sales_purchases.PURCHASES_INVOICE' | translate }}</a>
               </li>
-              <li class="nav-item nested">
+              <!-- <li class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="orders"> {{ 'ORDERS' | translate }}</a>
-              </li>
+              </li> -->
             
             </ul>
           </li>

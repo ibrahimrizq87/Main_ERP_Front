@@ -1,6 +1,15 @@
 {
 
-
+"CLIENT": "Client",
+"CLIENTS": "Clients",
+"CLIENT_LIST": "Client List",
+"CLIENT_DETAILS": "Client Details",
+"CLIENT_NAME": "Client Name",
+"CLIENT_NAME_AR": "Client Name (Arabic)",
+"CLIENT_NAME_EN": "Client Name (English)",
+"CLIENT_PHONE": "Client Phone",
+"CLIENT_EMAIL": "Client Email",
+"CLIENT_ADDRESS": "Client Address",
   "PYMENT_TYPE":"Payment Type",
 
   "SHOW_BRANCHES": "Show Branches",

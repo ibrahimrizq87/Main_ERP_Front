@@ -1,4 +1,7 @@
 {
+
+
+  "CLIENT": "العميل",
 "PYMENT_TYPE":"نوع الدفع",
   "SHOW_BRANCHES": "إظهار الفروع",
   "HIDE_BRANCHES": "إخفاء الفروع",
