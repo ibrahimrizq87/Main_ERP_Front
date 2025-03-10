@@ -1,27 +1,17 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
+ <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
-      <h5>Manage Payment Documents</h5>
-      <span class="text-muted">Dashboard <i class="fa-solid fa-angle-right"></i> Payment Document</span>
+      <h5>{{ 'paymentDocuments.MANAGE_PAYMENT_DOCUMENTS' | translate }}</h5>
+      <span class="text-muted">{{ 'paymentDocuments.DASHBOARD' | translate }} <i class="fa-solid fa-angle-right"></i>{{ 'paymentDocuments.PAYMENT_DOCUMENT' | translate }}</span>
   </div>
   <a class="nav-link" [routerLink]="addDocumentRouterLink">
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
-</div>
+</div> 
 
 <div class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
     
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <!-- <li>
-        <a routerLinkActive="active-tab" (click)="changeStatus('waiting')" class="nav-link px-2">{{ 'WAITING' | translate }}</a>
-      </li>
-      <li>
-        <a routerLinkActive="active-tab" (click)="changeStatus('approved')" class="nav-link px-2">{{ 'APPROVED' | translate }}</a>
-      </li>
-      <li>
-        <a routerLinkActive="active-tab" (click)="changeStatus('rejected')" class="nav-link px-2">{{ 'REJECTED' | translate }}</a>
-      </li> -->
-
       <li>
         <a 
           (click)="changeStatus('waiting')" 
@@ -60,7 +50,7 @@
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="fw-bold">Documents List</span>
+          <span class="fw-bold">{{ 'paymentDocuments.Documents_List' | translate }}</span>
           <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search">
       </div>
   </div>
@@ -73,12 +63,30 @@
           <tr>
         
               <th class="bg-light" scope="col">#</th>
-              <th class="bg-light" scope="col">Account</th>
-              <th class="bg-light" scope="col">Account_company </th>
-              <th class="bg-light" scope="col">Delegate</th>
+              <th class="bg-light" scope="col">
+                {{ type === 'receipt' ? ('addTransaction.RECEIPT_FROM' | translate) :
+                    type === 'payment' ? ('addTransaction.PAYMENT_TO' | translate) :
+                    
+                    type === 'credit_note' || type === 'debit_note' ? ('addTransaction.NOTIFIED_ACCOUNT' | translate) :
+                    ('addTransaction.ACCOUNT_1' | translate) }}
+
+              </th>
+              <th class="bg-light" scope="col">
+                {{ type === 'receipt' ? ('addTransaction.ACCOUNT_TO_BE_RECEIPT' | translate) :
+                type === 'payment' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
+                type === 'credit_note' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
+                type === 'debit_note' ? ('addTransaction.ACCOUNT_TO_GET_MONEY' | translate) :
+                ('addTransaction.ACCOUNT_2' | translate) }}
+               </th>
+              <!-- <th class="bg-light" scope="col">Delegate</th>
               <th class="bg-light" scope="col">Amount </th>
               <th class="bg-light" scope="col">Organization </th>
-              <th class="bg-light" scope="col">Actions</th>
+              <th class="bg-light" scope="col">Actions</th> -->
+
+              <th class="bg-light" scope="col">{{ 'paymentDocuments.DELEGATE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'paymentDocuments.AMOUNT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'paymentDocuments.ORGANIZATION' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'paymentDocuments.ACTIONS' | translate }}</th>
           </tr>
       </thead>
       <tbody>
@@ -96,7 +104,7 @@
               {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent}, -->
                 <td >
                   <div class="d-flex justify-content-around align-items-center">
-                    <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,document.id)">
+                    <!-- <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,document.id)">
                       approve
                     </a>
                     <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',document.id)">
@@ -104,9 +112,17 @@
                     </a>
                     <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',document.id)">
                       waiting
+                    </a> -->
+
+                    <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved', document.id)">
+                      {{ 'paymentDocuments.APPROVE' | translate }}
                     </a>
-
-
+                    <a *ngIf="status == 'approved' || status == 'waiting'" class="btn btn-danger" (click)="ManageChangeStatus('rejected', document.id)">
+                      {{ 'paymentDocuments.REJECT' | translate }}
+                    </a>
+                    <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting', document.id)">
+                      {{ 'paymentDocuments.WAITING' | translate }}
+                    </a>
 
                   <a class="nav-link" [routerLink]="['/dashboard/showPaymentDocument', document.id]">
                     <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>

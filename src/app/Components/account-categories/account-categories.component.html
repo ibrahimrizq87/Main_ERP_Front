@@ -21,7 +21,7 @@
             class="nav-link px-2"
             [ngClass]="{'active-tab': type === 'client', 'inactive-tab': type !== 'client'}"
           >
-            {{ 'clients' | translate }}
+            {{ 'accountCategories.CLIENTS' | translate }}
           </a>
         </li>
         <li>
@@ -30,7 +30,13 @@
             class="nav-link px-2"
             [ngClass]="{'active-tab': type === 'vendor', 'inactive-tab': type !== 'vendor'}"
           >
-            {{ 'vendors' | translate }}
+
+
+
+
+
+
+            {{ 'accountCategories.VENDORS' | translate }}
           </a>
         </li>
         <li>
@@ -39,7 +45,7 @@
             class="nav-link px-2"
             [ngClass]="{'active-tab': type === 'delegate', 'inactive-tab': type !== 'delegate'}"
           >
-            {{ 'delegates' | translate }}
+            {{ 'accountCategories.DELEGATES' | translate }}
           </a>
         </li>
       </ul>
@@ -61,7 +67,7 @@
         <thead>
             <tr>
                 <th class="bg-light" scope="col">#</th>
-                <th class="bg-light" scope="col">{{ 'CURRENCY_NAME_AR' | translate }}</th>  
+                <th class="bg-light" scope="col">{{ 'accountCategories.CATEGORY_NAME' | translate }}</th>  
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>

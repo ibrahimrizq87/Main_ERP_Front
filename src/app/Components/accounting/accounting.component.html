@@ -3,7 +3,7 @@
       <h5>{{ 'MANAGE_ACCOUNTING' | translate }}</h5>
       <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'ACCOUNTING' | translate }}</span>
     </div>
-    <a class="nav-link" routerLinkActive="active" (click)="addAccount()">
+    <a *ngIf="isAMainAccount" class="nav-link" routerLinkActive="active" (click)="addAccount()">
       <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a> 
   </div>

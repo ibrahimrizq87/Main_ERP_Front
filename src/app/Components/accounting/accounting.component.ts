@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AccountingComponent implements OnInit {
 
-
+  isAMainAccount =false;
   accounts: any[] = []; 
   type: string | null = '';
   searchTerm: string = '';
@@ -29,6 +29,22 @@ export class AccountingComponent implements OnInit {
         this.onParamChange();
       }
     });
+
+
+    if(
+       this.type == '611' ||
+       this.type == '621' ||
+       this.type == '622' ||
+       this.type == '113' ||
+       this.type == '118' ||
+       this.type == '211' ||
+       this.type == '119' ||
+       this.type == '623' 
+    ){
+      this.isAMainAccount = false;
+    }else{
+      this.isAMainAccount = true;
+    } 
 
   }
 
