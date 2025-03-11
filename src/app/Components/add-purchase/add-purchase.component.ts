@@ -590,27 +590,6 @@ handleForm() {
         let error = false;
 
         const formData = new FormData();
-
-        // Add form values
-
-
-
-        //             'payed_from_account_id' => 'nullable|exists:accounts,id',
-        //             'note' => 'nullable|string',
-        //             'total' => 'required|numeric|min:0',
-        //             'total_payed' => 'required|numeric|min:0',
-
-
-                    
-
-
-
-
-
-        // 'check_id' => 'nullable|exists:checks,id',
-
-        // 'payment_type' => 'nullable|in:cash,check,no_payment',
-
 if(this.purchasesBillForm.get('showCashAccountsDropdown')?.value){
 
   if(this.purchasesBillForm.get('cash_id')?.value && this.purchasesBillForm.get('payment_type')?.value == 'cash'){

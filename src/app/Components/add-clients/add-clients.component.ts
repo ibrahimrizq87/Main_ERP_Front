@@ -141,6 +141,7 @@ export class AddClientsComponent {
       address_name: ['', [Validators.required, Validators.maxLength(255)]],
       address_description: ['', [Validators.maxLength(500)]],
       city_id: ['', Validators.required],
+      cities:[[]],
       country_id:['']
     }));
   }
@@ -338,22 +339,27 @@ removeCurrentDelegate(){
   }
   selectedCountry: string = '';
 
-  onCountryChange(event:Event){
+  onCountryChange(event:Event ,index:number){
 
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedCountry =selectedValue;
-    this.loadCities( this.selectedCountry);
+    this.loadCities( this.selectedCountry ,index);
 
 
   }
   cities:City [] =[];
 
-  loadCities(id:string): void {
+  loadCities(id:string ,index:number): void {
+
+    console.log('id',id);
+    console.log('index',index);
+
     this._CityService.viewAllcitiesByCountry(id).subscribe({
       next: (response) => {
         if (response) {
-          this.cities = response.data; 
-          console.log(this.cities );
+          const addressControl = this.addresses.at(index) as FormGroup;
+          addressControl.patchValue({cities:response.data});
+          addressControl.patchValue({country_id:id});
 
         }
       },

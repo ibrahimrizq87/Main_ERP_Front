@@ -1,6 +1,5 @@
-<p>add-delegate works!</p>
 <div class="mt-3 mb-3">
-    <h5 class="large-text">{{ 'MANAGE_CATEGORY' | translate }}</h5>
+    <h5 class="large-text">{{ 'DELEGATE' | translate }}</h5>
     <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CATEGORY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
   </div>
   <div class="mt-4 mb-4">
@@ -10,7 +9,7 @@
             <div class="col-md-12">
               <div class="card shadow em-card rounded-lg">
                 <div class="card-header bg-white text-black rounded-top pt-3">
-                  <h5 class="large-text">{{ 'ADD_DELEGATE' | translate }}</h5>
+                  <h5 class="large-text">{{ 'UPDATE_DELEGATE' | translate }}</h5>
                 </div>
                 
                 <div class="card-body pb-5">
@@ -18,9 +17,9 @@
                     
                     <!-- Name Arabic -->
                     <div class="form-group col-md-6">
-                      <label for="nameAr" class="form-label large-text">{{ 'CATEGORY_NAME_AR' | translate }}</label>
+                      <label for="nameAr" class="form-label large-text">{{ 'DELEGATE_NAME_AR' | translate }}</label>
                       <input id="nameAr" formControlName="nameAr" type="text" class="form-control" required
-                        placeholder="{{ 'CATEGORY_NAME_AR' | translate }}"
+                        placeholder="{{ 'DELEGATE_NAME_AR' | translate }}"
                         [class.is-invalid]="delegateForm.get('nameAr')?.invalid && isSubmitted" 
                       />
                       <div class="invalid-feedback" *ngIf="delegateForm.get('nameAr')?.invalid && isSubmitted">
@@ -35,9 +34,9 @@
       
                     <!-- Name English -->
                     <div class="form-group col-md-6">
-                      <label for="nameEn" class="form-label large-text">{{ 'CATEGORY_NAME_EN' | translate }}</label>
+                      <label for="nameEn" class="form-label large-text">{{ 'DELEGATE_NAME_EN' | translate }}</label>
                       <input id="nameEn" formControlName="nameEn" type="text" class="form-control" required
-                        placeholder="{{ 'CATEGORY_NAME_EN' | translate }}"
+                        placeholder="{{ 'DELEGATE_NAME_EN' | translate }}"
                         [class.is-invalid]="delegateForm.get('nameEn')?.invalid && isSubmitted" 
                       />
                       <div class="invalid-feedback" *ngIf="delegateForm.get('nameEn')?.invalid && isSubmitted">

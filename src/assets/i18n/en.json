@@ -1,5 +1,42 @@
 {
 
+  "CLIENTS": "Clients",
+
+  "UPDATE_VENDOR": "Update Vendor",
+  "MANAGE_VENDORS": "Manage Vendors",
+  "VENDORS_LIST": "vendors List",
+  "ADD_VENDOR": "Add Vendor",
+  "CLEINTS_LIST": "Clients List",
+  "MANAGE_CLEINTS": "Manage Clients",
+  "DELEGATES_LIST": "Delegates List",
+  "MANAGE_DELEGATES": "Manage Delegates",
+  "OLD_IMAGE": "Old Image",
+
+    "UPLOAD_IMAGE": "Upload Image",
+    "ADDRESSES": "Addresses",
+    "ADDRESS_NAME": "Address Name",
+    "ADDRESS_NAME_REQUIRED": "Address name is required.",
+    "ADDRESS_DESCRIPTION": "Address Description",
+    "PLEASE_SELECT_A_COUNTRY_HAS_CITIES": "Please select a country that has cities.",
+    "ADD_ADDRESS": "Add Address",
+    "PHONES": "Phones",
+    "PHONE_NAME": "Phone Name",
+    "ADD_PHONE": "Add Phone",
+    "ADD_CLIENT": "Add Client",
+    
+  
+    "VENDOR_NAME_Ar": "Vendor Name (Arabic)",
+    "VENDOR_NAME_EN": "Vendor Name (English)",
+
+   "UPDATE_DELEGATE": "Update Delegate",
+    "ADD_DELEGATE": "Add Delegate",
+    "DELEGATE_NAME_Ar": "Delegate Name (Arabic)",
+    "DELEGATE_NAME_EN": "Delegate Name (English)",
+    "PHONE_NUMBER_1": "Phone Number 1",
+    "PHONE_NUMBER_2": "Phone Number 2",
+    "ACCEPTED_FORMATS": "Accepted formats: JPG, PNG, GIF",
+    "CATEGORY_REQUIRED": "Category selection is required.",
+
   
     "paymentDocuments": {
       "MANAGE_PAYMENT_DOCUMENTS": "Manage Payment Documents",
@@ -16,7 +53,7 @@
       "WAITING": "Waiting",
       "Documents_List": "Documents List"
     },
-  
+  "ACCOUNT_CATEGORY": "Account Category",
   
     "addTransaction": {
       "ADD_TRANSACTION": "Add Transaction",

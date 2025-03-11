@@ -1,8 +1,47 @@
 {
+  "CLIENTS": "العملاء",
 
+"UPDATE_VENDOR": "تحديث المورد",
+  "ADD_VENDOR": "إضافة مورد",
+"VENDOR_NAME_EN": "اسم المورد (بالإنجليزية)",
+  "VENDORS_LIST": "قائمة الموردين",
+  "MANAGE_VENDORS": "إدارة الموردين",
+  "VENDOR_NAME_AR": "اسم المورد (بالعربية)",
+"VENDOR_NAME_Ar": "اسم المورد (بالعربية)",
+  "CLEINTS_LIST": "قائمة الزبائن",
+"MANAGE_CLEINTS":"إدارة الزبائن",
+"DELEGATES_LIST": "قائمة المندوبين",
+"MANAGE_DELEGATES":"إدارة المندوبين",
+"OLD_IMAGE": "الصورة القديمة",
+  "CLIENT_NAME": "اسم الزبون",
 
-
+    "UPLOAD_IMAGE": "رفع صورة",
+    "ADDRESSES": "العناوين",
+    "ADDRESS_NAME": "اسم العنوان",
+    "ADDRESS_NAME_REQUIRED": "اسم العنوان مطلوب.",
+    "ADDRESS_DESCRIPTION": "وصف العنوان",
+    "PLEASE_SELECT_A_COUNTRY_HAS_CITIES": "يرجى اختيار بلد يحتوي على مدن.",
+    "ADD_ADDRESS": "إضافة عنوان",
+    "PHONES": "أرقام الهواتف",
+    "PHONE_NAME": "اسم الهاتف",
+    "ADD_PHONE": "إضافة هاتف",
+    "ADD_CLIENT": "إضافة عميل",
+    "CLIENT_NAME_AR": "اسم العميل (بالعربية)",
+    "CLIENT_NAME_EN": "اسم العميل (بالإنجليزية)"
+,
   
+
+"UPDATE_DELEGATE": "تحديث المندوب",
+  "ADD_DELEGATE": "إضافة مندوب",
+  "DELEGATE_NAME_AR": "اسم المندوب (بالعربية)",
+  "DELEGATE_NAME_EN": "اسم المندوب (بالإنجليزية)",
+  "PHONE_NUMBER_1": "رقم الهاتف 1",
+  "PHONE_NUMBER_2": "رقم الهاتف 2",
+  "ACCEPTED_FORMATS": "الصيغ المقبولة: JPG, PNG, GIF",
+  "ACCOUNT_CATEGORY": "فئة الحساب",
+  "CATEGORY_REQUIRED": "اختيار الفئة مطلوب.",
+
+
     "paymentDocuments": {
       "MANAGE_PAYMENT_DOCUMENTS": "إدارة مستندات الدفع",
       "DASHBOARD": "لوحة التحكم",

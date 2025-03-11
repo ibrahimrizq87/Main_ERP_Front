@@ -110,6 +110,7 @@ import { AddDelegateComponent } from './Components/add-delegate/add-delegate.com
 import { UpdateDelegateComponent } from './Components/update-delegate/update-delegate.component';
 import { VendorsComponent } from './Components/vendors/vendors.component';
 import { AddVendorComponent } from './Components/add-vendor/add-vendor.component';
+import { UpdateClientsComponent } from './Components/update-clients/update-clients.component';
 
 
 export const routes: Routes = [
@@ -131,12 +132,12 @@ export const routes: Routes = [
 
         {path:"clients",component:ClientsComponent},
         {path:"add-client",component:AddClientsComponent},
-        {path:"update-client",component:UpdateCityComponent},
+        {path:"update-client/:id",component:UpdateClientsComponent},
 
 
         {path:"vendors",component:VendorsComponent},
         {path:"add-vendor",component:AddVendorComponent},
-        {path:"update-vendor",component:UpdateVendorComponent},
+        {path:"update-vendor/:id",component:UpdateVendorComponent},
         
         {path:"delegates",component:DelegatesComponent},
         {path:"add-delegate",component:AddDelegateComponent},

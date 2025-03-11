@@ -1,6 +1,7 @@
 <div class="mt-3 mb-3">
-    <h5 class="large-text">{{ 'MANAGE_CATEGORY' | translate }}</h5>
-    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CATEGORY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
+    <h5 class="large-text">{{ 'ADD_CLIENT' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> 
+      {{ 'CLIENT' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
   </div>
   <div class="mt-4 mb-4">
     <form [formGroup]="clientForm" (ngSubmit)="handleForm()">
@@ -13,33 +14,14 @@
                 </div>
                 <div class="card-body pb-5">
       
-                  <!-- Name Fields -->
                   <div class="row">
-                    <!-- <div class="form-group col-md-6">
-                      <label class="form-label large-text">{{ 'CATEGORY_NAME_AR' | translate }}</label>
-                      <input formControlName="ar" type="text" class="form-control"
-                             placeholder="{{ 'CATEGORY_NAME_AR' | translate }}"
-                             [class.is-invalid]="clientForm.get('ar')?.invalid && isSubmitted">
-
-
-
+               
                      
-                             <div class="invalid-feedback" *ngIf="clientForm.get('ar')?.invalid && isSubmitted">
-                                <p *ngIf="clientForm.get('ar')?.hasError('required')">
-                                  {{ 'NAME_REQUIRED' | translate }}
-                                </p>
-                                <p *ngIf="clientForm.get('ar')?.hasError('maxlength')">
-                                  {{ 'MAX_LENGTH_255' | translate }}
-                                </p>
-                              </div>
-
-                    </div> -->
-
-
+        
                     <div class="form-group col-md-6">
-                        <label for="ar" class="form-label large-text">{{ 'CATEGORY_NAME_AR' | translate }}</label>
+                        <label for="ar" class="form-label large-text">{{ 'CLIENT_NAME_AR' | translate }}</label>
                         <input id="ar" formControlName="ar" type="text" class="form-control" required
-                          placeholder="{{ 'CATEGORY_NAME_AR' | translate }}"
+                          placeholder="{{ 'CLIENT_NAME_AR' | translate }}"
                           [class.is-invalid]="clientForm.get('ar')?.invalid && isSubmitted" 
                         />
                         <div class="invalid-feedback" *ngIf="clientForm.get('ar')?.invalid && isSubmitted">
@@ -54,9 +36,9 @@
         
                       <!-- Name English -->
                       <div class="form-group col-md-6">
-                        <label for="en" class="form-label large-text">{{ 'CATEGORY_NAME_EN' | translate }}</label>
+                        <label for="en" class="form-label large-text">{{ 'CLIENT_NAME_EN' | translate }}</label>
                         <input id="en" formControlName="en" type="text" class="form-control" required
-                          placeholder="{{ 'CATEGORY_NAME_EN' | translate }}"
+                          placeholder="{{ 'CLIENT_NAME_EN' | translate }}"
                           [class.is-invalid]="clientForm.get('en')?.invalid && isSubmitted" 
                         />
                         <div class="invalid-feedback" *ngIf="clientForm.get('en')?.invalid && isSubmitted">
@@ -68,34 +50,10 @@
                           </p>
                         </div>
                       </div>
-        
-      
-                    <!-- <div class="form-group col-md-6">
-                      <label class="form-label large-text">{{ 'CATEGORY_NAME_EN' | translate }}</label>
-                      <input formControlName="en" type="text" class="form-control"
-                             placeholder="{{ 'CATEGORY_NAME_EN' | translate }}"
-                             [class.is-invalid]="clientForm.get('en')?.invalid && isSubmitted">
-
-                             <div class="invalid-feedback" *ngIf="clientForm.get('en')?.invalid && isSubmitted">
-                                <p *ngIf="clientForm.get('en')?.hasError('required')">
-                                  {{ 'NAME_REQUIRED' | translate }}
-                                </p>
-                                <p *ngIf="clientForm.get('en')?.hasError('maxlength')">
-                                  {{ 'MAX_LENGTH_255' | translate }}
-                                </p>
-                              </div>
-
-
-
-
-                    </div> -->
+           
                   </div>
-      
-                  <!-- Delegate, Price Category, Account Category, and Currency -->
+    
                   <div class="row">
-
-
-
                     <div class="form-group col-md-6">
                         
                             <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
@@ -214,7 +172,7 @@
                       
 
                         <div class="col-md-3">
-                            <select class="form-control" (change)="onCountryChange($event)"   formControlName="country_id">
+                            <select class="form-control" (change)="onCountryChange($event ,i)"   formControlName="country_id">
                              <option>{{ 'SELECT_CURRENCY' | translate }}</option>
                              <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
                              </option>
@@ -228,12 +186,12 @@
 
 
                         <div class="form-group col-md-4 ">
-                             <select *ngIf="cities.length>0" class="form-control" (change)="onCityChange($event)"   formControlName="city_id"
+                             <select *ngIf="address.get('cities')?.value.length>0" class="form-control" (change)="onCityChange($event)"   formControlName="city_id"
                                 
                                 [class.is-invalid]="isSubmitted && address.get('city_id')?.invalid"
                                 >
                               <!-- <option>{{ 'SELECT_CURRENCY' | translate }}</option> -->
-                              <option *ngFor="let city of cities" [value]="city.id">{{ city.name }}
+                              <option *ngFor="let city of address.get('cities')?.value" [value]="city.id">{{ city.name }}
                               </option>
                             </select> 
 
@@ -244,7 +202,7 @@
                               
                               </div>
           
-                            <div *ngIf="cities.length<=0"  class="alert alert-warning">
+                            <div *ngIf="address.get('cities')?.value.length<=0"  class="alert alert-warning">
                               {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
                             </div>
                             <!-- <div class="alert alert-danger" *ngIf="bankBranchForm.get('country_id')?.errors && bankBranchForm.get('country_id')?.touched">

@@ -1,1 +1,320 @@
-<p>update-clients works!</p>
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'ADD_CLIENT' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> 
+      {{ 'CLIENT' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
+  </div>
+  <div class="mt-4 mb-4">
+    <form [formGroup]="clientForm" (ngSubmit)="handleForm()">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card shadow em-card rounded-lg">
+                <div class="card-header bg-white text-black rounded-top pt-3">
+                  <h5 class="large-text">{{ 'ADD_CLIENT' | translate }}</h5>
+                </div>
+                <div class="card-body pb-5">
+      
+                  <div class="row">
+               
+                     
+        
+                    <div class="form-group col-md-6">
+                        <label for="ar" class="form-label large-text">{{ 'CLIENT_NAME_AR' | translate }}</label>
+                        <input id="ar" formControlName="ar" type="text" class="form-control" required
+                          placeholder="{{ 'CLIENT_NAME_AR' | translate }}"
+                          [class.is-invalid]="clientForm.get('ar')?.invalid && isSubmitted" 
+                        />
+                        <div class="invalid-feedback" *ngIf="clientForm.get('ar')?.invalid && isSubmitted">
+                          <p *ngIf="clientForm.get('ar')?.hasError('required')">
+                            {{ 'NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="clientForm.get('ar')?.hasError('maxlength')">
+                            {{ 'MAX_LENGTH_255' | translate }}
+                          </p>
+                        </div>
+                      </div>
+        
+                      <!-- Name English -->
+                      <div class="form-group col-md-6">
+                        <label for="en" class="form-label large-text">{{ 'CLIENT_NAME_EN' | translate }}</label>
+                        <input id="en" formControlName="en" type="text" class="form-control" required
+                          placeholder="{{ 'CLIENT_NAME_EN' | translate }}"
+                          [class.is-invalid]="clientForm.get('en')?.invalid && isSubmitted" 
+                        />
+                        <div class="invalid-feedback" *ngIf="clientForm.get('en')?.invalid && isSubmitted">
+                          <p *ngIf="clientForm.get('en')?.hasError('required')">
+                            {{ 'NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="clientForm.get('en')?.hasError('maxlength')">
+                            {{ 'MAX_LENGTH_255' | translate }}
+                          </p>
+                        </div>
+                      </div>
+           
+                  </div>
+    
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                        
+                            <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
+                            <br>
+                            <a (click)="openModal('shiftModal')" class="btn btn-outline-info">
+                              {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
+                            </a>
+                            
+                            <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
+
+                             
+                                <p  class="text-danger" *ngIf="!selecteddelegateAccount && isSubmitted">
+                                  {{ 'DELEGATE_REQUIRED' | translate }}
+                                </p>
+
+          
+                    </div>
+
+
+      
+         
+
+
+                    <div class="form-group col-md-6">
+                        <label for="price_category_id" class="form-label large-text">{{ 'PRICE_CATEGORY' | translate }}</label>
+                        <select id="price_category_id" (change)="onPriceCategoryChange($event)" formControlName="price_category_id" class="form-control"
+                        
+                        [class.is-invalid]="!selectedPriceCaegory && isSubmitted"
+  
+                        >
+                          <option *ngFor="let priceCategory of priceCategories" [value]="priceCategory.id">
+                            {{ priceCategory.name }}
+                          </option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="!selectedPriceCaegory && isSubmitted">
+                          <p >
+                            {{ 'CATEGORY_REQUIRED' | translate }}
+                          </p>
+                        </div>
+                      </div>
+
+
+
+
+                    <div class="form-group col-md-6">
+                        <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate }}</label>
+                        <select id="account_category_id" (change)="onCategoryChange($event)" formControlName="account_category_id" class="form-control"
+                        
+                        [class.is-invalid]="!selectedCaegory && isSubmitted"
+  
+                        >
+                          <option *ngFor="let category of categories" [value]="category.id">
+                            {{ category.name }}
+                          </option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="!selectedCaegory && isSubmitted">
+                          <p >
+                            {{ 'CATEGORY_REQUIRED' | translate }}
+                          </p>
+                        </div>
+                      </div>
+                    
+                    
+                      <div class="form-group col-md-6">
+                        <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                        <select class="form-control" (change)="onCurrencyChange($event)"   formControlName="currency_id"
+                        [class.is-invalid]="isSubmitted && !selectedCurrency "
+                        
+                        >
+                          <option>{{ 'SELECT_CURRENCY' | translate }}</option>
+                          <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
+                          </option>
+                        </select>
+                        <div *ngIf="isSubmitted && !selectedCurrency " class="invalid-feedback">
+                         
+                         {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
+                        </div>                
+                      </div>
+                  
+                      <div class="form-group col-md-6">
+                        <label class="form-label">{{ 'UPLOAD_IMAGE' | translate }}</label>
+                        <input type="file" class="form-control" (change)="onFileSelect($event)" accept="image/*">
+                      </div>
+
+
+                      <div class="form-group col-md-6" *ngIf="currentImage" >
+                        <label class="form-label">{{ 'OLD_IMAGE' | translate }}</label>
+                        <img  [src]="currentImage" alt="" height="80" width="80">
+                      </div>
+                
+                </div>
+      
+
+           
+      
+
+                  <div class="border rounded p-3 mt-2" >
+                    <h5>{{ 'ADDRESSES' | translate }}</h5>
+                    <div formArrayName="addresses">
+                      <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="row mt-2 border rounded shadow p-3">
+
+
+
+                        <div class="col-md-4">
+                          <input formControlName="address_name" type="text" class="form-control"
+                                 placeholder="{{ 'ADDRESS_NAME' | translate }}"
+                                 [class.is-invalid]="isSubmitted && address.get('address_name')?.invalid"
+                                 >
+
+                                 <div class="invalid-feedback" *ngIf="isSubmitted && address.get('address_name')?.invalid">
+                                    <p *ngIf="address.get('address_name')?.hasError('required')">
+                                      {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                                    </p>
+                                    <p *ngIf="address.get('address_name')?.hasError('maxlength')">
+                                      {{ 'MAX_LENGTH_255' | translate }}
+                                    </p>
+                                  </div>
+
+                        </div>
+
+
+                      
+
+                        <div class="col-md-3">
+                            <select class="form-control" (change)="onCountryChange($event ,i)"   formControlName="country_id">
+                             <option>{{ 'SELECT_COUNTRY' | translate }}</option>
+                             <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
+                             </option>
+                           </select> 
+                        </div>
+
+
+             
+
+                    
+
+
+                        <div class="form-group col-md-4 ">
+                             <select *ngIf="address.get('cities')?.value.length>0" class="form-control" (change)="onCityChange($event)"   formControlName="city_id"
+                                
+                                [class.is-invalid]="isSubmitted && address.get('city_id')?.invalid"
+                                >
+                              <!-- <option>{{ 'SELECT_CURRENCY' | translate }}</option> -->
+                              <option *ngFor="let city of address.get('cities')?.value" [value]="city.id">{{ city.name }}
+                              </option>
+                            </select> 
+
+                            <div class="invalid-feedback" *ngIf="isSubmitted && address.get('city_id')?.invalid">
+                                <p >
+                                  {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                                </p>
+                              
+                              </div>
+          
+                            <div *ngIf="address.get('cities')?.value.length<=0"  class="alert alert-warning">
+                              {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
+                            </div>
+                            <!-- <div class="alert alert-danger" *ngIf="bankBranchForm.get('country_id')?.errors && bankBranchForm.get('country_id')?.touched">
+                              <p *ngIf="bankBranchForm.get('country_id')?.getError('required')">{{ 'addCity.city_required' | translate }}</p>
+                            </div> -->
+                          </div>
+
+
+                          <div class="col-md-10 mt-2">
+                            <input formControlName="address_description" type="text" class="form-control"
+                                   placeholder="{{ 'ADDRESS_DESCRIPTION' | translate }}">
+                          </div>
+  
+
+
+                        <div class="col-md-2 mt-2">
+                          <button type="button" class="btn btn-danger" (click)="removeAddress(i)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+
+
+                      </div>
+                      <button type="button" class="btn btn-success mt-2" (click)="addAddress()">+ {{ 'ADD_ADDRESS' | translate }}</button>
+                    </div>
+                  </div>
+      
+                  <!-- Phones Section -->
+                  <div class="border rounded p-3 mt-3">
+                    <h5>{{ 'PHONES' | translate }}</h5>
+                    <div formArrayName="phones">
+                      <div *ngFor="let phone of phones.controls; let i = index" [formGroupName]="i" class="row">
+                        <div class="col-md-6">
+                          <input formControlName="phone_name" type="text" class="form-control"
+                                 placeholder="{{ 'PHONE_NAME' | translate }}">
+                        </div>
+                        <div class="col-md-5">
+                          <input formControlName="phone" type="text" class="form-control"
+                                 placeholder="{{ 'PHONE' | translate }}"
+                                 
+                                 [class.is-invalid]="isSubmitted && phone.get('phone')?.invalid"
+                                 >
+
+                                 <div class="invalid-feedback" *ngIf="isSubmitted && phone.get('phone')?.invalid">
+                                    <p *ngIf="phone.get('phone')?.hasError('required')">
+                                      {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                                    </p>
+                                    <p *ngIf="phone.get('phone')?.hasError('maxlength')">
+                                      {{ 'MAX_LENGTH_255' | translate }}
+                                    </p>
+                                  </div>
+                        </div>
+                        <div class="col-md-1">
+                          <button type="button" class="btn btn-danger" (click)="removePhone(i)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-success mt-2" (click)="addPhone()">+ {{ 'ADD_PHONE' | translate }}</button>
+                    </div>
+                  </div>
+      
+                  <button type="submit" class="btn btn-primary mt-3">{{ 'SAVE' | translate }}</button>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      
+  </div>
+
+
+
+
+
+<div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+  
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+  
+  
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+                style="cursor: pointer;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ account.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
