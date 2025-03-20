@@ -60,6 +60,11 @@ export class SalesService {
     return this._HttpClient.get(`${this.baseURL}/general/sale-bills/update-status/${id}/${status}`,{ headers:this.getHeadersWithToken()  });
   }
   
+
+
+  getSaleById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/sale-bills/"+id, { headers:this.getHeadersWithToken() })
+  }
   
   viewAllSales(status:string): Observable<any> {
     const token = localStorage.getItem('Token');
@@ -74,14 +79,7 @@ export class SalesService {
   }
 
   
-  getSaleById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/sales-bills/"+id, { headers })
-    
-  }
   updateSale(saleId: string, salesData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

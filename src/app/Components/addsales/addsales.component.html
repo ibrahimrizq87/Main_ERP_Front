@@ -20,16 +20,6 @@
             </div>
             <div class="card-body pb-5">
               <div class="row">
-
-         
-
-
-
-            
-
-
-
-  
                 <div class="form-group col-md-6">
                   <label for="invoice_date" class="form-label large-text">{{ 'INVOICE_DATE' | translate }}</label>
                   <input id="invoice_date" formControlName="invoice_date" type="date" class="form-control" 
@@ -174,25 +164,7 @@
                         <img [src]="item.get('color')?.value.image" alt="" height="30" width="30"> 
                         {{ item.get('color')?.value.color }}
 
-                        <!-- <select
-                          id="color_id"
-                          (change)="onColorChange($event, i)"
-                          class="form-control custom-select"
-                          formControlName="color_id"
-                          [class.is-invalid]="!item.get('color_id')?.value && isSubmited "
-
-                        >
-                          <option
-                            *ngFor="let color of item.get('colors')?.value"
-                            [value]="color.id"
-                          >
-                            {{ color.color }}
-                          </option>
-                        </select>
-
-                        <div class="text-danger" *ngIf="!item.get('color_id')?.value && isSubmited ">
-                          {{ 'color' | translate }} {{ 'IS_REQUIRED' | translate }}
-                        </div> -->
+                 
                        
                       </div>
 
@@ -227,17 +199,7 @@
 
                             </div>
 
-                            <!-- <div class="d-flex align-items-center mb-2">
-                              <ng-select
-                                [items]="item.get('productSerialNumbers')?.value"
-                                bindLabel="name"
-                                bindValue="id"
-                                [typeahead]="searchTerm"
-                                formControlName="barcode"
-                                placeholder="Enter barcode"
-                                (change)="onBarcodeSelect($event)">
-                              </ng-select>
-                            </div> -->
+                     
                             <div class="d-flex align-items-center mb-2">
                               <input
                                 formControlName="barcode"
@@ -290,29 +252,6 @@
                       {{ 'SHOW_CASH_ACCOUNTS' | translate }}
                     </label>
                   </div>
-
-
-               
-
-                  <!-- <div class="form-group col-md-12" *ngIf="saleForm.get('showCashAccountsDropdown')?.value">
-                
-                    <label for="payment_type" class="form-label large-text">    اختر طريقة الدفع </label>
-                      <select id="payment_type" formControlName="payment_type" class="form-control"
-                      (change)="onPaymentTypeChange($event)"
-                       >
-                       <option value="cash">نقدى</option>
-                       <option value="check">شيك</option>
-                      
-                      
-                      
-                      
-                      </select>
-
-                      
-                    
-                  </div> -->
-
-
 
 
                   <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'" class="form-group col-md-6">

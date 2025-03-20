@@ -1,4 +1,31 @@
 {
+
+
+  
+    "manageColor": {
+      "manage_color": "إدارة الألوان",
+      "dashboard": "لوحة التحكم",
+      "colors": "الألوان",
+      "colors_list": "قائمة الألوان",
+      "color_name": "اسم اللون",
+      "actions": "الإجراءات",
+      "edit": "تعديل",
+      "delete": "حذف"
+    }
+  ,  
+    "addColor": {
+      "manage_color": "إدارة الألوان",
+      "dashboard": "لوحة التحكم",
+      "color": "اللون",
+      "create_color": "إضافة لون",
+      "add_color": "إضافة لون",
+      "color_name_ar": "اسم اللون (بالعربية)",
+      "enter_color_name_ar": "أدخل اسم اللون بالعربية",
+      "save": "حفظ"
+    },
+  
+
+
   "CLIENTS": "العملاء",
 
 "UPDATE_VENDOR": "تحديث المورد",

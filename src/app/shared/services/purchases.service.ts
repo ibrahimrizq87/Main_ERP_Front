@@ -67,9 +67,14 @@ export class PurchasesService {
   }
 
 
+  updatePurchase(purchaseId: string, PurchaseData: FormData): Observable<any> {
+    PurchaseData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills/${purchaseId}`, PurchaseData, {  headers: this.getHeadersWithToken() })
+  }
 
-
-  
+  deletePurchase(branchId: number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/purchases-bills/${branchId}`, { headers: this.getHeadersWithToken() })
+  }
 
   approveBill(billId: string): Observable<any> {
     const formData = new FormData();
@@ -86,19 +91,9 @@ export class PurchasesService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/purchases-bills`,{ headers });
   }
-  deletePurchase(branchId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/purchases-bills/${branchId}`, { headers })
-  }
 
-  updatePurchase(purchaseId: string, PurchaseData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    PurchaseData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/products-branches/${purchaseId}`, PurchaseData, { headers })
-  }
+
+
 
 
 

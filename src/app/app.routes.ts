@@ -111,6 +111,11 @@ import { UpdateDelegateComponent } from './Components/update-delegate/update-del
 import { VendorsComponent } from './Components/vendors/vendors.component';
 import { AddVendorComponent } from './Components/add-vendor/add-vendor.component';
 import { UpdateClientsComponent } from './Components/update-clients/update-clients.component';
+import { TestingDesignComponent } from './Components/testing-design/testing-design.component';
+import { ColorsComponent } from './Components/colors/colors.component';
+import { AddColorComponent } from './Components/add-color/add-color.component';
+import { UpdateColorComponent } from './Components/update-color/update-color.component';
+import { UpdateDeterminantComponent } from './Components/update-determinant/update-determinant.component';
 
 
 export const routes: Routes = [
@@ -125,6 +130,13 @@ export const routes: Routes = [
 
         ]},
 
+
+
+
+        {path:"colors",component:ColorsComponent},
+        {path:"add-color",component:AddColorComponent},
+        {path:"update-color/:id",component:UpdateColorComponent},
+
         
         {path:"product-moves",component:ProductMovesComponent},
         {path:"add-product-move",component:AddProductMoveComponent},
@@ -133,8 +145,9 @@ export const routes: Routes = [
         {path:"clients",component:ClientsComponent},
         {path:"add-client",component:AddClientsComponent},
         {path:"update-client/:id",component:UpdateClientsComponent},
+        {path:"testing",component:TestingDesignComponent},
 
-
+        
         {path:"vendors",component:VendorsComponent},
         {path:"add-vendor",component:AddVendorComponent},
         {path:"update-vendor/:id",component:UpdateVendorComponent},
@@ -249,7 +262,10 @@ export const routes: Routes = [
 
         {path:"productDeterminants",component:ProductDeterminantsComponent},
         {path:"addProductDeterminant",component:AddProductDeterminantsComponent},
+        {path:"update-determinant/:id",component:UpdateDeterminantComponent},
 
+
+        
         {path:"priceCategory",component:PriceCategoryComponent},
         {path:"addPriceCategory",component:AddPriceCategoryComponent},
         {path:"updateCategory/:id",component:UpdatePriceCategoryComponent},

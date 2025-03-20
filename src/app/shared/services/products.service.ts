@@ -76,7 +76,18 @@ export class ProductsService {
     return this._HttpClient.delete(`${this.baseURL}/general/products/${productId}`, { headers:this.getHeadersWithToken() });
   }
 
+  exportProducts(): Observable<Blob> {
+    return this._HttpClient.get(`${this.baseURL}/general/products/export-products-as-sheet`, {
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' // Important: Handle binary response
+    });
+  }
 
+
+  importProducts(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/products/import-products-as-sheet`,data ,{headers: this.getHeadersWithToken() });
+  }
+  
 
   getProductsByStore(storeID:string): Observable<any> {
     const token = localStorage.getItem('Token');
@@ -90,97 +101,8 @@ export class ProductsService {
   }
 
 
-
-  //// ProductUnits
-
-
-  // addProductUnit(unitData: FormData): Observable<any> {
-  //   const token = localStorage.getItem('Token');
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   return this._HttpClient.post(`${this.baseURL}/products-units`, unitData ,{ headers }).pipe(
-  //     catchError(this.handleError));
-  // }
-  // viewProductUnits(): Observable<any> {
-  //   const token = localStorage.getItem('Token');
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   return this._HttpClient.get(`${this.baseURL}/products-units`,{ headers });
-  // }
-  // deleteUnit(unitId: number): Observable<any> {
-  //   const token = localStorage.getItem('Token');
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-  //   return this._HttpClient.delete(`${this.baseURL}/products-units/${unitId}`, { headers }).pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
-  // getUnitById(id:any): Observable<any>{
-  //   const token = localStorage.getItem('Token');
-
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-  //   return this._HttpClient.get(this.baseURL+"/products-units/"+id, { headers }).pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
-  // updateUnit(unitId: string, unitsData: FormData): Observable<any> {
-  //   const token = localStorage.getItem('Token');
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   unitsData.append('_method', 'PUT');
-  //   return this._HttpClient.post(`${this.baseURL}/products-units/${unitId}`, unitsData, { headers }).pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
 
 
-  ////productBranch
-
-
-  addProductBranch(branchData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/products-branches`, branchData ,{ headers })
-  }
-  viewProductBranches(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/products-branches`,{ headers });
-  }
-  deleteBranch(branchId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/products-branches/${branchId}`, { headers })
-  }
-  getBranchById(id:any): Observable<any>{
-    const token = localStorage.getItem('Token');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this._HttpClient.get(this.baseURL+"/products-branches/"+id, { headers });
-  }
-  updateBranch(unitId: string, unitsData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    unitsData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/products-branches/${unitId}`, unitsData, { headers });
-  }
-  ///////////////////////////determinane
-
-  addProductDeterminants(determinantData: FormData): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/determinants`, determinantData ,{ headers })
-  }
-  viewAllDeterminants(): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/determinants`,{ headers });
-  }
-  deleteDeterminant(DeterminantId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this._HttpClient.delete(`${this.baseURL}/determinants/${DeterminantId}`, { headers })
-  }
 
 }

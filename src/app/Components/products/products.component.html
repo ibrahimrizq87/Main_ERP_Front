@@ -8,6 +8,27 @@
   </a>
 </div>
 
+
+
+
+
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
+  <a (click)="exportProducts()" class="btn btn-outline-info">
+    export products
+  </a>
+
+
+  <a (click)="openModal('ImportForm')" class="btn btn-outline-info ms-3">
+    import products
+  </a>
+  </header>
+</div>
+
+
+
+
+
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -74,4 +95,67 @@
         </tr>
       </tbody>
   </table>
+</div>
+
+
+
+
+
+<div class="modal fade" id="ImportForm" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'ImportForm' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('ImportForm')"></button>
+      </div>
+      <div class="modal-body">
+
+
+   
+        <div class="mt-4 mb-4">
+          <form [formGroup]="productImportForm" (ngSubmit)="handleForm()">
+            <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                      <div class="card-header bg-white text-black rounded-top pt-3">
+                        <h5>{{ 'addCity.add_city' | translate }}</h5>
+                      </div>
+                      <div class="card-body pb-5">
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="file" class="form-label">{{ 'FILE_TO_IMPORT' | translate }}</label>
+                            <input id="file" formControlName="file" type="file" class="form-control"  accept=".xlsx,.csv"  required
+                            (change)="onFileColorSelect($event)"
+                            [class.is-invalid]="productImportForm.get('file')?.errors && isSubmitted"
+                            />
+                             
+                            <div class="invalid-feedback" *ngIf="productImportForm.get('file')?.errors && isSubmitted">
+                              <p >
+                                {{ 'FILE_TO_IMPORT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                              </p>
+                              
+                            </div>
+                          </div>
+                        
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4 mb-4">
+                    <button  type="submit" class="btn btn-primary px-4">
+                      <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'addCity.save' | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+
+
+
+      </div>
+    </div>
+  </div>
 </div>

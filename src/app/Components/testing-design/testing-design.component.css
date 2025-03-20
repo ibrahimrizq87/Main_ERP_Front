@@ -1,0 +1,44 @@
+/* .table-container {
+    max-width: 800px;
+    margin: auto;
+    overflow-x: auto;
+  } */
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 1px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  input {
+    width: 100%;
+    border: none;
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  input:focus {
+    outline: 2px solid #007bff;
+  }
+  
+  button {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+  

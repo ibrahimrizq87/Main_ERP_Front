@@ -6,7 +6,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient, provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 // import {ToastrModule} from "ngx-toastr"
-
+import { BrowserModule } from '@angular/platform-browser';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
@@ -17,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       //      
       HttpClientModule,    
+      BrowserModule,
       // ToastrModule.forRoot(),           
       TranslateModule.forRoot({     
         loader: {

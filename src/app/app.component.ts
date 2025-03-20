@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { LoginComponent } from "./Components/login/login.component";
 import { TranslateModule } from '@ngx-translate/core';
 import {  TranslateService } from '@ngx-translate/core';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-root',

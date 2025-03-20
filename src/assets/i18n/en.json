@@ -1,5 +1,29 @@
 {
-
+  
+    "manageColor": {
+      "manage_color": "Manage Colors",
+      "dashboard": "Dashboard",
+      "colors": "Colors",
+      "colors_list": "Colors List",
+      "color_name": "Color Name",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  ,
+  
+    "addColor": {
+      "manage_color": "Manage Colors",
+      "dashboard": "Dashboard",
+      "color": "Color",
+      "create_color": "Create Color",
+      "add_color": "Add Color",
+      "color_name_ar": "Color Name (Arabic)",
+      "enter_color_name_ar": "Enter color name in Arabic",
+      "save": "Save"
+    },
+  
+  
   "CLIENTS": "Clients",
 
   "UPDATE_VENDOR": "Update Vendor",

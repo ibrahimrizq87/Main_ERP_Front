@@ -9,6 +9,8 @@ import { PriceService } from '../../shared/services/price.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductUnitsService } from '../../shared/services/product_units.service';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
+import { ColorService } from '../../shared/services/colors.service';
+import { DeterminantService } from '../../shared/services/determinants.service';
 
 @Component({
   selector: 'app-update-product',
@@ -18,7 +20,7 @@ import { ProductCategoriesService } from '../../shared/services/product_categori
   styleUrl: './update-product.component.css'
 })
 export class UpdateProductComponent implements OnInit {
-
+mainColors:any;
     productColors: ProductColor[] =[];
     productImages: ProductImage [] =[];
     msgError: string = '';
@@ -32,6 +34,8 @@ export class UpdateProductComponent implements OnInit {
     productPrices:ProductPrice[]=[];
     priceCategories: PriceCategory[] = [];
     pricesAreValid=false;
+    MainDeterminants:Determinant [] = [];
+
     currentProductImage ='images/image.jpg';
     readonly maxImageSize = 2048 * 1024;
 
@@ -42,18 +46,36 @@ export class UpdateProductComponent implements OnInit {
       return this.productForm.get('colors') as FormArray;
     }
     addColor(myColor: ProductColor | null) {
-      let colorName = myColor?.color ?? ''; 
+      let colorName = myColor?.color.id ?? ''; 
       let colorId = myColor?.id ?? null; 
       let colorImage = myColor?.image ?? ''; 
 
       this.colors.push(this.fb.group({
-        color: [colorName, [Validators.required]],
+        color_id: [colorName, [Validators.required]],
         image: [null],
         currentImage: [colorImage],
         id: [colorId],
 
       }));
     }
+
+
+    loadColors(): void {
+      this._ColorService.viewAllColors().subscribe({
+        next: (response) => {
+          if (response) {
+            // console.log(response);
+            this.mainColors = response.data; 
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+
+    
+
     removeColor(index: number) {
       const colorItem = this.colors.at(index).value; 
 
@@ -103,24 +125,37 @@ export class UpdateProductComponent implements OnInit {
     getRanges(index: number): FormArray {
       return (this.prices.at(index).get('ranges') as FormArray);
     }
-    // fetchImage(url: string) {
-    //   fetch(url)
-    //     .then(response => response.blob()) 
-    //     .then(blob => {
-    //       const file = new File([blob], "image.png", { type: blob.type }); 
-    //       const reader = new FileReader();
-    
-    //       reader.onload = (e: any) => {
-    //         this.selectedFiles.push({ file, preview: e.target.result });
-    //       };
 
-    //       console.log(url);
-    
-    //       reader.readAsDataURL(file); 
-    //     })
-    //     .catch(error => console.error("Error fetching image:", error));
-    // }
-    
+    addDeterminant() {
+      const id = this.productForm.get('determinant_id')?.value;
+  
+      if(id){
+  let isDublicted = false;
+  
+  this.determinants.controls.forEach((element) => {
+    if(element.get('determinant_id')?.value ==  id){
+      isDublicted = true;
+    }
+  });
+  
+  
+        if (!isDublicted){
+          const determinant = this.MainDeterminants.find(d => d.id == id);
+  
+       
+           this.determinants.push(this.fb.group({
+             determinant_name: [determinant?.name],
+             determinant_id: [determinant?.id],
+       
+           }));
+        }else{
+  alert('لقد تم اختيار هذا المحمدد من قبل')
+        }
+        this.productForm.patchValue({determinant_id : null});
+  
+      }
+     
+    }
     onFileColorSelect(event: any, index: number) {
       const file = event.target.files[0];
       if (file) {
@@ -135,8 +170,9 @@ export class UpdateProductComponent implements OnInit {
     constructor(
       private fb: FormBuilder,
       private router: Router,
+      private _ColorService:ColorService,
       private _ProductsService: ProductsService,
-      private _CurrencyService: CurrencyService,
+    private _DeterminantService: DeterminantService,
       private _PriceService: PriceService,
       private _ProductUnitsService:ProductUnitsService,
       private _ProductCategoriesService:ProductCategoriesService,
@@ -153,11 +189,11 @@ export class UpdateProductComponent implements OnInit {
         unit_id: this.fb.control(null, [Validators.required]),
         prices: this.fb.array([]),
         colors:  this.fb.array([]),
+        determinants: this.fb.array([]),
+        determinant_id:[null]
       });
 
 
-      // this.addPrice();
-      // this.addDeterminant();
     }
     onProductCategoryChange(event:Event){
       const selectedValue = (event.target as HTMLSelectElement).value;
@@ -180,10 +216,10 @@ export class UpdateProductComponent implements OnInit {
     }
     createRangeGroup(price:ProductPrice): FormGroup {
       return this.fb.group({
-          id: [price.id], // Price ID
-          range_from: [price.quantity_from], // Minimum quantity
-          range_to: [price.quantity_to], // Maximum quantity
-          price: [price.price], // Price value
+          id: [price.id],
+          range_from: [price.quantity_from], 
+          range_to: [price.quantity_to], 
+          price: [price.price], 
       });
   }
 
@@ -237,11 +273,7 @@ export class UpdateProductComponent implements OnInit {
       return this.productForm.get('determinants') as FormArray;
     }
   
-    removeDeterminant(index: number) {
-      if (this.determinants.length > 1) {
-        this.determinants.removeAt(index);
-      }
-    }
+  
   
   
   
@@ -256,7 +288,11 @@ export class UpdateProductComponent implements OnInit {
       }
     }
   
-    
+   
+  removeDeterminant(index: number) {
+    this.determinants.removeAt(index);
+
+  } 
   
     validateImage(control: AbstractControl): ValidationErrors | null {
       const file = this.selectedFile;
@@ -274,14 +310,32 @@ export class UpdateProductComponent implements OnInit {
       return null;
     }
   
+
+loadDeterminants(): void {
+  this._DeterminantService.getAllDeterminants().subscribe({
+    next: (response) => {
+      if (response) {
+        // console.log(response)
+        this.MainDeterminants = response.data;
+      }
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+
     ngOnInit(): void {
       const unitId = this.route.snapshot.paramMap.get('id'); 
       if (unitId) {
         this.fetchProduct(unitId);
       }
+      this.loadDeterminants();
+
       this.loadUnits();
-      // this.loadPriceCategories();
       this.loadProductCategories();
+      this.loadColors();
     }
   
 
@@ -316,12 +370,21 @@ export class UpdateProductComponent implements OnInit {
             
   
             });
+
+            categoryData.productDeterminants.forEach((element:any)=>{
+              this.determinants.push(this.fb.group({
+                determinant_name: [element?.determinant.name],
+                determinant_id: [element?.determinant.id],
+              }));
+
+              console.log(element);
+            })
             this.productImages = categoryData.images;
             this.productColors = categoryData.colors;
             this.currentProductImage = categoryData.cover_image;
             this.selectedUnit = categoryData.product_unit.id;
             this.selectedProductCategory = categoryData.productCategory.id;
-            this.loadPriceCategories();
+            // this.loadPriceCategories();
             this.productPrices = categoryData.prices;
             this.stock =categoryData.stock;
 
@@ -409,36 +472,36 @@ export class UpdateProductComponent implements OnInit {
       }
    }
   
-    loadPriceCategories(): void {
-      this._PriceService.viewAllCategory().subscribe({
-        next: (response) => {
-          if (response) {
-            this.priceCategories = response.data;
-            console.log(this.priceCategories);
-            console.log(this.productPrices);
+    // loadPriceCategories(): void {
+    //   this._PriceService.viewAllCategory().subscribe({
+    //     next: (response) => {
+    //       if (response) {
+    //         this.priceCategories = response.data;
+    //         console.log(this.priceCategories);
+    //         console.log(this.productPrices);
 
-            this.priceCategories.forEach((category)=>{
-              let currentPrice =null;
+    //         this.priceCategories.forEach((category)=>{
+    //           let currentPrice =null;
 
-              this.productPrices.forEach((price)=>{
-                if(price.id == category.id){
-                  currentPrice = price ;
-                }
+    //           this.productPrices.forEach((price)=>{
+    //             if(price.id == category.id){
+    //               currentPrice = price ;
+    //             }
               
-              });
+    //           });
 
-              this.addPrice(category ,currentPrice );
+    //           this.addPrice(category ,currentPrice );
 
             
-            });
+    //         });
             
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-    }
+    //       }
+    //     },
+    //     error: (err) => {
+    //       console.error(err);
+    //     }
+    //   });
+    // }
   
     handleForm() {
       // alert(this.productForm.get('need_serial')?.value);
@@ -454,7 +517,10 @@ export class UpdateProductComponent implements OnInit {
         formData.append('product_category_id', this.productForm.get('product_category_id')?.value);
         formData.append('description', this.productForm.get('product_description')?.value || '');
 
-
+        this.determinants.controls.forEach((item,index)=>{
+          formData.append(`determinant_values[${index}][determinant_value_id]`, item.get('value_id')?.value);
+        });
+        
         if(this.productForm.get('need_serial')?.value ){
           formData.append('need_serial_number', '1');
         } 
@@ -470,33 +536,37 @@ export class UpdateProductComponent implements OnInit {
 
         let counter = 0;
 
-        this.prices.controls.forEach((priceControl) => {
-          const ranges = priceControl.get('ranges') as FormArray;
 
 
-          
+        this.determinants.controls.forEach((determinant ,index) => {
+          formData.append(`determinants[${index}][determinant_id]`, determinant.get('determinant_id')?.value);
+        });
 
-            // if(ranges.length>0){
+
+
+        // this.prices.controls.forEach((priceControl) => {
+        //   const ranges = priceControl.get('ranges') as FormArray;
+        //     // if(ranges.length>0){
   
-              ranges.controls.forEach((rangeControl) => {
-                if(!rangeControl.get('price')?.value){
-                    alert('prices are invalid')
-                    return;
+        //       ranges.controls.forEach((rangeControl) => {
+        //         if(!rangeControl.get('price')?.value){
+        //             alert('prices are invalid')
+        //             return;
                   
-                }
-              formData.append(`prices[${counter}][price]`, rangeControl.get('price')?.value);
-              formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
-              formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
-              formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
-              counter++;
-              });
+        //         }
+        //       formData.append(`prices[${counter}][price]`, rangeControl.get('price')?.value);
+        //       formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
+        //       formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
+        //       formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
+        //       counter++;
+        //       });
     
             
 
           
   
  
-        });
+        // });
 
 
         // this.prices.controls.forEach((priceControl, index) => {
@@ -515,9 +585,8 @@ export class UpdateProductComponent implements OnInit {
         this.colors.controls.forEach((priceControl, index) => {
           if(priceControl.get('id')?.value){
             formData.append(`colors[${index}][id]`, priceControl.get('id')?.value);
-
           }
-          formData.append(`colors[${index}][color]`, priceControl.get('color')?.value);
+          formData.append(`colors[${index}][color_id]`, priceControl.get('color_id')?.value);
           if(priceControl.get('image')?.value){
             formData.append(`colors[${index}][image]`, priceControl.get('image')?.value);
           }
@@ -578,5 +647,21 @@ export class UpdateProductComponent implements OnInit {
   interface ProductColor{
     id:number;
     image:string | null;
+    color:Color;
+  }
+
+  interface Color{
+    id:number;
     color:string;
+  }
+  interface Determinant{
+    id:number;
+    name:string;
+    values: DeterminantValues[];
+  
+  }
+  
+  interface DeterminantValues{
+    id:number;
+    value:string;
   }

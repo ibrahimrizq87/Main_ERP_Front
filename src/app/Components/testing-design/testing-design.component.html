@@ -1,0 +1,29 @@
+
+
+<div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rowData; let i = index">
+          <td>{{ row.id }}</td>
+          <td><input type="text" [(ngModel)]="row.product" /></td>
+          <td><input type="number" [(ngModel)]="row.quantity" /></td>
+          <td><input type="number" [(ngModel)]="row.price" /></td>
+          <td>
+            <button (click)="removeRow(i)">❌</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="addRow()">➕ Add Row</button>
+    <button (click)="saveData()">💾 Save Data</button>
+  </div>
+  

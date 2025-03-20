@@ -9,6 +9,8 @@ import { PriceService } from '../../shared/services/price.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductUnitsService } from '../../shared/services/product_units.service';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
+import { ColorService } from '../../shared/services/colors.service';
+import { DeterminantService } from '../../shared/services/determinants.service';
 
 @Component({
   selector: 'app-add-product',
@@ -29,14 +31,83 @@ export class AddProductComponent implements OnInit {
   pricesAreValid=false;
   priceCategories: PriceCategory[] = [];
   readonly maxImageSize = 2048 * 1024;
-productCategories :any;
-  
+  productCategories :any;
+  mainColors:any;
+  MainDeterminants:Determinant [] = [];
+
+
+
+
+loadDeterminants(): void {
+  this._DeterminantService.getAllDeterminants().subscribe({
+    next: (response) => {
+      if (response) {
+        // console.log(response)
+        this.MainDeterminants = response.data;
+      }
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+
+
   get colors(): FormArray {
     return this.productForm.get('colors') as FormArray;
   }
+  get determinants(): FormArray {
+    return this.productForm.get('determinants') as FormArray;
+  }
+
+
+  removeDeterminant(index: number) {
+    this.determinants.removeAt(index);
+  }
+
+  
+  barcode = '';
+  generateBarcode() {
+    this.barcode = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+  }
+  onDeterminantChnage(event:Event , index:number){
+
+  }
+  addDeterminant() {
+    const id = this.productForm.get('determinant_id')?.value;
+
+    if(id){
+let isDublicted = false;
+
+this.determinants.controls.forEach((element) => {
+  if(element.get('determinant_id')?.value ==  id){
+    isDublicted = true;
+  }
+});
+
+
+      if (!isDublicted){
+        const determinant = this.MainDeterminants.find(d => d.id == id);
+
+     
+         this.determinants.push(this.fb.group({
+           determinant_name: [determinant?.name],
+           determinant_id: [determinant?.id],
+     
+         }));
+      }else{
+alert('لقد تم اختيار هذا المحمدد من قبل')
+      }
+      this.productForm.patchValue({determinant_id : null});
+
+    }
+   
+  }
+
   addColor() {
     this.colors.push(this.fb.group({
-      color: [null,[Validators.required]],
+      color_id: [null,[Validators.required]],
       image: [null],
     }));
   }
@@ -69,8 +140,9 @@ productCategories :any;
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private _ColorService:ColorService,
     private _ProductsService: ProductsService,
-    private _CurrencyService: CurrencyService,
+    private _DeterminantService: DeterminantService,
     private _PriceService: PriceService,
     private _ProductUnitsService:ProductUnitsService,
     private _ProductCategoriesService:ProductCategoriesService
@@ -78,14 +150,17 @@ productCategories :any;
     this.productForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
       product_name_en: this.fb.control(null, [Validators.required,Validators.maxLength(255)]),
-      default_price :[null,[Validators.required]],
+      // default_price :[null,[Validators.required]],
       product_category_id:[null,[Validators.required]],
       need_serial: this.fb.control(false), 
       product_description:[null],
+      determinant_id:[null],
+
       image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]), // Removed required validator
       unit_id: this.fb.control(null, [Validators.required]),
       prices: this.fb.array([]),
       colors:  this.fb.array([]),
+      determinants: this.fb.array([]),
     });
     // this.addPrice();
     // this.addDeterminant();
@@ -183,17 +258,6 @@ productCategories :any;
     }));
   }
 
-  get determinants(): FormArray {
-    return this.productForm.get('determinants') as FormArray;
-  }
-
-  removeDeterminant(index: number) {
-    if (this.determinants.length > 1) {
-      this.determinants.removeAt(index);
-    }
-  }
-
-
 
   selectedFile: File | null = null;
 
@@ -225,7 +289,10 @@ productCategories :any;
   }
 
   ngOnInit(): void {
+    this.generateBarcode();
+    this.loadColors();
     this.loadUnits();
+    this.loadDeterminants();
     this.loadPriceCategories();
     this.loadProductCategories();
   }
@@ -277,13 +344,28 @@ productCategories :any;
     });
   }
 
+
+  loadColors(): void {
+    this._ColorService.viewAllColors().subscribe({
+      next: (response) => {
+        if (response) {
+          // console.log(response);
+          this.mainColors = response.data; 
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
   handleForm() {
 
 
-    if(!this.pricesAreValid){
-      alert('prices are invalid')
-      return;
-    }
+    // if(!this.pricesAreValid){
+    //   alert('prices are invalid')
+    //   return;
+    // }
     this.isSubmited =true;
     if (this.productForm.valid) {
 
@@ -296,11 +378,13 @@ productCategories :any;
       formData.append('product_unit_id', this.productForm.get('unit_id')?.value);
       formData.append('product_category_id', this.productForm.get('product_category_id')?.value);
 
-      formData.append('default_price', this.productForm.get('default_price')?.value);
+      // formData.append('default_price', this.productForm.get('default_price')?.value);
       formData.append('cover_image', this.productForm.get('image')?.value);
       formData.append('description', this.productForm.get('product_description')?.value || '');
  
-      
+      formData.append('barcode', this.barcode);
+      // formData.append('barcode', this.barcode);
+
 
       if(this.productForm.get('need_serial')?.value ){
         formData.append('need_serial_number', '1');
@@ -308,34 +392,37 @@ productCategories :any;
 
 
       let counter = 0;
-      this.prices.controls.forEach((priceControl) => {
-        const ranges = priceControl.get('ranges') as FormArray;
+      this.determinants.controls.forEach((determinant ,index) => {
+        formData.append(`determinants[${index}][determinant_id]`, determinant.get('determinant_id')?.value);
+      });
+      // this.prices.controls.forEach((priceControl) => {
+      //   const ranges = priceControl.get('ranges') as FormArray;
 
-        if(ranges.length>0){
+      //   if(ranges.length>0){
 
-          ranges.controls.forEach((rangeControl) => {
-            if(!rangeControl.get('price')?.value){
-                alert('prices are invalid')
-                return;
+      //     ranges.controls.forEach((rangeControl) => {
+      //       if(!rangeControl.get('price')?.value){
+      //           alert('prices are invalid')
+      //           return;
               
-            }
+      //       }
            
 
-            // $table->integer('quantity_from');
-            // $table->integer('quantity_to');
+      //       // $table->integer('quantity_from');
+      //       // $table->integer('quantity_to');
 
-          formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
-          formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
-          formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
-          formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
-          counter++;
-          });
+      //     formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
+      //     formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
+      //     formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
+      //     formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
+      //     counter++;
+      //     });
 
-        }
-      });
+      //   }
+      // });
 
       this.colors.controls.forEach((priceControl, index) => {
-        formData.append(`colors[${index}][color]`, priceControl.get('color')?.value);
+        formData.append(`colors[${index}][color_id]`, priceControl.get('color_id')?.value);
         if(priceControl.get('image')?.value){
           formData.append(`colors[${index}][image]`, priceControl.get('image')?.value);
         }
@@ -372,4 +459,18 @@ interface PriceCategory{
   id:number;
   name:string;
 
+}
+
+
+
+interface Determinant{
+  id:number;
+  name:string;
+  values: DeterminantValues[];
+
+}
+
+interface DeterminantValues{
+  id:number;
+  value:string;
 }

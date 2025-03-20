@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { ProductsService } from '../../shared/services/products.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule ,FormGroup , ReactiveFormsModule,FormControl ,Validators} from '@angular/forms';
+import { Modal } from 'bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [RouterLinkActive, RouterModule,CommonModule,TranslateModule,FormsModule],
+  imports: [RouterLinkActive, RouterModule,CommonModule,TranslateModule,FormsModule,ReactiveFormsModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -17,13 +19,94 @@ export class ProductsComponent implements OnInit {
   Products: any[] = []; 
   filteredProducts: any[] = [];  
   searchTerm: string = ''; 
-
+  
+  // productImportForm: FormGroup;
+  
+  isLoading =false;
+  isSubmitted=false;
+  productImportForm: FormGroup = new FormGroup({
+      file: new FormControl(null, [Validators.required]),
+     
+    });
   constructor(private _ProductsService: ProductsService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadProducts(); 
   }
 
+  onFileColorSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.productImportForm.patchValue({ file: file }); 
+      console.log(file)
+      this.productImportForm.get('file')?.updateValueAndValidity();
+    }else{
+      console.error('No file selected');
+    }
+    
+  }
+
+     closeModal(modalId: string) {
+          const modalElement = document.getElementById(modalId);
+         this.productImportForm.patchValue({file:null});
+          if (modalElement) {
+            const modal = Modal.getInstance(modalElement);
+            modal?.hide();
+          }
+        }
+      
+        handleForm(){
+this.isSubmitted =true;
+  if (this.productImportForm.valid) {
+      this.isLoading = true;
+
+      const formData = new FormData();
+    
+      // formData.append('file', this.productImportForm.get('file')?.value);
+      const file = this.productImportForm.get('file')?.value;
+
+      if (file instanceof File) { // Ensure it's a File object
+        formData.append('file', file, file.name);
+      } else {
+        console.error('Invalid file detected:', file);
+        return; // Prevent submission
+      }
+      this._ProductsService.importProducts(formData).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response) {
+            this.isLoading = false; 
+            this.closeModal('ImportForm');       
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isLoading = false;
+           
+        }
+      });
+    }
+        }
+
+  exportProducts() {
+    this._ProductsService.exportProducts().subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'products.xlsx'); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error("Error downloading file:", err);
+      }
+    });
+  }
+
+  
+  
   loadProducts(): void {
     this._ProductsService.viewAllProducts().subscribe({
       next: (response) => {
@@ -54,9 +137,23 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
+
+
+
+  openModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+
+
+
   searchProducts(): void {
     this.filteredProducts = this.Products.filter(product => 
-      product.name_ar.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
       product.unit?.unit.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       product.product_dimension.toLowerCase().includes(this.searchTerm.toLowerCase())
     );

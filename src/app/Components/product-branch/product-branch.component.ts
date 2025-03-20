@@ -35,9 +35,7 @@ export class ProductBranchComponent implements OnInit {
       }
     });
   }
-  deleteBranche(branchId:string){
-
-  }
+  
 
   deleteBranch(branchId: number): void {
     console.log(branchId)

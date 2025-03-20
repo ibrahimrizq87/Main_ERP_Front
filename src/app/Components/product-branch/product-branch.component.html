@@ -40,7 +40,7 @@
                 <td>{{ branch.product.name }}</td>
                 <td>{{ branch.store.name }}</td>
                 <td>{{ branch.stock }}</td>
-                <td>{{ branch.product_color.color }}</td>
+                <td>{{ branch.product_color?.color?.color ?? "N/A"}}</td>
 
 
 
@@ -49,7 +49,7 @@
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProductBranch', branch.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBranche(branch.id)"></i>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBranch(branch.id)"></i>
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductBranch', branch.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
                       </a>

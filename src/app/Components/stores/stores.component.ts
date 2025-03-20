@@ -118,15 +118,18 @@ import { StoreService } from '../../shared/services/store.service';
 import { CommonModule } from '@angular/common';
 import { StorenodeComponent } from '../storenode/storenode.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-stores',
   standalone: true,
-  imports: [RouterLinkActive, RouterModule, CommonModule, StorenodeComponent,TranslateModule],
+  imports: [RouterLinkActive, RouterModule, CommonModule, StorenodeComponent,TranslateModule,FormsModule],
   templateUrl: './stores.component.html',
   styleUrls: ['./stores.component.css']
 })
 export class StoresComponent implements OnInit {
+
+
 
   stores: any[] = [];
   hierarchicalAccounts: any[] = [];

@@ -262,6 +262,21 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Stores')">
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="colors"> 
+                  <i class="fa-solid fa-warehouse me-2"></i>  {{ 'COLORS' | translate }}
+                </a>
+              </li>
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="productDeterminants"> 
+                  <i class="fa-solid fa-warehouse me-2"></i>  {{ 'DETERMINANTS' | translate }}
+                </a>
+              </li>
+              
+
               <li class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productUnit"> 
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'PRODUCT_UNITS' | translate }}

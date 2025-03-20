@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ProductsService } from '../../shared/services/products.service';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { DeterminantService } from '../../shared/services/determinants.service';
 
 @Component({
   selector: 'app-product-determinants',
@@ -17,14 +17,14 @@ export class ProductDeterminantsComponent {
   filteredDeterminants: any[] = [];
   searchTerm: string = ''
 
-  constructor(private _ProductsService: ProductsService, private router: Router) {}
+  constructor(private _DeterminantService: DeterminantService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadDeterminants();
   }
 
   loadDeterminants(): void {
-    this._ProductsService.viewAllDeterminants().subscribe({
+    this._DeterminantService.getAllDeterminants().subscribe({
       next: (response) => {
         if (response) {
           console.log(response)
@@ -40,7 +40,7 @@ export class ProductDeterminantsComponent {
 
   deleteDeterminant(determinantId: number): void {
     if (confirm('Are you sure you want to delete this determinant?')) {
-      this._ProductsService.deleteDeterminant(determinantId).subscribe({
+      this._DeterminantService.deleteDeterminant(determinantId).subscribe({
         next: (response) => {
           if (response) {
             this.router.navigate(['/dashboard/productDeterminants']);

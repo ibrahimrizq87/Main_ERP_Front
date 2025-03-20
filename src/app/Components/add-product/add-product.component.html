@@ -50,7 +50,10 @@
                     </p>
                   </div>
                 </div>
-                
+                <div class="form-group col-md-6">
+                  <label class="form-label large-text">{{ 'BARCODE' | translate }}</label>
+               <p><strong>{{barcode}}</strong></p>
+                </div>
                 
                 <div class="form-group col-md-6">
                   <label class="form-label large-text">{{ 'SELECT_UNIT' | translate }}</label>
@@ -84,24 +87,6 @@
                     
                   </div>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                  <label for="default_price" class="form-label large-text">
-                    {{ 'DEFULT_PRICE' | translate }}
-                  </label>
-                  
-                  <input id="default_price" formControlName="default_price" type="number" class="form-control" 
-                         placeholder="{{ 'DEFULT_PRICE' | translate }}" 
-                         [class.is-invalid]="productForm.get('default_price')?.invalid && isSubmited" />
-                
-                  <div class="invalid-feedback" *ngIf="productForm.get('default_price')?.invalid && isSubmited">
-                    <p>
-                      {{ 'DEFULT_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
-                    </p>
-                    
-                  </div>
-                </div>
-
 
                 <div class="col-md-6">
                   <label for="coverImage" class="form-label large-text">
@@ -146,18 +131,8 @@
   
                   
                 </div>
-                <!-- <div class="col-md-6 ">
-                  <label for="product_description" class="form-label large-text">
-                    {{ 'product_description' | translate }}
-                  </label>
-                
-                  <textarea  id="product_description" class="form-control" 
-                        ></textarea>
-                 
-                </div> -->
-
                 <div class="form-group text-center">
-                  <div formArrayName="prices">
+                  <!-- <div formArrayName="prices">
                     <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
 
                       <div class="card-header"> الاسعار </div>
@@ -167,25 +142,13 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">{{price.get('price_category_name')?.value}}</h5>
-                            <!-- <input type="number" class="form-control" formControlName="price" placeholder="{{'PRICE'| translate}}  " /> -->
 
                           <button type="button" class="btn btn-success mt-2" (click)="addPriceRange(i)">+</button>
 
-                          <!-- <div formArrayName="ranges">
-                            <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row">
-                              <input type="number" class="form-control col-md-6" formControlName="price" placeholder="Enter Range Price" />
-                              <input type="number" class="form-control col-md-6" formControlName="range_to" placeholder="Enter range_to Price" />
-
-                              <button type="button" class="btn btn-danger w-100" (click)="removeRange(i ,j)">
-                                <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
-                              </button>
-                            </div>
-                          </div> -->
-
+                
                           <div formArrayName="ranges" class="mt-2">
                             <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row align-items-center g-2 mt-2">
                               
-                              <!-- Range Price and Range To Side by Side -->
                               <div class="col-md-4">
                                 <input type="number" class="form-control" formControlName="price" placeholder="Enter Range Price" />
                               </div>
@@ -208,7 +171,6 @@
                                 </div>
                               </div>
                         
-                              <!-- Remove Button -->
                               <div class="col-md-2">
                                 <button type="button" class="btn btn-danger w-100" (click)="removeRange(i, j)">
                                   <i class="fa fa-trash"></i>
@@ -227,13 +189,12 @@
                       </div>
   
                     </div>
-                  </div>
+                  </div> -->
 
 
                   <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
 
                     <div class="card-header"> صور المنتج </div>
-                    <!-- -->
                     
                     <div class="file-upload-container text-center">
                       <label for="gallery" class="file-upload-label">
@@ -264,37 +225,30 @@
                     <div formArrayName="colors">
                       <div *ngFor="let color of colors.controls; let i = index" [formGroupName]="i" class="row align-items-center g-2 mb-2 mt-2">
     
-                        <!-- Color Name Input -->
-                        <!-- <div class="col-md-6">
-                          <input formControlName="color" type="text" class="form-control" placeholder="{{ 'COLOR_NAME' | translate }}" />
-                          <div *ngIf="color.get('color')?.invalid && color.get('color')?.touched" class="text-danger">
-                            {{ 'COLOR_NAME_IS_REQUIRED' | translate }}
-                          </div>
-                        </div> -->
-
                         <div class="col-md-6">
-                          <input formControlName="color" type="text" class="form-control" 
-                                 placeholder="{{ 'COLOR_NAME' | translate }}"
-                                 [class.is-invalid]="color.get('color')?.invalid && isSubmited" />
-                        
-                          <!-- Invalid Feedback Message -->
-                          <div class="invalid-feedback" *ngIf="color.get('color')?.invalid && isSubmited">
-                            {{ 'COLOR_NAME_IS_REQUIRED' | translate }}
+                      
+                          <label class="form-label large-text">{{ 'COLOR_NAME' | translate }}</label>
+                          <select class="form-control" formControlName="color_id"
+                          [class.is-invalid]="color.get('color_id')?.invalid && isSubmited"
+                          >
+                            <option *ngFor="let color of mainColors" [value]="color.id">{{color.color}}</option>
+                            
+                          </select>
+                          <div class="invalid-feedback" *ngIf="color.get('color_id')?.invalid && isSubmited">
+                            <p >
+                              {{ 'COLOR_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
+                            </p>
+                            
                           </div>
                         </div>
-                        
-                    
-                        <!-- Image Upload -->
+
                         <div class="col-md-5">
                           <input type="file" class="form-control" (change)="onFileColorSelect($event, i)" accept="image/*" />
                           <div *ngIf="color.get('image')?.invalid && color.get('image')?.touched" class="text-danger">
                             {{ 'IMAGE_IS_REQUIRED' | translate }}
                           </div>
-
-
                         </div>
                     
-                        <!-- Remove Button -->
                         <div class="col-md-1">
                           <button type="button" class="btn btn-danger w-100" (click)="removeColor(i)">
                             <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
@@ -303,10 +257,69 @@
                     
                       </div>
                     <button type="button" class="btn btn-success mt-2" (click)="addColor()">+ {{ 'ADD_COLOR' | translate }}</button>
-
                     </div>
+                  </div>
+
+
+
+
+
+                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+
+                    <div class="card-header"> محددات المنتج </div>
+                     
+                    
+                    
+                      <div class="col-md-12 text-black bg-secoundry border rounded pb-2 m-3" *ngIf="determinants.controls.length>0">
+                        <!-- <div class="card-header"> {{ 'DETERMINANT_VALUES' | translate }} </div> -->
+                        <div class="row ">
+                          <div *ngFor="let determinant of determinants.controls; let i = index" class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                            <div class="col-md-10">
+                              {{ determinant.get('determinant_name')?.value }}
+                            </div>
+                            <div class="col-md-2">
+                              <a class="btn-close" aria-label="Close" (click)="removeDeterminant(i)"></a>
+                            </div>
+                            </div>
+                        </div>
+                      </div>
+                      
+                    
+                    
+
+                        <div class="col-md-6 row">
+                          <label class="form-label large-text">{{ 'SELETECT_DETERMINAT' | translate }}</label>
+
+
+                          <div class="form-group col-md-6 ">
+
+                          <select class="form-control" formControlName="determinant_id">
+                            <option *ngFor="let determinant of MainDeterminants" [value]="determinant.id">{{determinant.name}}</option>
+                          </select>
+                        </div>
+
+
+                        <div class="form-group col-md-6 ">
+                          <a class="btn btn-outline-success" (click)="addDeterminant()"> add</a>                
+                        </div>
+
+
+                        </div>
+
+
+                     
+
+                      
+                        <!-- <div class="col-md-1">
+                          <button type="button" class="btn btn-danger w-100" (click)="removeColor(i)">
+                            <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
+                          </button>
+                        </div> -->
+                    
 
                   </div>
+
+
                 </div>
               </div>
             </div>

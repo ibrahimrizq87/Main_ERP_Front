@@ -93,7 +93,7 @@ export class PurchasesComponent implements OnInit {
       this._PurchasesService.deletePurchase(purchaseId).subscribe({
         next: (response) => {
           if (response) {
-            this.router.navigate(['/dashboard/purchases']);
+            // this.router.navigate(['/dashboard/purchases']);
             this.loadPurchases(this.status);
           }
         },
