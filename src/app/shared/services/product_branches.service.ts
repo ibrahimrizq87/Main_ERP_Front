@@ -72,7 +72,15 @@ export class ProductBranchesService {
 
   
 
+  importProductBranchs(data:FormData): Observable<any>{
+    return this._HttpClient.post(this.baseURL+"/general/product-branches/import-data-by-sheet/",data, { headers:this.getHeadersWithToken() });
+  }
+  
+  
+  exportProductBranches(productId:string): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/product-branches/export-data-to-sheet/"+productId, { headers:this.getHeadersWithToken() , responseType: 'blob'});
+  }
 
-
+  
 
 }

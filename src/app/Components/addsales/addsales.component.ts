@@ -4,7 +4,6 @@ import { StoreService } from '../../shared/services/store.service';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { ProductsService } from '../../shared/services/products.service';
 import { AccountService } from '../../shared/services/account.service';
-// import { PurchasesService } from '../../shared/services/purchases.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
@@ -15,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
 import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
+import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
 @Component({
   selector: 'app-addsales',
   standalone: true,
@@ -56,6 +56,7 @@ selectedCheck:any;
     private _ProductsService:ProductsService,
     private _ProductBranchesService:ProductBranchesService,
     private _ClientService:ClientService,
+    private _ProductBranchStoresService:ProductBranchStoresService,
 
     private _AccountService:AccountService,
     private _SalesService:SalesService,
@@ -69,7 +70,7 @@ selectedCheck:any;
       payed_price:[null],
       vendor_id: ['', Validators.required],
       store_id: ['', Validators.required],
-      currency_id: ['', Validators.required],
+      // currency_id: ['', Validators.required],
       payment_type: ['cash'],
       check_id: [''],
       tax_type: 'included',
@@ -269,7 +270,7 @@ this.selectedCurrency = selectedValue;
 loadProducts(storeId:string){
   
 
-    this._ProductBranchesService.getProductBranchByStoreId(storeId).subscribe({
+    this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
           this.Products = response.data;
@@ -525,7 +526,7 @@ onAmountChange(index: number): void {
       item.patchValue({price:price.price});
     }
   })
-  if(item.get('product')?.value?.product.need_serial_number){
+  if(item.get('product')?.value?.product_branch.product.need_serial_number){
     if (typeof amount === 'number' && amount >= 0) {
       item.patchValue({neededSerialNumbers:amount - serialNumbers})
       
@@ -654,7 +655,7 @@ handleForm() {
           formData.append('delegate_id', this.saleForm.get('delegate_id')?.value || '');
         }
         formData.append('store_id', this.saleForm.get('store_id')?.value );
-        formData.append('currency_id', this.saleForm.get('currency_id')?.value || '');
+        // formData.append('currency_id', this.saleForm.get('currency_id')?.value || '');
         formData.append('invoice_date', this.saleForm.get('date')?.value);
         formData.append('delegate_id', this.saleForm.get('delegate_id')?.value || '');
        
@@ -686,6 +687,15 @@ handleForm() {
                     formData.append(`items[${index}][product_branch_id]`, itemValue.product_id );
                     formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
                     formData.append(`items[${index}][price]`, itemValue.price || '0');
+
+
+                    if(itemValue.overridePrice){
+                      formData.append(`items[${index}][has_overrided_price]`, '1');
+
+                    }else{
+                      formData.append(`items[${index}][has_overrided_price]`, '0');
+
+                    }
 
                     // if(itemValue.colors.length>0){
 
@@ -728,7 +738,7 @@ if(!error){
         if (response) {
             console.log(response);
             this.isLoading = false;
-            this._Router.navigate(['/dashboard/sales']);
+            this._Router.navigate(['/dashboard/sales/waiting']);
         }
     },
    
@@ -896,16 +906,17 @@ selectedClient:any | null= null;
     }
 
 
-    selectProduct(product:any){
+    selectProduct(productBranchStore:any){
       const itemsArray = this.saleForm.get('items') as FormArray;
       const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
     
-      itemGroup.patchValue({product: product});
-      itemGroup.patchValue({product_id: product.id});
-      itemGroup.patchValue({color: product.product_color});
+      itemGroup.patchValue({product: productBranchStore});
+      console.log('productBranchStore',productBranchStore);
+      itemGroup.patchValue({product_id: productBranchStore.product_branch.id});
+      itemGroup.patchValue({color: productBranchStore.product_branch.product_color});
 
       
-      product.product.prices.forEach((price:any)=>{
+      productBranchStore.product_branch.prices.forEach((price:any)=>{
         if(price.id == this.selectedClient.price_category.id){
           itemGroup.patchValue({priceRanges: price.prices});
           console.log('price ranges' , price.prices);
@@ -920,22 +931,22 @@ selectedClient:any | null= null;
 
 
       if(!itemGroup.get('price')?.value){
-        itemGroup.patchValue({price: product.product.default_price});
+        itemGroup.patchValue({price: productBranchStore.product_branch.default_price});
       }
 
       // itemGroup.patchValue({price: product});
 
 
-      this.getSerialNumbers(product.product.id ,this.selectedStore,this.productIndex );
+      this.getSerialNumbers(productBranchStore.product_branch.product.id ,this.selectedStore,this.productIndex );
 
-      if(product.colors){
+//       if(product.colors){
 
- if(product.colors.length>0){
+//  if(product.colors.length>0){
         
-  itemGroup.patchValue({colors: product.colors});
+//   itemGroup.patchValue({colors: product.colors});
 
-      }
-      }
+//       }
+//       }
     
 
       this.closeProductModel();

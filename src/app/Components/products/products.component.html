@@ -48,7 +48,7 @@
   <table class="table mt-3">
       <thead>
           <tr>
-              <th class="bg-light" scope="col">#</th>
+              <th class="bg-light" scope="col">ID</th>
               <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'PRODUCT_UNIT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
@@ -60,7 +60,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let product of filteredProducts; let i = index">
-          <th scope="row">{{ i + 1 }}</th>
+          <th scope="row">{{ product.id }}</th>
           <td>{{ product.name }}</td>
           <td>{{ product.product_unit?.name || 'N/A' }}</td>
           <td>{{ product.stock || 'N/A' }}</td>

@@ -48,7 +48,7 @@ export class ProductsComponent implements OnInit {
 
      closeModal(modalId: string) {
           const modalElement = document.getElementById(modalId);
-         this.productImportForm.patchValue({file:null});
+         this.productImportForm.patchValue({file:null});  
           if (modalElement) {
             const modal = Modal.getInstance(modalElement);
             modal?.hide();

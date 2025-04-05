@@ -50,4 +50,13 @@ export class CurrencyService {
   deleteCurrency(currencyId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/currencies/${currencyId}`, { headers: this.getHeadersWithToken()  });
   }
+
+  setCurrencyAsDefault(currencyId: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/currencies/set-as-default/${currencyId}`, { headers: this.getHeadersWithToken()  });
+  }
+  getDefultCurrency(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/currencies/get-default`, { headers: this.getHeadersWithToken()  });
+  }
+  
+  
 }

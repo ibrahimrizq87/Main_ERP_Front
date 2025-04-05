@@ -24,6 +24,23 @@ export class CurrencyComponent implements OnInit {
     this.loadCurrency(); 
   }
 
+  makeDefault(currencyId:string){
+    
+
+      this._CurrencyService.setCurrencyAsDefault(currencyId).subscribe({
+        next: (response) => {
+          if (response) {
+            this.loadCurrency();
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          alert('An error occurred while deleting the currency.');
+        }
+      });
+    
+  }
+
   loadCurrency(): void {
     this._CurrencyService.viewAllCurrency().subscribe({
       next: (response) => {

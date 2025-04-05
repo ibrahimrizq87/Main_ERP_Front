@@ -33,14 +33,14 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">ID</th>
                 <th class="bg-light" scope="col">{{ 'manageColor.color_name' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'manageColor.actions' | translate }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let color of colors; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ color.id }}</th>
                 <td>{{ color.color }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-color', color.id]">

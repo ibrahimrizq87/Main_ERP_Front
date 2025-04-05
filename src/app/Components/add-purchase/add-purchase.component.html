@@ -38,7 +38,7 @@
                     </div>
                   </div>
                   
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
                     <br>
                     <a (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
@@ -46,7 +46,7 @@
                     </a>
                     <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
 
-                  </div>
+                  </div> -->
 
 
                   <div class="form-group col-md-6">
@@ -62,9 +62,19 @@
                       {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </div>
                   </div>
+
+                  <div *ngIf="selectedVendor && selectedVendor.currency?.id != currencies.id" class="form-group col-md-6">
+                    <label class="form-label large-text">سعر عملة ال ({{selectedVendor.currency.name}})</label>
+                    <input formControlName="currency_price_value" type="number" class="form-control" (input)="currencyPrice()" />
+                </div>
+                
+                  <!-- <div *ngIf="selectedVendor && selectedVendor?.currency?.id != currencies.id " class="form-group col-md-2">
+                    <label class="form-label large-text"> سعر عملة ال ({{selectedVendor?.currency?.name}})</label>
+                    <input formControlName="currency_price_value" type="number" class="form-control" (input)="currencyPrice()" />
+
+                  </div> -->
   
-                  <!-- Currency -->
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
                     <select id="currency_id" formControlName="currency_id" class="form-control"
                     (change)="onCurrencyChange($event)"
@@ -75,7 +85,7 @@
                     <div class="invalid-feedback" *ngIf="!selectedCurrency  && isSubmited">
                       {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </div>
-                  </div>
+                  </div> -->
   
                   <!-- Notes -->
                   <div class="form-group col-md-12">
@@ -89,11 +99,11 @@
                       <div class="row">
                 
                         <!-- Product Selection -->
-                        <div class="col-md-4">
+                        <div class="col-md-2">
 
                           <label class="form-label">{{ 'PRODUCT' | translate }}</label>
                           <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
-                            {{ item.get('product')?.value?.name ? item.get('product')?.value.name : ('PRODUCT' | translate) }}
+                            {{ item.get('product')?.value?.name ? item.get('product')?.value.name  : ('PRODUCT' | translate) }}
                           </button>
                           <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
                         </div>
@@ -117,7 +127,7 @@
                 
                         <!-- Total Price -->
                         <div class="col-md-2">
-                          <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
+                          <label for="price">{{ 'PRICE' | translate }} <span *ngIf="selectedVendor && selectedVendor.currency?.id != currencies.id">({{selectedVendor.currency.name}})</span></label>
                           <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
                           [class.is-invalid]="item.get('price')?.invalid && isSubmited"
                           />
@@ -140,7 +150,7 @@
                               *ngFor="let color of item.get('colors')?.value"
                               [value]="color.id"
                             >
-                              {{ color.color }}
+                              {{ color.color.color }}
                             </option>
                           </select>
 
@@ -151,6 +161,27 @@
                         </div>
 
 
+                        <div class="col-md-2" *ngIf="item.get('type')?.value == 'branch'">
+                          <label for="price">{{ 'COLOR' | translate }}</label>
+                          <p>
+                            <!-- <strong>{{ 'COLOR' | translate }}: </strong> -->
+                            {{item.get('branch_data')?.value.color.color }}
+                          </p>
+
+                        </div>
+
+                        <div class="col-md-2" *ngIf="item.get('type')?.value == 'branch'">
+                          <label for="price">{{ 'DETERMINANTS' | translate }}</label>
+
+                          <span *ngFor="let determinant of item.get('branch_data')?.value.determinants; let i = index">
+                            <span class="badge bg-info text-dark me-1">
+                              {{ determinant.name }}: {{ determinant.value }}
+                            </span>
+                          </span>
+                        </div>
+
+
+
                         <div class="col-md-2">
                           <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
                           <p>
@@ -158,6 +189,39 @@
                             {{item.get('price')?.value * item.get('amount')?.value ? item.get('price')?.value * item.get('amount')?.value:0 }}
                           </p>
                         </div>
+
+
+
+                        <ng-container  *ngIf="item.get('determinants')?.value?.length">
+                          <div class="row"  formArrayName="determinants">
+
+                        <div class="col-md-2"   *ngFor="let determinant of getDeterminants(item).controls; let i = index" [formGroupName]="i">
+                          <label>{{determinant.get('name')?.value}}</label>
+                          <select
+                            id="selected_id"
+                            (change)="onColorChange($event, i)"
+                            class="form-control custom-select"
+                            formControlName="selected_id" 
+                          >
+                            <option
+                              *ngFor="let value of determinant.get('values')?.value"
+                              [value]="value.id"
+                            >
+                              {{ value.value }}
+                            </option>
+                          </select>
+
+                          <!-- <div class="text-danger" *ngIf="!item.get('color_id')?.value && isSubmited ">
+                            {{ 'color' | translate }} {{ 'IS_REQUIRED' | translate }}
+                          </div> -->
+                         
+                        </div>
+                      </div>
+
+                      </ng-container>
+
+
+                   
 
 
                         <div class="form-group col-md-12 mt-4"  *ngIf="item.get('neededSerialNumbers')?.value>0 || item.get('serialNumbers')?.value.length>0 ">
@@ -287,14 +351,14 @@
                       <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
   
                     </div>
-                    <div *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'" class="form-group col-md-6">
+                    <div *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'" class="form-group col-md-4">
                       <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
                       <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
 
                     </div>
 
 
-
+           
 
                     <div *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'check'" class="form-group col-md-6">
                       <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
@@ -413,22 +477,53 @@
         />
 
         <!-- Accounts Table -->
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>{{ 'ProductName' | translate }}</th>
-              <th>{{ 'BranchQuantity' | translate }}</th>
 
+
+
+        <table class="table table-striped table-hover table-bordered rounded">
+          <thead class="table-dark">
+            <tr>
+              <!-- <th>#</th> -->
+              <th>Product ID</th>
+              <th>Product Name</th>
+              <th>Stock</th>
+              <th>Color</th>
+              <th>determinants</th>
+        
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let product of filteredProducts; let i = index" (click)="selectProduct(product)" style="cursor: pointer;">
-              <td>{{product.name }}</td>
-              <td>{{product.stock }}</td>
-
-            </tr>
+            <ng-container *ngFor="let product of filteredProducts; let i = index">
+              <!-- Main Product Row -->
+              <tr class="table-primary" (click)="selectProduct(product.product , 'product' ,product.product.id )" style="cursor: pointer;">
+                <!-- <td rowspan="{{ product.branches.length + 1 }}">{{ i + 1 }}</td> -->
+                <td><strong>{{ product.product.id }}</strong></td>
+                <td>{{ product.product.name }}</td>
+                <td>{{ product.product.stock }}</td>
+                <td colspan="4">Main Product</td>
+              </tr>
+        
+              <!-- Branches -->
+              <tr *ngFor="let branch of product.branches" (click)="selectProduct(product.product ,'branch',branch.id ,branch )" style="cursor: pointer;">
+                <td>{{ branch.code }}</td>
+                <td>{{ product.product.name }}</td>
+                <td>{{ branch.stock }}</td>
+                <td *ngIf="branch.color">{{ branch.color.color }}</td>
+                <td>
+                  <span *ngFor="let determinant of branch.determinants; let i = index">
+                    <span class="badge bg-info text-dark me-1">
+                      {{ determinant.name }}: {{ determinant.value }}
+                    </span>
+                  </span>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
+
+        
+
+     
       </div>
     </div>
   </div>

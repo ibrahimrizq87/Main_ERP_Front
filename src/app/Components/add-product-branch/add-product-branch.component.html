@@ -29,13 +29,12 @@
 
                 </div>
             
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label class="form-label large-text">{{ 'SELECT_STORE' | translate }}</label>
                   <select  class="form-control" formControlName="store_id"
                   [class.is-invalid]="!selectedStore && isSubmited"
                   (change)="onStoreChange($event)"
                   >
-                    <!-- <option>{{ 'SELECT_PARENT_BRANCH' | translate }}</option> -->
                     <option *ngFor="let value of stores" [value]="value.id">
                       {{ value.name }}
                     </option>
@@ -48,7 +47,7 @@
                     </p>
                     
                   </div>
-                </div>
+                </div> -->
 
 
                 <div class="form-group col-md-6">

@@ -67,7 +67,7 @@ export class AddProductBranchComponent implements OnInit {
     private _ProductBranchesService:ProductBranchesService
   ) {
     this.branchForm = new FormGroup({
-      store_id: new FormControl(null, [Validators.required]),
+      // store_id: new FormControl(null, [Validators.required]),
       product_id: new FormControl(null, [Validators.required]),
       color_id: new FormControl(null),
       default_price: new FormControl(null, [Validators.required]),
@@ -270,7 +270,7 @@ loadDeterminants(productId:string): void {
 
   
       const formData = new FormData();
-      formData.append('store_id', this.branchForm.get('store_id')?.value);
+      // formData.append('store_id', this.branchForm.get('store_id')?.value);
       formData.append('product_id', this.branchForm.get('product_id')?.value);
       if(this.selectedColor){
         formData.append('product_color_id', this.branchForm.get('color_id')?.value);

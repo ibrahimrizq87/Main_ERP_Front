@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- Currency -->
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
                   <select id="currency_id" formControlName="currency_id" class="form-control"
                   (change)="onCurrencyChange($event)"
@@ -81,7 +81,7 @@
                   <div class="invalid-feedback" *ngIf="!selectedCurrency  && isSubmited">
                     {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                   </div>
-                </div>
+                </div> -->
 
                 <!-- Notes -->
                 <div class="form-group col-md-12">
@@ -103,7 +103,7 @@
 
                         <label class="form-label">{{ 'PRODUCT' | translate }}</label>
                         <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
-                          {{ item.get('product')?.value?.product.name ? item.get('product')?.value.product.name : ('PRODUCT' | translate) }}
+                          {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name : ('PRODUCT' | translate) }}
                         </button>
                         <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
                       </div>
@@ -162,7 +162,7 @@
                         <label>color</label>
 
                         <img [src]="item.get('color')?.value.image" alt="" height="30" width="30"> 
-                        {{ item.get('color')?.value.color }}
+                        {{ item.get('color')?.value.color.color }}
 
                  
                        
@@ -396,34 +396,41 @@
         />
 
         <!-- Accounts Table -->
-        <table class="table table-striped">
-          <thead>
+
+        <table class="table table-striped table-hover table-bordered rounded">
+          <thead class="table-dark">
             <tr>
-             
-                <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'COLOR' | translate }}</th>
+              <!-- <th>#</th> -->
+              <th>Product ID</th>
+              <th>Product Name</th>
+              <th>Stock</th>
+              <th>Color</th>
+              <th>determinants</th>
+        
             </tr>
-
-            </thead>
+          </thead>
           <tbody>
-            <tr *ngFor="let branch of filteredProducts; let i = index" (click)="selectProduct(branch)" style="cursor: pointer;">
-              <!-- <th scope="row">{{ i + 1 }}</th> -->
-              <td>
-                  <img [src]="branch.product.cover_image" alt="" height="50" width="50"> 
-                  {{ branch.product.name }}
-              </td>
-              <td>{{ branch.store.name }}</td>
-              <td>{{ branch.stock }}</td>
-              <td>
-                  <img [src]="branch.product_color.image" alt="" height="30" width="30"> 
-                  {{ branch.product_color.color }}
-              </td>
+              <!-- Main Product Row -->
+          
+              <!-- Branches -->
+              <tr *ngFor="let branch of Products" (click)="selectProduct(branch)" style="cursor: pointer;">
+                <td>{{ branch.product_branch.code }}</td>
+                <td>{{ branch.product_branch.product.name }}</td>
+                <td>{{ branch.product_branch.stock }}</td>
+                <td *ngIf="branch.product_branch.product_color">{{ branch.product_branch.product_color.color.color}}</td>
+                <td *ngIf="!branch.product_branch.product_color"> -- </td>
 
-            </tr>
+                <td>
+                  <span *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
+                    <span class="badge bg-info text-dark me-1">
+                      {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
+                    </span>
+                  </span>
+                </td>
+              </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   </div>

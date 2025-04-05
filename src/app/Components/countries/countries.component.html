@@ -25,14 +25,14 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">ID</th>
                 <th class="bg-light" scope="col">{{ 'manageCountry.country_name' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'manageCountry.actions' | translate }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let country of filteredCountries; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ country.id }}</th>
                 <td>{{ country.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCountry', country.id]">

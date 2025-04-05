@@ -67,7 +67,7 @@
                     <tr>
                         <th class="bg-light" scope="col">#</th>
                         <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
-                        <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
+                        <!-- <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th> -->
                         <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
                         <th class="bg-light" scope="col">{{ 'COLOR' | translate }}</th>
                     </tr>
@@ -79,7 +79,7 @@
                             <img [src]="branch.product.cover_image" alt="" height="50" width="50"> 
                             {{ branch.product.name }}
                         </td>
-                        <td>{{ branch.store.name }}</td>
+                        <!-- <td>{{ branch.store.name }}</td> -->
                         <td>{{ branch.stock }}</td>
                         <td>
                             <img [src]="branch.product_color.image" alt="" height="30" width="30"> 

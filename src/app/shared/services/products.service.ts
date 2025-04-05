@@ -89,6 +89,13 @@ export class ProductsService {
   }
   
 
+  getProductsForOperations(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/products/get-products-for-operations`,{ headers: this.getHeadersWithToken() });
+  }
+
+
+  
+
   getProductsByStore(storeID:string): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

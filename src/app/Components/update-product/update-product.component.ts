@@ -181,7 +181,7 @@ mainColors:any;
       this.productForm = this.fb.group({
         name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
         product_name_en: this.fb.control(null, [Validators.required,Validators.maxLength(255)]),
-        default_price :[null,[Validators.required]],
+        // default_price :[null,[Validators.required]],
         product_category_id:[null,[Validators.required]],
         need_serial: this.fb.control(false), 
         product_description:[null],
@@ -362,7 +362,7 @@ loadDeterminants(): void {
             this.productForm.patchValue({
               name_ar: categoryData.name_lang.ar,
               product_name_en: categoryData.name_lang.en,
-              default_price :categoryData.default_price,
+              // default_price :categoryData.default_price,
               product_category_id:categoryData.productCategory.id,
               unit_id: categoryData.product_unit.id,
               need_serial:categoryData.need_serial_number,
@@ -525,7 +525,7 @@ loadDeterminants(): void {
           formData.append('need_serial_number', '1');
         } 
 
-        formData.append('default_price', this.productForm.get('default_price')?.value);
+        // formData.append('default_price', this.productForm.get('default_price')?.value);
         if(this.productForm.get('image')?.value){
           formData.append('cover_image', this.productForm.get('image')?.value);
 
@@ -617,6 +617,8 @@ loadDeterminants(): void {
           });
         }
        
+      }else{
+        console.log('invalid dataaaa')
       }
     }
   }
