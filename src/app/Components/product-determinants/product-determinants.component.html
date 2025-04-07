@@ -26,18 +26,76 @@
         </thead>
         <tbody>
             <!-- Loop through the Groups array to display each group -->
-            <tr *ngFor="let determinant of filteredDeterminants; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ determinant.name }}</td>
-                <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>
-
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
-                    </a>
-
-                </td>
-            </tr>
+            <tr *ngFor="let determinant of filteredDeterminants; let i = index" 
+            (click)="openModal(determinant)" 
+            style="cursor: pointer;">
+            
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ determinant.name }}</td>
+        
+            <!-- Prevent click from propagating to row when clicking inside action buttons -->
+            <td class="d-flex justify-content-center gap-3 align-items-center" (click)="$event.stopPropagation()">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
+                    <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+                </a>
+                <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>
+             
+            </td>
+        </tr>
+        
         </tbody>
     </table>
+    <!-- Modal -->
+<!-- Improved Modal -->
+<div class="modal fade" id="determinantModal" tabindex="-1" aria-labelledby="determinantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Large centered modal -->
+      <div class="modal-content shadow-lg border-0 rounded-4">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title" id="determinantModalLabel">
+            <i class="fa-solid fa-circle-info me-2"></i>Determinant Details
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4 px-5" *ngIf="selectedDeterminant">
+          <div class="mb-3">
+            <h6 class="fw-bold">ID:</h6>
+            <p class="text-muted">{{ selectedDeterminant.id }}</p>
+          </div>
+          <div class="mb-3">
+            <h6 class="fw-bold">Name:</h6>
+            <p class="text-muted">{{ selectedDeterminant.name }}</p>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-3">Values:</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col">Value ID</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let val of selectedDeterminant.values; let i = index">
+                    <td class="text-center">{{ i + 1 }}</td>
+                    <td>{{ val.id }}</td>
+                    <td>{{ val.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+        <div class="modal-footer bg-light rounded-bottom-4">
+          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+            <i class="fa-solid fa-xmark me-1"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
 </div>
