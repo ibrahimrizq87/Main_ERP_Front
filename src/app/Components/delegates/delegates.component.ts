@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormSubmittedEvent, FormsModule } from '@angular/forms';
 import { DelegateService } from '../../shared/services/delegate.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-delegates',
   standalone: true,
@@ -20,7 +21,7 @@ export class DelegatesComponent {
   filteredCurrencies: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _DelegateService: DelegateService, private router: Router) {}
+  constructor(private _DelegateService: DelegateService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadDelegates(); 
@@ -54,11 +55,13 @@ export class DelegatesComponent {
       this._DelegateService.deleteDelegate(currency_id).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف العميل بنجاح');
             // this.router.navigate(['/dashboard/currency']);
             this.loadDelegates();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف العميل');
           console.error(err);
           alert('An error occurred while deleting the currency.');
         }

@@ -11,6 +11,7 @@ import { ProductUnitsService } from '../../shared/services/product_units.service
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 import { ColorService } from '../../shared/services/colors.service';
 import { DeterminantService } from '../../shared/services/determinants.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product',
@@ -145,7 +146,9 @@ alert('لقد تم اختيار هذا المحمدد من قبل')
     private _DeterminantService: DeterminantService,
     private _PriceService: PriceService,
     private _ProductUnitsService:ProductUnitsService,
-    private _ProductCategoriesService:ProductCategoriesService
+    private _ProductCategoriesService:ProductCategoriesService,
+    private toastr: ToastrService,
+
   ) {
     this.productForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
@@ -442,10 +445,12 @@ alert('لقد تم اختيار هذا المحمدد من قبل')
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه المنتج بنجاح');
             this.router.navigate(['/dashboard/products']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المنتج');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CountryService } from '../../shared/services/country.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-city',
   standalone: true,
@@ -18,7 +19,7 @@ export class AddCityComponent {
   isLoading: boolean = false;
 countries :any;
 selectedCountry:any;
-  constructor(private _CityService:CityService ,private _CountryService:CountryService, private _Router: Router,private translate: TranslateService) {
+  constructor(private _CityService:CityService ,private _CountryService:CountryService, private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   }
 
@@ -66,14 +67,13 @@ selectedCountry:any;
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المدينه بنجاح');
             this.isLoading = false;
-
-
-          
             this._Router.navigate(['/dashboard/city']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المدينه');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

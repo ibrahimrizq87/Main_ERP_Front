@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { CommonModule } from '@angular/common';
 import { GroupService } from '../../shared/services/group.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-group',
@@ -19,7 +20,9 @@ export class AddGroupComponent {
   isLoading: boolean = false;
   groups:any;
   
-  constructor(private _GroupService:GroupService , private _Router: Router) {}
+  constructor(private _GroupService:GroupService , private _Router: Router,
+    private toastr: ToastrService,
+  ) {}
 
   groupForm: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
@@ -54,13 +57,15 @@ export class AddGroupComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المجموعه بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/group']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المجموعه');
           this.isLoading = false;
-           this.msgError = err.error.error;
+          this.msgError = err.error.error;
           console.log(err);
         }
       });

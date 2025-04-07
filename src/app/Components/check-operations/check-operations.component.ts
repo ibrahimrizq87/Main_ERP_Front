@@ -9,6 +9,7 @@ import { CheckService } from '../../shared/services/check.service';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-check-operations',
@@ -54,7 +55,9 @@ operations = [
     , private router: Router, private fb: FormBuilder
     , private _GroupService: GroupService,
   private _CheckService:CheckService,
-private _CurrencyService:CurrencyService) {
+private _CurrencyService:CurrencyService,
+    private toastr: ToastrService
+) {
     this.checkOerationForm = this.fb.group({
       type: this.fb.control("", [Validators.required]),
       check: this.fb.control(""),
@@ -129,6 +132,7 @@ console.log(this.selectedOperation);
 
               const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
               if (existingItem) {
+                this.toastr.error('This check has already been added. can not do two oprations on one check');
                 alert('This check has already been added. can not do two oprations on one check');
               } else {
 
@@ -155,6 +159,7 @@ console.log(this.selectedOperation);
           
       
       }else{
+        this.toastr.error('you need to select an check');
           alert('you need to select an check')
         }
 
@@ -170,6 +175,7 @@ console.log(this.selectedOperation);
 
           const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
           if (existingItem) {
+            this.toastr.error('This check has already been added. can not do two oprations on one check');
             alert('This check has already been added. can not do two oprations on one check');
           } else {
           this.entryItems.push({
@@ -186,6 +192,7 @@ console.log(this.selectedOperation);
           this.checkOerationForm.get('requiredAccount')?.setValue('');
           this.checkOerationForm.get('check')?.setValue('');
         }}else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an account')
         }
 
@@ -205,6 +212,7 @@ console.log(this.selectedOperation);
 
               const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
               if (existingItem) {
+                this.toastr.error('This check has already been added. can not do two oprations on one check');
                 alert('This check has already been added. can not do two oprations on one check');
               } else {
 
@@ -231,6 +239,7 @@ console.log(this.selectedOperation);
           
       
       }else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an check')
         }
         // Case for 'تحقيق الشيكات الصادرة'
@@ -242,6 +251,7 @@ console.log(this.selectedOperation);
 
         const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
         if (existingItem) {
+          this.toastr.error('This check has already been added. can not do two oprations on one check');
           alert('This check has already been added. can not do two oprations on one check');
         } else {
         this.entryItems.push({
@@ -258,6 +268,7 @@ console.log(this.selectedOperation);
         this.checkOerationForm.get('requiredAccount')?.setValue('');
         this.checkOerationForm.get('check')?.setValue('');
       }}else{
+        this.toastr.error('you need to select an check');
         alert('you need to select an account')
       }
 
@@ -269,6 +280,7 @@ console.log(this.selectedOperation);
 
           const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
           if (existingItem) {
+            this.toastr.error('This check has already been added. can not do two oprations on one check');
             alert('This check has already been added. can not do two oprations on one check');
           } else {
           this.entryItems.push({
@@ -285,6 +297,7 @@ console.log(this.selectedOperation);
           this.checkOerationForm.get('requiredAccount')?.setValue('');
           this.checkOerationForm.get('check')?.setValue('');
         }}else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an account')
         }
         // Case for 'صرف الشيكات الصادرة نقدا'
@@ -296,6 +309,7 @@ console.log(this.selectedOperation);
 
           const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
           if (existingItem) {
+            this.toastr.error('This check has already been added. can not do two oprations on one check');
             alert('This check has already been added. can not do two oprations on one check');
           } else {
           this.entryItems.push({
@@ -312,6 +326,7 @@ console.log(this.selectedOperation);
           this.checkOerationForm.get('requiredAccount')?.setValue('');
           this.checkOerationForm.get('check')?.setValue('');
         }}else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an account')
         }
         // Case for 'ارجاع الشيكات الواردة الى الصندوق'
@@ -324,6 +339,7 @@ console.log(this.selectedOperation);
 
         const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
         if (existingItem) {
+          this.toastr.error('This check has already been added. can not do two oprations on one check');
           alert('This check has already been added. can not do two oprations on one check');
         } else {
         this.entryItems.push({
@@ -340,6 +356,7 @@ console.log(this.selectedOperation);
         // this.checkOerationForm.get('requiredAccount')?.setValue('');
         this.checkOerationForm.get('check')?.setValue('');
       }}else{
+        this.toastr.error('you need to select an check');
         alert('you need to select an account')
       }
         // Case for 'ارجاع الشيكات الواردة الى الزمم'
@@ -357,6 +374,7 @@ console.log(this.selectedOperation);
 
         const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
         if (existingItem) {
+          this.toastr.error('This check has already been added. can not do two oprations on one check');
           alert('This check has already been added. can not do two oprations on one check');
         } else {
         this.entryItems.push({
@@ -373,6 +391,7 @@ console.log(this.selectedOperation);
         this.checkOerationForm.get('requiredAccount')?.setValue('');
         this.checkOerationForm.get('check')?.setValue('');
       }}else{
+        this.toastr.error('you need to select an check');
         alert('you need to select an account')
       }
         // Case for 'سحب الشيكات الواردة الى الصندوق'
@@ -384,6 +403,7 @@ console.log(this.selectedOperation);
 
           const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
           if (existingItem) {
+            this.toastr.error('This check has already been added. can not do two oprations on one check');
             alert('This check has already been added. can not do two oprations on one check');
           } else {
           this.entryItems.push({
@@ -400,6 +420,7 @@ console.log(this.selectedOperation);
           this.checkOerationForm.get('requiredAccount')?.setValue('');
           this.checkOerationForm.get('check')?.setValue('');
         }}else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an account')
         }
         // Case for 'نقل الشيكات الواردة'
@@ -411,6 +432,7 @@ console.log(this.selectedOperation);
 
           const existingItem = this.entryItems.find(item => item.check.id === this.selectedCheck.id);
           if (existingItem) {
+            this.toastr.error('This check has already been added. can not do two oprations on one check');
             alert('This check has already been added. can not do two oprations on one check');
           } else {
           this.entryItems.push({
@@ -427,6 +449,7 @@ console.log(this.selectedOperation);
           // this.checkOerationForm.get('requiredAccount')?.setValue('');
           this.checkOerationForm.get('check')?.setValue('');
         }}else{
+          this.toastr.error('you need to select an check');
           alert('you need to select an account')
         }
         // Case for 'ألغاء الشيكات الصادرة'
@@ -692,10 +715,12 @@ this.checks = response.data;
       next: (response) => {
         this.isLoading = false;
         if (response) {
+          this.toastr.success('تمت العمليه بنجاح');
           this.router.navigate(['/dashboard/check_list/waiting']);
         }
       },
       error: (err: HttpErrorResponse) => {
+        this.toastr.error('حدث خطا اثناء العمليه');
         this.isLoading = false;
         console.log(err);
       }

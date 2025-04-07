@@ -5,6 +5,7 @@ import { BankAccountService } from '../../shared/services/bank_account.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bank-accounts',
@@ -17,7 +18,7 @@ export class BankAccountsComponent implements OnInit {
 
   bankAccounts: any[] = []; 
   searchText: string = '';
-  constructor(private _BankAccountService: BankAccountService, private router: Router) {}
+  constructor(private _BankAccountService: BankAccountService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadBankBranchs(); 
@@ -41,11 +42,13 @@ export class BankAccountsComponent implements OnInit {
       this._BankAccountService.deleteBankAccount(bankAccountId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الحساب البنكي بنجاح');
             this.router.navigate(['/dashboard/bankAccounts']);
             this.loadBankBranchs();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الحساب البنكي');
           console.error(err);
           alert('An error occurred while deleting the Bank Account.');
         }

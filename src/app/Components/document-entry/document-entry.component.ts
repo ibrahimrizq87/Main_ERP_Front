@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { EntryDocumentService } from '../../shared/services/entry-documnet.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-document-entry',
@@ -17,7 +18,7 @@ export class DocumentEntryComponent implements OnInit {
   status ='waiting';
 
   constructor(private _EntryDocumentService: EntryDocumentService , private router: Router , 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,private toastr:ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -72,10 +73,12 @@ export class DocumentEntryComponent implements OnInit {
       this._EntryDocumentService.deleteEntryDocument(documentId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المستند بنجاح');
             this.loadDocumentEntry(this.status);
           }
         },
         error: (err:HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء حذف المستند');
           console.log(err.error);
           alert('An error occurred while deleting the Document.');
           

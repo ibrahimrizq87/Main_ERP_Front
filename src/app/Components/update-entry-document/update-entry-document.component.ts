@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-entry-document',
   standalone: true,
@@ -70,7 +71,8 @@ export class UpdateEntryDocumentComponent {
         private _Router: Router,
         private cdr: ChangeDetectorRef,
             private route: ActivatedRoute,
-    private _EntryDocument :EntryDocumentService
+    private _EntryDocument :EntryDocumentService,
+    private toastr: ToastrService
   ) {
     this.entryForm = this.fb.group({
       manual_reference: ['', [Validators.maxLength(255)]],
@@ -304,12 +306,14 @@ export class UpdateEntryDocumentComponent {
 
       this._EntryDocument.updateEntryDocument(formData , this.entryDocument.id.toString()).subscribe({
         next: (response) => {
+          this.toastr.success('تم تعديل القيد بنجاح');
           this.isLoading = false;
           if (response) {
             this._Router.navigate(['/dashboard/documentEntry/'+this.entryDocument.status]); 
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل القيد');
           this.isLoading = false;
           console.log(err);
         }

@@ -10,6 +10,7 @@ import { Modal } from 'bootstrap';
 import { Product ,ProductColor ,ProductBranch} from '../../models/product.model';
 import { ProductBranchMovesService } from '../../shared/services/product_branch_moves.service';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product-move',
@@ -55,7 +56,7 @@ export class AddProductMoveComponent {
     private _StoreService: StoreService,
     private _ProductBranchMovesService:ProductBranchMovesService,
     private _ProductBranchesService:ProductBranchesService,
-
+    private toastr:ToastrService
 
   ) {
     this.branchForm = new FormGroup({
@@ -239,11 +240,13 @@ return;
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الحركه بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/productBranch']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الحركه');
           this.isLoading = false;
           this.msgError = err.error.error;
           console.log(err.error.error);

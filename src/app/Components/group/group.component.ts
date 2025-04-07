@@ -5,6 +5,7 @@ import { GroupService } from '../../shared/services/group.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class GroupComponent implements OnInit {
   Groups: any[] = [];
   filteredGroups: any[] = []; // For displaying filtered groups
   searchTerm: string = ''; 
-  constructor(private _GroupService: GroupService, private router: Router) {}
+  constructor(private _GroupService: GroupService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadGroups();
@@ -89,13 +90,16 @@ export class GroupComponent implements OnInit {
           if (response) {
             this.router.navigate(['/dashboard/group']);
             this.loadGroups();
+            this.toastr.success('تم حذف المجموعة بنجاح');
           }
         },
         error: (err:HttpErrorResponse) => {
           if (err.status == 403){
             alert('can not delete this group it has some groups in it');
+            this.toastr.error('لا يمكن حذف هذه المجموعة لأنها تحتوي على مجموعات فرعية');
           }else{
             alert('An error occurred while deleting the group.');
+            this.toastr.error('حدث خطا اثناء حذف المجموعة');
           }
           
           // console.log('Status Code:', );

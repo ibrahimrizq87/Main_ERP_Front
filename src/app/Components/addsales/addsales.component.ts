@@ -15,6 +15,7 @@ import { ProductBranchesService } from '../../shared/services/product_branches.s
 import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
 import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-addsales',
   standalone: true,
@@ -62,7 +63,8 @@ selectedCheck:any;
     private _SalesService:SalesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
-    private _CheckService: CheckService
+    private _CheckService: CheckService,
+    private toastr:ToastrService,
 
   ) {
     this.saleForm = this.fb.group({
@@ -736,6 +738,7 @@ if(!error){
   this._SalesService.addSale(formData).subscribe({
     next: (response) => {
         if (response) {
+            this.toastr.success('تم اضافه الفاتوره بنجاح');
             console.log(response);
             this.isLoading = false;
             this._Router.navigate(['/dashboard/sales/waiting']);
@@ -745,7 +748,7 @@ if(!error){
     error: (err: HttpErrorResponse) => {
       this.isLoading = false;
       this.msgError = [];
-  
+      this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
       if (err.error && err.error.errors) {
          
           for (const key in err.error.errors) {

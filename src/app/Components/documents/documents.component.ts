@@ -7,6 +7,7 @@ import { AccountService } from '../../shared/services/account.service';
 import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-documents',
@@ -37,7 +38,7 @@ export class DocumentsComponent {
     , private fb: FormBuilder,
     private _AccountService: AccountService,
     private _PaymentDocumentService: PaymentDocumentService
-    , private router: Router
+    , private router: Router,private toastr:ToastrService
   ) {
 
    
@@ -72,11 +73,13 @@ this.loadAllDocuments();
     this._PaymentDocumentService.deleteDocument(id  ).subscribe({
       next: (response) => {
         if (response) {
+          this.toastr.success('تم حذف المستند بنجاح');
           this.loadAllDocuments()
 
         }
       },
       error: (err) => {
+        this.toastr.error('حدث خطا اثناء حذف المستند');
         console.error(err);
       }
     });

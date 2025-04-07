@@ -6,6 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 // import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent {
   isLoading: boolean = false;
 
   constructor(private _UserService:UserService ,
-    private _Router: Router) {}
+    private _Router: Router,private toastr:ToastrService) {}
 
   loginForm: FormGroup = new FormGroup({
     user_name: new FormControl(null, [Validators.required]),
@@ -42,6 +43,7 @@ export class LoginComponent {
 
           
             localStorage.setItem('Token', response.data.token);
+            this.toastr.success('تم تسجيل الدخول بنجاح');
             alert(response.message);
 
             // Call saveUserData() to decode and store the access_token
@@ -52,6 +54,7 @@ export class LoginComponent {
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تسجيل الدخول');
           this.isLoading = false;
           if(err.status == 422){
             this.msgError = err.error.errors;

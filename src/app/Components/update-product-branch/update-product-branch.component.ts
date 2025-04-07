@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../shared/services/products.service';
-import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StoreService } from '../../shared/services/store.service';
@@ -10,12 +9,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
 import { DeterminantService } from '../../shared/services/determinants.service';
 import { PriceService } from '../../shared/services/price.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
   selector: 'app-update-product-branch',
   standalone: true,
-  imports: [CommonModule , ReactiveFormsModule, RouterModule , RouterLinkActive,TranslateModule],
+  imports: [CommonModule , ReactiveFormsModule, RouterModule ,TranslateModule],
   templateUrl: './update-product-branch.component.html',
   styleUrl: './update-product-branch.component.css'
 })
@@ -67,7 +67,8 @@ currentProductBranch:any;
       private _Router: Router,
       private _DeterminantService: DeterminantService,
       private _StoreService: StoreService,
-      private _ProductBranchesService:ProductBranchesService
+      private _ProductBranchesService:ProductBranchesService,
+      private toastr: ToastrService,
     ) {
       this.branchForm = new FormGroup({
         // store_id: new FormControl(null, [Validators.required]),
@@ -425,11 +426,13 @@ currentProductBranch:any;
           next: (response) => {
             console.log(response);
             if (response) {
+              this.toastr.success('تم تعديل المنتج بنجاح');
               this.isLoading = false;
               this._Router.navigate(['/dashboard/productBranch']);
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل المنتج');
             this.isLoading = false;
             this.msgError = err.error.error;
             console.log(err.error.error);

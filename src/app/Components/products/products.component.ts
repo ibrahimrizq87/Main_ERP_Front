@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule ,FormGroup , ReactiveFormsModule,FormControl ,Validators} from '@angular/forms';
 import { Modal } from 'bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-products',
@@ -28,7 +29,9 @@ export class ProductsComponent implements OnInit {
       file: new FormControl(null, [Validators.required]),
      
     });
-  constructor(private _ProductsService: ProductsService, private router: Router) {}
+  constructor(private _ProductsService: ProductsService, private router: Router,
+    private toastr:ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts(); 
@@ -126,11 +129,13 @@ this.isSubmitted =true;
       this._ProductsService.deleteProduct(productId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المنتج بنجاح');
             this.router.navigate(['/dashboard/products']);
             this.loadProducts();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المنتج');
           console.error(err);
           alert('An error occurred while deleting the Product.');
         }

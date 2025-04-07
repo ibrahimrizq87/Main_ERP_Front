@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { CheckService } from '../../shared/services/check.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-purchase',
@@ -53,7 +54,8 @@ export class AddPurchaseComponent implements OnInit {
     private _PurchasesService: PurchasesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
-    private _CheckService: CheckService
+    private _CheckService: CheckService,
+    private toastr: ToastrService
 
   ) {
     this.purchasesBillForm = this.fb.group({
@@ -680,6 +682,7 @@ export class AddPurchaseComponent implements OnInit {
         this._PurchasesService.addPurchase(formData).subscribe({
           next: (response) => {
             if (response) {
+              this.toastr.success('تم اضافه الفاتوره بنجاح');
               console.log(response);
               this.isLoading = false;
               this._Router.navigate(['/dashboard/purchases/waiting']);
@@ -687,6 +690,7 @@ export class AddPurchaseComponent implements OnInit {
           },
 
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
             this.isLoading = false;
             this.msgError = [];
 

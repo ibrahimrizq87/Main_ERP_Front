@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-order',
@@ -40,7 +41,8 @@ stores:any[]=[];
     private _AccountService:AccountService,
     private _PurchasesService:PurchasesService,
     private _Router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService,
   ) {
     this.orderForm = this.fb.group({
       status: 'pending',
@@ -408,6 +410,7 @@ handleForm() {
         this._PurchasesService.addOrder(formData).subscribe({
             next: (response) => {
                 if (response) {
+                    this.toastr.success('تم اضافه الطلب بنجاح');
                     console.log(response);
                     this.isLoading = false;
                     this._Router.navigate(['/dashboard/orders']);
@@ -415,6 +418,7 @@ handleForm() {
             },
            
             error: (err: HttpErrorResponse) => {
+              this.toastr.error('حدث خطا اثناء اضافه الطلب');
               this.isLoading = false;
               this.msgError = [];
           

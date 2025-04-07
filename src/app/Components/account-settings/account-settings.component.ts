@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccountSettingService } from '../../shared/services/account_settings.service';
 import { AccountService } from '../../shared/services/account.service';
 import { Modal } from 'bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-account-settings',
@@ -47,7 +48,7 @@ export class AccountSettingsComponent {
 
   constructor(private fb: FormBuilder,
      private _AccountSettingService: AccountSettingService,
-     private _AccountService: AccountService) {
+     private _AccountService: AccountService,private toastr: ToastrService) {
     this.mainAccountForm = this.fb.group({
       id: [null],
       title: ['', Validators.required],
@@ -241,9 +242,12 @@ alert('you can not add more than 6 settings');
   deleteSetting(id: number) {
     this._AccountSettingService.deleteMainNav(id).subscribe({
       next: (response) => {
+        this.toastr.success('تم حذف الاعدادات بنجاح');
         this.loadSettings();
+
       },
       error: (err) => {
+        this.toastr.error('حدث خطا اثناء حذف الاعدادات');
         console.error(err);
         this.isLoading = false;
       }

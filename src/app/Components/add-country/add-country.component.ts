@@ -6,6 +6,7 @@ import { CountryService } from '../../shared/services/country.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-country',
   standalone: true,
@@ -17,7 +18,7 @@ export class AddCountryComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _CountryService:CountryService , private _Router: Router,private translate: TranslateService) {
+  constructor(private _CountryService:CountryService , private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   }
 
@@ -42,14 +43,13 @@ export class AddCountryComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الدوله بنجاح');
             this.isLoading = false;
-
-
-          
             this._Router.navigate(['/dashboard/countries']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الدوله');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

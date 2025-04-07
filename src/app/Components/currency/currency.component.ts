@@ -4,6 +4,7 @@ import { CurrencyService } from '../../shared/services/currency.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormSubmittedEvent, FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-currency',
@@ -18,7 +19,7 @@ export class CurrencyComponent implements OnInit {
   filteredCurrencies: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _CurrencyService: CurrencyService, private router: Router) {}
+  constructor(private _CurrencyService: CurrencyService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadCurrency(); 
@@ -69,11 +70,13 @@ export class CurrencyComponent implements OnInit {
       this._CurrencyService.deleteCurrency(currency_id).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف العملة بنجاح');
             this.router.navigate(['/dashboard/currency']);
             this.loadCurrency();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف العملة');
           console.error(err);
           alert('An error occurred while deleting the currency.');
         }

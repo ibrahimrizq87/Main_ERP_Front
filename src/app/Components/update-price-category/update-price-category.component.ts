@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-price-category',
@@ -21,7 +22,8 @@ export class UpdatePriceCategoryComponent implements OnInit {
     constructor(
     private _PriceService: PriceService,
     private _Router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
    this.categoryForm= new FormGroup({
     name: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
@@ -68,11 +70,13 @@ export class UpdatePriceCategoryComponent implements OnInit {
       next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل الفئة بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/priceCategory']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل الفئة');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

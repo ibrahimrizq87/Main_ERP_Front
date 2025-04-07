@@ -7,6 +7,7 @@ import { CountryService } from '../../shared/services/country.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-countries',
@@ -24,7 +25,7 @@ export class CountriesComponent  {
   filteredCountries: any[] = []; // Filtered list to display
   searchQuery: string = ''; 
 
-  constructor(private _CountryService: CountryService, private router: Router) {}
+  constructor(private _CountryService: CountryService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadCities(); 
@@ -56,11 +57,13 @@ export class CountriesComponent  {
       this._CountryService.deleteCountry(cityId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المدينة بنجاح');
             // this.router.navigate(['/dashboard/city']);
             this.loadCities();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المدينة');
           console.error(err);
           alert('An error occurred while deleting the City.');
         }

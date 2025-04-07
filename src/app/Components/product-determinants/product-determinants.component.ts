@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { DeterminantService } from '../../shared/services/determinants.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-determinants',
@@ -18,7 +19,7 @@ export class ProductDeterminantsComponent {
   searchTerm: string = '';
   selectedDeterminant: any = null;
 
-  constructor(private _DeterminantService: DeterminantService, private router: Router) {}
+  constructor(private _DeterminantService: DeterminantService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadDeterminants();
@@ -46,11 +47,13 @@ export class ProductDeterminantsComponent {
           if (response) {
             this.router.navigate(['/dashboard/productDeterminants']);
             this.loadDeterminants();
+            this.toastr.success('تم حذف المحدد بنجاح');
           }
         },
         error: (err) => {
           console.error(err);
           alert('An error occurred while deleting the determinant.');
+          this.toastr.error('حدث خطا اثناء حذف المحدد');
         }
       });
     }

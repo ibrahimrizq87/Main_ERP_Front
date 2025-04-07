@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PurchasesService } from '../../shared/services/purchases.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class PurchasesComponent implements OnInit {
 
 
   constructor(private _PurchasesService: PurchasesService, private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr:ToastrService
     
   ) {}
 
@@ -93,11 +95,13 @@ export class PurchasesComponent implements OnInit {
       this._PurchasesService.deletePurchase(purchaseId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الفاتورة بنجاح');
             // this.router.navigate(['/dashboard/purchases']);
             this.loadPurchases(this.status);
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الفاتورة');
           console.error(err);
           alert('An error occurred while deleting the Purchase.');
         }

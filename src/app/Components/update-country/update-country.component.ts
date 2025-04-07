@@ -7,6 +7,7 @@ import { CountryService } from '../../shared/services/country.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-country',
   standalone: true,
@@ -19,7 +20,8 @@ export class UpdateCountryComponent {
   isLoading: boolean = false;
 
   constructor(    private route: ActivatedRoute
-  ,private _CountryService:CountryService , private _Router: Router,private translate: TranslateService) {
+  ,private _CountryService:CountryService , private _Router: Router,private translate: TranslateService,
+private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   }
 
@@ -72,14 +74,13 @@ export class UpdateCountryComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل الدولة بنجاح');
             this.isLoading = false;
-
-
-          
             this._Router.navigate(['/dashboard/countries']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل الدولة');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-account-category',
@@ -22,7 +23,8 @@ export class AddAccountCategoryComponent {
   constructor(private _AccountCategoriesService:AccountCategoriesService ,
         private _Router: Router,
         private translate: TranslateService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     
   ) {
    
@@ -66,11 +68,13 @@ export class AddAccountCategoryComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الفئة بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/account-categories/'+ this.type]);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الفئة');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

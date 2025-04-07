@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { CountryService } from '../../shared/services/country.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-city',
@@ -25,7 +26,8 @@ export class UpdateCityComponent implements OnInit {
     private _CityService: CityService,
     private router: Router,
     private route: ActivatedRoute,
-    private _CountryService:CountryService
+    private _CountryService:CountryService,
+    private toastr: ToastrService
   ) {
     this.cityForm = new FormGroup({
       city: new FormControl(null, [Validators.required]),
@@ -96,6 +98,7 @@ export class UpdateCityComponent implements OnInit {
           next: (response) => {
             this.isLoading = false;
             if (response) {
+              this.toastr.success('تم تعديل المدينه بنجاح');
               this.msgSuccess = response;
               this.router.navigate(['/dashboard/city']);
 
@@ -104,6 +107,7 @@ export class UpdateCityComponent implements OnInit {
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل المدينه');
             this.isLoading = false;
             this.msgError = err.error.error;
           }

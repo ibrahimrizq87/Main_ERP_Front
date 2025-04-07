@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-document-entry',
@@ -39,7 +40,8 @@ export class AddDocumentEntryComponent implements OnInit {
     private _AccountService:AccountService,
         private _Router: Router,
         private cdr: ChangeDetectorRef,
-    private _EntryDocument :EntryDocumentService
+    private _EntryDocument :EntryDocumentService,
+    private toastr: ToastrService
   ) {
     this.entryForm = this.fb.group({
       manual_reference: ['', [Validators.maxLength(255)]],
@@ -219,10 +221,12 @@ export class AddDocumentEntryComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه المستند بنجاح');
             this._Router.navigate(['/dashboard/documentEntry/waiting']); 
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المستند');
           this.isLoading = false;
           console.log(err);
         }

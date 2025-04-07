@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../shared/services/account.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GroupService } from '../../shared/services/group.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CurrencyService } from '../../shared/services/currency.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Account {
   id: string;
@@ -18,7 +19,7 @@ interface Account {
 @Component({
   selector: 'app-update-account',
   standalone: true,
-  imports: [CommonModule,RouterLinkActive ,RouterModule,TranslateModule ,FormsModule ,ReactiveFormsModule],
+  imports: [CommonModule ,RouterModule,TranslateModule ,FormsModule ,ReactiveFormsModule],
   templateUrl: './update-account.component.html',
   styleUrl: './update-account.component.css'
 })
@@ -39,7 +40,7 @@ export class UpdateAccountComponent implements OnInit{
   parent_id :string ='';
   
   constructor(    private _CurrencyService: CurrencyService,
-    private _AccountService: AccountService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute,private _GroupService:GroupService) {
+    private _AccountService: AccountService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute,private _GroupService:GroupService,private toastr: ToastrService) {
     this.accountForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required]),
       name_en: this.fb.control(null),
@@ -142,12 +143,14 @@ export class UpdateAccountComponent implements OnInit{
        
       this._AccountService.updateAccount(accountID,formData).subscribe({
         next: (response) => {
+          this.toastr.success('تم تعديل الحساب بنجاح');
           this.isLoading = false;
           if (response) {
             this.router.navigate(['/dashboard/accounting/'+this.parent_id]);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل الحساب');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

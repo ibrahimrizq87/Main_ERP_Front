@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { CheckService } from '../../shared/services/check.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-purchase',
@@ -56,7 +57,8 @@ export class UpdatePurchaseComponent {
     private _Router: Router,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
 
 
   ) {
@@ -673,6 +675,7 @@ export class UpdatePurchaseComponent {
         this._PurchasesService.updatePurchase(unitId, formData).subscribe({
           next: (response) => {
             if (response) {
+              this.toastr.success('تم تعديل الفاتورة بنجاح');
               console.log(response);
               this.isLoading = false;
               this._Router.navigate(['/dashboard/purchases/waiting']);
@@ -680,6 +683,7 @@ export class UpdatePurchaseComponent {
           },
 
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل الفاتورة');
             this.isLoading = false;
             this.msgError = [];
 

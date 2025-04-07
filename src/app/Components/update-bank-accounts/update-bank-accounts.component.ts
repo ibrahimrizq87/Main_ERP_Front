@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { AccountService } from '../../shared/services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-bank-accounts',
@@ -37,7 +38,8 @@ export class UpdateBankAccountsComponent implements OnInit {
   parentId: any;
   constructor(private _BankService:BankService ,
     private _AccountService:AccountService,
-    private _Router: Router,private translate: TranslateService,private _BankAccountService:BankAccountService,private _CurrencyService:CurrencyService, private route: ActivatedRoute) {
+    private _Router: Router,private translate: TranslateService,private _BankAccountService:BankAccountService,private _CurrencyService:CurrencyService, private route: ActivatedRoute
+  ,private toastr: ToastrService) {
    this.bankAccountForm = new FormGroup({
     account_no: new FormControl(null, [Validators.required,Validators.minLength(8),Validators.pattern(/^[0-9]+$/)]),
     bank_id: new FormControl(null, [Validators.required]),
@@ -253,6 +255,7 @@ export class UpdateBankAccountsComponent implements OnInit {
           next: (response) => {
             console.log(response);
             if (response) {
+              this.toastr.success('تم اضافه الحساب بنجاح');
               console.log("add",response)
               const bankAccountId = this.route.snapshot.paramMap.get('id'); 
               if (bankAccountId) {
@@ -262,7 +265,7 @@ export class UpdateBankAccountsComponent implements OnInit {
             }
           },
           error: (err: HttpErrorResponse) => {
-           
+           this.toastr.error('حدث خطا اثناء اضافه الحساب');
              this.msgError = err.error.error;
             console.log(err);
           }

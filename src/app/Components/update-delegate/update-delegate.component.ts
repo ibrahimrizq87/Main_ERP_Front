@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { CurrencyService } from '../../shared/services/currency.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-delegate',
   standalone: true,
@@ -46,7 +47,8 @@ currentImage:any;
           private route: ActivatedRoute,
           private fb: FormBuilder,
           private _CurrencyService:CurrencyService,
-          private _AccountCategoriesService:AccountCategoriesService
+          private _AccountCategoriesService:AccountCategoriesService,
+          private toastr: ToastrService
     ) {
       this.delegateForm = this.fb.group({
         nameAr: ['', [Validators.required, Validators.maxLength(255)]],
@@ -194,11 +196,13 @@ currentImage:any;
           next: (response) => {
             console.log(response);
             if (response) {
+              this.toastr.success("تم تحديث المندوب بنجاح");
               this.isLoading = false;
               this._Router.navigate(['/dashboard/delegates']);
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل المندوب');
             this.isLoading = false;
              this.msgError = err.error.error;
             console.log(err);

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormSubmittedEvent, FormsModule } from '@angular/forms';
 import { VendorService } from '../../shared/services/vendor.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-vendors',
   standalone: true,
@@ -20,7 +21,7 @@ export class VendorsComponent {
   filteredCurrencies: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _VendorService: VendorService, private router: Router) {}
+  constructor(private _VendorService: VendorService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadCurrency(); 
@@ -53,10 +54,12 @@ export class VendorsComponent {
       this._VendorService.deleteVendor(currency_id).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المورد بنجاح');
             this.loadCurrency();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المورد');
           console.error(err);
           alert('An error occurred while deleting the currency.');
         }
