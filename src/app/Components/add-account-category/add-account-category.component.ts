@@ -40,7 +40,8 @@ export class AddAccountCategoryComponent {
       const newStatus = params.get('type');
 
       if(newStatus != 'client' && newStatus != 'vendor' && newStatus != 'delegate'){
-        alert('worng type');
+        // alert('worng type');
+        this.toastr.error('خطا في نوع ');
         this._Router.navigate(['/dashboard/account-categories/client']);
 
       }

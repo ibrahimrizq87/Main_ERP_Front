@@ -179,7 +179,7 @@ export class StoresComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المتجر');
           console.error(err);
-          alert('An error occurred while deleting the Store.');
+          // alert('An error occurred while deleting the Store.');
         }
       });
     }

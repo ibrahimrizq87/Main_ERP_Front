@@ -43,8 +43,8 @@ export class LoginComponent {
 
           
             localStorage.setItem('Token', response.data.token);
-            this.toastr.success('تم تسجيل الدخول بنجاح');
-            alert(response.message);
+            this.toastr.success(response.message);
+            // alert(response.message);
 
             // Call saveUserData() to decode and store the access_token
             // this._UserService.saveUserData();
@@ -59,8 +59,8 @@ export class LoginComponent {
           if(err.status == 422){
             this.msgError = err.error.errors;
           }
-          // this.toastr.error(err.error.message);
-          alert(err.error.message);
+          this.toastr.error(err.error.message);
+          // alert(err.error.message);
 
           // console.log(err);
           // console.log(err.error.message);  

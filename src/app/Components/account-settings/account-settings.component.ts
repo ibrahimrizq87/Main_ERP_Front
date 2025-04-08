@@ -139,7 +139,8 @@ export class AccountSettingsComponent {
         });
       }
     } else {
-alert('you can not add more than 6 settings');
+    //  alert('you can not add more than 6 settings');
+    this.toastr.error('لا يمكنك اضافة اكثر من 6 اعدادات');
     }
 
 
@@ -190,7 +191,8 @@ alert('you can not add more than 6 settings');
     
 
     }else{
-      alert('please select account and enter title');
+      this.toastr.error('من فضلك ادخل العنوان واختر الحساب');
+      // alert('please select account and enter title');
     }
   }
 
@@ -228,7 +230,8 @@ alert('you can not add more than 6 settings');
 
     this._AccountSettingService.deleteChildAccountNav(childId).subscribe({
       next: (response) => {
-        alert('Child deleted successfully');
+        // alert('Child deleted successfully');
+        this.toastr.success('تم حذف الاعدادات بنجاح');
         this.loadSettings();
       },
       error: (err) => {

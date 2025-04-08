@@ -80,7 +80,7 @@ export class DocumentEntryComponent implements OnInit {
         error: (err:HttpErrorResponse) => {
           this.toastr.error('حدث خطا اثناء حذف المستند');
           console.log(err.error);
-          alert('An error occurred while deleting the Document.');
+          // alert('An error occurred while deleting the Document.');
           
         }
       });

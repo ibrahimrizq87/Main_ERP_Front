@@ -124,7 +124,8 @@ export class AddAccountComponent implements OnInit {
         formData.append('parent_id', this.currentAccount.id);
 
       }else{
-        alert('a problem happend please relaod page');
+        this.toastr.error('A problem happend please relaod page');
+        // alert('a problem happend please relaod page');
         return;
       }
 

@@ -63,7 +63,7 @@ export class BanksComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف البنك');
           console.error(err);
-          alert('An error occurred while deleting the Bank.');
+          // alert('An error occurred while deleting the Bank.');
         }
       });
     }

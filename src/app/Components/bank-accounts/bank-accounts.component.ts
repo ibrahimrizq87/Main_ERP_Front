@@ -50,7 +50,8 @@ export class BankAccountsComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الحساب البنكي');
           console.error(err);
-          alert('An error occurred while deleting the Bank Account.');
+          this.toastr.error('An error occurred while deleting the Bank Account.');
+          // alert('An error occurred while deleting the Bank Account.');
         }
       });
     }

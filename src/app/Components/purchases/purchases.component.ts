@@ -103,7 +103,7 @@ export class PurchasesComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الفاتورة');
           console.error(err);
-          alert('An error occurred while deleting the Purchase.');
+          // alert('An error occurred while deleting the Purchase.');
         }
       });
     }

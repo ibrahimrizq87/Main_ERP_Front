@@ -98,7 +98,9 @@ this.determinants.controls.forEach((element) => {
      
          }));
       }else{
-alert('لقد تم اختيار هذا المحمدد من قبل')
+     
+        this.toastr.error('لقد تم اختيار هذا المحمدد من قبل');
+// alert('لقد تم اختيار هذا المحمدد من قبل')
       }
       this.productForm.patchValue({determinant_id : null});
 

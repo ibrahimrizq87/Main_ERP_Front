@@ -144,8 +144,8 @@ export class AddDocumentEntryComponent implements OnInit {
         entryItem.at(index).get('type')?.setValue('debit'); 
 
       }
-
-      alert('You cannot choose the same account with a different type (debit/credit)!');
+       this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
+      // alert('You cannot choose the same account with a different type (debit/credit)!');
       return;
     }
     
@@ -232,9 +232,12 @@ export class AddDocumentEntryComponent implements OnInit {
         }
       });
     }else if (this.entryForm.valid && this.entryItems.length<2){
-    alert('you have to add at least 2 accounts');
+      this.toastr.error('you have to add at least 2 accounts');
+    
+    // alert('you have to add at least 2 accounts');
     }else if(this.totalDifference != 0){
-      alert('credit must match debit');
+      this.toastr.error('credit must match debit');
+      // alert('credit must match debit');
 
     }
   }
@@ -262,7 +265,8 @@ onAccountChange(selectedaccountID: string, index: number) {
 
   if (isDuplicate) {
     entryItem.at(index).get('account')?.setValue(null); 
-    alert('You cannot choose the same account with a different type (debit/credit)!');
+    this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
+    // alert('You cannot choose the same account with a different type (debit/credit)!');
   }
 
 

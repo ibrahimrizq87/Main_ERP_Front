@@ -94,7 +94,7 @@ export class CheckManagementComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الشيك');
           console.error(err);
-          alert('An error occurred while deleting the City.');
+          // alert('An error occurred while deleting the City.');
         }
       });
     }

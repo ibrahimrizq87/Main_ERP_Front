@@ -151,7 +151,7 @@ export class UpdateProductComponent implements OnInit {
         }));
       } else {
         this.toastr.error('هذا المحدد تم اختياره من قبل');
-        alert('لقد تم اختيار هذا المحمدد من قبل')
+        // alert('لقد تم اختيار هذا المحمدد من قبل')
 
       }
       this.productForm.patchValue({ determinant_id: null });

@@ -322,7 +322,8 @@ removeCurrentDelegate(){
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('خطا في البيانات المدخله');
+      // alert('invalid')
     }
   }
 

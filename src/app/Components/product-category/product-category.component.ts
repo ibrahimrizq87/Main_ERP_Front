@@ -54,7 +54,7 @@ export class ProductCategoryComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الوحدة');
           console.error(err);
-          alert('An error occurred while deleting the Unit.');
+          // alert('An error occurred while deleting the Unit.');
         }
       });
     }

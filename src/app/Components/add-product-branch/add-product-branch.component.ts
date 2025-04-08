@@ -294,7 +294,8 @@ this.determinants.controls.forEach((item,index)=>{
 
           ranges.controls.forEach((rangeControl) => {
             if(!rangeControl.get('price')?.value){
-                alert('prices are invalid')
+              this.toastr.error('الرجاء ادخال كل الاسعار المطلوبه');
+                // alert('prices are invalid')
                 return;
             }
           formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);

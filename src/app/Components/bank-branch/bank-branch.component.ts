@@ -52,7 +52,7 @@ export class BankBranchComponent  implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الفرع البنكي');
           console.error(err);
-          alert('An error occurred while deleting the Bank Branch.');
+          // alert('An error occurred while deleting the Bank Branch.');
         }
       });
     }

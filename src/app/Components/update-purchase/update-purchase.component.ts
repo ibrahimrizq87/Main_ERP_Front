@@ -622,7 +622,8 @@ export class UpdatePurchaseComponent {
           const itemValue = itemControl.value;
 
           if (itemValue.neededSerialNumbers > 0) {
-            alert('يجب ادخال كل السيريا المطلوب')
+            this.toastr.error('يجب ادخال كل السيريا المطلوب');
+            // alert('يجب ادخال كل السيريا المطلوب')
             error = true;
 
             return;
@@ -640,7 +641,8 @@ export class UpdatePurchaseComponent {
                 formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
 
               } else {
-                alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                this.toastr.error('يجب اختيار لون للمنتج');
+                // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
                 error = true;
                 return;
               }

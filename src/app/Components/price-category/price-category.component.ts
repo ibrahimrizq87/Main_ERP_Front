@@ -51,7 +51,7 @@ export class PriceCategoryComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الفئة');
           console.error(err);
-          alert('An error occurred while deleting the Category.');
+          // alert('An error occurred while deleting the Category.');
         }
       });
     }

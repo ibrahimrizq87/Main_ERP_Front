@@ -138,7 +138,8 @@ export class AddPurchaseComponent implements OnInit {
       error: (err) => {
         if (err.status == 404) {
           // console.log('here')
-          alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          // alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
           this._Router.navigate(['/dashboard/currency']);
 
         }
@@ -549,7 +550,8 @@ export class AddPurchaseComponent implements OnInit {
   handleForm() {
 
     if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor &&(this.selectedVendor?.currency?.id != this.currencies.id) && !this.purchasesBillForm.get('currency_price_value')?.value){
-      alert('يجب ادخال سعر الصرف');
+      this.toastr.error('يجب ادخال سعر الصرف');
+      // alert('يجب ادخال سعر الصرف');
       return;
     }
 
@@ -613,7 +615,8 @@ export class AddPurchaseComponent implements OnInit {
           const itemValue = itemControl.value;
 
           if (itemValue.neededSerialNumbers > 0) {
-            alert('يجب ادخال كل السيريا المطلوب')
+            this.toastr.error('يجب ادخال كل السيريا المطلوب');
+            // alert('يجب ادخال كل السيريا المطلوب')
             error = true;
 
             return;
@@ -649,7 +652,8 @@ export class AddPurchaseComponent implements OnInit {
                 formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
 
               } else {
-                alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                this.toastr.error('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
                 error = true;
                 return;
               }

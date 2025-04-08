@@ -79,7 +79,7 @@ export class SalesComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المبيعات');
           console.error(err);
-          alert('An error occurred while deleting the sale.');
+          // alert('An error occurred while deleting the sale.');
         }
       });
     }

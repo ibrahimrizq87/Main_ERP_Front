@@ -89,7 +89,8 @@ selectProduct(product:any){
 
 exportProductBranchByProduct(){
   if (!this.selectedProduct){
-    alert('يجب اختيار منتج اولا');
+    this.toastr.error('يجب اختيار منتج اولا');
+    // alert('يجب اختيار منتج اولا');
   }else{
 
     // this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
@@ -190,7 +191,7 @@ onProductSearchChange(){
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الفرع');
           console.error(err);
-          alert('An error occurred while deleting the Branch.');
+          // alert('An error occurred while deleting the Branch.');
         }
       });
     }

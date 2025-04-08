@@ -111,7 +111,8 @@ export class UpdateAccountComponent implements OnInit{
       },
       error: (err: HttpErrorResponse) => {
         this.msgError = err.error.error;
-        alert('can not fetch account data');
+        this.toastr.error('حدث خطا اثناء جلب بيانات الحساب');
+        // alert('can not fetch account data');
       }
     });
   }

@@ -61,7 +61,7 @@ export class VendorsComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المورد');
           console.error(err);
-          alert('An error occurred while deleting the currency.');
+          // alert('An error occurred while deleting the currency.');
         }
       });
     }

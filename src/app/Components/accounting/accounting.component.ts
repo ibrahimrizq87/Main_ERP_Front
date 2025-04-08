@@ -109,7 +109,7 @@ export class AccountingComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الحساب');
           console.error(err);
-          alert('An error occurred while deleting the Account.');
+          // alert('An error occurred while deleting the Account.');
         }
       });
     }

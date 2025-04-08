@@ -52,7 +52,7 @@ export class ProductDeterminantsComponent {
         },
         error: (err) => {
           console.error(err);
-          alert('An error occurred while deleting the determinant.');
+          // alert('An error occurred while deleting the determinant.');
           this.toastr.error('حدث خطا اثناء حذف المحدد');
         }
       });

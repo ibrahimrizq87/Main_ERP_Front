@@ -355,7 +355,8 @@ onBarcodeSelect(barcode: Event , index:number){ {
 let isdublicated =false;
   tempList.forEach((item:any)=>{
     if(item.barcode == selectedValue){
-      alert('هذا السيريال موجود بالفعل');
+      this.toastr.error('هذا السيريال موجود بالفعل');
+      // alert('هذا السيريال موجود بالفعل');
       isdublicated = true;
       return;
     }
@@ -641,7 +642,8 @@ handleForm() {
                 const itemValue = itemControl.value;
 
                 if(itemValue.neededSerialNumbers >0){
-                  alert('يجب ادخال كل السيريا المطلوب')
+                  this.toastr.error('يجب ادخال كل السيريا المطلوب');
+                  // alert('يجب ادخال كل السيريا المطلوب')
                   error =true;
 
                   return;

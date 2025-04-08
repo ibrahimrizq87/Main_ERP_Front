@@ -399,7 +399,8 @@ currentProductBranch:any;
   
             ranges.controls.forEach((rangeControl) => {
               if(!rangeControl.get('price')?.value){
-                  alert('prices are invalid')
+                this.toastr.error('الرجاء ادخال كل الاسعار المطلوبه');
+                  // alert('prices are invalid')
                   return;
                 
               }

@@ -117,7 +117,8 @@ export class AddProductMoveComponent {
 
     if (type == 'from'){
       if(selectedValue == this.toStore){
-      alert('لا يمكن انشاء حركه من المخزن لنفسه');
+        this.toastr.error('لا يمكن انشاء حركه من المخزن لنفسه');
+      // alert('لا يمكن انشاء حركه من المخزن لنفسه');
       this.branchForm.patchValue({
         from_store: null,
       });
@@ -127,7 +128,8 @@ export class AddProductMoveComponent {
 
     }else{
       if(selectedValue == this.fromStore){
-        alert('لا يمكن انشاء حركه من المخزن لنفسه');
+        this.toastr.error('لا يمكن انشاء حركه من المخزن لنفسه');
+        // alert('لا يمكن انشاء حركه من المخزن لنفسه');
         this.branchForm.patchValue({
           to_store: null,
         });
@@ -206,12 +208,14 @@ this.selectedProduct =selectedValue;
     this.isSubmited =true;
 
     if( (this.selectedType == 'store'  || this.selectedType == 'lost') && !this.fromSelectedBranch){
-      alert('فرع المنتج المرغوب الانقص منه مطلوب');
+      this.toastr.error('فرع المنتج المرغوب الانقص منه مطلوب');
+      // alert('فرع المنتج المرغوب الانقص منه مطلوب');
 return;
     }
     
     if( (this.selectedType == 'store'  || this.selectedType == 'extra'|| this.selectedType == 'first_entry') && !this.toSelectedBranch){
-      alert('فرع المنتج المرغوب الزياده عليه مطلوب');
+     this.toastr.error('فرع المنتج المرغوب الزياده عليه مطلوب');
+      // alert('فرع المنتج المرغوب الزياده عليه مطلوب');
       return;
 
     }

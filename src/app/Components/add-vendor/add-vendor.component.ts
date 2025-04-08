@@ -324,7 +324,8 @@ selecteddelegateAccount:Account | null= null;
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('خطا في البيانات المدخله');
+      // alert('invalid')
     }
   }
 

@@ -137,7 +137,7 @@ this.isSubmitted =true;
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المنتج');
           console.error(err);
-          alert('An error occurred while deleting the Product.');
+          // alert('An error occurred while deleting the Product.');
         }
       });
     }

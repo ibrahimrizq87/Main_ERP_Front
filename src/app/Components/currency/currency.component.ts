@@ -36,7 +36,8 @@ export class CurrencyComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert('An error occurred while deleting the currency.');
+          this.toastr.error('حدث خطا اثناء تعيين العملة كافتراضية');
+          // alert('An error occurred while deleting the currency.');
         }
       });
     
@@ -78,7 +79,7 @@ export class CurrencyComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف العملة');
           console.error(err);
-          alert('An error occurred while deleting the currency.');
+          // alert('An error occurred while deleting the currency.');
         }
       });
     }

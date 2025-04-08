@@ -65,7 +65,7 @@ export class CountriesComponent  {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المدينة');
           console.error(err);
-          alert('An error occurred while deleting the City.');
+          // alert('An error occurred while deleting the City.');
         }
       });
     }

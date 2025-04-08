@@ -95,10 +95,10 @@ export class GroupComponent implements OnInit {
         },
         error: (err:HttpErrorResponse) => {
           if (err.status == 403){
-            alert('can not delete this group it has some groups in it');
+            // alert('can not delete this group it has some groups in it');
             this.toastr.error('لا يمكن حذف هذه المجموعة لأنها تحتوي على مجموعات فرعية');
           }else{
-            alert('An error occurred while deleting the group.');
+            // alert('An error occurred while deleting the group.');
             this.toastr.error('حدث خطا اثناء حذف المجموعة');
           }
           

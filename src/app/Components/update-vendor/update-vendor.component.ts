@@ -361,7 +361,8 @@ fetchVendortData(vendor_id:string){
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('حدث خطا اثناء تعديل المورد');
+      // alert('invalid')
     }
   }
   }

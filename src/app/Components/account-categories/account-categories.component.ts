@@ -71,7 +71,7 @@ export class AccountCategoriesComponent {
         error: (err:HttpErrorResponse) => {
           this.toastr.error('حدث خطا اثناء حذف الفئة');
           console.log(err.error);
-          alert('An error occurred while deleting the Document.');
+          // alert('An error occurred while deleting the Document.');
           
         }
       });

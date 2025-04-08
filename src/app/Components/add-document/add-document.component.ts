@@ -131,7 +131,8 @@ export class AddDocumentComponent {
       //   break;
 
       default:
-        alert('wrong document type please try to select a document');
+        this.toastr.error('خطا في نوع المستند');
+        // alert('wrong document type please try to select a document');
         this.router.navigate(['/dashboard/document/' + this.type ]);
         break;
     }

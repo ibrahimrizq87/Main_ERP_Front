@@ -63,7 +63,7 @@ export class DelegatesComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف العميل');
           console.error(err);
-          alert('An error occurred while deleting the currency.');
+          // alert('An error occurred while deleting the currency.');
         }
       });
     }

@@ -364,7 +364,8 @@ removeCurrentDelegate(){
 
    
     }else{
-      alert('invalid')
+      this.toastr.error('الرجاء ملئ جميع الحقول المطلوبة');
+      // alert('invalid')
     }
   }
 

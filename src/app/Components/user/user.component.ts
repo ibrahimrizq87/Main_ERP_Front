@@ -58,7 +58,7 @@ export class UserComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المستخدم');
           console.error(err);
-          alert('An error occurred while deleting the User.');
+          // alert('An error occurred while deleting the User.');
         }
       });
     }
