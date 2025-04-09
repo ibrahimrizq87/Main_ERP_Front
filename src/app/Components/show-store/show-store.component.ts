@@ -8,15 +8,16 @@ import { TranslateModule } from '@ngx-translate/core';
 
 interface StoreData {
   id: number;               
-  manager: string;         
+  manager_name: string;  
+  address_description: string;       
   name: string;            
   name_en: string;         
   note: string;            
-  phone_number: string;    
+  phone: string;    
   store_id: number | null; 
-  type: string;            
-  last_update?: string;   
-  last_update_creator?: string; 
+   city:{name:string,country:{name:string}};        
+  updated_at?: string;   
+  created_at?: string; 
   child?: StoreData[];
 }
 @Component({
@@ -29,7 +30,6 @@ interface StoreData {
 export class ShowStoreComponent implements OnInit{
   constructor(
     private _StoreService: StoreService,
-    private router: Router,
     private route: ActivatedRoute
   ) {}
   storeData: StoreData | undefined;
@@ -44,8 +44,9 @@ export class ShowStoreComponent implements OnInit{
     this._StoreService.showStoreById(storeId).subscribe({
       next: (response) => {
         if (response && response.data) {
-          console.log(response)
+          // console.log(response)
           this.storeData = response.data;
+          console.log("store data",this.storeData);
         }
       },
       error: (err: HttpErrorResponse) => {

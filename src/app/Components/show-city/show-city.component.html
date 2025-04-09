@@ -1,0 +1,53 @@
+<div class="mt-4 mb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>City Details</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
+  
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">ID:</label>
+                    <p class="text-muted">{{ cityData?.id || 'غير متوفر' }}</p>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">الاسم:</label>
+                    <p class="text-muted">{{ cityData?.name || 'غير متوفر' }}</p>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">اسم الدوله(بالإنجليزية):</label>
+                    <p class="text-muted">{{ cityData?.country?.name_langs?.en || 'غير متوفر' }}</p>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="fw-bold">اسم الدوله(بالعربية):</label>
+                    <p class="text-muted">{{ cityData?.country?.name_langs?.ar || 'غير متوفر' }}</p>
+                  </div>
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="mt-4 mb-4">
+        <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/city">
+          <button type="button" class="btn btn-primary px-4">رجوع</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  

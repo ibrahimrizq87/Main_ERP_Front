@@ -8,60 +8,43 @@
           </div>
           <div class="card-body pb-5">
             <div class="row">
+              <!-- Left Column -->
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="fw-bold">{{ 'STORE_NAME_AR' | translate }}:</label>
+                  <label class="fw-bold">{{ 'STORE_NAME' | translate }}:</label>
                   <p class="text-muted">{{ storeData?.name }}</p>
                 </div>
                 <div class="mb-3">
-                  <label class="fw-bold">{{ 'STORE_NAME_EN' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.name_en }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'MANAGER' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.manager }}</p>
+                  <label class="fw-bold">{{ 'MANAGER_NAME' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.manager_name }}</p>
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'PHONE_NUMBER' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.phone_number }}</p>
+                  <p class="text-muted">{{ storeData?.phone }}</p>
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'NOTE' | translate }}:</label>
                   <p class="text-muted">{{ storeData?.note }}</p>
                 </div>
-              </div>
-              <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="fw-bold">{{ 'STORE_TYPE' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.type }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'PARENT_STORE_ID' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.store_id || 'N/A' }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'CHILD_STORES' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.child?.length || 0 }} stores</p>
-                  <ul *ngIf="storeData?.child?.length">
-                    <li *ngFor="let child of storeData?.child">
-                      {{ child.name }} (ID: {{ child.id }})
-                    </li>
-                  </ul>
+                  <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.created_at }}</p>
                 </div>
               </div>
-            </div>
-            <h6 class="mt-4">{{ 'ADDITIONAL_INFORMATION' | translate }}</h6>
-            <div class="row">
+
+              <!-- Right Column -->
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="fw-bold">{{ 'LAST_UPDATE' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.last_update || 'N/A' }}</p>
+                  <label class="fw-bold">{{ 'CITY_NAME' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.city?.name }}</p>
                 </div>
-              </div>
-              <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="fw-bold">{{ 'LAST_UPDATED_BY' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.last_update_creator || 'N/A' }}</p>
+                  <label class="fw-bold">{{ 'COUNTRY_NAME' | translate }}:</label>
+                  <pre class="text-muted">{{ storeData?.city?.country?.name }}</pre>
+                </div>
+                <div class="mb-3">
+                  <label class="fw-bold">{{ 'ADDRESS_DESCRIPTION' | translate }}:</label>
+                  <p class="text-muted">{{ storeData?.address_description }}</p>
                 </div>
               </div>
             </div>
@@ -70,6 +53,7 @@
       </div>
     </div>
 
+    <!-- Back Button -->
     <div class="mt-4 mb-4">
       <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/stores">
         <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>

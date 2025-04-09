@@ -116,6 +116,8 @@ import { ColorsComponent } from './Components/colors/colors.component';
 import { AddColorComponent } from './Components/add-color/add-color.component';
 import { UpdateColorComponent } from './Components/update-color/update-color.component';
 import { UpdateDeterminantComponent } from './Components/update-determinant/update-determinant.component';
+import { ShowCityComponent } from './Components/show-city/show-city.component';
+import { ShowDocumentEntryComponent } from './Components/show-document-entry/show-document-entry.component';
 
 
 export const routes: Routes = [
@@ -171,6 +173,7 @@ export const routes: Routes = [
         {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
         {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
         {path:"updateEntryDocument/:id",component:UpdateEntryDocumentComponent},
+        {path:"showEntryDocument/:id",component:ShowDocumentEntryComponent},
         {path:"productCategories",component:ProductCategoryComponent},
         {path:"addCategory",component:AddProductCategoryComponent},
         {path:"updateproductCategory/:id",component:UpdateProductCategoryComponent},
@@ -214,6 +217,7 @@ export const routes: Routes = [
 
         {path:"addCity",component:AddCityComponent},
         {path:"updateCity/:id",component:UpdateCityComponent},
+        {path:"showCity/:id",component:ShowCityComponent},
 
         {path:"currency",component:CurrencyComponent},
         {path:"addCurrency",component:AddCurrencyComponent},

@@ -38,6 +38,9 @@
                 <td>{{ city.country.name }}</td>
                 <td>{{ city.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showCity',city.id]">
+                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>
+                    </a>
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCity',city.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.edit' | translate }}"></i>
                     </a>

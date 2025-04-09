@@ -7,64 +7,123 @@
             <h5>{{ 'PRODUCT_INFORMATION' | translate }}</h5>
           </div>
           <div class="card-body pb-5">
+            <!-- Basic Product Info -->
+            <h6 class="mb-3 text-primary">{{ 'BASIC_INFORMATION' | translate }}</h6>
             <div class="row">
-              <!-- Left column for product details -->
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'PRODUCT_NAME_ARABIC' | translate }}:</label>
-                  <p class="text-muted">
-                    {{ storeData?.product?.name_ar || 'N/A' }}
-                  </p>
+                <div class="mb-2">
+                  <label class="fw-bold">{{ 'CODE' | translate }}:</label>
+                  <p class="text-muted">{{ productBranchData?.code || 'N/A' }}</p>
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                   <label class="fw-bold">{{ 'PRODUCT_NAME_ENGLISH' | translate }}:</label>
-                  <p class="text-muted">
-                    {{ storeData?.product?.name_en || 'N/A' }}
-                  </p>
+                  <p class="text-muted">{{ productBranchData?.product?.name_lang?.en || 'N/A' }}</p>
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                   <label class="fw-bold">{{ 'PRODUCT_DIMENSION' | translate }}:</label>
-                  <p class="text-muted">
-                    {{ storeData?.product?.product_dimension || 'N/A' }}
-                  </p>
+                  <p class="text-muted">{{ productBranchData?.product?.product_unit?.name || 'N/A' }}</p>
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                   <label class="fw-bold">{{ 'AMOUNT' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.amount || 'N/A' }}</p>
+                  <p class="text-muted">{{ productBranchData?.stock || 'N/A' }}</p>
+                </div>
+                <div class="mb-2">
+                  <label class="fw-bold">{{ 'DEFAULT_PRICE' | translate }}:</label>
+                  <p class="text-muted">{{ productBranchData?.default_price || 'N/A' }}</p>
                 </div>
               </div>
-
-              <!-- Right column for product image -->
               <div class="col-md-6 text-center">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'PRODUCT_IMAGE' | translate }}:</label>
-                  <div class="image-container mt-3">
-                    <img
-                      [src]="storeData?.product?.image"
-                      alt="Product Image"
-                      class="img-fluid rounded shadow"
-                      style="max-width: 100%; max-height: 200px;"
-                    />
-                  </div>
-                </div>
+                <label class="fw-bold d-block">{{ 'PRODUCT_IMAGE' | translate }}:</label>
+                <img
+                  [src]="productBranchData?.product?.cover_image"
+                  alt="Product Image"
+                  class="img-fluid rounded shadow mt-2"
+                  style="max-width: 100%; max-height: 200px;"
+                />
               </div>
             </div>
 
-            <!-- Additional Information -->
+            <hr>
+
+            <!-- Category and Color -->
+            <h6 class="mb-3 text-primary">{{ 'CATEGORY_AND_COLOR' | translate }}</h6>
             <div class="row">
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'OVERRIDE' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.override || 'N/A' }}</p>
+                <div class="mb-2">
+                  <label class="fw-bold">{{ 'CATEGORY' | translate }}:</label>
+                  <p class="text-muted">{{ productBranchData?.product?.productCategory?.name || 'N/A' }}</p>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
-                  <p class="text-muted">{{ storeData?.created_at || 'N/A' }}</p>
+                <div class="mb-2">
+                  <label class="fw-bold">{{ 'COLOR' | translate }}:</label>
+                  <p class="text-muted">{{ productBranchData?.product_color?.color?.color || 'N/A' }}</p>
                 </div>
               </div>
             </div>
+
+            <hr>
+
+            <!-- Created Date -->
+            <h6 class="mb-3 text-primary">{{ 'CREATED_AT' | translate }}</h6>
+            <div class="mb-3">
+              <p class="text-muted">{{ productBranchData?.created_at || 'N/A' }}</p>
+            </div>
+
+            <hr>
+
+            <!-- Determinant Values -->
+            <h6 class="mb-3 text-primary">{{ 'PRODUCT_DETERMINANTS' | translate }}</h6>
+            <div class="mb-3" *ngFor="let d of productBranchData?.determinantValues">
+              <label class="fw-bold">
+                {{ d?.determinantValue?.determinant?.name || ('DETERMINANT' | translate) }}:
+              </label>
+              <p class="text-muted">
+                {{ d?.determinantValue?.value || 'N/A' }}
+              </p>
+            </div>
+
+            <hr>
+
+            <!-- Price Details -->
+            <h6 class="mb-3 text-primary">{{ 'PRODUCT_PRICES' | translate }}</h6>
+            <div *ngFor="let priceGroup of productBranchData?.prices">
+              <div class="border rounded p-3 mb-3 shadow-sm bg-light">
+                <p class="fw-bold text-dark mb-2">
+                  {{ priceGroup?.name || 'Price Group' }}
+                </p>
+                <div *ngFor="let price of priceGroup?.prices" class="ps-3">
+                  <p class="mb-1">
+                    <span class="fw-bold">{{ 'PRICE' | translate }}:</span> {{ price?.price || 'N/A' }}
+                  </p>
+                  <p class="mb-1">
+                    <span class="fw-bold">{{ 'QUANTITY_FROM' | translate }}:</span> {{ price?.quantity_from }}
+                  </p>
+                  <p class="mb-1">
+                    <span class="fw-bold">{{ 'QUANTITY_TO' | translate }}:</span> {{ price?.quantity_to }}
+                  </p>
+                  <p class="mb-1">
+                    <span class="fw-bold">{{ 'CATEGORY' | translate }}:</span> {{ price?.priceCategory?.name || 'N/A' }}
+                  </p>
+                  <hr class="my-2" *ngIf="priceGroup?.prices?.length > 1" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Images Gallery -->
+            <hr>
+            <h6 class="mb-3 text-primary">{{ 'ADDITIONAL_IMAGES' | translate }}</h6>
+            <div class="d-flex flex-wrap gap-3">
+              <div *ngFor="let img of productBranchData?.product?.images">
+                <img
+                  [src]="img?.image"
+                  alt="Product Additional Image"
+                  class="img-thumbnail"
+                  style="width: 120px; height: 120px; object-fit: cover;"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -73,8 +132,10 @@
     <!-- Back Button -->
     <div class="mt-4 mb-4 text-center">
       <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/productBranch">
-        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+        <button type="button" class="btn btn-primary px-4">
+          {{ 'BACK' | translate }}
+        </button>
       </a>
     </div>
   </div>
-</div> 
+</div>

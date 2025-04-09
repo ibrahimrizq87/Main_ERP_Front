@@ -92,10 +92,10 @@
       <tbody>
           <tr *ngFor="let document of documents; let i = index">
               <th scope="row">{{ i + 1 }}</th>
-              <td>{{ document.from_to_account }}</td>
-              <td>{{ document.from_to_account_company }}</td>
+              <td>{{ document.from_to_account.name }}</td>
+              <td>{{ document.from_to_account_company.name }}</td>
              
-              <td>{{ document.delegate_id }}</td>
+              <td>{{ document.delegate.name }}</td>
               <td>{{ document.amount }}</td>
               <td>{{ document.organization }}</td>
              

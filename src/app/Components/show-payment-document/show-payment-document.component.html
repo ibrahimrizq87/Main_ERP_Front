@@ -1,1 +1,89 @@
-<p>show-payment-document works!</p>
+<div class="mt-4 mb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>Payment Document Details</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <label class="fw-bold">ID:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.id || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">المبلغ:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.amount || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">العملة:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.currency_id || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">نوع المستند:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.type || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">الحالة:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.status || 'غير متوفر' }}</p>
+                </div>
+            
+                <div class="col-md-6">
+                  <label class="fw-bold">أنشأ بواسطة (ID):</label>
+                  <p class="text-muted">{{ paymentDocumentData?.creator_id || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">المرجع اليدوي:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.manual_reference || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">المستلم:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.receiver || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">المفوض:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.delegate?.name || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">من/إلى حساب:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.from_to_account?.name || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">اسم الشركة:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.from_to_account_company?.name || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold">المنظمة:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.organization || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-12">
+                  <label class="fw-bold">ملاحظة:</label>
+                  <p class="text-muted">{{ paymentDocumentData?.note || 'غير متوفر' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold">تاريخ الانشاء:</label>
+                    <p class="text-muted">{{ paymentDocumentData?.created_at  }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="fw-bold">تاريخ المعاملة:</label>
+                    <p class="text-muted">{{ paymentDocumentData?.date || 'غير متوفر' }}</p>
+                  </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Back Button -->
+          <div class="text-center mt-4">
+            <a class="nav-link" [routerLink]="['/dashboard/document', paymentDocumentData?.type, paymentDocumentData?.status]">
+              <button type="button" class="btn btn-outline-primary px-5 py-2 rounded-pill">
+                <i class="bi bi-arrow-left-circle me-2"></i> رجوع
+              </button>
+            </a>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
