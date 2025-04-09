@@ -119,6 +119,7 @@ import { CommonModule } from '@angular/common';
 import { StorenodeComponent } from '../storenode/storenode.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-stores',
@@ -134,7 +135,9 @@ export class StoresComponent implements OnInit {
   stores: any[] = [];
   hierarchicalAccounts: any[] = [];
 
-  constructor(private _StoreService: StoreService, private router: Router) {}
+  constructor(private _StoreService: StoreService, private router: Router,
+    private toastr:ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.loadStores();
@@ -169,12 +172,14 @@ export class StoresComponent implements OnInit {
       this._StoreService.deleteStore(store_id).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المتجر بنجاح');
             this.loadStores(); // Reloads the data after deletion
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المتجر');
           console.error(err);
-          alert('An error occurred while deleting the Store.');
+          // alert('An error occurred while deleting the Store.');
         }
       });
     }

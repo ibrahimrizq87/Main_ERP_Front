@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Modal } from 'bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CountryService } from '../../shared/services/country.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-bank-branch',
@@ -32,7 +33,8 @@ export class UpdateBankBranchComponent implements OnInit {
     ,
     private _CountryService:CountryService ,
     private route: ActivatedRoute,
-    private _Router: Router,private translate: TranslateService,private _CityService:CityService) {
+    private _Router: Router,private translate: TranslateService,private _CityService:CityService,
+  private  toastr :ToastrService) {
   
   }
   ngOnInit(): void {
@@ -198,11 +200,13 @@ export class UpdateBankBranchComponent implements OnInit {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل الفرع بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/bankBranch']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل الفرع');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

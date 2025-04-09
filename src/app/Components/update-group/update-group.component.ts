@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-group',
@@ -24,7 +25,8 @@ export class UpdateGroupComponent implements OnInit{
     constructor(
     private _GroupService: GroupService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
     this.groupForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
@@ -97,6 +99,7 @@ console.log(err.message);
           next: (response) => {
             this.isLoading = false;
             if (response) {
+              this.toastr.success('تم تعديل المجموعة بنجاح');
               this.msgSuccess = response;
               setTimeout(() => {
                 this.router.navigate(['/dashboard/group']);
@@ -104,6 +107,7 @@ console.log(err.message);
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل المجموعة');
             this.isLoading = false;
             this.msgError = err.error.error;
           }

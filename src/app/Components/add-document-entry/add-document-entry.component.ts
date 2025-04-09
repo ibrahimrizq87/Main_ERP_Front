@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-document-entry',
@@ -39,7 +40,8 @@ export class AddDocumentEntryComponent implements OnInit {
     private _AccountService:AccountService,
         private _Router: Router,
         private cdr: ChangeDetectorRef,
-    private _EntryDocument :EntryDocumentService
+    private _EntryDocument :EntryDocumentService,
+    private toastr: ToastrService
   ) {
     this.entryForm = this.fb.group({
       manual_reference: ['', [Validators.maxLength(255)]],
@@ -142,8 +144,8 @@ export class AddDocumentEntryComponent implements OnInit {
         entryItem.at(index).get('type')?.setValue('debit'); 
 
       }
-
-      alert('You cannot choose the same account with a different type (debit/credit)!');
+       this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
+      // alert('You cannot choose the same account with a different type (debit/credit)!');
       return;
     }
     
@@ -219,18 +221,23 @@ export class AddDocumentEntryComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه المستند بنجاح');
             this._Router.navigate(['/dashboard/documentEntry/waiting']); 
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المستند');
           this.isLoading = false;
           console.log(err);
         }
       });
     }else if (this.entryForm.valid && this.entryItems.length<2){
-    alert('you have to add at least 2 accounts');
+      this.toastr.error('you have to add at least 2 accounts');
+    
+    // alert('you have to add at least 2 accounts');
     }else if(this.totalDifference != 0){
-      alert('credit must match debit');
+      this.toastr.error('credit must match debit');
+      // alert('credit must match debit');
 
     }
   }
@@ -258,7 +265,8 @@ onAccountChange(selectedaccountID: string, index: number) {
 
   if (isDuplicate) {
     entryItem.at(index).get('account')?.setValue(null); 
-    alert('You cannot choose the same account with a different type (debit/credit)!');
+    this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
+    // alert('You cannot choose the same account with a different type (debit/credit)!');
   }
 
 

@@ -6,6 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-price-category',
@@ -18,7 +19,8 @@ export class AddPriceCategoryComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _PriceService:PriceService , private _Router: Router,private translate: TranslateService) {
+  constructor(private _PriceService:PriceService , private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
+    // this.translate.setDefaultLang('en'); 
    
   }
 
@@ -40,11 +42,13 @@ export class AddPriceCategoryComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الفئه بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/priceCategory']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الفئه');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

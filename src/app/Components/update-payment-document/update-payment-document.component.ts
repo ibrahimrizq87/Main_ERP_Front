@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccountService } from '../../shared/services/account.service';
 import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
 import { Modal } from 'bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -49,7 +50,8 @@ export class UpdatePaymentDocumentComponent {
       , private fb: FormBuilder,
       private _AccountService: AccountService,
       private _PaymentDocumentService: PaymentDocumentService
-      , private router: Router
+      , private router: Router,
+      private toastr: ToastrService
     ) {
   
       this.transactionForm = this.fb.group({
@@ -186,7 +188,8 @@ export class UpdatePaymentDocumentComponent {
           //   break;
     
           default:
-            alert('wrong document type please try to select a document');
+            this.toastr.error('خطا في نوع المستند');
+            // alert('wrong document type please try to select a document');
             break;
         }
     
@@ -244,6 +247,7 @@ export class UpdatePaymentDocumentComponent {
     
           this._PaymentDocumentService.updateDocumentById(this.documentId,formData).subscribe({
             next: (response) => {
+              this.toastr.success('تم تحديث مستند الدفع بنجاح');
               this.isLoading = false;
               if (response) {
                 this.router.navigate(['/dashboard/document/' + this.type +'/'+ this.paymentDocument?.status]);
@@ -251,6 +255,7 @@ export class UpdatePaymentDocumentComponent {
               }
             },
             error: (err: HttpErrorResponse) => {
+              this.toastr.error('حدث خطا اثناء تحديث مستند الدفع');
               this.isLoading = false;
               console.log('error happend', err);
     

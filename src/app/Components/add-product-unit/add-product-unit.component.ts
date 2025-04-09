@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductUnitsService } from '../../shared/services/product_units.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product-unit',
@@ -18,7 +19,8 @@ export class AddProductUnitComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _ProductUnitsService:ProductUnitsService ,private _Router: Router,private translate: TranslateService) {
+  constructor(private _ProductUnitsService:ProductUnitsService ,private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
+    // this.translate.setDefaultLang('en'); 
   
   }
 
@@ -41,11 +43,13 @@ export class AddProductUnitComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الوحده بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/productUnit']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الوحده');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

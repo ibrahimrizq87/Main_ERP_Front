@@ -15,6 +15,7 @@ import { CityService } from '../../shared/services/city.service';
 import { CountryService } from '../../shared/services/country.service';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { VendorService } from '../../shared/services/vendor.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-vendor',
@@ -71,9 +72,9 @@ export class UpdateVendorComponent {
         private fb: FormBuilder,
         private _DelegateService: DelegateService,
         private route: ActivatedRoute,
-
         private _CurrencyService:CurrencyService,
-        private _AccountCategoriesService:AccountCategoriesService
+        private _AccountCategoriesService:AccountCategoriesService,
+        private toastr: ToastrService,
   ) {
     this.clientForm = this.fb.group({
       ar: ['', [Validators.required, Validators.maxLength(255)]],
@@ -347,18 +348,21 @@ fetchVendortData(vendor_id:string){
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل المورد بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/vendors']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل المورد');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('حدث خطا اثناء تعديل المورد');
+      // alert('invalid')
     }
   }
   }

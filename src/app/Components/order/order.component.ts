@@ -74,6 +74,7 @@ import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-order',
@@ -89,7 +90,9 @@ export class OrderComponent implements OnInit {
   // Define the status flow
   private statusFlow: string[] = ['in-process', 'pending', 'in-transit', 'completed'];
 
-  constructor(private _PurchasesService: PurchasesService, private router: Router) {}
+  constructor(private _PurchasesService: PurchasesService, private router: Router,
+    private toastr: ToastrService 
+  ) {}
 
   ngOnInit(): void {
     this.loadOrders(this.currentStatus);
@@ -117,7 +120,8 @@ export class OrderComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert('An error occurred while deleting the order.');
+          this.toastr.error('An error occurred while deleting the order.');
+          // alert('An error occurred while deleting the order.');
         }
       });
     }
@@ -134,7 +138,8 @@ export class OrderComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert(`An error occurred while changing the status to ${nextStatus}.`);
+          this.toastr.error('An error occurred while changing the status.');
+          // alert(`An error occurred while changing the status to ${nextStatus}.`);
         }
       });
     }

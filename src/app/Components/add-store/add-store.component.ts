@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AccountService } from '../../shared/services/account.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CountryService } from '../../shared/services/country.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Account {
   id: string;
@@ -44,7 +45,8 @@ export class AddStoreComponent implements OnInit {
     private router: Router, 
     private _CityService: CityService,
     private _StoreService: StoreService,
-    private _CountryService:CountryService
+    private _CountryService:CountryService,
+    private toastr: ToastrService,
   ) {
     
     this.storeForm = this.fb.group({
@@ -152,12 +154,14 @@ export class AddStoreComponent implements OnInit {
       }
       this._StoreService.addStore(formData).subscribe({
         next: (response) => {
+          this.toastr.success('تم اضافه المتجر بنجاح');
           this.isLoading = false;
           if (response) {
             this.router.navigate(['/dashboard/stores']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المتجر');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

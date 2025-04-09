@@ -15,6 +15,7 @@ import { ProductBranchesService } from '../../shared/services/product_branches.s
 import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
 import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-addsales',
   standalone: true,
@@ -62,7 +63,8 @@ selectedCheck:any;
     private _SalesService:SalesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
-    private _CheckService: CheckService
+    private _CheckService: CheckService,
+    private toastr:ToastrService,
 
   ) {
     this.saleForm = this.fb.group({
@@ -423,7 +425,8 @@ onBarcodeSelect(barcode: Event , index:number){ {
 let isdublicated =false;
   tempList.forEach((item:any)=>{
     if(item.barcode == selectedValue){
-      alert('هذا السيريال موجود بالفعل');
+      this.toastr.error('هذا السيريال موجود بالفعل');
+      // alert('هذا السيريال موجود بالفعل');
       isdublicated = true;
       return;
     }
@@ -676,7 +679,8 @@ handleForm() {
                 const itemValue = itemControl.value;
 
                 if(itemValue.neededSerialNumbers >0){
-                  alert('يجب ادخال كل السيريا المطلوب')
+                  this.toastr.error('يجب ادخال كل السيريا المطلوب');
+                  // alert('يجب ادخال كل السيريا المطلوب')
                   error =true;
 
                   return;
@@ -724,6 +728,7 @@ if(!error){
   this._SalesService.addSale(formData).subscribe({
     next: (response) => {
         if (response) {
+            this.toastr.success('تم اضافه الفاتوره بنجاح');
             console.log(response);
             this.isLoading = false;
             this._Router.navigate(['/dashboard/sales/waiting']);
@@ -733,7 +738,7 @@ if(!error){
     error: (err: HttpErrorResponse) => {
       this.isLoading = false;
       this.msgError = [];
-  
+      this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
       if (err.error && err.error.errors) {
          
           for (const key in err.error.errors) {

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sales',
@@ -16,7 +17,8 @@ export class SalesComponent implements OnInit {
   sales: any[] = []; 
 
   constructor(private _SalesService: SalesService, private router: Router,
-            private route: ActivatedRoute
+            private route: ActivatedRoute,
+            private toastr:ToastrService
     
   ) {}
   status ='waiting';
@@ -69,13 +71,15 @@ export class SalesComponent implements OnInit {
       this._SalesService.deleteSale(saleId).subscribe({
         next: (response) => {
           if (response) {
-            // this.router.navigate(['/dashboard/sales']);
+            this.toastr.success('تم حذف المبيعات بنجاح');
+            this.router.navigate(['/dashboard/sales']);
             this.loadSales(this.status);
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المبيعات');
           console.error(err);
-          alert('An error occurred while deleting the sale.');
+          // alert('An error occurred while deleting the sale.');
         }
       });
     }

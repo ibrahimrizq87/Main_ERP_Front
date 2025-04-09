@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { PriceService } from '../../shared/services/price.service';
 import { CurrencyService } from '../../shared/services/currency.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Account {
   id: string;
@@ -48,7 +49,8 @@ export class AddAccountComponent implements OnInit {
     , private _GroupService: GroupService,
     private _StoreService:StoreService,
     private _PriceService:PriceService,
-    private _CurrencyService: CurrencyService) {
+    private _CurrencyService: CurrencyService,
+    private toastr: ToastrService) {
     this.accountForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required]),
       name_en: this.fb.control(null , [Validators.required]),
@@ -122,7 +124,8 @@ export class AddAccountComponent implements OnInit {
         formData.append('parent_id', this.currentAccount.id);
 
       }else{
-        alert('a problem happend please relaod page');
+        this.toastr.error('A problem happend please relaod page');
+        // alert('a problem happend please relaod page');
         return;
       }
 
@@ -141,6 +144,7 @@ export class AddAccountComponent implements OnInit {
           this.isLoading = false;
           console.log(response)
           if (response) {
+            this.toastr.success('تم اضافه الحساب بنجاح');
             console.log(response)
             if (this.currentAccount) {
               this.router.navigate(['/dashboard/accounting/' + this.currentAccount.id]);
@@ -151,6 +155,7 @@ export class AddAccountComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           console.log(err.error)
+          this.toastr.error('حدث خطا اثناء اضافه الحساب');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

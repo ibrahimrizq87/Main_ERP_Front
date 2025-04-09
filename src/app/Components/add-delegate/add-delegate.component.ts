@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { CurrencyService } from '../../shared/services/currency.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-delegate',
@@ -44,7 +45,8 @@ export class AddDelegateComponent {
         private route: ActivatedRoute,
         private fb: FormBuilder,
         private _CurrencyService:CurrencyService,
-        private _AccountCategoriesService:AccountCategoriesService
+        private _AccountCategoriesService:AccountCategoriesService,
+        private toastr: ToastrService
   ) {
 
   }
@@ -139,11 +141,13 @@ onCurrencyChange(event:Event){
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المندوب بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/delegates']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المندوب');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

@@ -6,6 +6,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-bank',
@@ -18,7 +19,8 @@ export class AddBankComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _BankService:BankService ,private _Router: Router,private translate: TranslateService) {
+  constructor(private _BankService:BankService ,private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
+    // this.translate.setDefaultLang('en'); 
   
   }
 
@@ -46,11 +48,13 @@ export class AddBankComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه البنك بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/banks']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه البنك');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

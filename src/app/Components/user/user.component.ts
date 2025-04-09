@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services/user.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user',
@@ -17,7 +18,7 @@ export class UserComponent implements OnInit {
   filteredCities: any[] = []; 
   searchQuery: string = ''; 
 
-  constructor(private _UserServicev: UserService, private router: Router) {}
+  constructor(private _UserServicev: UserService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadUsers(); 
@@ -49,13 +50,15 @@ export class UserComponent implements OnInit {
       this._UserServicev.deleteUser(userId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المستخدم بنجاح');
             this.router.navigate(['/dashboard/users']);
             this.loadUsers();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المستخدم');
           console.error(err);
-          alert('An error occurred while deleting the User.');
+          // alert('An error occurred while deleting the User.');
         }
       });
     }

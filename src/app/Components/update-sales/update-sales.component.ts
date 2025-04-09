@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
 import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-sales',
   standalone: true,
@@ -58,7 +59,8 @@ selectedCheck:any;
     private _SalesService:SalesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
-    private _CheckService: CheckService
+    private _CheckService: CheckService,
+    private toastr: ToastrService,
 
   ) {
     this.saleForm = this.fb.group({
@@ -353,7 +355,8 @@ onBarcodeSelect(barcode: Event , index:number){ {
 let isdublicated =false;
   tempList.forEach((item:any)=>{
     if(item.barcode == selectedValue){
-      alert('هذا السيريال موجود بالفعل');
+      this.toastr.error('هذا السيريال موجود بالفعل');
+      // alert('هذا السيريال موجود بالفعل');
       isdublicated = true;
       return;
     }
@@ -639,7 +642,8 @@ handleForm() {
                 const itemValue = itemControl.value;
 
                 if(itemValue.neededSerialNumbers >0){
-                  alert('يجب ادخال كل السيريا المطلوب')
+                  this.toastr.error('يجب ادخال كل السيريا المطلوب');
+                  // alert('يجب ادخال كل السيريا المطلوب')
                   error =true;
 
                   return;
@@ -677,6 +681,7 @@ if(!error){
   this._SalesService.addSale(formData).subscribe({
     next: (response) => {
         if (response) {
+            this.toastr.success('تم اضافه الفاتوره بنجاح');
             console.log(response);
             this.isLoading = false;
             this._Router.navigate(['/dashboard/sales']);
@@ -684,6 +689,7 @@ if(!error){
     },
    
     error: (err: HttpErrorResponse) => {
+      this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
       this.isLoading = false;
       this.msgError = [];
   

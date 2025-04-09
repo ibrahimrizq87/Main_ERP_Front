@@ -14,6 +14,7 @@ import { ClientService } from '../../shared/services/client.service';
 import { CityService } from '../../shared/services/city.service';
 import { CountryService } from '../../shared/services/country.service';
 import { DelegateService } from '../../shared/services/delegate.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -82,7 +83,8 @@ export class AddClientsComponent {
         private _DelegateService: DelegateService,
 
         private _CurrencyService:CurrencyService,
-        private _AccountCategoriesService:AccountCategoriesService
+        private _AccountCategoriesService:AccountCategoriesService,
+        private toastr: ToastrService,
   ) {
     this.clientForm = this.fb.group({
       // name: this.fb.group({
@@ -307,18 +309,21 @@ removeCurrentDelegate(){
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه العميل بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/clients']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه العميل');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('خطا في البيانات المدخله');
+      // alert('invalid')
     }
   }
 

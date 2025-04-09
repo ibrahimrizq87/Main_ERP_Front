@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductUnitsService } from '../../shared/services/product_units.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-unit',
@@ -18,7 +19,10 @@ export class ProductUnitComponent implements OnInit {
   filteredUnits: any[] = [];
   searchTerm: string = '';
 
-  constructor(private _ProductUnitsService: ProductUnitsService, private router: Router) {}
+  constructor(private _ProductUnitsService: ProductUnitsService, private router: Router,
+     private toastr:ToastrService
+
+  ) {}
 
   ngOnInit(): void {
     this.loadUnits(); 
@@ -43,13 +47,15 @@ export class ProductUnitComponent implements OnInit {
       this._ProductUnitsService.deleteProductUnit(unitId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الوحدة بنجاح');
             this.router.navigate(['/dashboard/productUnit']);
             this.loadUnits();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الوحدة');
           console.error(err);
-          alert('An error occurred while deleting the Unit.');
+          // alert('An error occurred while deleting the Unit.');
         }
       });
     }

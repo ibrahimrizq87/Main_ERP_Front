@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { CheckService } from '../../shared/services/check.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-purchase',
@@ -53,7 +54,8 @@ export class AddPurchaseComponent implements OnInit {
     private _PurchasesService: PurchasesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
-    private _CheckService: CheckService
+    private _CheckService: CheckService,
+    private toastr: ToastrService
 
   ) {
     this.purchasesBillForm = this.fb.group({
@@ -136,7 +138,8 @@ export class AddPurchaseComponent implements OnInit {
       error: (err) => {
         if (err.status == 404) {
           // console.log('here')
-          alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          // alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
           this._Router.navigate(['/dashboard/currency']);
 
         }
@@ -547,7 +550,8 @@ export class AddPurchaseComponent implements OnInit {
   handleForm() {
 
     if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor &&(this.selectedVendor?.currency?.id != this.currencies.id) && !this.purchasesBillForm.get('currency_price_value')?.value){
-      alert('يجب ادخال سعر الصرف');
+      this.toastr.error('يجب ادخال سعر الصرف');
+      // alert('يجب ادخال سعر الصرف');
       return;
     }
 
@@ -611,7 +615,8 @@ export class AddPurchaseComponent implements OnInit {
           const itemValue = itemControl.value;
 
           if (itemValue.neededSerialNumbers > 0) {
-            alert('يجب ادخال كل السيريا المطلوب')
+            this.toastr.error('يجب ادخال كل السيريا المطلوب');
+            // alert('يجب ادخال كل السيريا المطلوب')
             error = true;
 
             return;
@@ -647,7 +652,8 @@ export class AddPurchaseComponent implements OnInit {
                 formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
 
               } else {
-                alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                this.toastr.error('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
                 error = true;
                 return;
               }
@@ -680,6 +686,7 @@ export class AddPurchaseComponent implements OnInit {
         this._PurchasesService.addPurchase(formData).subscribe({
           next: (response) => {
             if (response) {
+              this.toastr.success('تم اضافه الفاتوره بنجاح');
               console.log(response);
               this.isLoading = false;
               this._Router.navigate(['/dashboard/purchases/waiting']);
@@ -687,6 +694,7 @@ export class AddPurchaseComponent implements OnInit {
           },
 
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
             this.isLoading = false;
             this.msgError = [];
 

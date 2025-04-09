@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -21,7 +22,7 @@ export class AccountCategoriesComponent {
   type ='client';
 
   constructor(private _AccountCategoriesService: AccountCategoriesService , private router: Router , 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,private toastr:ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -63,12 +64,14 @@ export class AccountCategoriesComponent {
       this._AccountCategoriesService.deleteAccountCategory(documentId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الفئة بنجاح');
             this.loadCategories(this.type);
           }
         },
         error: (err:HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء حذف الفئة');
           console.log(err.error);
-          alert('An error occurred while deleting the Document.');
+          // alert('An error occurred while deleting the Document.');
           
         }
       });

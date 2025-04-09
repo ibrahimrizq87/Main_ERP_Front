@@ -4,6 +4,7 @@ import { RouterOutlet, RouterModule, RouterLinkActive, Router, ActivatedRoute } 
 import { AccountService } from '../../shared/services/account.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-accounting',
@@ -18,7 +19,7 @@ export class AccountingComponent implements OnInit {
   accounts: any[] = []; 
   type: string | null = '';
   searchTerm: string = '';
-  constructor(private _AccountService: AccountService, private router: Router , private route: ActivatedRoute) {}
+  constructor(private _AccountService: AccountService, private router: Router , private route: ActivatedRoute,private toastr:ToastrService) {}
 
   ngOnInit(): void {
 
@@ -100,13 +101,15 @@ export class AccountingComponent implements OnInit {
       this._AccountService.deleteAccount(accountID).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الحساب بنجاح');
             this.router.navigate(['/dashboard/accounting/'+this.type]);
             this.loadAccounts();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الحساب');
           console.error(err);
-          alert('An error occurred while deleting the Account.');
+          // alert('An error occurred while deleting the Account.');
         }
       });
     }

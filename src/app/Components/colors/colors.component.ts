@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorService } from '../../shared/services/colors.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-colors',
@@ -23,7 +24,7 @@ export class ColorsComponent {
   filteredCountries: any[] = []; 
   searchQuery: string = ''; 
 
-  constructor(private _ColorService: ColorService, private router: Router) {}
+  constructor(private _ColorService: ColorService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadCities(); 
@@ -55,13 +56,15 @@ export class ColorsComponent {
       this._ColorService.deleteColor(cityId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف المدينة بنجاح');
             // this.router.navigate(['/dashboard/city']);
             this.loadCities();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف المدينة');
           console.error(err);
-          alert('An error occurred while deleting the City.');
+          // alert('An error occurred while deleting the City.');
         }
       });
     }

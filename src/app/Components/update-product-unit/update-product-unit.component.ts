@@ -5,6 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductUnitsService } from '../../shared/services/product_units.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-product-unit',
@@ -21,7 +22,8 @@ export class UpdateProductUnitComponent implements OnInit {
     constructor(
     private _ProductUnitsService: ProductUnitsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
     this.unitForm = new FormGroup({
       unit: new FormControl(null, [Validators.required]),
@@ -66,6 +68,7 @@ export class UpdateProductUnitComponent implements OnInit {
           next: (response) => {
             this.isLoading = false;
             if (response) {
+              this.toastr.success('تم تعديل الوحدة بنجاح');
               this.msgSuccess = response;
               setTimeout(() => {
                 this.router.navigate(['/dashboard/productUnit']);
@@ -73,6 +76,7 @@ export class UpdateProductUnitComponent implements OnInit {
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل الوحدة');
             this.isLoading = false;
             this.msgError = err.error.error;
           }

@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterOutlet, RouterModule, RouterLinkActive, Router } from '@angular/router';
+import {  RouterModule, Router } from '@angular/router';
 import { GroupService } from '../../shared/services/group.service';
 import { CityService } from '../../shared/services/city.service';
 import { UserService } from '../../shared/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-customer',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, RouterLinkActive,CommonModule,FormsModule,ReactiveFormsModule ,TranslateModule],
+  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './create-customer.component.html',
   styleUrl: './create-customer.component.css'
 })
@@ -36,7 +37,8 @@ export class CreateCustomerComponent implements OnInit {
     private router: Router, 
     private _CityService: CityService,
     private _UserService: UserService,
-    private _CurrencyService:CurrencyService
+    private _CurrencyService:CurrencyService,
+    private toastr: ToastrService
   ) {
     
     this.userForm = this.fb.group({
@@ -157,10 +159,12 @@ export class CreateCustomerComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه العميل بنجاح');
             this.router.navigate(['/dashboard/customer']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه العميل');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

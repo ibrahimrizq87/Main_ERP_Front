@@ -8,6 +8,7 @@ import { PaymentDocumentService } from '../../shared/services/pyment_document.se
 import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 // import { FormBuilder, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -37,7 +38,8 @@ export class AddDocumentComponent {
     private route: ActivatedRoute
     , private fb: FormBuilder,
     private _AccountService: AccountService,
-    private _PaymentDocumentService: PaymentDocumentService
+    private _PaymentDocumentService: PaymentDocumentService,
+    private toastr: ToastrService,
   ) {
 
     this.transactionForm = this.fb.group({
@@ -129,7 +131,8 @@ export class AddDocumentComponent {
       //   break;
 
       default:
-        alert('wrong document type please try to select a document');
+        this.toastr.error('خطا في نوع المستند');
+        // alert('wrong document type please try to select a document');
         this.router.navigate(['/dashboard/document/' + this.type ]);
         break;
     }
@@ -190,11 +193,13 @@ export class AddDocumentComponent {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه المستند بنجاح');
             this.router.navigate(['/dashboard/document/' + this.type +'/waiting']);
 
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المستند');
           this.isLoading = false;
           console.log('error happend', err);
 

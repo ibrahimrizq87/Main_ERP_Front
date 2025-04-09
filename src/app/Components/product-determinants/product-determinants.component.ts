@@ -4,20 +4,22 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { DeterminantService } from '../../shared/services/determinants.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-determinants',
   standalone: true,
-  imports: [CommonModule,RouterModule,RouterLinkActive ,TranslateModule,FormsModule],
+  imports: [CommonModule, RouterModule, RouterLinkActive, TranslateModule, FormsModule],
   templateUrl: './product-determinants.component.html',
   styleUrl: './product-determinants.component.css'
 })
 export class ProductDeterminantsComponent {
   determinants: any[] = [];
   filteredDeterminants: any[] = [];
-  searchTerm: string = ''
+  searchTerm: string = '';
+  selectedDeterminant: any = null;
 
-  constructor(private _DeterminantService: DeterminantService, private router: Router) {}
+  constructor(private _DeterminantService: DeterminantService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadDeterminants();
@@ -27,7 +29,7 @@ export class ProductDeterminantsComponent {
     this._DeterminantService.getAllDeterminants().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response)
+          console.log(response);
           this.determinants = response.data;
           this.filteredDeterminants = [...this.determinants];
         }
@@ -45,11 +47,13 @@ export class ProductDeterminantsComponent {
           if (response) {
             this.router.navigate(['/dashboard/productDeterminants']);
             this.loadDeterminants();
+            this.toastr.success('تم حذف المحدد بنجاح');
           }
         },
         error: (err) => {
           console.error(err);
-          alert('An error occurred while deleting the determinant.');
+          // alert('An error occurred while deleting the determinant.');
+          this.toastr.error('حدث خطا اثناء حذف المحدد');
         }
       });
     }
@@ -60,10 +64,15 @@ export class ProductDeterminantsComponent {
       this.filteredDeterminants = [...this.determinants];
     } else {
       this.filteredDeterminants = this.determinants.filter(determinant =>
-        determinant.determinant.toLowerCase().includes(this.searchTerm.toLowerCase())
+        determinant.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
   }
+
+  openModal(determinant: any): void {
+    this.selectedDeterminant = determinant;
+    const modal = document.getElementById('determinantModal')!;
+    const modalInstance = new (window as any).bootstrap.Modal(modal);
+    modalInstance.show();
+  }
 }
-
-

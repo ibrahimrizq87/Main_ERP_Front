@@ -7,6 +7,7 @@ import { FormsModule ,FormGroup , ReactiveFormsModule,FormControl ,Validators} f
 import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { ProductsService } from '../../shared/services/products.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-branch',
@@ -25,7 +26,8 @@ export class ProductBranchComponent implements OnInit {
   filteredProducts:any;
   constructor(private _ProductBranchesService: ProductBranchesService,
      private router: Router,
-    private _ProductsService:ProductsService) {}
+    private _ProductsService:ProductsService,
+  private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadBranches(); 
@@ -87,7 +89,8 @@ selectProduct(product:any){
 
 exportProductBranchByProduct(){
   if (!this.selectedProduct){
-    alert('يجب اختيار منتج اولا');
+    this.toastr.error('يجب اختيار منتج اولا');
+    // alert('يجب اختيار منتج اولا');
   }else{
 
     // this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
@@ -179,14 +182,16 @@ onProductSearchChange(){
       this._ProductBranchesService.deleteProductBranch(branchId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الفرع بنجاح');
             console.log(response)
             this.router.navigate(['/dashboard/productBranch']);
             this.loadBranches();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الفرع');
           console.error(err);
-          alert('An error occurred while deleting the Branch.');
+          // alert('An error occurred while deleting the Branch.');
         }
       });
     }

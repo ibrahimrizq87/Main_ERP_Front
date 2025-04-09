@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-bank',
@@ -21,7 +22,8 @@ export class UpdateBankComponent implements OnInit {
     constructor(
     private _BankService: BankService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
     this.bankForm = new FormGroup({
       name_ar: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
@@ -70,6 +72,7 @@ export class UpdateBankComponent implements OnInit {
       if (bankId) {
         this._BankService.updateBank(bankId, bankData).subscribe({
           next: (response) => {
+            this.toastr.success('تم تعديل البنك بنجاح');
             this.isLoading = false;
             if (response) {
               this.msgSuccess = response;
@@ -79,6 +82,7 @@ export class UpdateBankComponent implements OnInit {
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل البنك');
             this.isLoading = false;
             this.msgError = err.error.error;
           }
@@ -91,7 +95,6 @@ export class UpdateBankComponent implements OnInit {
   } 
   onCancel(): void {
         this.bankForm.reset();
-       
         this.router.navigate(['/dashboard/banks']); 
       }  
 }

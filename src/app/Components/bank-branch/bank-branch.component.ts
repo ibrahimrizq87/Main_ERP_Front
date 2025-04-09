@@ -4,6 +4,7 @@ import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bank-branch',
@@ -18,7 +19,7 @@ export class BankBranchComponent  implements OnInit {
   filteredBankBranches: any[] = [];
   searchQuery: string = '';
 
-  constructor(private _BankService: BankService, private router: Router) {}
+  constructor(private _BankService: BankService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadBankBranches(); 
@@ -43,13 +44,15 @@ export class BankBranchComponent  implements OnInit {
       this._BankService.deleteBankBranch(bankId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الفرع البنكي بنجاح');
             this.router.navigate(['/dashboard/bankBranch']);
             this.loadBankBranches();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الفرع البنكي');
           console.error(err);
-          alert('An error occurred while deleting the Bank Branch.');
+          // alert('An error occurred while deleting the Bank Branch.');
         }
       });
     }

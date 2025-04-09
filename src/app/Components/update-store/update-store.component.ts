@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { CountryService } from '../../shared/services/country.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-store',
@@ -33,7 +34,8 @@ export class UpdateStoreComponent implements OnInit {
     private _CityService: CityService,
     private _StoreService: StoreService,
     private route: ActivatedRoute,
-    private _CountryService:CountryService
+    private _CountryService:CountryService,
+    private toastr: ToastrService
   ) {
     this.storeForm = new FormGroup({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
@@ -161,12 +163,14 @@ export class UpdateStoreComponent implements OnInit {
       if (storeId){
       this._StoreService.updateStore(storeId,formData).subscribe({
         next: (response) => {
+          this.toastr.success('تم تعديل المتجر بنجاح');
           this.isLoading = false;
           if (response) {
             this.router.navigate(['/dashboard/stores']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل المتجر');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

@@ -10,6 +10,7 @@ import { Modal } from 'bootstrap';
 import { Product ,ProductColor ,ProductBranch} from '../../models/product.model';
 import { ProductBranchMovesService } from '../../shared/services/product_branch_moves.service';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product-move',
@@ -55,7 +56,7 @@ export class AddProductMoveComponent {
     private _StoreService: StoreService,
     private _ProductBranchMovesService:ProductBranchMovesService,
     private _ProductBranchesService:ProductBranchesService,
-
+    private toastr:ToastrService
 
   ) {
     this.branchForm = new FormGroup({
@@ -116,7 +117,8 @@ export class AddProductMoveComponent {
 
     if (type == 'from'){
       if(selectedValue == this.toStore){
-      alert('لا يمكن انشاء حركه من المخزن لنفسه');
+        this.toastr.error('لا يمكن انشاء حركه من المخزن لنفسه');
+      // alert('لا يمكن انشاء حركه من المخزن لنفسه');
       this.branchForm.patchValue({
         from_store: null,
       });
@@ -126,7 +128,8 @@ export class AddProductMoveComponent {
 
     }else{
       if(selectedValue == this.fromStore){
-        alert('لا يمكن انشاء حركه من المخزن لنفسه');
+        this.toastr.error('لا يمكن انشاء حركه من المخزن لنفسه');
+        // alert('لا يمكن انشاء حركه من المخزن لنفسه');
         this.branchForm.patchValue({
           to_store: null,
         });
@@ -205,12 +208,14 @@ this.selectedProduct =selectedValue;
     this.isSubmited =true;
 
     if( (this.selectedType == 'store'  || this.selectedType == 'lost') && !this.fromSelectedBranch){
-      alert('فرع المنتج المرغوب الانقص منه مطلوب');
+      this.toastr.error('فرع المنتج المرغوب الانقص منه مطلوب');
+      // alert('فرع المنتج المرغوب الانقص منه مطلوب');
 return;
     }
     
     if( (this.selectedType == 'store'  || this.selectedType == 'extra'|| this.selectedType == 'first_entry') && !this.toSelectedBranch){
-      alert('فرع المنتج المرغوب الزياده عليه مطلوب');
+     this.toastr.error('فرع المنتج المرغوب الزياده عليه مطلوب');
+      // alert('فرع المنتج المرغوب الزياده عليه مطلوب');
       return;
 
     }
@@ -239,11 +244,13 @@ return;
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه الحركه بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/productBranch']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه الحركه');
           this.isLoading = false;
           this.msgError = err.error.error;
           console.log(err.error.error);

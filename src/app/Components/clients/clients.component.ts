@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormSubmittedEvent, FormsModule } from '@angular/forms';
 import { ClientService } from '../../shared/services/client.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-clients',
   standalone: true,
@@ -18,7 +19,7 @@ export class ClientsComponent {
   filteredCurrencies: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _ClientService: ClientService, private router: Router) {}
+  constructor(private _ClientService: ClientService, private router: Router,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.loadCurrency(); 
@@ -51,12 +52,14 @@ export class ClientsComponent {
       this._ClientService.deleteClient(currency_id).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف العميل بنجاح');
             this.loadCurrency();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف العميل');
           console.error(err);
-          alert('An error occurred while deleting the currency.');
+          // alert('An error occurred while deleting the currency.');
         }
       });
     }

@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
 import { DeterminantService } from '../../shared/services/determinants.service';
 import { PriceService } from '../../shared/services/price.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product-branch',
@@ -64,7 +65,8 @@ export class AddProductBranchComponent implements OnInit {
     private _Router: Router,
     private _DeterminantService: DeterminantService,
     private _StoreService: StoreService,
-    private _ProductBranchesService:ProductBranchesService
+    private _ProductBranchesService:ProductBranchesService,
+    private toastr: ToastrService,
   ) {
     this.branchForm = new FormGroup({
       // store_id: new FormControl(null, [Validators.required]),
@@ -292,7 +294,8 @@ this.determinants.controls.forEach((item,index)=>{
 
           ranges.controls.forEach((rangeControl) => {
             if(!rangeControl.get('price')?.value){
-                alert('prices are invalid')
+              this.toastr.error('الرجاء ادخال كل الاسعار المطلوبه');
+                // alert('prices are invalid')
                 return;
             }
           formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
@@ -312,11 +315,13 @@ this.determinants.controls.forEach((item,index)=>{
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المنتج بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/productBranch']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المنتج');
           this.isLoading = false;
           this.msgError = err.error.error;
           console.log(err.error.error);

@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeterminantService } from '../../shared/services/determinants.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-product-determinants',
@@ -20,7 +21,8 @@ submitted =false;
   isLoading: boolean = false;
   values: {value:string} [] =[];
 
-  constructor(private _DeterminantService:DeterminantService ,private _Router: Router,private translate: TranslateService) {
+  constructor(private _DeterminantService:DeterminantService ,private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
+    this.translate.setDefaultLang(localStorage.getItem('lang') || 'ar');
   
   }
   addValue(){
@@ -55,11 +57,13 @@ submitted =false;
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المحدد بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/productDeterminants']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المحدد');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

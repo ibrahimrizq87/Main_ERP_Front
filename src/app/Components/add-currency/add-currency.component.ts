@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-currency',
   standalone: true,
@@ -18,7 +19,7 @@ export class AddCurrencyComponent {
   isLoading: boolean = false;
   isSubmited = false;
 
-  constructor(private _CurrencyService:CurrencyService , private _Router: Router) {}
+  constructor(private _CurrencyService:CurrencyService , private _Router: Router,private toastr:ToastrService) {}
 
   currencyForm: FormGroup = new FormGroup({
     currency_name_ar: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
@@ -52,11 +53,13 @@ export class AddCurrencyComponent {
       next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه العمله بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/currency']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه العمله');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

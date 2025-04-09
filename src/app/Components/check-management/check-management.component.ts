@@ -8,6 +8,7 @@ import { BankService } from '../../shared/services/bank.service';
 import { CheckService } from '../../shared/services/check.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -24,7 +25,8 @@ export class CheckManagementComponent {
   constructor(
     private _CheckServic: CheckService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
 
   ) { }
 
@@ -84,13 +86,15 @@ export class CheckManagementComponent {
       this._CheckServic.deleteCheck(checkId).subscribe({
         next: (response) => {
           if (response) {
+            this.toastr.success('تم حذف الشيك بنجاح');
             // this.router.navigate(['/dashboard/city']);
             this.getChecks();
           }
         },
         error: (err) => {
+          this.toastr.error('حدث خطا اثناء حذف الشيك');
           console.error(err);
-          alert('An error occurred while deleting the City.');
+          // alert('An error occurred while deleting the City.');
         }
       });
     }

@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-user',
@@ -17,7 +18,7 @@ export class AddUserComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _UserService:UserService , private _Router: Router,private translate: TranslateService) {
+  constructor(private _UserService:UserService , private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   }
 
@@ -44,11 +45,13 @@ export class AddUserComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المستخدم بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/users']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المستخدم');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

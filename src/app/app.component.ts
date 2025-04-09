@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./Components/login/login.component";
 import { TranslateModule } from '@ngx-translate/core';
 import {  TranslateService } from '@ngx-translate/core';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -8,8 +7,7 @@ import {  TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, 
-    LoginComponent,
+  imports: [RouterOutlet,
     TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CityService } from '../../shared/services/city.service';
 import { UserService } from '../../shared/services/user.service';
 import { GroupService } from '../../shared/services/group.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-vendor',
   standalone: true,
-  imports: [RouterLinkActive, RouterModule,CommonModule,ReactiveFormsModule,FormsModule ,TranslateModule],
+  imports: [ RouterModule,CommonModule,ReactiveFormsModule,FormsModule ,TranslateModule],
   templateUrl: './create-vendor.component.html',
   styleUrls: ['./create-vendor.component.css']
 })
@@ -32,7 +33,8 @@ export class CreateVendorComponent implements OnInit {
     private _GroupService: GroupService, 
     private router: Router, 
     private _CityService: CityService,
-    private _UserService: UserService
+    private _UserService: UserService,
+    private toastr: ToastrService
   ) {
     // Initialize the userForm with FormBuilder
     this.userForm = this.fb.group({
@@ -125,10 +127,12 @@ export class CreateVendorComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           if (response) {
+            this.toastr.success('تم اضافه المورد بنجاح');
             this.router.navigate(['/dashboard/vendor']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المورد');
           this.isLoading = false;
           this.msgError = err.error.error;
         }

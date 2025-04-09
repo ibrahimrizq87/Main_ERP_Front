@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-account-categories',
@@ -23,7 +24,8 @@ export class UpdateAccountCategoriesComponent {
   constructor(private _AccountCategoriesService:AccountCategoriesService ,
         private _Router: Router,
         private translate: TranslateService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     
   ) {
    
@@ -80,11 +82,14 @@ export class UpdateAccountCategoriesComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل الفئة بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/account-categories/'+ this.type ]);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل الفئة');
+          
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

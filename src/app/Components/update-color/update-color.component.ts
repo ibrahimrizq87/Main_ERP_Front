@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ColorService } from '../../shared/services/colors.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-color',
   standalone: true,
@@ -20,7 +21,9 @@ export class UpdateColorComponent {
   isLoading: boolean = false;
 
   constructor(private route: ActivatedRoute,
-    private _ColorService:ColorService , private _Router: Router,private translate: TranslateService) {
+    private _ColorService:ColorService , private _Router: Router,private translate: TranslateService,
+  private toastr: ToastrService) {
+   
   }
 
 
@@ -74,11 +77,13 @@ export class UpdateColorComponent {
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم تعديل اللون بنجاح');
             this.isLoading = false;        
             this._Router.navigate(['/dashboard/colors']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء تعديل اللون');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);

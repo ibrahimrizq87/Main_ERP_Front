@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-product-category',
@@ -21,7 +22,8 @@ export class UpdateProductCategoryComponent {
   isLoading: boolean = false;
 
   constructor(private _ProductCategoriesService:ProductCategoriesService ,private _Router: Router,private translate: TranslateService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     
   ) {
   
@@ -93,11 +95,13 @@ export class UpdateProductCategoryComponent {
           next: (response) => {
             console.log(response);
             if (response) {
+              this.toastr.success('تم تعديل الفئة بنجاح');
               this.isLoading = false;
               this._Router.navigate(['/dashboard/productCategories']);
             }
           },
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل الفئة');
             this.isLoading = false;
              this.msgError = err.error.error;
             console.log(err);

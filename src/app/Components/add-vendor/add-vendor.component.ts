@@ -15,6 +15,7 @@ import { CityService } from '../../shared/services/city.service';
 import { CountryService } from '../../shared/services/country.service';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { VendorService } from '../../shared/services/vendor.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-vendor',
@@ -83,7 +84,8 @@ export class AddVendorComponent {
         private _DelegateService: DelegateService,
 
         private _CurrencyService:CurrencyService,
-        private _AccountCategoriesService:AccountCategoriesService
+        private _AccountCategoriesService:AccountCategoriesService,
+        private toastr: ToastrService,
   ) {
     this.clientForm = this.fb.group({
       // name: this.fb.group({
@@ -309,18 +311,21 @@ selecteddelegateAccount:Account | null= null;
         next: (response) => {
           console.log(response);
           if (response) {
+            this.toastr.success('تم اضافه المورد بنجاح');
             this.isLoading = false;
             this._Router.navigate(['/dashboard/vendors']);
           }
         },
         error: (err: HttpErrorResponse) => {
+          this.toastr.error('حدث خطا اثناء اضافه المورد');
           this.isLoading = false;
            this.msgError = err.error.error;
           console.log(err);
         }
       });
     }else{
-      alert('invalid')
+      this.toastr.error('خطا في البيانات المدخله');
+      // alert('invalid')
     }
   }
 

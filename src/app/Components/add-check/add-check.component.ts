@@ -1,9 +1,9 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from '../../shared/services/account.service'
-import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BankService } from '../../shared/services/bank.service';
 import { CheckService } from '../../shared/services/check.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,7 +15,7 @@ import { Modal } from 'bootstrap';
 @Component({
   selector: 'app-check-management',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterModule, FormsModule, ReactiveFormsModule,TranslateModule ],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule,TranslateModule ],
   templateUrl: './add-check.component.html',
   styleUrl: './add-check.component.css'
 })

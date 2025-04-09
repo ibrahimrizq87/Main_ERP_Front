@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { CheckService } from '../../shared/services/check.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-purchase',
@@ -56,7 +57,8 @@ export class UpdatePurchaseComponent {
     private _Router: Router,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
 
 
   ) {
@@ -620,7 +622,8 @@ export class UpdatePurchaseComponent {
           const itemValue = itemControl.value;
 
           if (itemValue.neededSerialNumbers > 0) {
-            alert('يجب ادخال كل السيريا المطلوب')
+            this.toastr.error('يجب ادخال كل السيريا المطلوب');
+            // alert('يجب ادخال كل السيريا المطلوب')
             error = true;
 
             return;
@@ -638,7 +641,8 @@ export class UpdatePurchaseComponent {
                 formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
 
               } else {
-                alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                this.toastr.error('يجب اختيار لون للمنتج');
+                // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
                 error = true;
                 return;
               }
@@ -673,6 +677,7 @@ export class UpdatePurchaseComponent {
         this._PurchasesService.updatePurchase(unitId, formData).subscribe({
           next: (response) => {
             if (response) {
+              this.toastr.success('تم تعديل الفاتورة بنجاح');
               console.log(response);
               this.isLoading = false;
               this._Router.navigate(['/dashboard/purchases/waiting']);
@@ -680,6 +685,7 @@ export class UpdatePurchaseComponent {
           },
 
           error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء تعديل الفاتورة');
             this.isLoading = false;
             this.msgError = [];
 
