@@ -701,30 +701,18 @@ handleForm() {
 
                     }
 
-                    // if(itemValue.colors.length>0){
 
-// if( itemValue.color_id){
-//   formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
-
-// }else{
-//   alert( 'لازم تضيف لون للمنتجات اللى ليها اللوان');
-//   error =true;
-//   return;
-// }
-
-
-                    // }
 
                     const serialNumbers = itemControl.get('serialNumbers')?.value;
 
-if(serialNumbers.length>0){
+                  if(serialNumbers.length>0){
 
-  serialNumbers.forEach((item :any ,internalIndex:number)=>{
-    formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode );
+                    serialNumbers.forEach((item :any ,internalIndex:number)=>{
+                      formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode );
 
-  });
+                    });
 
-}
+                  }
 
 
 

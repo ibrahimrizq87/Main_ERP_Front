@@ -67,15 +67,11 @@ export class SalesService {
   }
   
   viewAllSales(status:string): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/sales-bills/by-status/${status}`,{ headers });
+    return this._HttpClient.get(`${this.baseURL}/general/sale-bills/${status}`,{ headers:this.getHeadersWithToken() });
   }
   deleteSale(saleId: number): Observable<any> {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this._HttpClient.delete(`${this.baseURL}/sales-bills/${saleId}`, { headers })
+    return this._HttpClient.delete(`${this.baseURL}/general/sale-bills/${saleId}`, { headers:this.getHeadersWithToken() })
   }
 
   
