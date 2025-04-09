@@ -19,15 +19,14 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">ID</th>
                 <th class="bg-light" scope="col">{{ 'DETERMINANTS' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Loop through the Groups array to display each group -->
             <tr *ngFor="let determinant of filteredDeterminants; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{determinant.id}}</th>
                 <td>{{ determinant.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>

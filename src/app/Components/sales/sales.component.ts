@@ -69,7 +69,7 @@ export class SalesComponent implements OnInit {
       this._SalesService.deleteSale(saleId).subscribe({
         next: (response) => {
           if (response) {
-            this.router.navigate(['/dashboard/sales']);
+            // this.router.navigate(['/dashboard/sales']);
             this.loadSales(this.status);
           }
         },

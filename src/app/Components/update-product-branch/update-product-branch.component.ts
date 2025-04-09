@@ -38,7 +38,7 @@ currentProductBranch:any;
     selectedColor :ProductColor|null = null;
     isSubmited =false;
     pricesAreValid=false;
-  
+    productPrices:ProductPrice[]=[];
     selectedStore :string|null=null;
     selectedProduct :string|null=null;
     priceCategories: PriceCategory[] = [];
@@ -48,9 +48,7 @@ currentProductBranch:any;
     }
   
   
-    addDeterminant(determinant: any) {
-      console.log('values', determinant.values);
-    
+    addDeterminant(determinant: any) {    
       this.determinants.push(this.fb.group({
         determinant_name: [determinant?.name],
         determinant_id: [determinant?.id],
@@ -70,8 +68,6 @@ currentProductBranch:any;
       private _ProductBranchesService:ProductBranchesService
     ) {
       this.branchForm = new FormGroup({
-        // store_id: new FormControl(null, [Validators.required]),
-        // product_id: new FormControl(null, [Validators.required]),
         color_id: new FormControl(null),
         default_price: new FormControl(null, [Validators.required]),
         determinants: this.fb.array([]),
@@ -151,25 +147,21 @@ currentProductBranch:any;
         if(price != null){
   
             const priceForm = this.fb.group({
-              price_category_id: [priceCategory.id],
+            price_category_id: [priceCategory.id],
             price_category_name: [priceCategory.name],
             ranges: this.fb.array([]) 
           });
   
           this.prices.push(priceForm);
-  
           price.prices.forEach((item)=>{
-       const ranges = priceForm.get('ranges') as FormArray;
-       
-        
+          const ranges = priceForm.get('ranges') as FormArray;
+               
         ranges.push(this.fb.group({
           price: [item.price],
           range_to: [item.quantity_to],
-          range_from: [item.quantity_from],
-    
-    
+          range_from: [item.quantity_from],    
         }));
-          })
+      })
   
 
   
@@ -184,26 +176,6 @@ currentProductBranch:any;
     
       }
     
-  
-    // loadPriceCategories(): void {
-    //   this._PriceService.viewAllCategory().subscribe({
-    //     next: (response) => {
-    //       if (response) {
-    //         this.priceCategories = response.data;
-    //         this.priceCategories.forEach((category)=>{
-    //           this.addPrice(category);
-    //         })
-            
-    //       }
-    //     },
-    //     error: (err) => {
-    //       console.error(err);
-    //     }
-    //   });
-    // }
-    productPrices:ProductPrice[]=[];
-
-  
       loadPriceCategories(): void {
       this._PriceService.viewAllCategory().subscribe({
         next: (response) => {
@@ -223,8 +195,6 @@ currentProductBranch:any;
               });
 
               this.addPrice(category ,currentPrice );
-
-            
             });
             
           }
@@ -250,13 +220,8 @@ currentProductBranch:any;
       if (unitId) {
         this.fetchProductBranch(unitId);
       }
-
-
       this.loadStores();
       this.loadProducts();
-      // this.loadPriceCategories();
-  
-      // this.loadDeterminants();
     }
   
     
@@ -269,16 +234,10 @@ currentProductBranch:any;
             this.currentProductBranch =  categoryData;
             console.log(categoryData)
             this.branchForm.patchValue({
-              // store_id: new FormControl(null, [Validators.required]),
-              // product_id: new FormControl(null, [Validators.required]),
               color_id: categoryData.product_color?.id,
               default_price: categoryData.default_price,
-  
             });
             this.selectedColor = categoryData.product_color;
-
-         
-
             categoryData.determinantValues.forEach((element:any) => {
               console.log(element)
               this.determinants.push(this.fb.group({
@@ -292,6 +251,8 @@ currentProductBranch:any;
 
             this.productColors = categoryData.product.colors
             this.loadPriceCategories();
+            this.loadDeterminants(categoryData.product.id);
+
           }
         },
         error: (err: HttpErrorResponse) => {
@@ -331,25 +292,33 @@ currentProductBranch:any;
   
     
   
-  onProductChange(event: Event) {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedType = selectedValue;
-    this.loadDeterminants(selectedValue);
-    const selectedProduct = this.products.find(product => product.id == selectedValue);
-  this.selectedProduct =selectedValue;
-    this.productColors = selectedProduct?.colors|| [];
-  }
+  // onProductChange(event: Event) {
+  //   const selectedValue = (event.target as HTMLSelectElement).value;
+  //   this.selectedType = selectedValue;
+  //   this.loadDeterminants(selectedValue);
+  //   const selectedProduct = this.products.find(product => product.id == selectedValue);
+  // this.selectedProduct =selectedValue;
+  //   this.productColors = selectedProduct?.colors|| [];
+  // }
   
   loadDeterminants(productId:string): void {
     this._DeterminantService.getDeterminantsByProduct(productId).subscribe({
       next: (response) => {
         if (response) {
           this.MainDeterminants = response.data;
-          this.determinants.clear();
+          // this.determinants.clear();
           console.log(this.MainDeterminants );
           this.MainDeterminants.forEach((item)=>{
+            let isExsist = false;
+            this.determinants.controls.forEach((determinant)=>{
+              if(determinant.get('determinant_id')?.value == item.id){
+                isExsist = true;
+              }
+            })
+            if(!isExsist){
+              this.addDeterminant(item);
+            }
 
-            this.addDeterminant(item);
           })
         }
       },
@@ -360,13 +329,7 @@ currentProductBranch:any;
   }
   
     handleForm() {
-  
-      //   if(!this.pricesAreValid){
-      //   alert('الرجاء ادخال كل الاسعار المطلوبه')
-      //   return;
-      // }
-  
-  
+
       this.isSubmited =true;
       if (this.branchForm.valid ) {
   
@@ -374,15 +337,11 @@ currentProductBranch:any;
           return;
         }
         this.isLoading = true;
-  
     
         const formData = new FormData();
-        // formData.append('store_id', this.branchForm.get('store_id')?.value);
-        // formData.append('product_id', this.branchForm.get('product_id')?.value);
         if(this.selectedColor){
           formData.append('product_color_id', this.branchForm.get('color_id')?.value);
         }
-
 
         this.determinants.controls.forEach((item,index)=>{
           formData.append(`determinant_values[${index}][determinant_value_id]`, item.get('value_id')?.value);
@@ -402,10 +361,6 @@ currentProductBranch:any;
                   return;
                 
               }
-             
-  
-              // $table->integer('quantity_from');
-              // $table->integer('quantity_to');
   
             formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
             formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
@@ -417,8 +372,6 @@ currentProductBranch:any;
           }
         });
       
-  
-       
         const productId = this.route.snapshot.paramMap.get('id');
         if (productId) {
         this._ProductBranchesService.updateProductBranch(productId,formData).subscribe({
