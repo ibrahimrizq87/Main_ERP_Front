@@ -13,26 +13,26 @@ import { ProductBranchesService } from '../../shared/services/product_branches.s
   styleUrl: './view-product-branch.component.css'
 })
 export class ViewProductBranchComponent implements OnInit {
-  storeData: any;
+  productBranchData: any;
 
   constructor(
     private _ProductBranchesService: ProductBranchesService,
-    private router: Router,
+   
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    const productId = this.route.snapshot.paramMap.get('id');
-    if (productId) {
-      this.fetchProductData(productId);
+    const productBranchId = this.route.snapshot.paramMap.get('id');
+    if (productBranchId) {
+      this.fetchProductBranchData(productBranchId);
     }
   }
 
-  fetchProductData(productId: string): void {
-    this._ProductBranchesService.viewProductBranchById(productId).subscribe({
+  fetchProductBranchData(productBranchId: string): void {
+    this._ProductBranchesService.viewProductBranchById(productBranchId).subscribe({
       next: (response) => {
         console.log(response);
-        this.storeData = response.data|| {};
+        this.productBranchData = response.data|| {};
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error fetching product data:', err.message);

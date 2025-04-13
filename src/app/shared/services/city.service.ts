@@ -58,6 +58,7 @@ export class CityService {
     return this._HttpClient.delete(`${this.baseURL}/general/cities/${cityId}`, { headers:this.getHeadersWithToken() });
   }
 
+
   viewAllcitiesByCountry(countryId: string): Observable<any> {
   
     return this._HttpClient.get(`${this.baseURL}/general/cities-by-country/${countryId}`, { headers:this.getHeadersWithToken() });

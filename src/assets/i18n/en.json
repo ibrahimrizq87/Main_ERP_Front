@@ -75,6 +75,7 @@
       "ORGANIZATION": "Organization",
       "ACTIONS": "Actions",
       "APPROVE": "Approve",
+      "CURRENCY": "Currency",
       "REJECT": "Reject",
       "WAITING": "Waiting",
       "Documents_List": "Documents List"

@@ -25,7 +25,7 @@
                   <label for="country_id" class="form-label">{{ 'addCity.country_name' | translate }}</label>
                   <!-- <input id="city" formControlName="city" type="text" class="form-control" [placeholder]="'addCity.enter_city_name' | translate" required /> -->
                    <select class="form-control" (change)="onCountryChange($event)"   formControlName="country_id">
-                    <option>{{ 'SELECT_CURRENCY' | translate }}</option>
+                    <option disabled >{{ 'SELECT_COUNTRY' | translate }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
                     </option>
                   </select> 

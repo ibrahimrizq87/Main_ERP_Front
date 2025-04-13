@@ -1,0 +1,109 @@
+<div class="mt-4 mb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>تفاصيل المستند</h5>
+            </div>
+  
+            <div class="card-body pb-5">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <label class="fw-bold">ID:</label>
+                  <p class="text-muted">{{ documentData?.id || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">المبلغ:</label>
+                  <p class="text-muted">{{ documentData?.amount || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">العملة:</label>
+                  <p class="text-muted">{{ documentData?.currency?.name || 'غير متوفر' }}</p>
+                </div>
+  
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">الحالة:</label>
+                  <p class="text-muted">{{ documentData?.status || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">أنشئ بواسطة:</label>
+                  <p class="text-muted">{{ documentData?.creator?.name || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">المرجع اليدوي:</label>
+                  <p class="text-muted">{{ documentData?.manual_reference || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">المفوض:</label>
+                  <p class="text-muted">{{ documentData?.delegate?.name || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">المنظمة:</label>
+                  <p class="text-muted">{{ documentData?.organization || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-12">
+                  <label class="fw-bold">ملاحظة:</label>
+                  <p class="text-muted">{{ documentData?.note || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">تاريخ الإنشاء:</label>
+                  <p class="text-muted">{{ documentData?.created_at || 'غير متوفر' }}</p>
+                </div>
+  
+                <div class="col-md-6">
+                  <label class="fw-bold">تاريخ المعاملة:</label>
+                  <p class="text-muted">{{ documentData?.date || 'غير متوفر' }}</p>
+                </div>
+  
+                <!-- Entry Document Items Table -->
+                <div class="col-12">
+                  <label class="fw-bold">تفاصيل الحسابات:</label>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                      <thead class="table-light">
+                        <tr>
+                          <th>نوع</th>
+                          <th>الحساب</th>
+                          <th>المبلغ</th>
+                          <th>تاريخ الإنشاء</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of documentData?.entryDocumentItems">
+                          <td>{{ item.type || 'غير متوفر' }}</td>
+                          <td>{{ item.account?.name || 'غير متوفر' }}</td>
+                          <td>{{ item.amount || 'غير متوفر' }}</td>
+                          <td>{{ item.created_at || 'غير متوفر' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+  
+              </div>
+            </div>
+          </div>
+  
+          <!-- Back Button -->
+          <div class="text-center mt-4">
+            <a class="nav-link" [routerLink]="['/dashboard/documentEntry',  documentData?.status]">
+              <button type="button" class="btn btn-outline-primary px-5 py-2 rounded-pill">
+                <i class="bi bi-arrow-left-circle me-2"></i> رجوع
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

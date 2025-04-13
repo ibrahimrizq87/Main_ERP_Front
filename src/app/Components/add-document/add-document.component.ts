@@ -9,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-// import { FormBuilder, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CurrencyService } from '../../shared/services/currency.service';
 
 
 @Component({
@@ -26,17 +26,21 @@ export class AddDocumentComponent {
   compony_accounts: Account [] = [];
   notes: any;
   currencies: any;
+  forignCurrencyName ='';
+  amountInLocalCurrency = 0;
 
   delegates: Account [] = [];
   creators: any;
   parent_accounts: any;
-
+  isSubmited = false;
   parent_accounts_company: any;
-
+  needCurrecyPrice = false;
   type: string | null = '';
   constructor(private router: Router,
-    private route: ActivatedRoute
-    , private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private _Router: Router,
+    private _CurrencyService:CurrencyService,
     private _AccountService: AccountService,
     private _PaymentDocumentService: PaymentDocumentService,
     private toastr: ToastrService,
@@ -47,19 +51,27 @@ export class AddDocumentComponent {
       from_to_account: [null, Validators.required],
       from_to_account_company: [null, Validators.required],
       note_id: [null],
-      currency_id: [null, Validators.required],
+      // currency_name: [null],
       delegate_id: [null],
       date: [this.getTodayDate()],
       amount: [null, [Validators.required, Validators.min(0)]],
       organization: [''],
       note: [''],
       receiver: [''],
+      currency_value: [''],
       payer: ['']
     });
 
   }
 
 
+
+
+  caculateAmountInLocalCurrency() {
+    const amount =this.transactionForm.get('amount')?.value|| 0;
+    const currency_value = this.transactionForm.get('currency_value')?.value || 0;
+    this.amountInLocalCurrency = amount * currency_value;
+  }
   getTodayDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -71,8 +83,33 @@ export class AddDocumentComponent {
   ngOnInit(): void {
     this.getParams();
     this.loadDelegates();
-
+    this.loadDefaultCurrency();
   }
+
+
+
+
+  currency: any ;
+  loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+
+        }
+        console.log(err);
+      }
+    });
+  }
+
+
+
 
   handleReceipt() {
     this.parent_accounts = [6];
@@ -126,24 +163,20 @@ export class AddDocumentComponent {
         this.handleDebitNote();
         break;
 
-      // case 'bank-entry':
-      //   // this.handleBankEntry();
-      //   break;
-
       default:
         this.toastr.error('خطا في نوع المستند');
-        // alert('wrong document type please try to select a document');
         this.router.navigate(['/dashboard/document/' + this.type ]);
         break;
     }
-
   }
+
+
   loadDelegates() {
-    
     this._AccountService.getAccountsByParent('623').subscribe({
       next: (response) => {
         if (response) {
           this.delegates = response.data;
+          console.log("my response:", response.data)
         }
       },
       error: (err) => {
@@ -151,6 +184,9 @@ export class AddDocumentComponent {
       }
     });
   }
+
+
+
   getAccounts(parent: number[], parent_company: number[]) {
     this._AccountService.getParentForDocument(parent, parent_company).subscribe({
       next: (response) => {
@@ -167,16 +203,40 @@ export class AddDocumentComponent {
     });
   }
 
-  handleForm(): void {
-    if (this.transactionForm.valid) {
-      this.isLoading = true;
 
+
+
+  handleForm(): void {
+
+
+    this.isSubmited = true;
+  let isCorrectCurrency = true;
+    if((this.selectedAccount?.currency.id != this.currency.id) && 
+    (this.selectedcompanyAccount?.currency.id != this.currency.id) && 
+    (this.selectedcompanyAccount?.currency.id != this.selectedAccount?.currency.id)){
+      alert('فى حالة وجود حساب بعملة اجنبية يجب ان يكو ن الحساب الاخر بنفس العملة او بعملة الشركة');
+      isCorrectCurrency = false;
+    }
+    if(this.needCurrecyPrice && this.transactionForm.get('currency_value')?.value == null){
+      isCorrectCurrency = false;
+    }
+
+
+
+    if (this.transactionForm.valid && isCorrectCurrency) {
+      this.isLoading = true;
       const formData = new FormData();
       formData.append('manual_reference', this.transactionForm.get('manual_reference')?.value || '');
       formData.append('from_to_account', this.transactionForm.get('from_to_account')?.value);
       formData.append('from_to_account_company', this.transactionForm.get('from_to_account_company')?.value);
       formData.append('note_id', this.transactionForm.get('note_id')?.value || '');
-      formData.append('currency_id', this.transactionForm.get('currency_id')?.value);
+
+      if(this.transactionForm.get('currency_value')?.value){
+        formData.append('currency_price_value', this.transactionForm.get('currency_value')?.value);
+      }
+
+
+      
       formData.append('delegate_id', this.transactionForm.get('delegate_id')?.value || '');
       formData.append('date', this.transactionForm.get('date')?.value);
       formData.append('amount', this.transactionForm.get('amount')?.value);
@@ -213,7 +273,6 @@ export class AddDocumentComponent {
 
 
 
-  // for pop up
   filteredAccounts: Account[] = [];
   selectedPopUP:string ='';
   searchQuery: string = '';
@@ -227,6 +286,29 @@ export class AddDocumentComponent {
     if(this.selectedPopUP  == 'company'){
       this.selectedcompanyAccount = account;
       this.transactionForm.patchValue({'from_to_account_company':account.id})
+
+
+      this.needCurrecyPrice = false;
+      this.forignCurrencyName = account.currency.name;
+
+      if(this.selectedAccount) {
+        if(this.selectedAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = account.currency.name;
+
+        }      
+      }
+
+      if(this.selectedcompanyAccount) {
+        if(this.selectedcompanyAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = account.currency.name;
+
+        }      
+      }
+
+
+
     }else if (this.selectedPopUP  == 'delegate'){
       this.selecteddelegateAccount = account;
       this.transactionForm.patchValue({'delegate_id':account.id})
@@ -234,6 +316,25 @@ export class AddDocumentComponent {
     }else{
       this.selectedAccount = account;
       this.transactionForm.patchValue({'from_to_account':account.id})
+
+
+      this.needCurrecyPrice = false;
+      if(this.selectedAccount) {
+        if(this.selectedAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = account.currency.name;
+
+        }      
+      }
+
+      if(this.selectedcompanyAccount) {
+        if(this.selectedcompanyAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = account.currency.name;
+
+        }      
+      }
+
 
     }
     this.closeModal('shiftModal');
@@ -303,6 +404,10 @@ export class AddDocumentComponent {
 interface Account {
   id: string;
   name: string;
+  currency: {
+    id: string;
+    name: string;
+  };
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;

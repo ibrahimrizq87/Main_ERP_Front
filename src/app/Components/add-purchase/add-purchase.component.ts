@@ -34,9 +34,9 @@ export class AddPurchaseComponent implements OnInit {
   stores: any[] = [];
   vendors: any[] = [];
   selectedType: string = 'purchase';
-  selectedStore: string = '';
+  selectedStore: any;
   checks: any;
-
+  storeSearchTerm: string = '';
   delegates: any[] = [];
   cashAccounts: any[] = [];
   productDeterminants: any[] = [];
@@ -514,29 +514,6 @@ export class AddPurchaseComponent implements OnInit {
     if (control) control.disable();
   }
 
-  // get dynamicInputsFormArray(): FormArray<FormControl> {
-  //   return this.dynamicInputs;
-  // }
-  // getDynamicInputs(item: AbstractControl): FormArray {
-  //   return (item.get('dynamicInputs') as FormArray);
-  // }
-
-
-
-  // loadCurrencies(){
-  // this._CurrencyService.viewAllCurrency().subscribe({
-  //       next: (response) => {
-  //         if (response) {
-  //           console.log(response);
-  //           this.currencies = response.data;
-  //         }
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //       }
-  //     });
-  //   }
-
 
   get items() {
     return (this.purchasesBillForm.get('items') as FormArray);
@@ -914,7 +891,20 @@ export class AddPurchaseComponent implements OnInit {
       modal?.hide();
     }
   }
-
+  filteredStores() {
+    if (!this.storeSearchTerm) return this.stores;
+    const term = this.storeSearchTerm.toLowerCase();
+    return this.stores.filter(store =>
+      store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
+    );
+  }
+  
+  selectStore(store: any) {
+    this.selectedStore = store;
+    this.purchasesBillForm.patchValue({ store_id: store.id });
+  }
+  // Called when store is selected
+  
 }
 
 
