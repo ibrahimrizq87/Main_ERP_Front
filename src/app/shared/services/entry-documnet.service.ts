@@ -60,4 +60,9 @@ export class EntryDocumentService {
   
   
 
+
+  getEntryDocumentByType(type: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/entry-documents/get-by-type/${type}`,{ headers: this.getHeadersWithToken() })
+  }
+
 }

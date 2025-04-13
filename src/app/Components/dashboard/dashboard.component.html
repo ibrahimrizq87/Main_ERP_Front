@@ -7,29 +7,6 @@
         <ul class="nav flex-column">
 
 
-
-
-
-
-            <!-- <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('HRM')">
-                <i class="fa-regular fa-user"></i>
-                <span>HRM System</span>
-                <i [ngClass]="isDropdownOpen('HRM') ? 'fa-angle-down' : 'fa-chevron-right'" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul class="nav flex-column" *ngIf="isDropdownOpen('HRM')">
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="users">Users</a>
-              </li>
-             
-            </ul>
-          </li> -->
-
-
-
-
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('HRM')" style="cursor: pointer;">
               <i class="fa-solid fa-user me-2"></i>
@@ -46,40 +23,6 @@
 
             </ul>
           </li>
-
-
-          <!-- <li class="nav-item">
-            <a class="nav-link">
-              <div class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Groups')">
-                <i class="fa-solid fa-layer-group"></i>
-                <span> {{'GROUPS_SYSTEM'  | translate}}</span>
-                <i [ngClass]="isDropdownOpen('Groups') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Groups')">
-       
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="city">{{ 'CITY' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="countries">{{ 'COUNTRYS' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="currency">{{ 'CURRENCY' | translate }}</a>
-              </li>
-             
-             
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="priceCategory">{{ 'PRICE_CATEGORY' | translate }}</a>
-              </li>
-             
-            </ul>
-          </li> -->
-
-
-
-
-
 
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Groups')" style="cursor: pointer;">
@@ -117,62 +60,6 @@
 
 
 
-
-
-
-<!-- 
-          <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('ACCOUNTING')">
-                <i class="fa-solid fa-user-group"></i>
-                <span>{{ 'accounting.ACCOUNTING' | translate }}</span>
-                <i [ngClass]="isDropdownOpen('ACCOUNTING') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-
-            <ul class="nav flex-column nested-inside" *ngIf="isDropdownOpen('ACCOUNTING')">
-
-
-
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="accounting/all">{{ 'ACCOUNTING' | translate }}</a>              </li>
-
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="accounts">{{ 'ACCOUNTS' | translate }}</a>              </li>
-
-
-
-
-                
-              <li class="nav-item nested-inside">
-                <a class="nav-link d-flex justify-content-between" (click)="toggleDropdown('BOX')">
-                  <span>{{ 'BOX' | translate }}</span>
-                  <i [ngClass]="isDropdownOpen('BOX') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-                </a>
-                <ul *ngIf="isDropdownOpen('BOX')" class="nav flex-column nested">
-
-                  <li class="nav-item nested-inside">
-                    <a class="nav-link" (click)="accounting('111')">{{ 'CASH_FUND' | translate }}</a>
-                  </li>
-
-                  <li class="nav-item nested-inside">
-                    <a class="nav-link" (click)="accounting('112')" >{{ 'CHECKS_FUND' | translate }}</a>
-                  </li>
-
-                </ul>
-              </li>
-
-              
-
-              
-
-              
-
-
-
-            </ul>
-          </li> -->
-
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('ACCOUNTING')" style="cursor: pointer;">
               <i class="fa-solid fa-user-group me-2"></i>
@@ -205,6 +92,16 @@
                 
                 </ul>
               </li>
+
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="currency-price-tracking" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{ 'CURRENCY_PRICE_TRACKING' | translate }}
+                </a>
+              </li>
+
+              
             </ul>
           </li>
           
@@ -311,86 +208,6 @@
             </ul>
           </li>
 
-<!-- 
-
-          <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('Stores')">
-                <i class="fa-solid fa-warehouse"></i>
-                <span> {{'STORES_SYSTEM'  | translate}}</span>
-                <i [ngClass]="isDropdownOpen('Stores') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul class="nav flex-column" *ngIf="isDropdownOpen('Stores')">
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="productUnit">  {{ 'PRODUCT_UNITS' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="productCategories">  {{ 'PRODUCT_CATEGORY' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="stores">{{ 'STORES' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="products">{{ 'PRODUCTS' | translate }}</a>
-              </li>
-
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="productBranch">{{ 'PRODUCT_BRANCHES' | translate }}</a>
-              </li> 
-           
-            </ul>
-          </li>
- -->
-
-
-
-      
-<!-- 
-          <li class="nav-item">
-
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('BANKS')">
-
-                <i class="fa-solid fa-money-check-dollar"></i>
-                <span>{{'BANK_SYSTEM'  | translate}}</span>
-                <i [ngClass]="isDropdownOpen('BANKS') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul *ngIf="isDropdownOpen('BANKS')" class="nav flex-column nested">
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="banks"> {{ 'BANKS' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="bankBranch">{{ 'BANK_BRANCHES' | translate }}</a>
-              </li>
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="bankAccounts"> {{ 'BANK_ACCOUNTS' | translate }}</a>
-              </li>
-
-
-              <li class="nav-item nested-inside">
-                <a class="nav-link"  (click)="accounting('113')" >{{ 'CURRENT_BANK_ACCOUNT' | translate }}</a>
-              </li>
-
-              <li class="nav-item nested-inside">
-                <a class="nav-link" (click)="accounting('118')">{{ 'COLLECTION_BANK_ACCOUNT' | translate }}</a>
-              </li>
-
-
-              <li class="nav-item nested-inside">
-                <a class="nav-link" (click)="accounting('211')">{{ 'PAYMENT_BANK_ACCOUNT' | translate }}</a>
-              </li>
-
-              <li class="nav-item nested-inside">
-                <a class="nav-link" (click)="accounting('119')">{{ 'SAVINGS_BANK_ACCOUNT' | translate }}</a>
-              </li>
-
-            </ul>
-          </li> -->
-
-
-
 
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('BANKS')" style="cursor: pointer;">
@@ -453,49 +270,7 @@
 
 
 
-
-
-<!-- 
-          <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('DOCUMENTS')">
-                <i class="fa-solid fa-money-bill-transfer"></i>
-                <span>{{ 'payment_document.DOCUMENTS' | translate }}</span>
-                <i [ngClass]="isDropdownOpen('DOCUMENTS') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul *ngIf="isDropdownOpen('DOCUMENTS')" class="nav flex-column nested">
-              <li class="nav-item nested-inside">
-                <a class="nav-link"  routerLinkActive="active" routerLink="document/receipt/waiting">{{ 'payment_document.RECEIPT_DOCUMENT' | translate }}</a>
-              </li>
-              <li class="nav-item nested-inside">
-                <a class="nav-link"  routerLinkActive="active" routerLink="document/payment/waiting">{{ 'payment_document.PAYMENT_DOCUMENT' | translate }}</a>
-              </li>
-
-
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="documentEntry/waiting">{{ 'payment_document.INSTALLMENT_DOCUMENT' | translate }}</a>
-              </li>
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="document/credit_note/waiting">{{ 'payment_document.CREDIT_NOTE_DOCUMENT' | translate }}</a>
-              </li>
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="document/debit_note/waiting">{{ 'payment_document.DEBIT_NOTE_DOCUMENT' | translate }}</a>
-              </li>
-              
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="check_list/waiting">{{ 'payment_document.CHECKS_DOCUMENT' | translate }}</a>
-              </li>
-            </ul>
-          </li>
-
- -->
-
-
-          
-
-
-          <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('DOCUMENTS')" style="cursor: pointer;">
               <i class="fa-solid fa-money-bill-transfer me-2"></i>
               <span>{{ 'payment_document.DOCUMENTS' | translate }}</span>
@@ -546,42 +321,17 @@
               </li>
 
 
-           
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="check-documents/payment_check">
+                  <i class="fa-solid fa-money-bill-transfer me-2"></i>{{ 'payment_document.CHECK_DOCUMENTS' | translate }}
+                </a>
+              </li>
+
+
+
+              
             </ul>
           </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <!-- <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('SALES')">
-                <i class="fa-solid fa-cart-shopping"></i>
-                  <span>{{ 'sales_purchases.SALES' | translate }}</span>
-                <i [ngClass]="isDropdownOpen('SALES') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul *ngIf="isDropdownOpen('SALES')" class="nav flex-column nested">
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="sales/waiting">{{ 'sales_purchases.SALES_INVOICE' | translate }}</a>
-              </li>
-              
-              
-           
-            </ul>
-          </li> -->
-
-
-
 
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES')" style="cursor: pointer;">
@@ -600,29 +350,6 @@
           </li>
 
 
-
-
-          
-          
-          
-<!--           
-          <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('SALES_PURCHASES')">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span>{{ 'sales_purchases.PURCHASES' | translate }}</span>
-                <i [ngClass]="isDropdownOpen('SALES_PURCHASES') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul *ngIf="isDropdownOpen('SALES_PURCHASES')" class="nav flex-column nested">
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="purchases/waiting">{{ 'sales_purchases.PURCHASES_INVOICE' | translate }}</a>
-              </li>
-            </ul>
-          </li> -->
-
-
-
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES_PURCHASES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
@@ -639,25 +366,6 @@
             </ul>
           </li>
 
-
-
-
-          <!-- <li class="nav-item">
-            <a class="nav-link">
-              <div class="d-flex justify-content-around align-items-center" (click)="toggleDropdown('SYSTEM_SETTING')">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span>{{ 'System_Setting_Nav.SystemSetting' | translate }}</span>
-                <i [ngClass]="isDropdownOpen('SYSTEM_SETTING') ? 'fa-angle-down' : ('fa-chevron-'| translate )" class="fa-solid"></i>
-              </div>
-            </a>
-            <ul *ngIf="isDropdownOpen('SYSTEM_SETTING')" class="nav flex-column nested">
-              <li class="nav-item nested-inside">
-                <a class="nav-link" routerLinkActive="active" routerLink="system-settings">{{ 'System_Setting_Nav.Account_Setting' | translate }}</a>
-              </li>
-              
-            
-            </ul>
-          </li> -->
 
 
           <li class="nav-item">
