@@ -43,16 +43,17 @@
                 <div class="form-group col-md-6">
                   <div class="form-group col-md-6">
                     <label class="form-label">{{ 'STORE' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('storeModal', 'store')">
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openModal('storeModal', 'store')">
                       {{ selectedStore ? selectedStore?.name : ('STORE' | translate) }}
                     </button>
-                  
+
                     <input type="hidden" formControlName="store_id" [value]="selectedStore?.id" />
                     <div class="text-danger" *ngIf="!selectedStore && isSubmited">
                       {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </div>
                   </div>
-                  
+
 
 
                   <div class="invalid-feedback" *ngIf="!selectedStore  && isSubmited">
@@ -72,7 +73,42 @@
                     placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
                 </div>
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
+                  <label for="file_type" class="form-label">Type</label>
+                  <select id="file_type" formControlName="file_type" class="form-control"
+                    (change)="onFileTypeChange($event)">
+                    <option value="manual">Manual</option>
+                    <option value="all_data">All Product Data</option>
+                    <option value="items_only">Only Items</option>
+                  </select>
+                </div>
+                <div class="d-flex align-items-end gap-3" *ngIf="showFile">
+                  <!-- Show All Data Export Button -->
+                  <a *ngIf="showAllDataExport" (click)="exportAllDataToSheet()" class="btn btn-outline-info">
+                    Export All Data To Sheet
+                  </a>
+
+                  <!-- Show only for only_items -->
+                  <a *ngIf="showItemsExport" (click)="exportItemsDataToSheet()" class="btn btn-outline-info">
+                    Export Items Data To Sheet
+                  </a>
+
+                  <div>
+                    <label for="total_Amount" class="form-label">Total Amount</label>
+                    <input
+                      id="total_Amount"
+                      type="number"
+                      class="form-control"
+                      (input)="onTotalChange($event)"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="file" class="form-label">File</label>
+                    <input id="file" formControlName="file" type="file" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group col-md-12" *ngIf="showManual">
                   <div formArrayName="items" class="mt-4 ">
                     <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
                       class="mb-3 border p-3 rounded">
@@ -136,7 +172,7 @@
                         <div class="col-md-2" *ngIf="item.get('type')?.value == 'branch'">
                           <label for="price">{{ 'COLOR' | translate }}</label>
                           <p>
-                           
+
                             {{item.get('branch_data')?.value.color.color }}
                           </p>
 
@@ -151,8 +187,6 @@
                             </span>
                           </span>
                         </div>
-
-
 
                         <div class="col-md-2">
                           <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
@@ -179,7 +213,7 @@
                                 </option>
                               </select>
 
-                             
+
 
                             </div>
                           </div>
@@ -241,84 +275,34 @@
                   <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
                     <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
                   </button>
+                </div>
+                <div class=" text-black bg-secoundry border rounded  row  mt-3">
+                  <div class="card-header text-center"> الدفع </div>
+
+                  <div class="form-group col-md-12">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown"
+                        (change)="paymentTriggerChange()" />
+                      {{ 'SHOW_CASH_ACCOUNTS' | translate }}
+                    </label>
+                  </div>
+
+                  <div class="form-group col-md-12" *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
+                    <!-- <label class="form-check-label">
+                      اختر طريقة الدفع
+                    </label> -->
+
+                    <label for="payment_type" class="form-label large-text"> اختر طريقة الدفع </label>
+                    <select id="payment_type" formControlName="payment_type" class="form-control"
+                      (change)="onPaymentTypeChange($event)">
+                      <!-- <option disabled>اختر طريقة الدفع</option> -->
+                      <option value="cash">نقدى</option>
+                      <option value="check">شيك</option>
 
 
 
 
-
-
-                  <div class=" text-black bg-secoundry border rounded  row  mt-3">
-                    <div class="card-header text-center"> الدفع </div>
-
-                    <div class="form-group col-md-12">
-                      <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown"
-                          (change)="paymentTriggerChange()" />
-                        {{ 'SHOW_CASH_ACCOUNTS' | translate }}
-                      </label>
-                    </div>
-
-
-
-
-                    <div class="form-group col-md-12" *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
-                      <!-- <label class="form-check-label">
-                        اختر طريقة الدفع
-                      </label> -->
-
-                      <label for="payment_type" class="form-label large-text"> اختر طريقة الدفع </label>
-                      <select id="payment_type" formControlName="payment_type" class="form-control"
-                        (change)="onPaymentTypeChange($event)">
-                        <!-- <option disabled>اختر طريقة الدفع</option> -->
-                        <option value="cash">نقدى</option>
-                        <option value="check">شيك</option>
-
-
-
-
-                      </select>
-
-
-
-                    </div>
-
-
-
-
-                    <div
-                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
-                      class="form-group col-md-6">
-                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
-                      <button type="button" class="btn btn-outline-primary w-100"
-                        (click)="openModal('shiftModal' , 'cash')">
-                        {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
-                      </button>
-                      <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
-
-                    </div>
-                    <div
-                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
-                      class="form-group col-md-4">
-                      <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
-                      <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
-
-                    </div>
-
-
-
-
-                    <div
-                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'check'"
-                      class="form-group col-md-6">
-                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
-                      <button type="button" class="btn btn-outline-primary w-100"
-                        (click)="openModal('checkModel' , '')">
-                        {{ selectedCheck ? selectedCheck.payed_to.name : ('SELECT_CHECK_ACCOUNTS' | translate) }}
-                      </button>
-                      <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
-
-                    </div>
-
+                    </select>
 
 
 
@@ -327,21 +311,55 @@
 
 
 
+                  <div
+                    *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
+                    class="form-group col-md-6">
+                    <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openModal('shiftModal' , 'cash')">
+                      {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
+                    </button>
+                    <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
 
-                  <div class="form-group col-md-6">
-
-                    <p><strong>Total: </strong>{{total}}</p>
-                    <p><strong>Total Payed: </strong>{{totalPayed}}</p>
-                    <p><strong>the rest: </strong>{{total -totalPayed}}</p>
+                  </div>
+                  <div
+                    *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
+                    class="form-group col-md-4">
+                    <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
+                    <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
 
                   </div>
 
+
+
+
+                  <div
+                    *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'check'"
+                    class="form-group col-md-6">
+                    <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('checkModel' , '')">
+                      {{ selectedCheck ? selectedCheck.payed_to.name : ('SELECT_CHECK_ACCOUNTS' | translate) }}
+                    </button>
+                    <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
+
+                  </div>
 
 
 
 
                 </div>
 
+
+
+
+
+                <div class="form-group col-md-6">
+
+                  <p><strong>Total: </strong>{{total}}</p>
+                  <p><strong>Total Payed: </strong>{{totalPayed}}</p>
+                  <p><strong>the rest: </strong>{{total -totalPayed}}</p>
+
+                </div>
               </div>
 
             </div>
@@ -398,8 +416,6 @@
     </div>
   </div>
 </div>
-
-<!-- Store Modal -->
 <!-- Store Modal -->
 <div class="modal fade" id="storeModal" tabindex="-1" aria-labelledby="storeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -410,25 +426,21 @@
       </div>
 
       <div class="modal-body">
-        <input type="text" class="form-control mb-3" [(ngModel)]="storeSearchTerm" placeholder="{{ 'SEARCH' | translate }}" />
+        <input type="text" class="form-control mb-3" [(ngModel)]="storeSearchTerm"
+          placeholder="{{ 'SEARCH' | translate }}" />
 
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
               <th>{{ 'ID' | translate }}</th>
               <th>{{ 'STORE' | translate }}</th>
-              <th>{{ 'ACTIONS' | translate }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let store of filteredStores()">
+            <tr *ngFor="let store of filteredStores()" (click)="selectStore(store)"
+              class="cursor-pointer hover-highlight">
               <td>{{ store.id }}</td>
               <td>{{ store.name }}</td>
-              <td>
-                <button class="btn btn-success" (click)="selectStore(store)" data-bs-dismiss="modal">
-                  <i class="fa fa-check"></i> {{ 'SELECT' | translate }}
-                </button>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -508,13 +520,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
 <div class="modal fade" id="checkModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">

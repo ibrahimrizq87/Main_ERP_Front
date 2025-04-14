@@ -45,7 +45,10 @@ export class AddPurchaseComponent implements OnInit {
   selectedCheck: any;
   total = 0;
   totalPayed = 0;
-
+  showManual = false;
+  showFile = false;
+  showAllDataExport = false;
+  showItemsExport = false
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
@@ -67,12 +70,19 @@ export class AddPurchaseComponent implements OnInit {
       // currency_id: ['', Validators.required],
       payment_type: ['cash'],
       check_id: [''],
-      items: this.fb.array([this.createItem()]),
+      // items: this.fb.array([this.createItem()]),
+      items: this.fb.array([]),
+      
       supplier_id: [null],
       cash_id: [null],
       notes: [''],
       showCashAccountsDropdown: [false],
+      file_type: ['', Validators.required],
+      file: [null],
     });
+    if (this.purchasesBillForm.get('file_type')?.value === 'manual') {
+      this.addItem(); // Push a default item
+    }
   }
 
   getTodayDate(): string {
@@ -99,7 +109,6 @@ export class AddPurchaseComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-
     this.loadProducts();
     this.loadDefaultCurrency();
     this.loadStores();
@@ -107,26 +116,17 @@ export class AddPurchaseComponent implements OnInit {
     this.loadCashAccounts();
     this.loadChecks();
   }
-
   currencyPriceValue: number = 0;
-
   currencyPrice(){
-
-
     const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
     if ((currencyPriceValue * this.totalPayed) > this.total) {
       this.purchasesBillForm.patchValue({ payed_price: this.total / currencyPriceValue });
     }
-
     if(this.currencyPriceValue>0){
       this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
     }
   }
-
-
-
-
   loadDefaultCurrency() {
     this._CurrencyService.getDefultCurrency().subscribe({
       next: (response) => {
@@ -165,24 +165,7 @@ export class AddPurchaseComponent implements OnInit {
       }
     });
   }
-  // loadDelegates(): void {
-  //   this._AccountService.getAccountsByParent('623').subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         console.log("delegates",response)
-  //         const delegates = response.data;
-  //         delegates.forEach((account: { hasChildren: any; id: any; }) => {
-  //           account.hasChildren = delegates.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-  //         });
 
-  //         this.delegates = delegates;
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
   loadCashAccounts(): void {
 
     this._AccountService.getAccountsByParent('111').subscribe({
@@ -218,35 +201,11 @@ export class AddPurchaseComponent implements OnInit {
     });
   }
 
-  // onTypeChange(event: Event): void {
-
-
-  //   const selectedValue = (event.target as HTMLSelectElement).value;
-
-  //   this.selectedType = selectedValue;
-  //   console.log(selectedValue);
-  //   const itemsArray = this.purchasesBillForm.get('items') as FormArray;
-
-  //   itemsArray.clear();
-  //   if (this.selectedStore){
-  //     // this.loadProducts(this.selectedStore);
-
-  //   }
-
-  // }
+ 
   onStoreChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedStore = selectedValue;
   }
-  // selectedCurrency:any;
-  // onCurrencyChange(event: Event): void {
-  //   const selectedValue = (event.target as HTMLSelectElement).value;
-
-  // this.selectedCurrency = selectedValue;
-  // }
-
-
-
   loadProducts() {
 
     this._ProductsService.getProductsForOperations().subscribe({
@@ -265,62 +224,6 @@ export class AddPurchaseComponent implements OnInit {
 
   }
 
-
-
-  // onProductChange(event: Event, index: number): void {
-  //   const selectedProductId = (event.target as HTMLSelectElement).value;
-
-  //   const itemsArray = this.purchasesBillForm.get('items') as FormArray;
-  //   const itemGroup = itemsArray.at(index) as FormGroup;
-  //   if (this.selectedType == 'purchase'){
-
-  //   }
-
-  // }
-
-
-
-  // getGroupedDeterminants(productDeterminants: any[]): any[] {
-  //   const grouped = new Map();
-  //   productDeterminants.forEach((item) => {
-  //     if (!grouped.has(item.determinant.id)) {
-  //       grouped.set(item.determinant.id, {
-  //         determinantId: item.determinant.id,
-  //         determinantName: item.determinant.determinant,
-  //         determinantValues: [],
-  //       });
-  //     }
-  //     grouped.get(item.determinant.id).determinantValues.push({
-  //       id: item.id,
-  //       value: item.value,
-  //     });
-  //   });
-  //   return Array.from(grouped.values());
-  // }
-
-  // onDeterminantValueSelect(determinantId: number, itemIndex: number, event: Event): void {
-  //   const selectedValueId = Number((event.target as HTMLSelectElement).value);
-  //   const selectedValueText = (event.target as HTMLSelectElement).options[(event.target as HTMLSelectElement).selectedIndex].text;
-  //    console.log(selectedValueId)
-  //    console.log(selectedValueText)
-  //   const itemsArray = this.purchasesBillForm.get('items') as FormArray;
-  //   const itemGroup = itemsArray.at(itemIndex) as FormGroup;
-
-  //   const determinants = itemGroup.get('determinants')?.value || [];
-
-  //   const updatedDeterminants = determinants.map((det: any) =>
-  //     det.determinantId === determinantId
-  //       ? { ...det, selectedValue: selectedValueId, selectedValueText }
-  //       : det
-  //   );
-
-  //   // Update the determinants array in the item
-  //   itemGroup.patchValue({ determinants: updatedDeterminants });
-
-  //   // Trigger change detection to immediately update the view
-  //   this.cdr.detectChanges();
-  // }
-
   trackByDeterminantId(index: number, det: any): number {
     return det.determinantId;
   }
@@ -334,9 +237,13 @@ export class AddPurchaseComponent implements OnInit {
     console.log(selectedProductId);
 
   }
-
-  addItem(): void {
-    this.items.push(this.createItem());
+  
+  // addItem(): void {
+  //   this.items.push(this.createItem());
+  // }
+  addItem() {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    items.push(this.createItem());
   }
 
   removeItem(index: number): void {
@@ -358,7 +265,6 @@ export class AddPurchaseComponent implements OnInit {
       barcode: [null],
       colors: [[]],
       branch_data: [null],
-
       determinants: this.fb.array([]),
 
       serialNumbers: [[]],
@@ -369,9 +275,6 @@ export class AddPurchaseComponent implements OnInit {
 
     });
   }
-
-
-
 
   removeSerialNumber(serialNumber: string, index: number) {
     const items = this.purchasesBillForm.get('items') as FormArray;
@@ -384,20 +287,9 @@ export class AddPurchaseComponent implements OnInit {
 
     if (serialNumbers && Array.isArray(serialNumbers)) {
       const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
-
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
-
     }
-
-    // item.patchValue({serialNumbers: tempList});
-    // console.log(tempList);
-    // item.patchValue({barcode: null});
-    // item.patchValue({neededSerialNumbers: neededBars -1});
-
-
-
-
   }
   addParcode(index: number) {
     const items = this.purchasesBillForm.get('items') as FormArray;
@@ -423,15 +315,11 @@ export class AddPurchaseComponent implements OnInit {
       console.log(tempList);
       item.patchValue({ barcode: null });
       item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
     }
-
   }
   updateDynamicInputs(index: number, amount: number): void {
     const items = this.purchasesBillForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
-
     let dynamicInputs = item.get('dynamicInputs') as FormArray<FormControl>;
     if (!dynamicInputs) {
       dynamicInputs = this.fb.array([]);
@@ -525,13 +413,12 @@ export class AddPurchaseComponent implements OnInit {
 
   }
   handleForm() {
-
+ 
     if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor &&(this.selectedVendor?.currency?.id != this.currencies.id) && !this.purchasesBillForm.get('currency_price_value')?.value){
       this.toastr.error('يجب ادخال سعر الصرف');
       // alert('يجب ادخال سعر الصرف');
       return;
     }
-
     this.isSubmited = true;
     if (this.purchasesBillForm.valid) {
       this.isLoading = true;
@@ -555,14 +442,8 @@ export class AddPurchaseComponent implements OnInit {
 
           formData.append('payment_type', 'check');
           formData.append('check_id', this.purchasesBillForm.get('check_id')?.value);
-
         }
-
       }
-
-
-
-
       formData.append('vendor_id', this.purchasesBillForm.get('vendor_id')?.value);
       console.log(this.purchasesBillForm.get('vendor_id')?.value);
       // if (this.selecteddelegateAccount) {
@@ -572,22 +453,27 @@ export class AddPurchaseComponent implements OnInit {
       // formData.append('currency_id', this.purchasesBillForm.get('currency_id')?.value || '');
       formData.append('invoice_date', this.purchasesBillForm.get('date')?.value);
       // formData.append('delegate_id', this.purchasesBillForm.get('delegate_id')?.value || '');
-
       formData.append('total', this.total.toString());
       formData.append('total_payed', this.totalPayed.toString());
-
-
       formData.append('notes', this.purchasesBillForm.get('notes')?.value || '');
       formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
+       if(this.purchasesBillForm.get('file_type')?.value == 'items_only'||this.purchasesBillForm.get('file_type')?.value == 'all_data'){
+      formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
+      // formData.append("file", this.purchasesBillForm.get('file')?.value);   
+      const file = this.purchasesBillForm.get('file')?.value;  
+      if (file instanceof File) { // Ensure it's a File object
+        formData.append('file', file, file.name);
+      } else {
+        console.error('Invalid file detected:', file);
+        return; // Prevent submission
+      }     
+     }
+     
 
 
 
-
-
+    if(this.purchasesBillForm.get('file_type')?.value == 'manual'){
       if (this.items && this.items.controls) {
-
-
-
         this.items.controls.forEach((itemControl, index) => {
           const itemValue = itemControl.value;
 
@@ -634,10 +520,7 @@ export class AddPurchaseComponent implements OnInit {
                 error = true;
                 return;
               }
-
-
             }
-
             const serialNumbers = itemControl.get('serialNumbers')?.value;
 
             if (serialNumbers.length > 0) {
@@ -646,21 +529,49 @@ export class AddPurchaseComponent implements OnInit {
                 formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
 
               });
-
             }
-
-
-
-
+           
+           
 
           }
-        });
+        });}
       }
-
-
       if (!error) {
-
+        if (this.purchasesBillForm.get('file_type')?.value == 'manual') {
+          
         this._PurchasesService.addPurchase(formData).subscribe({
+          next: (response) => {
+            if (response) {
+              this.toastr.success('تم اضافه الفاتوره بنجاح');
+              console.log(response);
+              this.isLoading = false;
+              this._Router.navigate(['/dashboard/purchases/waiting']);
+            }
+          },
+
+          error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
+            this.isLoading = false;
+            this.msgError = [];
+
+            if (err.error && err.error.errors) {
+
+              for (const key in err.error.errors) {
+                if (err.error.errors[key] instanceof Array) {
+                  this.msgError.push(...err.error.errors[key]);
+                } else {
+                  this.msgError.push(err.error.errors[key]);
+                }
+              }
+            }
+
+            console.error(this.msgError);
+          },
+
+        });
+      }}
+      if(this.purchasesBillForm.get('file_type')?.value == 'items_only'||this.purchasesBillForm.get('file_type')?.value == 'all_data'){
+        this._PurchasesService.importProducts(formData).subscribe({
           next: (response) => {
             if (response) {
               this.toastr.success('تم اضافه الفاتوره بنجاح');
@@ -802,13 +713,9 @@ export class AddPurchaseComponent implements OnInit {
   onProductSearchChange() {
 
   }
-
-
   getDeterminants(item: AbstractControl<any, any>): FormArray {
     return item.get('determinants') as FormArray;
   }
-
-
   selectProduct(product: any, type: string, product_id: string, branch: any = null) {
     const itemsArray = this.purchasesBillForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
@@ -902,30 +809,71 @@ export class AddPurchaseComponent implements OnInit {
   selectStore(store: any) {
     this.selectedStore = store;
     this.purchasesBillForm.patchValue({ store_id: store.id });
+    this.closeModal('storeModal');
   }
   // Called when store is selected
+  onFileTypeChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
   
+    this.showManual = value === 'manual';
+    this.showFile = value === 'all_data' || value === 'items_only';
+  
+    this.showAllDataExport = value === 'all_data';
+    this.showItemsExport = value === 'items_only';
+    if (this.purchasesBillForm.get('file_type')?.value === 'manual') {
+      this.addItem(); // Push a default item
+    } 
+  }
+  exportAllDataToSheet() {
+    this._PurchasesService.exportAllDataToSheet().subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'PurchaseAllData.xlsx'); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error("Error downloading file:", err);
+      }
+    });
+  }
+  exportItemsDataToSheet() {
+    this._PurchasesService.exportItemsDataToSheet().subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'PurchaseItemsOnly.xlsx'); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error("Error downloading file:", err);
+      }
+    });
+  }
+  onTotalChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.total = Number(input.value);
+  }
 }
-
-
-
-
 
 interface Account {
   id: string;
   name: string;
-
   currency:Currency
-
 }
 
 interface Currency {
   id: string;
   name: string;
-
-
 }
 interface SerialNumber {
   serialNumber: string;
-
 }
