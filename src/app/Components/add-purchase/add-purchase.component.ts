@@ -48,7 +48,8 @@ export class AddPurchaseComponent implements OnInit {
   showManual = false;
   showFile = false;
   showAllDataExport = false;
-  showItemsExport = false
+  showItemsExport = false;
+  selectedFile: File | null = null;
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
@@ -93,7 +94,23 @@ export class AddPurchaseComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+  
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+  
+      // Check type (optional, backend also validates it)
+      const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastr.error('الملف يجب أن يكون من نوع xlsx أو csv');
+        return;
+      }
+  
+      this.selectedFile = file;
+    }
+  }
+  
   loadChecks() {
     this._CheckService.getCheckByPayedToAccount('112').subscribe({
       next: (response) => {
@@ -459,19 +476,22 @@ export class AddPurchaseComponent implements OnInit {
       formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
        if(this.purchasesBillForm.get('file_type')?.value == 'items_only'||this.purchasesBillForm.get('file_type')?.value == 'all_data'){
       formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
-      // formData.append("file", this.purchasesBillForm.get('file')?.value);   
-      const file = this.purchasesBillForm.get('file')?.value;  
-      if (file instanceof File) { // Ensure it's a File object
-        formData.append('file', file, file.name);
+      if (this.selectedFile) {
+        formData.append('file', this.selectedFile, this.selectedFile.name);
       } else {
-        console.error('Invalid file detected:', file);
-        return; // Prevent submission
-      }     
+        this.toastr.error('يرجى اختيار ملف');
+        return;
+      }
+      // formData.append("file", this.purchasesBillForm.get('file')?.value);   
+    //   const file = this.purchasesBillForm.get('file')?.value;  
+    //   if (file instanceof File) { // Ensure it's a File object
+    //     formData.append('file', file, file.name);
+    //   } else {
+    //     console.error('Invalid file detected:', file);
+    //     return; // Prevent submission
+    //   }     
      }
      
-
-
-
     if(this.purchasesBillForm.get('file_type')?.value == 'manual'){
       if (this.items && this.items.controls) {
         this.items.controls.forEach((itemControl, index) => {
