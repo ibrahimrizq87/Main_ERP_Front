@@ -39,12 +39,29 @@
                 </div>
                 
                 <!-- Currency -->
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
                   <select id="currency_id" formControlName="currency_id" class="form-control">
                     <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                   </select>
+                </div> -->
+
+
+
+                <div class="form-group col-md-6" *ngIf="needCurrecyPrice">
+                  <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' | translate }}</label>
+                  <input type="number" id="currency_value" formControlName="currency_value" class="form-control"
+                  [class.is-invalid]="needCurrecyPrice && isSubmited && entryForm.get('currency_value')?.value == 0"
+                  (input)="calculateTotals()" 
+                  >
+
+                  <div class="text-danger" *ngIf="needCurrecyPrice && isSubmited && entryForm.get('currency_value')?.value == 0">
+                    {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                  </div>
+
                 </div>
+
+
 
                 <!-- Delegate -->
                 <div class="form-group col-md-6">
@@ -70,8 +87,34 @@
                     <div *ngFor="let item of entryItems.controls; let i = index" [formGroupName]="i">
                       <div class="row mb-3">
                         <!-- Amount -->
-                        <div class="form-group col-md-3">
-                          <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}</label>
+
+                        <ng-container *ngIf="currency && item.get('account')?.value">
+
+                        <div class="form-group col-md-2" *ngIf="item.get('account')?.value.currency.id != currency?.id">
+                          <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }} ({{currency.name}})</label>
+                          <p>{{item.get('amount')?.value * entryForm.get('currency_value')?.value }}</p>
+                        </div>
+
+                        </ng-container>
+
+                        <div class="form-group col-md-2">
+
+                          <label for="amount" class="form-label large-text">{{ 'AMOUNT'  | translate }}
+
+
+                            <ng-container *ngIf="currency && item.get('account')?.value">
+
+                              <span class="form-group col-md-2" *ngIf="item.get('account')?.value.currency.id != currency?.id">
+                               ({{item.get('account')?.value.currency.name}})
+                              </span>
+                            </ng-container>
+
+
+                          </label>
+
+
+                      
+
                           <input formControlName="amount" type="number"   (input)="calculateTotals()"  class="form-control" placeholder="{{ 'AMOUNT' | translate }}" />
                           <div class="alert alert-danger" *ngIf="item.get('amount')?.errors && item.get('amount')?.touched">
                             <p *ngIf="item.get('amount')?.hasError('required')">{{ 'AMOUNT' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
@@ -79,7 +122,7 @@
                         </div>
                 
                         <!-- Type -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                           <label for="type" class="form-label large-text">{{ 'TYPE' | translate }}</label>
                           <select formControlName="type" class="form-control" (change)="onTypeChange($event , i)">
                             <option  value="debit">{{ 'DEBIT' | translate }}</option>

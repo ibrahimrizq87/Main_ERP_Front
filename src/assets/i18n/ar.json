@@ -1,7 +1,16 @@
 {
 "COLORS": "الألوان",
 
-  
+"CURRENCY_PRICE_TRACKING": "تتبع أسعار العملات",
+
+
+"PAYMENT_CHECK":"مستند شيك صادر",
+"ENTRY_CHECK":"مستند حركة شيك",
+"RECEIPT_CHECK":"مستند شيك وارد",
+
+
+
+  "CURRENCY_PRICE":"سعر العملة",
     "manageColor": {
       "manage_color": "إدارة الألوان",
       "dashboard": "لوحة التحكم",
@@ -70,6 +79,12 @@
 
 
     "paymentDocuments": {
+
+
+      "DATE": "التاريخ",
+
+
+
       "MANAGE_PAYMENT_DOCUMENTS": "إدارة مستندات الدفع",
       "DASHBOARD": "لوحة التحكم",
       "PAYMENT_DOCUMENT": "مستند الدفع",
@@ -81,6 +96,7 @@
       "ACTIONS": "الإجراءات",
       "APPROVE": "موافقة",
       "REJECT": "رفض",
+      "CURRENCY": "العملة",
       "WAITING": "في الانتظار",
       "Documents_List": "قائمة المستندات"
     }
@@ -612,6 +628,8 @@
   "payment_document": {
     "DOCUMENTS": "مستندات الدفع",
     "RECEIPT_DOCUMENT": "مستند قبض",
+    "CHECK_DOCUMENTS": "مستندات الشيك",
+
     "PAYMENT_DOCUMENT": "مستند صرف",
     "INSTALLMENT_DOCUMENT": "مستند قيد",
     "CREDIT_NOTE_DOCUMENT": "مستند اشعار دائن",

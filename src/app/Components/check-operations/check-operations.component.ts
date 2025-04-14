@@ -31,8 +31,9 @@ export class CheckOperationsComponent {
   delegates:any;
   needReasone:boolean =false;
   currencies:any;
+  needCurrecyPrice:boolean =false;
   selectedOperation:number = 100;
-
+  isSubmited:boolean = false;
   sameBankAcount:boolean =false;
 operations = [
   'تحصيل الشيكات الواردة',
@@ -55,6 +56,8 @@ operations = [
     , private router: Router, private fb: FormBuilder
     , private _GroupService: GroupService,
   private _CheckService:CheckService,
+  private _Router: Router,
+
 private _CurrencyService:CurrencyService,
     private toastr: ToastrService
 ) {
@@ -63,8 +66,9 @@ private _CurrencyService:CurrencyService,
       check: this.fb.control(""),
       requiredAccount: this.fb.control(""),
       organization: ['', Validators.maxLength(255)],
-      currency_id: ['', Validators.required],
+      // currency_id: ['', Validators.required],
       delegate_id: [''],
+      currency_value: [''],
       note: ['', Validators.maxLength(255)],
       date: [this.getTodayDate()],
       reasone: [''],
@@ -76,9 +80,28 @@ private _CurrencyService:CurrencyService,
   }
 
   ngOnInit() {
-    this.loadCurrencies();
+    this.loadDefaultCurrency();
     this.loadDelegates()
   }
+  currency: any ;
+  loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+
+        }
+        console.log(err);
+      }
+    });
+  }
+
 
   loadDelegates() {
     this._AccountService.getAccountsByParent('623').subscribe({
@@ -114,12 +137,14 @@ private _CurrencyService:CurrencyService,
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
+  
   addItem(){
     this.addEntryItem();  
   }
   addEntryItem(){
-console.log('heree');
-console.log(this.selectedOperation);
+// console.log('heree');
+// console.log(this.selectedOperation);
 
     switch (this.selectedOperation) {
       case 0:
@@ -470,6 +495,20 @@ console.log(this.selectedOperation);
         console.log("Unknown operation selected");
     }
 
+
+    this.checkNeedForCurrencyPrice();
+  }
+  checkNeedForCurrencyPrice(){
+
+    this.needCurrecyPrice =false;
+    this.entryItems.forEach((item) => {
+      if(item.check.currency_id != this.currency.id || item.creditor.currency_id != this.currency.id ||item.debitor.currency_id != this.currency.id ){
+        this.needCurrecyPrice = true;
+      }
+    });
+
+
+    
   }
 
   getAccounts(ids : number []){
@@ -679,9 +718,15 @@ this.checks = response.data;
 
 
   handleForm() {
-    // this.submitted = true;
+    this.isSubmited = true;
+    let isCorrectCurrency = true;
+     
+      if(this.needCurrecyPrice && this.checkOerationForm.get('currency_value')?.value == null){
+        isCorrectCurrency = false;
+      }
+  
 
-    if (this.checkOerationForm.valid && this.entryItems.length>0){
+    if (this.checkOerationForm.valid && this.entryItems.length>0 && isCorrectCurrency) {
 
       this.isLoading = true;
 
@@ -689,10 +734,14 @@ this.checks = response.data;
       formData.append('manual_reference', this.checkOerationForm.get('manual_reference')?.value || '');
       formData.append('date', this.checkOerationForm.get('date')?.value );
       formData.append('organization', this.checkOerationForm.get('organization')?.value || '');
-      formData.append('currency_id', this.checkOerationForm.get('currency_id')?.value );
+      // formData.append('currency_id', this.checkOerationForm.get('currency_id')?.value );
       formData.append('delegate_id', this.checkOerationForm.get('delegate_id')?.value || '');
       formData.append('note', this.checkOerationForm.get('note')?.value || '');
 
+      if(this.checkOerationForm.get('currency_value')?.value){
+        formData.append('currency_price_value', this.checkOerationForm.get('currency_value')?.value);
+
+      }
       // const entryItems = this.entryForm.get('entryItems') as FormArray;
       
       this.entryItems.forEach((item, index) => {

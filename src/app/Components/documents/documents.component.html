@@ -85,7 +85,7 @@
 
               <th class="bg-light" scope="col">{{ 'paymentDocuments.DELEGATE' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'paymentDocuments.AMOUNT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'paymentDocuments.ORGANIZATION' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'paymentDocuments.CURRENCY' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'paymentDocuments.ACTIONS' | translate }}</th>
           </tr>
       </thead>
@@ -95,9 +95,9 @@
               <td>{{ document.from_to_account.name }}</td>
               <td>{{ document.from_to_account_company.name }}</td>
              
-              <td>{{ document.delegate.name }}</td>
+              <td>{{ document.delegate ? document.delegate.name : '--' }}</td>
               <td>{{ document.amount }}</td>
-              <td>{{ document.organization }}</td>
+              <td>{{ document.currency.name }}</td>
              
             
               <!-- {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},

@@ -118,6 +118,8 @@ import { UpdateColorComponent } from './Components/update-color/update-color.com
 import { UpdateDeterminantComponent } from './Components/update-determinant/update-determinant.component';
 import { ShowCityComponent } from './Components/show-city/show-city.component';
 import { ShowDocumentEntryComponent } from './Components/show-document-entry/show-document-entry.component';
+import { CheckDocumentsComponent } from './Components/check-documents/check-documents.component';
+import { CurrencyPriceTrackingComponent } from './Components/currency-price-tracking/currency-price-tracking.component';
 
 
 export const routes: Routes = [
@@ -134,6 +136,11 @@ export const routes: Routes = [
 
 
 
+
+        
+        {path:"currency-price-tracking",component:CurrencyPriceTrackingComponent},
+
+        {path:"check-documents/:type",component:CheckDocumentsComponent},
 
         {path:"colors",component:ColorsComponent},
         {path:"add-color",component:AddColorComponent},

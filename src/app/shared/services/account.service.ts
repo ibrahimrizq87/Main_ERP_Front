@@ -126,6 +126,16 @@ export class AccountService {
     }
 
 
+    getCurrencyTracking(): Observable<any> {
+  
+      return this._HttpClient.get(`${this.baseURL}/general/accounts/get-currency-tracking-data`, { headers: this.getHeadersWithToken() });
+      }
+  
+  
+  
+
+
+    
 
   
 }

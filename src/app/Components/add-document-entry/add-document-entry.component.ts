@@ -34,6 +34,10 @@ export class AddDocumentEntryComponent implements OnInit {
   totalCredit = 0;
   totalDifference = 0;
   totalType = '';
+  needCurrecyPrice = false;
+  isSubmited = false;
+
+
   selectedAccounts: { index: number; account: Account }[] = [];
   constructor(private fb: FormBuilder,
     private _CurrencyService:CurrencyService,
@@ -48,8 +52,10 @@ export class AddDocumentEntryComponent implements OnInit {
       date: [this.getTodayDate()],
       // amount: ['', Validators.required],
       organization: ['', Validators.maxLength(255)],
-      currency_id: ['', Validators.required],
+      // currency_id: ['', Validators.required],
       delegate_id: [''],
+      currency_value: [''],
+
       note: ['', Validators.maxLength(255)],
       entryItems: this.fb.array([])
         });
@@ -59,9 +65,31 @@ export class AddDocumentEntryComponent implements OnInit {
 
 
   ngOnInit() {
-    this.loadCurrencies();
+    // this.loadCurrencies();
     this.loadDelegates();
     this.loadAccounts();
+    this.loadDefaultCurrency();
+
+  }
+
+  currency: any ;
+
+  loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+
+        }
+        console.log(err);
+      }
+    });
   }
 
   getTodayDate(): string {
@@ -190,8 +218,11 @@ export class AddDocumentEntryComponent implements OnInit {
 
   // Handle form submission
   handleSubmit() {
+
+
+    this.isSubmited = true;
     
-    if (this.entryForm.valid && this.entryItems.length>1 && this.totalDifference == 0) {
+    if (this.entryForm.valid && this.entryItems.length>1 && this.totalDifference == 0 &&(this.needCurrecyPrice == false || this.entryForm.get('currency_value')?.value != null)) {
       this.isLoading = true;
 
 
@@ -203,6 +234,13 @@ export class AddDocumentEntryComponent implements OnInit {
       formData.append('currency_id', this.entryForm.get('currency_id')?.value );
       formData.append('delegate_id', this.entryForm.get('delegate_id')?.value || '');
       formData.append('note', this.entryForm.get('note')?.value || '');
+
+      if(this.entryForm.get('currency_value')?.value){
+        
+        formData.append('currency_price_value', this.entryForm.get('currency_value')?.value);
+
+      }
+
       const entryItems = this.entryForm.get('entryItems') as FormArray;
       entryItems.controls.forEach((item, index) => {
         const entryData = {
@@ -232,14 +270,14 @@ export class AddDocumentEntryComponent implements OnInit {
         }
       });
     }else if (this.entryForm.valid && this.entryItems.length<2){
-      this.toastr.error('you have to add at least 2 accounts');
+      // this.toastr.error('you have to add at least 2 accounts');
     
-    // alert('you have to add at least 2 accounts');
+    alert('you have to add at least 2 accounts');
     }else if(this.totalDifference != 0){
-      this.toastr.error('credit must match debit');
-      // alert('credit must match debit');
+      // this.toastr.error('credit must match debit');
+      alert('credit must match debit');
 
-    }
+    }else{}
   }
   
 
@@ -277,10 +315,17 @@ calculateTotals() {
     this.totalDebit = 0;
     this.totalCredit = 0;
     this.entryItems.controls.forEach((item) => {
-      const amount = item.get('amount')?.value || 0;
+      let amount = item.get('amount')?.value || 0;
       const type = item.get('type')?.value;
-
+      const account = item.get('account')?.value;
+      if(account){
+      if(account.currency.id != this.currency.id){
+        amount = amount * parseFloat(this.entryForm.get('currency_value')?.value);
+      }
+      }
       if (type === 'debit') {
+
+        
         this.totalDebit += parseFloat(amount);
       } else if (type === 'credit') {
         this.totalCredit += parseFloat(amount);
@@ -310,15 +355,25 @@ calculateTotals() {
     selectAccount(account:Account){
       const entryItem = this.entryForm.get('entryItems') as FormArray;
     
+
       if(this.selectedPopUP  == 'account'){
         const isDoublicated = this.onAccountChange(account.id , this.popUpIndex);
         if(isDoublicated){
           this.closeModal('shiftModal');
           return;
         }
+
         entryItem.at(this.popUpIndex).get('account')?.setValue(account); 
         entryItem.at(this.popUpIndex).get('account_name')?.setValue(account.name); 
 
+
+        entryItem.controls.forEach((item) => {
+        if(item.get('account')?.value.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+        }
+        })
+
+        this.calculateTotals();
       }else if (this.selectedPopUP  == 'delegate'){
         this.selecteddelegateAccount = account;
         this.entryForm.patchValue({'delegate_id':account.id})

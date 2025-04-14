@@ -29,18 +29,51 @@
                                         class="form-control" placeholder="{{ 'CHECK_NUMBER' | translate }}" />
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6" *ngIf="!needCurrecyPrice">
                                     <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}</label>
                                     <input id="amount" formControlName="amount" type="number" step="0.01"
                                         class="form-control" placeholder="{{ 'AMOUNT' | translate }}" />
                                 </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
-                                    <input id="notes" formControlName="notes" type="text" class="form-control"
-                                        placeholder="{{ 'NOTES' | translate }}" />
+
+                                <div class="form-group col-md-3" *ngIf="needCurrecyPrice">
+                                    <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}
+                                        ({{forignCurrencyName}})
+                                    </label>
+                                    <input id="amount" formControlName="amount" type="number" step="0.01"
+                                        class="form-control" placeholder="{{ 'AMOUNT' | translate }}" 
+                                        (input)="caculateAmountInLocalCurrency()" 
+                                        />
                                 </div>
 
+                                <div class="form-group col-md-3" *ngIf="needCurrecyPrice">
+                                    <label for="amount" class="form-label large-text">{{ 'AMOUNT' | translate }}
+                                        ({{currency.name}})
+                                    </label>
+                                    <p>
+                                        {{amountInLocalCurrency}}
+                                    </p>
+                                </div>
+
+
+                                <div class="form-group col-md-6" >
+                                    <ng-container *ngIf="needCurrecyPrice">
+                                     <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' | translate }}</label>
+                                     <input (input)="caculateAmountInLocalCurrency()" type="number" id="currency_value" formControlName="currency_value" class="form-control"
+                                     [class.is-invalid]="needCurrecyPrice && isSubmited && checkForm.get('currency_value')?.value == 0">
+                   
+                                     <div class="text-danger" *ngIf="needCurrecyPrice && isSubmited && checkForm.get('currency_value')?.value == 0">
+                                       {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                                     </div>
+                                    </ng-container>
+                                   
+                   
+                                   </div>
+
+
+
+
+                           
                                 <div class="form-group col-md-6">
                                     <label for="type" class="form-label large-text">{{ 'TYPE' | translate }}</label>
                                     <select id="type" formControlName="type" (change)="onTypeChange($event)"
@@ -50,14 +83,27 @@
                                         <option value="endorsed">{{ 'ENDORSED' | translate }}</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
+
+
+
+
+                                  <div class="form-group col-md-6">
+                                    <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
+                                    <input id="notes" formControlName="notes" type="text" class="form-control"
+                                        placeholder="{{ 'NOTES' | translate }}" />
+                                </div>
+
+
+
+
+                                <!-- <div class="form-group col-md-6">
                                     <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate
                                         }}</label>
                                     <select id="currency_id" formControlName="currency_id" class="form-control">
                                         <option *ngFor="let currency of currencies" [value]="currency.id">{{
                                             currency.name }}</option>
                                     </select>
-                                </div>
+                                </div> -->
 
 
 

@@ -1,154 +1,3 @@
-<!-- <div class="mt-3 mb-3">
-  <h5>Add Transaction</h5>
-  <span class="text-muted">Dashboard <i class="fa-solid fa-angle-right"></i> Transactions <i
-      class="fa-solid fa-angle-right"></i> Add Transaction</span>
-</div>
-<div class="mt-4 mb-4">
-  <form [formGroup]="transactionForm" (ngSubmit)="handleForm()">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
-              <h5>Add Transaction</h5>
-            </div>
-            <div class="card-body pb-5">
-              <div class="row">
-
-                <div class="form-group col-md-12">
-                  <label for="manual_reference" class="form-label">Manual Reference (optional)</label>
-                  <input id="manual_reference" formControlName="manual_reference" type="number" class="form-control"
-                    placeholder="Enter Manual Reference" />
-                </div>
-
-                <div class="form-group col-md-12 mt-2">
-     
-                  <label for="from_to_account" class="form-label">
-                    {{ type === 'receipt' ? 'receipt from' :
-                    type === 'payment' ? 'payment to' :
-                    type === 'creditNote' || type === 'debitNote' ? 'notified account' :
-                    'account 1' }}
-                  </label>
-                  <br>
-                  <a (click)="openModal('shiftModal' , 'other')" class="btn btn-outline-info">
-                    {{selectedAccount? selectedAccount.name : 'اختر الحساب'}}
-                  </a>
-                </div>
-
-                <div class="form-group col-md-12 mt-3">
-
-                  <label for="from_to_account" class="form-label">
-                    {{ type === 'receipt' ? 'account to be receipt t' :
-                    type === 'payment' ? 'account to payment from' :
-                    type === 'creditNote' ? 'account to payment from' :
-                    type === 'debitNote' ? 'account to get money' :'account 2'
-                    }}
-                  </label>
-                  <br>
-                  <a (click)="openModal('shiftModal' , 'company')" class="btn btn-outline-info">
-                    {{selectedcompanyAccount? selectedcompanyAccount.name : 'اختر الحساب'}}
-                  </a>
-                </div>
-
-           
-                <div class="form-group col-md-6">
-                  <label for="currency_id" class="form-label">Currency</label>
-                  <select id="currency_id" formControlName="currency_id" class="form-control">
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
-                  </select>
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="delegate_id" class="form-label">Delegate (optional)</label>
-                  <br>
-
-                  <a (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
-                    {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
-                  </a>
-                  <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
-
-                </div>
-
-
-                <div class="form-group col-md-6">
-                  <label for="date" class="form-label">Date</label>
-                  <input id="date" formControlName="date" type="date" class="form-control" />
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="amount" class="form-label">Amount</label>
-                  <input id="amount" formControlName="amount" type="number" step="0.01" class="form-control"
-                    placeholder="Enter Amount" />
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="organization" class="form-label">Organization (optional)</label>
-                  <input id="organization" formControlName="organization" type="text" class="form-control"
-                    placeholder="Enter Organization" />
-                </div>
-
-
-                <div class="form-group col-md-6">
-                  <label for="note" class="form-label">Note (optional)</label>
-                  <input id="note" formControlName="note" type="text" class="form-control" placeholder="Enter Note" />
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="receiver" class="form-label">Receiver (optional)</label>
-                  <input id="receiver" formControlName="receiver" type="text" class="form-control"
-                    placeholder="Enter Receiver" />
-                </div>
-
-
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 mb-4">
-          <button [disabled]="transactionForm.invalid" type="submit" class="btn btn-primary px-4">
-            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
-
-
-
-<div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
-      </div>
-      <div class="modal-body">
-
-        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
-
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
-              style="cursor: pointer;">
-              <td>{{ i + 1 }}</td>
-              <td>{{ account.name }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 
 <div class="mt-3 mb-3">
   <h5>{{ 'addTransaction.ADD_TRANSACTION' | translate }}</h5>
@@ -170,7 +19,6 @@
             <div class="card-body pb-5">
               <div class="row">
 
-                <!-- Manual Reference -->
                 <div class="form-group col-md-12">
                   <label for="manual_reference" class="form-label">
                     {{ 'addTransaction.MANUAL_REFERENCE' | translate }}
@@ -179,7 +27,7 @@
                     [placeholder]="'addTransaction.ENTER_MANUAL_REFERENCE' | translate" />
                 </div>
 
-                <div class="form-group col-md-12 mt-2">
+                <div class="form-group col-md-6 mt-2">
                   <label for="from_to_account" class="form-label">
                     {{ type === 'receipt' ? ('addTransaction.RECEIPT_FROM' | translate) :
                     type === 'payment' ? ('addTransaction.PAYMENT_TO' | translate) :
@@ -192,7 +40,7 @@
                   </a>
                 </div>
 
-                <div class="form-group col-md-12 mt-3">
+                <div class="form-group col-md-6 mt-3">
                   <label for="from_to_account" class="form-label">
                     {{ type === 'receipt' ? ('addTransaction.ACCOUNT_TO_BE_RECEIPT' | translate) :
                     type === 'payment' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
@@ -206,17 +54,21 @@
                   </a>
                 </div>
 
-                <!-- Currency -->
-                <div class="form-group col-md-6">
-                  <label for="currency_id" class="form-label">
-                    {{ 'addTransaction.CURRENCY' | translate }}
-                  </label>
-                  <select id="currency_id" formControlName="currency_id" class="form-control">
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
-                  </select>
+                <div class="form-group col-md-6" *ngIf="needCurrecyPrice">
+                  <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' | translate }}</label>
+                  <input (input)="caculateAmountInLocalCurrency()" type="number" id="currency_value" formControlName="currency_value" class="form-control"
+                  [class.is-invalid]="needCurrecyPrice && isSubmited && transactionForm.get('currency_value')?.value == 0">
+
+                  <div class="text-danger" *ngIf="needCurrecyPrice && isSubmited && transactionForm.get('currency_value')?.value == 0">
+                    {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                  </div>
+
                 </div>
 
-                <!-- Delegate -->
+
+
+
+
                 <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label">
                     {{ 'addTransaction.DELEGATE' | translate }}
@@ -236,13 +88,32 @@
                   <input id="date" formControlName="date" type="date" class="form-control" />
                 </div>
 
-                <!-- Amount -->
-                <div class="form-group col-md-6">
+
+                <div class="form-group col-md-6" *ngIf="!needCurrecyPrice">
                   <label for="amount" class="form-label">
                     {{ 'addTransaction.AMOUNT' | translate }}
                   </label>
                   <input id="amount" formControlName="amount" type="number" step="0.01" class="form-control"
                     [placeholder]="'addTransaction.ENTER_AMOUNT' | translate" />
+                </div>
+
+                <div class="form-group col-md-3" *ngIf="needCurrecyPrice">
+                  <label for="amount" class="form-label">
+                    {{ 'addTransaction.AMOUNT' | translate }}
+                    ({{forignCurrencyName}})
+
+                  </label>
+                  <input id="amount" (input)="caculateAmountInLocalCurrency()" formControlName="amount" type="number" step="0.01" class="form-control"
+                    [placeholder]="'addTransaction.ENTER_AMOUNT' | translate" />
+                </div>
+
+
+                <div class="form-group col-md-3" *ngIf="needCurrecyPrice">
+                  <label for="amount" class="form-label">
+                    {{ 'addTransaction.AMOUNT' | translate }}
+                    ({{currency.name}})
+                  </label>
+                  <p>{{amountInLocalCurrency}}</p>
                 </div>
 
                 <!-- Organization -->

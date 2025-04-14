@@ -91,12 +91,28 @@
                                   <label for="organization" class="form-label">{{ 'ORGANIZATION' | translate }}</label>
                                   <input id="organization" formControlName="organization" type="text" class="form-control" placeholder="{{ 'ORGANIZATION' | translate }}" />
                               </div>
-                              <div class="form-group col-md-6">
+                              <!-- <div class="form-group col-md-6">
                                   <label for="currency_id" class="form-label">{{ 'CURRENCY' | translate }}</label>
                                   <select id="currency_id" formControlName="currency_id" class="form-control">
                                       <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
                                   </select>
-                              </div>
+                              </div> -->
+
+
+
+                              <div class="form-group col-md-6" >
+                                <ng-container *ngIf="needCurrecyPrice">
+                                 <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' | translate }}</label>
+                                 <input  type="number" id="currency_value" formControlName="currency_value" class="form-control"
+                                 [class.is-invalid]="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
+               
+                                 <div class="text-danger" *ngIf="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
+                                   {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                                 </div>
+                                </ng-container>
+                               
+               
+                               </div>
                               <div class="form-group col-md-6">
                                   <label for="delegate_id" class="form-label">{{ 'DELEGATE' | translate }}</label>
                                   <select id="delegate_id" formControlName="delegate_id" class="form-control">

@@ -10,6 +10,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { BankAccountService } from '../../shared/services/bank_account.service';
 import { Modal } from 'bootstrap';
+import { CurrencyService } from '../../shared/services/currency.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -20,6 +22,8 @@ import { Modal } from 'bootstrap';
   styleUrl: './add-check.component.css'
 })
 export class AddCheckComponent {
+
+
   checkForm: FormGroup;
   isLoading: boolean = false;
   banks: any;
@@ -27,17 +31,23 @@ export class AddCheckComponent {
   currencies: any;
   bankBranches: any;
   bankAccounts: any;
+  forignCurrencyName ='';
+  amountInLocalCurrency = 0;
   pay_to_accounts: Account [] =[];
   source_accounts: Account [] =[];
   selectedFrontImage: File | null = null;
   selectedBackImage: File | null = null;
-
+  isSubmited: boolean = false;
+  needCurrecyPrice: boolean = false;
   constructor(private fb: FormBuilder,
     private _AccountService: AccountService,
     private _BankService: BankService,
+    private _CurrencyService: CurrencyService,
     private _CheckServic: CheckService,
     private _BankAccountService:BankAccountService, 
-    private _Router: Router
+    private _Router: Router,
+        private toastr: ToastrService,
+    
   ) {
     this.checkForm = this.fb.group({
       due_date: [null, Validators.required],
@@ -48,17 +58,48 @@ export class AddCheckComponent {
       payed_to_id: [null, Validators.required],
       bank_id: [null, Validators.required],
       source_account_id: [null, Validators.required],
-      currency_id: [null, Validators.required],
+      // currency_id: [null, Validators.required],
       front_image: [null, Validators.required],
       back_image: [null, Validators.required],
-
+      currency_value:[null],
       bank_branch_id: [null],
       bank_account_id: [null],
     });
 
   }
-  destination_accounts: any;
 
+
+
+  currency: any ;
+  loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+
+        }
+        console.log(err);
+      }
+    });
+  }
+
+
+
+  caculateAmountInLocalCurrency() {
+    const amount =this.checkForm.get('amount')?.value|| 0;
+    const currency_value = this.checkForm.get('currency_value')?.value || 0;
+    this.amountInLocalCurrency = amount * currency_value;
+  }
+
+
+
+  destination_accounts: any;
   source_accounts_parents: any;
   handleIncoming() {
 
@@ -155,6 +196,7 @@ export class AddCheckComponent {
     this.getBanks();
     this.getBankAccounts();
     this.handleIncoming();
+    this.loadDefaultCurrency();
   }
 
   getBankAccounts() {
@@ -184,7 +226,25 @@ export class AddCheckComponent {
   }
 
   handleForm(): void {
-    if (this.checkForm.valid) {
+
+
+    this.isSubmited = true;
+    let isCorrectCurrency = true;
+      if((this.selectedSourceAccount?.currency.id != this.currency.id) && 
+      (this.selectedPayedToAccount?.currency.id != this.currency.id) && 
+      (this.selectedPayedToAccount?.currency.id != this.selectedSourceAccount?.currency.id)){
+        alert('فى حالة وجود حساب بعملة اجنبية يجب ان يكو ن الحساب الاخر بنفس العملة او بعملة الشركة');
+        isCorrectCurrency = false;
+      }
+      if(this.needCurrecyPrice && this.checkForm.get('currency_value')?.value == null){
+        isCorrectCurrency = false;
+      }
+  
+
+      
+
+
+    if (this.checkForm.valid && isCorrectCurrency) {
       this.isLoading = true;
 
 
@@ -200,8 +260,14 @@ export class AddCheckComponent {
       formData.append('payed_to_id', this.checkForm.get('payed_to_id')?.value);
       formData.append('source_account_id', this.checkForm.get('source_account_id')?.value);
       formData.append('bank_id', this.checkForm.get('bank_id')?.value);
-      formData.append('currency_id', this.checkForm.get('currency_id')?.value);
+      // formData.append('currency_id', this.checkForm.get('currency_id')?.value);
       formData.append('bank_branch_id', this.checkForm.get('bank_branch_id')?.value || '');
+
+
+      if(this.checkForm.get('currency_value')?.value){
+        formData.append('currency_price_value', this.checkForm.get('currency_value')?.value);
+
+      }
       if (this.selectedFrontImage) {
         formData.append('front_image', this.selectedFrontImage);
       }
@@ -242,9 +308,48 @@ filteredAccounts: Account[] = [];
     if(this.selectedPopUP  == 'pay_to_accounts'){
       this.selectedPayedToAccount = account;
       this.checkForm.patchValue({'payed_to_id':account.id})
+
+      this.needCurrecyPrice = false;
+
+      if(this.selectedPayedToAccount) {
+        if(this.selectedPayedToAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = this.selectedPayedToAccount.currency.name;
+
+        }      
+      }
+
+      if(this.selectedSourceAccount) {
+        if(this.selectedSourceAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = this.selectedSourceAccount.currency.name;
+
+        }      
+      }
+
+
     }else if(this.selectedPopUP  == 'source_accounts'){
       this.selectedSourceAccount = account;
       this.checkForm.patchValue({'source_account_id':account.id})
+
+      this.needCurrecyPrice = false;
+
+      if(this.selectedPayedToAccount) {
+        if(this.selectedPayedToAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = this.selectedPayedToAccount.currency.name;
+
+        }      
+      }
+
+      if(this.selectedSourceAccount) {
+        if(this.selectedSourceAccount.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName =this.selectedSourceAccount.currency.name;
+
+        }      
+      }
+
 
     }
     this.closeModal('shiftModal');
@@ -300,6 +405,10 @@ filteredAccounts: Account[] = [];
 interface Account {
   id: string;
   name: string;
+  currency: {
+    id: string;
+    name: string;
+  };
   parent_id?: string;
   child?: Account[];
   showChildren?: boolean;

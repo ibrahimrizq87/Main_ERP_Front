@@ -1,6 +1,14 @@
 {
   
 
+"CURRENCY_PRICE_TRACKING":"Currency price tracking",
+"PAYMENT_CHECK":"outgoing check document",
+"ENTRY_CHECK":"check movement document",
+"RECEIPT_CHECK":"incomming check document",
+
+
+  "CURRENCY_PRICE":"Currency price",
+
   "COLORS": "Colors",
     "manageColor": {
       "manage_color": "Manage Colors",
@@ -72,9 +80,11 @@
       "FROM_TO_ACCOUNT_COMPANY": "From/To Account Company",
       "DELEGATE": "Delegate",
       "AMOUNT": "Amount",
+      "DATE": "Date",
       "ORGANIZATION": "Organization",
       "ACTIONS": "Actions",
       "APPROVE": "Approve",
+      "CURRENCY": "Currency",
       "REJECT": "Reject",
       "WAITING": "Waiting",
       "Documents_List": "Documents List"
@@ -693,6 +703,7 @@
     "DOCUMENTS": "Documents",
     "RECEIPT_DOCUMENT": "Receipt Document",
     "PAYMENT_DOCUMENT": "Payment Document",
+    "CHECK_DOCUMENTS": "Check Documents",
     "INSTALLMENT_DOCUMENT": "Entry Document",
     "CREDIT_NOTE_DOCUMENT": "Credit Note Document",
     "DEBIT_NOTE_DOCUMENT": "Debit Note Document",
