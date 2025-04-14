@@ -1,80 +1,72 @@
-<div class="mt-4 mb-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
-              <h5>Purchase Details</h5>
-            </div>
-            <div class="card-body pb-5">
-              <div class="row">
-                <!-- Left column for general details -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="fw-bold">Type:</label>
-                    <p class="text-muted">{{ storeData?.type || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Status:</label>
-                    <p class="text-muted">{{ storeData?.status || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Invoice Date:</label>
-                    <p class="text-muted">{{ storeData?.invoice_date || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Due Date:</label>
-                    <p class="text-muted">{{ storeData?.due_date || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Tax Type:</label>
-                    <p class="text-muted">{{ storeData?.tax_type || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Notes:</label>
-                    <p class="text-muted">{{ storeData?.notes || 'N/A' }}</p>
-                  </div>
-                </div>
-  
-                <!-- Right column for related entities -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="fw-bold">Purchased From:</label>
-                    <p class="text-muted">{{ storeData?.purchased_from?.name_en || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Delegate:</label>
-                    <p class="text-muted">{{ storeData?.delegate?.name_en || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Store:</label>
-                    <p class="text-muted">{{ storeData?.store?.name_en || 'N/A' }}</p>
-                  </div>
-                  <div class="mb-3">
-                    <label class="fw-bold">Currency:</label>
-                    <p class="text-muted">{{ storeData?.currency?.currency_name_en || 'N/A' }}</p>
-                  </div>
-                </div>
-              </div>
-  
-              <!-- Dynamic Sections -->
-              <div class="row">
-                <div class="col-md-12">
-                  <h5 class="fw-bold">Additional Details:</h5>
-                  <p><strong>Ledger No:</strong> {{ storeData?.ledger_no || 'N/A' }}</p>
-                  <p><strong>Manual Reference:</strong> {{ storeData?.manual_reference || 'N/A' }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="container my-4">
+  <div class="card shadow-lg rounded-4 border-0">
+    <div class="card-header rounded-top py-3 px-4">
+      <h4 class="mb-0">Purchase Bill #{{ storeData?.id || 'N/A' }}</h4>
+    </div>
+
+    <div class="card-body px-4 py-4">
+      <div class="row g-4 mb-4">
+        <!-- Left side -->
+        <div class="col-md-6">
+          <p><strong>Date:</strong> {{ storeData?.date || 'N/A' }}</p>
+          <p><strong>Status:</strong> {{ storeData?.status || 'N/A' }}</p>
+          <p><strong>Payment Type:</strong> {{ storeData?.payment_type || 'N/A' }}</p>
+          <p><strong>Total:</strong> {{ storeData?.total || '0.00' }}</p>
+          <p><strong>Total Paid:</strong> {{ storeData?.total_payed || '0.00' }}</p>
+          <p><strong>Created At:</strong> {{ storeData?.created_at || 'N/A' }}</p>
+        </div>
+
+        <!-- Right side -->
+        <div class="col-md-6">
+          <p><strong>Store:</strong> {{ storeData?.store?.name || 'N/A' }}</p>
+          <p><strong>Vendor:</strong> {{ storeData?.vendor?.name || 'N/A' }}</p>
+          <p><strong>Creator:</strong> {{ storeData?.creator?.name || 'N/A' }}</p>
+          <p><strong>Note:</strong> {{ storeData?.note || 'N/A' }}</p>
         </div>
       </div>
-  
-      <div class="mt-4 mb-4">
-        <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/purchases">
-          <button type="button" class="btn btn-primary px-4">Back</button>
-        </a>
+
+      <!-- Purchase Items Table -->
+      <div class="mt-4">
+        <h5 class="fw-bold mb-3">Purchase Items</h5>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle">
+            <thead class="table-primary text-center">
+              <tr>
+                <th>#</th>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Color</th>
+                <th>Quantity</th>
+                <th>Price</th>
+
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="storeData?.purchaseBillItems?.length > 0; else noItems">
+              <tr *ngFor="let item of storeData.purchaseBillItems; let i = index" class="text-center">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.product.id || 'N/A' }}</td>
+                <td>{{ item?.product?.name || 'N/A' }}</td>
+                <td>{{ item?.product?.colors[0]?.color?.color || 'N/A' }}</td>
+                <td>{{ item?.quantity || 0 }}</td>
+                <td>{{ item?.price || '0.00' }}</td>
+                
+                <td>{{ item?.created_at | date: 'medium' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noItems>
+          <div class="text-center py-3 text-muted">No purchase items available.</div>
+        </ng-template>
       </div>
     </div>
+
+    <!-- Back Button -->
+    <div class="card-footer text-end bg-white px-4 py-3">
+      <a class="btn btn-secondary px-4" [routerLink]="['/dashboard/purchases', storeData?.status]">Back</a>
+
+     
+    </div>
   </div>
-  
+</div>
