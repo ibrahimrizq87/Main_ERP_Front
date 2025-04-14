@@ -30,7 +30,7 @@ export class AddPurchaseComponent implements OnInit {
   Products: any[] = [];
   msgError: any[] = [];
   isLoading: boolean = false;
-  currencies: any;
+  currency: any;
   stores: any[] = [];
   vendors: any[] = [];
   selectedType: string = 'purchase';
@@ -50,6 +50,9 @@ export class AddPurchaseComponent implements OnInit {
   showAllDataExport = false;
   showItemsExport = false;
   selectedFile: File | null = null;
+  needCurrecyPrice: boolean = false;
+  forignCurrencyName = '';
+
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
@@ -137,19 +140,19 @@ export class AddPurchaseComponent implements OnInit {
   currencyPrice(){
     const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
-    if ((currencyPriceValue * this.totalPayed) > this.total) {
-      this.purchasesBillForm.patchValue({ payed_price: this.total / currencyPriceValue });
-    }
-    if(this.currencyPriceValue>0){
-      this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
-    }
+    // if ((currencyPriceValue * this.totalPayed) > this.total) {
+    //   this.purchasesBillForm.patchValue({ payed_price: this.total / currencyPriceValue });
+    // }
+    // if(this.currencyPriceValue>0){
+    //   this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
+    // }
   }
   loadDefaultCurrency() {
     this._CurrencyService.getDefultCurrency().subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
-          this.currencies = response.data;
+          this.currency = response.data;
         }
       },
       error: (err) => {
@@ -377,10 +380,10 @@ export class AddPurchaseComponent implements OnInit {
       this.purchasesBillForm.patchValue({ payed_price: this.total });
     }
 
-    if(this.currencyPriceValue>0){
-      this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
-    }
-    // this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0);
+    // if(this.currencyPriceValue>0){
+    //   this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
+    // }
+    this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0);
   }
   paymentTriggerChange() {
     // const value = (event.target as HTMLSelectElement).value;
@@ -430,8 +433,12 @@ export class AddPurchaseComponent implements OnInit {
 
   }
   handleForm() {
- 
-    if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor &&(this.selectedVendor?.currency?.id != this.currencies.id) && !this.purchasesBillForm.get('currency_price_value')?.value){
+    if(this.purchasesBillForm.get('file_type')?.value != 'manual'){
+
+      this.items.clear();
+
+      }
+    if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value){
       this.toastr.error('يجب ادخال سعر الصرف');
       // alert('يجب ادخال سعر الصرف');
       return;
@@ -449,7 +456,7 @@ export class AddPurchaseComponent implements OnInit {
           formData.append('payment_type', 'cash');
 
 
-          if((this.selectedVendor?.currency?.id != this.currencies.id) && this.purchasesBillForm.get('currency_price_value')?.value){
+          if(this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value){
             formData.append('currency_price_value', this.purchasesBillForm.get('currency_price_value')?.value);
 
           }
@@ -651,6 +658,23 @@ export class AddPurchaseComponent implements OnInit {
   selectcheck(check: any) {
     this.purchasesBillForm.patchValue({ 'check_id': check.id })
     this.selectedCheck = check;
+    this.needCurrecyPrice =false;
+    this.forignCurrencyName ='';
+
+
+    if(this.currency.id != check.currency.id){
+      this.needCurrecyPrice =true;
+      this.forignCurrencyName =check.currency.name;
+
+    }
+    
+    if(this.selectedVendor){
+      if(this.selectedVendor.currency.id != this.currency.id){
+        this.needCurrecyPrice =true;
+        this.forignCurrencyName =this.selectedVendor.currency.name;
+
+      }
+    }
     this.closeModal('checkModel');
   }
   closeModal(modalId: string) {
@@ -716,10 +740,57 @@ export class AddPurchaseComponent implements OnInit {
     if (this.selectedPopUP == 'cash') {
       this.selectedCashAccount = account;
       this.purchasesBillForm.patchValue({ 'cash_id': account.id })
+      this.needCurrecyPrice =false;
+      this.forignCurrencyName ='';
 
+
+      if(this.currency.id != account.currency.id){
+        this.needCurrecyPrice =true;
+        this.forignCurrencyName =account.currency.name;
+
+      }
+      
+      if(this.selectedVendor){
+        if(this.selectedVendor.currency.id != this.currency.id){
+          this.needCurrecyPrice =true;
+          this.forignCurrencyName =this.selectedVendor.currency.name;
+
+        }
+      }
+
+    
+      
     } else if (this.selectedPopUP == 'vendor') {
       this.selectedVendor = account;
       this.purchasesBillForm.patchValue({ 'vendor_id': account.id })
+
+    this.needCurrecyPrice =false;
+    this.forignCurrencyName ='';
+
+if(this.currency.id != account.currency.id){
+  this.needCurrecyPrice =true;
+  this.forignCurrencyName =account.currency.name;
+
+
+}
+
+if(this.selectedCashAccount){
+  if(this.selectedCashAccount.currency.id != this.currency.id){
+    this.needCurrecyPrice =true;
+    this.forignCurrencyName =this.selectedCashAccount.currency.name;
+
+  }
+}
+
+if(this.selectedCheck){
+  if(this.selectedCheck.currency.id != this.currency.id){
+    this.needCurrecyPrice =true;
+
+    this.forignCurrencyName =this.selectedCheck.currency.name;
+
+  }
+}
+
 
     }
     this.cdr.detectChanges();

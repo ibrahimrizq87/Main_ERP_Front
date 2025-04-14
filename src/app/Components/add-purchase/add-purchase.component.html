@@ -61,8 +61,8 @@
                   </div>
                 </div>
 
-                <div *ngIf="selectedVendor && selectedVendor.currency?.id != currencies.id" class="form-group col-md-6">
-                  <label class="form-label large-text">سعر عملة ال ({{selectedVendor.currency.name}})</label>
+                <div *ngIf="needCurrecyPrice" class="form-group col-md-6">
+                  <label class="form-label large-text">سعر عملة ال ({{forignCurrencyName}})</label>
                   <input formControlName="currency_price_value" type="number" class="form-control"
                     (input)="currencyPrice()" />
                 </div>
@@ -147,7 +147,7 @@
                         <!-- Total Price -->
                         <div class="col-md-2">
                           <label for="price">{{ 'PRICE' | translate }} <span
-                              *ngIf="selectedVendor && selectedVendor.currency?.id != currencies.id">({{selectedVendor.currency.name}})</span></label>
+                              *ngIf="needCurrecyPrice">({{forignCurrencyName}})</span></label>
                           <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
                             [class.is-invalid]="item.get('price')?.invalid && isSubmited" />
                           <div class="text-danger" *ngIf="item.get('price')?.invalid && isSubmited ">
@@ -327,7 +327,8 @@
                   <div
                     *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
                     class="form-group col-md-4">
-                    <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
+                    <label class="form-label large-text">
+                      <span *ngIf="needCurrecyPrice">({{forignCurrencyName}})</span>سوف يتم دفع هذا المبلغ</label>
                     <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
 
                   </div>
