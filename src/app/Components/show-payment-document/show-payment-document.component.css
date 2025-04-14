@@ -22,4 +22,10 @@ span {
     width: 3px;           
     background-color: #145388; 
   }
+  .card-body .row > [class^="col-"] {
+    margin-bottom: 0;
+  }
+  .card-body p {
+    margin-bottom: 0 !important;
+  }
   
