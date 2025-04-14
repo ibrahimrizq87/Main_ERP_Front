@@ -344,7 +344,10 @@ export class UpdatePaymentDocumentComponent {
        
       }
     
-    
+    onCancel() {
+      this.transactionForm.reset();
+      this.router.navigate(['/dashboard/document/' + this.type +'/'+ this.paymentDocument?.status]);
+    }
     }
     
     

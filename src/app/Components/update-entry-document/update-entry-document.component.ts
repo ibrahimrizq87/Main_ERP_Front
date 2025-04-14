@@ -474,7 +474,10 @@ calculateTotals() {
      
     }
   
-  
+  onCancel() {
+    this.entryForm.reset();
+    this._Router.navigate(['/dashboard/documentEntry/'+this.entryDocument.status]); 
+  }
   }
   
   

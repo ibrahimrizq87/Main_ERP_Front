@@ -210,5 +210,9 @@ currentImage:any;
         });}
       }
     }
+    onCancel() {
+      this.delegateForm.reset();
+      this._Router.navigate(['/dashboard/delegates']);
+    }
   }
   

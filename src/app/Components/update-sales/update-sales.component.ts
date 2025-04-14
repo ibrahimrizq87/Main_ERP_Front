@@ -917,7 +917,10 @@ selectedClient:any | null= null;
         modal?.hide();
       }
     }
-  
+  onCancel(){
+    this.saleForm.reset();
+    this._Router.navigate(['/dashboard/sales']);
+  }
 }
 
 

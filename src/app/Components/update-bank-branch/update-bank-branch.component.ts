@@ -214,6 +214,10 @@ export class UpdateBankBranchComponent implements OnInit {
       });
     }
   }
+  onCancel() {
+    this.bankBranchForm.reset();
+    this._Router.navigate(['/dashboard/bankBranch']); 
+  }
 }
 interface City{
   id:string;

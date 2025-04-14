@@ -88,4 +88,8 @@ private toastr: ToastrService) {
       });
     }
   }
+  onCancel() {
+    this.countryForm.reset();
+    this._Router.navigate(['/dashboard/countries']);
+  }
 }

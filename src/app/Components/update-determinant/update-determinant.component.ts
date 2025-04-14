@@ -115,4 +115,8 @@ submitted =false;
       });
     }}
   }
+  onCancel(): void {
+    this.determinantForm.reset();
+    this._Router.navigate(['/dashboard/productDeterminants']);
+  }
 }

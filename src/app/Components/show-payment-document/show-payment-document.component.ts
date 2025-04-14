@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-show-payment-document',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule,CommonModule],
   templateUrl: './show-payment-document.component.html',
   styleUrl: './show-payment-document.component.css'
 })

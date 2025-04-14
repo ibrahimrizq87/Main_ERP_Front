@@ -456,7 +456,10 @@ removeCurrentDelegate(){
               
             }
           
-          
+ onCancel(){
+  this._Router.navigate(['/dashboard/clients']);
+  this.closeModal('shiftModal');
+ }         
       
 }
 

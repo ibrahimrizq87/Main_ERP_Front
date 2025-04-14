@@ -154,4 +154,20 @@ export class PurchasesService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/purchases-orders/status/${orderId}/${status}`, { headers })
    }
+   exportAllDataToSheet(): Observable<Blob> {
+    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/export-all-data-to-sheet`, {
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+    });
+  }
+  exportItemsDataToSheet(): Observable<Blob> {
+    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/export-items-data-to-sheet`, {
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+    });
+  }
+
+  importProducts(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills/import-excell-all-data`,data ,{headers: this.getHeadersWithToken() });
+  }
 }
