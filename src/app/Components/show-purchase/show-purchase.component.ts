@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductsService } from '../../shared/services/products.service';
-import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PurchasesService } from '../../shared/services/purchases.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-show-purchase',
   standalone: true,
-  imports: [RouterLinkActive,RouterModule],
+  imports: [RouterModule,CommonModule],
   templateUrl: './show-purchase.component.html',
   styleUrl: './show-purchase.component.css'
 })
@@ -23,7 +23,9 @@ export class ShowPurchaseComponent implements OnInit {
 
   ngOnInit(): void {
     const purchaseId = this.route.snapshot.paramMap.get('id');
+    console.log('Purchase ID:', purchaseId);
     if (purchaseId) {
+
       this.fetchPurchaseData(purchaseId);
     }
   }
