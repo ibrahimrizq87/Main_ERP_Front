@@ -1,6 +1,26 @@
 {
-"COLORS": "الألوان",
 
+  
+    "CURRENCY_REPORT": "تقرير العملة",
+    "Start Balance": "الرصيد الابتدائي",
+    "Current Balance": "الرصيد الحالي",
+    "Net Debit": "صافي المدين",
+    "Net Credit": "صافي الدائن",
+    "Currency": "العملة",
+    "Financial Condition": "الحالة المالية",
+    "CURRENCY_VALUE_CHANGES": "تغييرات قيمة العملة",
+    "Old Value": "القيمة القديمة",
+    "New Value": "القيمة الجديدة",
+    "Type": "النوع",
+    "Account": "الحساب",
+    "Created At": "تاريخ الإنشاء",
+    "GAIN_LOSS_RECORDS": "سجل الأرباح/الخسائر",
+    "Amount": "المبلغ",
+    "EVENT": "الحدث"
+  ,  
+
+
+"COLORS": "الألوان",
 "CURRENCY_PRICE_TRACKING": "تتبع أسعار العملات",
 
 

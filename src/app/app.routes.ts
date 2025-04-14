@@ -137,7 +137,8 @@ export const routes: Routes = [
 
 
 
-        
+        // {path:"show-purchase-bill/:id",component:ShowPurchaseComponent},
+
         {path:"currency-price-tracking",component:CurrencyPriceTrackingComponent},
 
         {path:"check-documents/:type",component:CheckDocumentsComponent},
@@ -177,6 +178,10 @@ export const routes: Routes = [
         {path:"approvedPurchases",component:ApprovedPurchasesComponent},
         {path:"updatePurchase/:id",component:UpdatePurchaseComponent},
         {path:"showPurchase/:id",component:ShowPurchaseComponent},
+
+
+
+
         {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
         {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
         {path:"updateEntryDocument/:id",component:UpdateEntryDocumentComponent},

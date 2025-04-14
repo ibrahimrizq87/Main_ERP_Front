@@ -1,0 +1,13 @@
+tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  tbody tr:hover {
+    background-color: #a39c9c;
+  }
+  
+  tbody tr.selected {
+    background-color: #d0ebff !important;
+  }
+  

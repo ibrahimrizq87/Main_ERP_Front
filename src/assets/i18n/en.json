@@ -1,6 +1,28 @@
 {
   
 
+
+
+  
+    "CURRENCY_REPORT": "Currency Report",
+    "Start Balance": "Start Balance",
+    "Current Balance": "Current Balance",
+    "Net Debit": "Net Debit",
+    "Net Credit": "Net Credit",
+    "Currency": "Currency",
+    "Financial Condition": "Financial Condition",
+    "CURRENCY_VALUE_CHANGES": "Currency Value Changes",
+    "Old Value": "Old Value",
+    "New Value": "New Value",
+    "Type": "Type",
+    "Account": "Account",
+    "Created At": "Created At",
+    "GAIN_LOSS_RECORDS": "Gain/Loss Records",
+    "Amount": "Amount",
+    "EVENT": "Event"
+  ,
+  
+
 "CURRENCY_PRICE_TRACKING":"Currency price tracking",
 "PAYMENT_CHECK":"outgoing check document",
 "ENTRY_CHECK":"check movement document",

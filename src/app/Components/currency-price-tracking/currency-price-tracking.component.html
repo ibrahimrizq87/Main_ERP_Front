@@ -1,0 +1,99 @@
+<div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h4>{{ 'CURRENCY_REPORT' | translate }}</h4>
+        <span class="text-muted">
+          {{ 'DASHBOARD' | translate }}
+          <i class="fa-solid fa-chart-line mx-1"></i>
+          {{ 'CURRENCY_REPORT' | translate }}
+        </span>
+      </div>
+  
+    </div>
+  
+    <!-- Account Info Card -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">{{ account.name }}</h5>
+        <p class="mb-1"><strong>{{ 'Start Balance' | translate }}:</strong> {{ account.start_balance }}</p>
+        <p class="mb-1"><strong>{{ 'Current Balance' | translate }}:</strong> {{ account.current_balance }}</p>
+        <p class="mb-1"><strong>{{ 'Net Debit' | translate }}:</strong> {{ account.net_debit }}</p>
+        <p class="mb-1"><strong>{{ 'Net Credit' | translate }}:</strong> {{ account.net_credit }}</p>
+        <p class="mb-1"><strong>{{ 'Currency' | translate }}:</strong> {{ account.currency.name }}</p>
+        <p class="mb-0"><strong>{{ 'Financial Condition' | translate }}:</strong> {{ account.financial_condition }}</p>
+      </div>
+    </div>
+  
+    <!-- Currency Value Change Table -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h6 class="mb-0">{{ 'CURRENCY_VALUE_CHANGES' | translate }}</h6>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-bordered mb-0">
+          <thead class="table-light text-center">
+            <tr>
+              <th>#</th>
+              <th>{{ 'Old Value' | translate }}</th>
+              <th>{{ 'New Value' | translate }}</th>
+              <th>{{ 'Type' | translate }}</th>
+              <th>{{ 'Account' | translate }}</th>
+              <th>{{ 'Created At' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let change of currencyChanges; let i = index"
+            
+            (click)="selectRecord(change)"
+            >
+              <td>{{ i + 1 }}</td>
+              <td>{{ change.old_value }}</td>
+              <td>{{ change.new_value }}</td>
+              <td>{{ change.type }}</td>
+              <td>{{ change.account.name }}</td>
+              <td>{{ change.created_at }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- Gain / Loss Table -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h6 class="mb-0">{{ 'GAIN_LOSS_RECORDS' | translate }}</h6>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-bordered mb-0">
+          <thead class="table-light text-center">
+            <tr>
+              <th>#</th>
+              <th>{{ 'Amount' | translate }}</th>
+              <th>{{ 'Type' | translate }}</th>
+              <th>{{ 'EVENT' | translate }}</th>
+
+              <th>{{ 'Account' | translate }}</th>
+              <th>{{ 'Created At' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of gainLossList; let i = index"
+            (click)="selectRecord(record)"
+            >
+              <td>{{ i + 1 }}</td>
+              <td>{{ record.amount }}</td>
+              <td>{{ record.type }}</td>
+              <td>{{ record.event }}</td>
+
+              <td>{{ record.account.name }}</td>
+              <td>{{ record.created_at }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  </div>
+  
