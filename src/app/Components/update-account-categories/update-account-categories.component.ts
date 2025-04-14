@@ -97,4 +97,8 @@ export class UpdateAccountCategoriesComponent {
       });}
     }
   }
+  onCancel() {
+    this.categoryForm.reset();
+    this._Router.navigate(['/dashboard/account-categories/'+ this.type ]);
+  }
 }

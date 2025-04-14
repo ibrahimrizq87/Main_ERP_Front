@@ -455,8 +455,10 @@ fetchVendortData(vendor_id:string){
               
             // }
           
-          
-      
+    onCancel(){
+      this.clientForm.reset();
+      this._Router.navigate(['/dashboard/vendors']);
+    }
 }
 
 

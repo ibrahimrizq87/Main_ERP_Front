@@ -872,8 +872,12 @@ export class UpdatePurchaseComponent {
       modal?.hide();
     }
   }
+onCancel() {
+  this.purchasesBillForm.reset();
+  this._Router.navigate(['/dashboard/purchases/waiting']);
 
-}
+
+}}
 
 
 

@@ -22,4 +22,6 @@ export class UpdateCustomerComponent {
       this.phoneNumbers.splice(index, 1); 
     }
   }
+  onCancel() {
+  }
 }

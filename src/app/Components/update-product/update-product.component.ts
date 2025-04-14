@@ -629,6 +629,10 @@ export class UpdateProductComponent implements OnInit {
       console.log('invalid dataaaa')
     }
   }
+  onCancel() {
+    this.productForm.reset();
+    this.router.navigate(['/dashboard/products']);
+  }
 }
 
 

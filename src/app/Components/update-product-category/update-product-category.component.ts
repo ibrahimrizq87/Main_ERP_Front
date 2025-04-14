@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-update-product-category',
   standalone: true,
-  imports: [CommonModule,FormsModule ,ReactiveFormsModule,TranslateModule ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './update-product-category.component.html',
   styleUrl: './update-product-category.component.css'
 })
@@ -21,18 +21,18 @@ export class UpdateProductCategoryComponent {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _ProductCategoriesService:ProductCategoriesService ,private _Router: Router,private translate: TranslateService,
-        private route: ActivatedRoute,
-        private toastr: ToastrService
-    
+  constructor(private _ProductCategoriesService: ProductCategoriesService, private _Router: Router, private translate: TranslateService,
+    private route: ActivatedRoute,
+    private toastr: ToastrService
+
   ) {
-  
+
   }
-  categoryImage: string | ArrayBuffer | undefined| null = null;
+  categoryImage: string | ArrayBuffer | undefined | null = null;
 
   selectedFile: File | null = null;
   ngOnInit(): void {
-    const unitId = this.route.snapshot.paramMap.get('id'); 
+    const unitId = this.route.snapshot.paramMap.get('id');
     if (unitId) {
       this.fetchProductCategory(unitId);
     }
@@ -42,14 +42,14 @@ export class UpdateProductCategoryComponent {
     this._ProductCategoriesService.getAllProductCategoryById(unitId).subscribe({
       next: (response) => {
         if (response) {
-          const categoryData = response.data ; 
+          const categoryData = response.data;
           console.log(categoryData)
           this.categoryForm.patchValue({
             name: categoryData.name,
             // image: UnitsData.name,
 
           });
-        this.categoryImage = categoryData.image;
+          this.categoryImage = categoryData.image;
         }
       },
       error: (err: HttpErrorResponse) => {
@@ -63,35 +63,35 @@ export class UpdateProductCategoryComponent {
       this.selectedFile = file;
       this.categoryForm.patchValue({ image: file });
     }
-   
-      // Preview Image
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.categoryImage = e.target?.result;
-      };
-      reader.readAsDataURL(file);
+
+    // Preview Image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.categoryImage = e.target?.result;
+    };
+    reader.readAsDataURL(file);
   }
   categoryForm: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
+    name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
     image: new FormControl(null),
   });
 
   handleForm() {
-   
+
     if (this.categoryForm.valid) {
       this.isLoading = true;
 
       const formData = new FormData();
-    
+
       formData.append('name', this.categoryForm.get('name')?.value);
-      if( this.selectedFile){
+      if (this.selectedFile) {
         formData.append('image', this.categoryForm.get('image')?.value);
       }
 
       const unitId = this.route.snapshot.paramMap.get('id');
 
-      if(unitId){
-        this._ProductCategoriesService.updateProductCategory(unitId , formData).subscribe({
+      if (unitId) {
+        this._ProductCategoriesService.updateProductCategory(unitId, formData).subscribe({
           next: (response) => {
             console.log(response);
             if (response) {
@@ -103,14 +103,18 @@ export class UpdateProductCategoryComponent {
           error: (err: HttpErrorResponse) => {
             this.toastr.error('حدث خطا اثناء تعديل الفئة');
             this.isLoading = false;
-             this.msgError = err.error.error;
+            this.msgError = err.error.error;
             console.log(err);
           }
-        }); 
+        });
       }
 
 
 
     }
+  }
+  onCancel() {
+    this.categoryForm.reset();
+    this._Router.navigate(['/dashboard/productCategories']);
   }
 }

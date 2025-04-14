@@ -91,4 +91,8 @@ export class UpdateColorComponent {
       });
     }
   }
+  onCancel(): void {
+    this.colorForm.reset();
+    this._Router.navigate(['/dashboard/colors']);
+  }
 }
