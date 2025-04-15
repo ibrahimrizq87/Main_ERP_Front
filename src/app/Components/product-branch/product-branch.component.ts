@@ -24,13 +24,28 @@ export class ProductBranchComponent implements OnInit {
   isSubmitted =false;
   selectedProduct:any;
   filteredProducts:any;
+  Products: any;
+  productImportForm: FormGroup = new FormGroup({
+    file: new FormControl(null, [Validators.required]),
+    template: new FormControl('1', [Validators.required]),
+    file_name:new FormControl(null),
+    product_id:new FormControl(null),
+  });
   constructor(private _ProductBranchesService: ProductBranchesService,
      private router: Router,
     private _ProductsService:ProductsService,
   private toastr:ToastrService) {}
-
+  selectedTemplate: string = '';
   ngOnInit(): void {
     this.loadBranches(); 
+    this.loadProducts();
+    this.productImportForm.get('template')?.valueChanges.subscribe((value) => {
+      this.selectedTemplate = value;
+    });
+    this.productImportForm.get('product_id')?.valueChanges.subscribe((productId) => {
+      this.selectedProduct = this.Products.find((p: { id: number; }) => p.id === +productId);
+    });
+    
   }
 
   loadBranches(): void {
@@ -46,7 +61,35 @@ export class ProductBranchComponent implements OnInit {
       }
     });
   }
+  handleExport() {
+    const selectedTemplate = this.productImportForm.get('template')?.value;
   
+    if (selectedTemplate === '5') {
+      this.exportProductBranchByProduct();
+    } else {
+      this.exportProductBranchExcel();
+    }
+  }
+  exportProductBranchExcel(){
+
+    const name = this.productImportForm.get('file_name')?.value || 'products template';
+        const template =this.productImportForm.get('template')?.value;
+        this._ProductBranchesService.exportProductBranchesTemplates(template).subscribe({
+          next: (response) => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', name+'.xlsx'); 
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          },
+          error: (err) => {
+            console.error("Error downloading file:", err);
+          }
+        });
+      }
   onFileColorSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -82,10 +125,10 @@ export class ProductBranchComponent implements OnInit {
   }
 
 
-selectProduct(product:any){
-  this.selectedProduct = product;
-  this.closeModal('productModel');
-}
+// selectProduct(product:any){
+//   this.selectedProduct = product;
+//   this.closeModal('productModel');
+// }
 
 exportProductBranchByProduct(){
   if (!this.selectedProduct){
@@ -135,7 +178,8 @@ ProductsearchQuery ='';
 onProductSearchChange(){
 }
 
-         handleForm(){
+
+handleForm(){
   this.isSubmitted =true;
     if (this.productImportForm.valid) {
         this.isLoading = true;
@@ -151,7 +195,7 @@ onProductSearchChange(){
           console.error('Invalid file detected:', file);
           return; // Prevent submission
         }
-        this._ProductBranchesService.importProductBranchs(formData).subscribe({
+        this._ProductBranchesService.importProductBranchesTemplates(formData).subscribe({
           next: (response) => {
             console.log(response);
             if (response) {
@@ -166,14 +210,46 @@ onProductSearchChange(){
         });
       }
           }
+
+  //        handleForm(){
+  // this.isSubmitted =true;
+  //   if (this.productImportForm.valid) {
+  //       this.isLoading = true;
+  
+  //       const formData = new FormData();
+      
+  //       // formData.append('file', this.productImportForm.get('file')?.value);
+  //       const file = this.productImportForm.get('file')?.value;
+  
+  //       if (file instanceof File) { // Ensure it's a File object
+  //         formData.append('file', file, file.name);
+  //       } else {
+  //         console.error('Invalid file detected:', file);
+  //         return; // Prevent submission
+  //       }
+  //       this._ProductBranchesService.importProductBranchs(formData).subscribe({
+  //         next: (response) => {
+  //           console.log(response);
+  //           if (response) {
+  //             this.isLoading = false; 
+  //             this.closeModal('ImportForm');       
+  //           }
+  //         },
+  //         error: (err: HttpErrorResponse) => {
+  //           this.isLoading = false;
+             
+  //         }
+  //       });
+  //     }
+  //         }
   
 
 
 
-    productImportForm: FormGroup = new FormGroup({
-        file: new FormControl(null, [Validators.required]),
+    // productImportForm: FormGroup = new FormGroup({
+    //     file: new FormControl(null, [Validators.required]),
        
-      });
+    //   });
 
 
   deleteBranch(branchId: number): void {
@@ -206,8 +282,8 @@ onProductSearchChange(){
       next: (response) => {
         if (response) {
           console.log(response);
-          // this.Products = response.data; 
-          this.filteredProducts = response.data;
+          this.Products = response.data; 
+          // this.filteredProducts = response.data;
         }
       },
       error: (err) => {

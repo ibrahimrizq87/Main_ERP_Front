@@ -1,20 +1,21 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <h5>{{ 'MANAGE_PRODUCT_BRANCH' | translate }}</h5>
-        <span class="text-muted">
-            {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'BRANCHES' | translate }}
-        </span>
-    </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductBranch">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
-    </a>
+  <div>
+    <h5>{{ 'MANAGE_PRODUCT_BRANCH' | translate }}</h5>
+    <span class="text-muted">
+      {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'BRANCHES' |
+      translate }}
+    </span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductBranch">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
 </div>
 
 
 <div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
+  <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
 
-        <a  class="btn btn-outline-primary ms-2" (click)="openModal('productModel')">
+    <!-- <a  class="btn btn-outline-primary ms-2" (click)="openModal('productModel')">
             {{ selectedProduct ? selectedProduct.name : ('PRODUCT' | translate) }}
         </a>
     
@@ -23,73 +24,158 @@
 
     <a (click)="exportProductBranchByProduct()" class="btn btn-outline-info ms-2">
       export 
-    </a>
+    </a> -->
 
     <a (click)="openModal('ImportForm')" class="btn btn-outline-info ms-2">
-         import
-      </a>
+      export or import product Branches
+    </a>
 
 
-    </header>
-  </div>
-
-  
-
-
-<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="fw-bold">{{ 'BRANCHES_LIST' | translate }}</span>
-            <input class="form-control search w-25" type="search" [(ngModel)]="searchQuery"  placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
-        </div>
-    </div>
-
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <th class="bg-light" scope="col">ID</th>
-                <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
-
-                <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
-                <!-- <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th> -->
-                <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'COLOR' | translate }}</th>
-
-                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let branch of branches; let i = index">
-                <th scope="row">{{  branch.code }}</th>
-                <td><img [src]="branch.product.cover_image" alt="" height="50" width="50"> </td>
-
-                <td>{{ branch.product.name }}</td>
-                <!-- <td>{{ branch.store.name }}</td> -->
-                <td>{{ branch.stock }}</td>
-                <td>{{ branch.product_color?.color?.color ?? "N/A"}}</td>
-
-
-
-
-                <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProductBranch', branch.id]">
-                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>
-                    </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBranch(branch.id)"></i>
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductBranch', branch.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
-                      </a>
-                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  </header>
 </div>
 
 
 
 
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'BRANCHES_LIST' | translate }}</span>
+      <input class="form-control search w-25" type="search" [(ngModel)]="searchQuery"
+        placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">ID</th>
+        <!-- <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th> -->
+
+        <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
+        <!-- <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th> -->
+        <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'COLOR' | translate }}</th>
+
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let branch of branches; let i = index">
+        <th scope="row">{{ branch.code }}</th>
+        <!-- <td><img [src]="branch.product.cover_image" alt="" height="50" width="50"> </td> -->
+
+        <td>{{ branch.product.name }}</td>
+        <!-- <td>{{ branch.store.name }}</td> -->
+        <td>{{ branch.stock }}</td>
+        <td>{{ branch.product_color?.color?.color ?? "N/A"}}</td>
+
+
+
+
+        <td class="d-flex justify-content-center gap-3 align-items-center">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProductBranch', branch.id]">
+            <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>
+          </a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductBranch', branch.id]">
+            <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+          </a>
+          <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBranch(branch.id)"></i>
+        
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <div class="modal fade" id="ImportForm" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'ImportForm' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('ImportForm')"></button>
+      </div>
+      <div class="modal-body">
+
+
+
+        <div class="mt-4 mb-4">
+          <form [formGroup]="productImportForm" (ngSubmit)="handleForm()">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card shadow em-card rounded-lg">
+                    <div class="card-header bg-white text-black rounded-top pt-3">
+                      <h5>Export and Import product Branch </h5>
+                    </div>
+                    <div class="card-body pb-5">
+                      <div class="row">
+
+
+                        <div class="form-group col-md-6">
+                          <label for="template" class="form-label">{{ 'TEMPLATE' | translate }}</label>
+                          <select id="template" formControlName="template" class="form-control">
+                            <option value="1">template 1</option>
+                            <option value="2">template 2</option>
+                            <option value="3">template 3</option>
+                            <option value="4">template 4</option>
+                            <option value="5">template 5</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="file_name" class="form-label">{{ 'FILE_NAME' | translate }}</label>
+                          <input type="text" id="file_name" formControlName="file_name" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="file" class="form-label">{{ 'FILE_TO_IMPORT' | translate }}</label>
+                          <input id="file" formControlName="file" type="file" class="form-control" accept=".xlsx,.csv"
+                            required (change)="onFileColorSelect($event)"
+                            [class.is-invalid]="productImportForm.get('file')?.errors && isSubmitted" />
+
+                          <div class="invalid-feedback" *ngIf="productImportForm.get('file')?.errors && isSubmitted">
+                            <p>
+                              {{ 'FILE_TO_IMPORT' | translate }} {{ 'IS_REQUIRED' | translate }}
+                            </p>
+
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6" *ngIf="selectedTemplate === '5'">
+                          <label for="product_id" class="form-label">{{ 'SELECT_PRODUCT' | translate }}</label>
+                          <select class="form-control" formControlName="product_id">
+                            <option disabled>{{ 'SELECT_PRODUCT' | translate }}</option>
+                            <option *ngFor="let product of Products" [value]="product.id">{{ product.name }}</option>
+                          </select>
+                        </div>
+                        
+                        
+
+                        <div class="form-group col-md-6 mt-2">
+                          <label for="file" class="form-label">{{ 'ACTION' | translate }}</label>
+                          <br>
+                          <a (click)="handleExport()" class="btn btn-outline-success me-3">{{ 'EXPORT' | translate }}</a>
+
+                          <!-- <a (click)="exportProductBranchExcel()" class="btn btn-outline-success me-3">{{ 'EXPORT' |
+                            translate }}</a> -->
+                          <a class="btn btn-outline-info">{{ 'IMPORT' | translate }}</a>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="modal fade" id="ImportForm" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -147,14 +233,14 @@
       </div>
     </div>
   </div>
-  
+   -->
 
 
 
 
 
 
-<div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -162,7 +248,7 @@
           <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('productModel')"></button>
         </div>
         <div class="modal-body">
-          <!-- Search Input -->
+          
           <input
             type="text"
             class="form-control mb-3"
@@ -171,7 +257,7 @@
             (ngModelChange)="onProductSearchChange()"
           />
   
-          <!-- Accounts Table -->
+        
           <table class="table table-striped">
             <thead>
               <tr>
@@ -191,9 +277,4 @@
         </div>
       </div>
     </div>
-  </div>
-  
-  
-  
-  
-  
+  </div> -->
