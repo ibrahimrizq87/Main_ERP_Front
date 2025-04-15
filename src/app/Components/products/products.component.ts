@@ -27,6 +27,9 @@ export class ProductsComponent implements OnInit {
   isSubmitted=false;
   productImportForm: FormGroup = new FormGroup({
       file: new FormControl(null, [Validators.required]),
+      template: new FormControl('1', [Validators.required]),
+      file_name:new FormControl(null),
+
      
     });
   constructor(private _ProductsService: ProductsService, private router: Router,
@@ -35,6 +38,27 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts(); 
+  }
+
+  exportProductExcel(){
+
+const name = this.productImportForm.get('file_name')?.value || 'products template';
+    const template =this.productImportForm.get('template')?.value;
+    this._ProductsService.exportProductsTemplates(template).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name+'.xlsx'); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error("Error downloading file:", err);
+      }
+    });
   }
 
   onFileColorSelect(event: any) {

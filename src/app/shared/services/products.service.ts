@@ -89,6 +89,20 @@ export class ProductsService {
   }
   
 
+
+
+  exportProductsTemplates(template:string): Observable<Blob> {
+    return this._HttpClient.get(`${this.baseURL}/general/products/export-products-as-sheet/templates/${template}`, {
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+    });
+  }
+  
+  importProductsTemplates(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/products/import-products-as-sheet/templates`,data ,{headers: this.getHeadersWithToken() });
+  }
+  
+
   getProductsForOperations(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/products/get-products-for-operations`,{ headers: this.getHeadersWithToken() });
   }
