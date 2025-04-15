@@ -82,23 +82,25 @@ const name = this.productImportForm.get('file_name')?.value || 'products templat
           }
         }
       
+
+
         handleForm(){
-this.isSubmitted =true;
-  if (this.productImportForm.valid) {
-      this.isLoading = true;
+      this.isSubmitted =true;
+        if (this.productImportForm.valid) {
+            this.isLoading = true;
 
       const formData = new FormData();
     
-      // formData.append('file', this.productImportForm.get('file')?.value);
+      formData.append('template', this.productImportForm.get('template')?.value);
       const file = this.productImportForm.get('file')?.value;
 
-      if (file instanceof File) { // Ensure it's a File object
+      if (file instanceof File) { 
         formData.append('file', file, file.name);
       } else {
         console.error('Invalid file detected:', file);
-        return; // Prevent submission
+        return; 
       }
-      this._ProductsService.importProducts(formData).subscribe({
+      this._ProductsService.importProductsTemplates(formData).subscribe({
         next: (response) => {
           console.log(response);
           if (response) {
