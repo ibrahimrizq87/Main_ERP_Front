@@ -61,34 +61,65 @@ export class ProductBranchComponent implements OnInit {
       }
     });
   }
-  handleExport() {
-    const selectedTemplate = this.productImportForm.get('template')?.value;
+  // handleExport() {
+  //   const selectedTemplate = this.productImportForm.get('template')?.value;
   
-    if (selectedTemplate === '5') {
-      this.exportProductBranchByProduct();
-    } else {
-      this.exportProductBranchExcel();
-    }
-  }
-  exportProductBranchExcel(){
+  //   if (selectedTemplate === '5') {
+  //     this.exportProductBranchByProduct();
+  //   } else {
+  //     this.exportProductBranchExcel();
+  //   }
+  // }
+  handleExport(){
 
     const name = this.productImportForm.get('file_name')?.value || 'products template';
         const template =this.productImportForm.get('template')?.value;
-        this._ProductBranchesService.exportProductBranchesTemplates(template).subscribe({
-          next: (response) => {
-            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', name+'.xlsx'); 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          },
-          error: (err) => {
-            console.error("Error downloading file:", err);
+
+        if(template == '5'){
+          const product_id =this.productImportForm.get('product_id')?.value;
+
+          if(!product_id){
+            this.toastr.error('يجب اختيار منتج اولا');
+            return;
           }
-        });
+
+
+          this._ProductBranchesService.exportProductBranches(product_id).subscribe({
+            next: (response) => {
+              const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', name+'.xlsx'); 
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            },
+            error: (err) => {
+              console.error("Error downloading file:", err);
+            }
+          });
+        }else{
+          this._ProductBranchesService.exportProductBranchesTemplates(template).subscribe({
+            next: (response) => {
+              const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', name+'.xlsx'); 
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            },
+            error: (err) => {
+              console.error("Error downloading file:", err);
+            }
+          });
+        }
+ 
+
+
+
       }
   onFileColorSelect(event: any) {
     const file = event.target.files[0];
@@ -130,49 +161,49 @@ export class ProductBranchComponent implements OnInit {
 //   this.closeModal('productModel');
 // }
 
-exportProductBranchByProduct(){
-  if (!this.selectedProduct){
-    this.toastr.error('يجب اختيار منتج اولا');
-    // alert('يجب اختيار منتج اولا');
-  }else{
+// exportProductBranchByProduct(){
+//   if (!this.selectedProduct){
+//     this.toastr.error('يجب اختيار منتج اولا');
+//     // alert('يجب اختيار منتج اولا');
+//   }else{
 
-    // this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
-    //   next: (response) => {
-    //     const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    //     const url = window.URL.createObjectURL(blob);
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'products.xlsx'); 
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    //   },
-    //   error: (err) => {
-    //     console.error("Error downloading file:", err);
-    //     console.log("my error Error downloading file:", err);
+//     // this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
+//     //   next: (response) => {
+//     //     const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+//     //     const url = window.URL.createObjectURL(blob);
+//     //     const link = document.createElement('a');
+//     //     link.href = url;
+//     //     link.setAttribute('download', 'products.xlsx'); 
+//     //     document.body.appendChild(link);
+//     //     link.click();
+//     //     document.body.removeChild(link);
+//     //   },
+//     //   error: (err) => {
+//     //     console.error("Error downloading file:", err);
+//     //     console.log("my error Error downloading file:", err);
 
-    //   }
-    // });
-    this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
-      next: (response) => {
-        console.log('hererererer');
-        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'products.xlsx'); 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      },
-      error: (err) => {
-        console.error("Error downloading file:", err);
-      }
-    });
+//     //   }
+//     // });
+//     this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
+//       next: (response) => {
+//         console.log('hererererer');
+//         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+//         const url = window.URL.createObjectURL(blob);
+//         const link = document.createElement('a');
+//         link.href = url;
+//         link.setAttribute('download', 'products.xlsx'); 
+//         document.body.appendChild(link);
+//         link.click();
+//         document.body.removeChild(link);
+//       },
+//       error: (err) => {
+//         console.error("Error downloading file:", err);
+//       }
+//     });
     
 
-  }
-}
+//   }
+// }
 
 ProductsearchQuery ='';
 onProductSearchChange(){
@@ -185,9 +216,7 @@ handleForm(){
         this.isLoading = true;
   
         const formData = new FormData();
-      
-        // formData.append('file', this.productImportForm.get('file')?.value);
-        const file = this.productImportForm.get('file')?.value;
+          const file = this.productImportForm.get('file')?.value;
   
         if (file instanceof File) { // Ensure it's a File object
           formData.append('file', file, file.name);

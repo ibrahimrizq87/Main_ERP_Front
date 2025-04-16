@@ -82,14 +82,21 @@ export class ProductBranchesService {
   }
 
   exportProductBranchesTemplates(template:string): Observable<Blob> {
-    return this._HttpClient.get(`${this.baseURL}/general/products/export-products-as-sheet/templates/${template}`, {
+    return this._HttpClient.get(`${this.baseURL}/general/product-branches/export-data-to-sheet/templates/${template}`, {
       headers: this.getHeadersWithToken(),
       responseType: 'blob' 
     });
   }
   
   importProductBranchesTemplates(data:FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/products/import-products-as-sheet/templates`,data ,{headers: this.getHeadersWithToken() });
+    return this._HttpClient.post(`${this.baseURL}/general/product-branches/import-data-to-sheet/templates`,data ,{headers: this.getHeadersWithToken() });
   }
+
+
+
+
+
+  // Route::get('/export-data-to-sheet/templates/{template}', [ProductBranchController::class, 'exportProductBranchesAsSheetTemplates']);
+  // Route::post('/import-data-to-sheet/templates', [ProductBranchController::class, 'importProductBranchesTemplates']);
 
 }
