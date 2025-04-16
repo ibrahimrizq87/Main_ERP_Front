@@ -2,7 +2,23 @@
   
 
 
-
+  
+  
+    "ImportForm": "Import Form",
+    "Export_and_Import_product_Branch": "Export and Import Product by Branch",
+    "Export_and_Import_product": "Export and Import Product",
+    "TEMPLATE": "Template",
+    "PRICES_ORDERED_BY_PRODUCTS": "Prices Ordered by Products",
+    "PRICES_ORDERED_BY_CATEGORIES": "Prices Ordered by Categories",
+    "BRANCHES_ALL_DATA_TEMPLATE1": "All Branches – Full Data (Template 1)",
+    "BRANCHES_SINGLE_PRICE_TEMPLATE": "Single Branch – Single Price",
+    "BRANCHES_ALL_DATA_TEMPLATE2": "All Branches – Full Data (Template 2)",
+    "TEMPLATE1": "Template 1",
+    "TEMPLATE2": "Template 2",
+    "ALL_DATA_TEMPLATE": "All Data Template",
+    "FILE_NAME": "File Name",
+    "FILE_TO_IMPORT": "File to Import",
+   
   
     "CURRENCY_REPORT": "Currency Report",
     "Start Balance": "Start Balance",

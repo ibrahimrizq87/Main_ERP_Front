@@ -81,10 +81,18 @@ export class ProductBranchesService {
     return this._HttpClient.get(this.baseURL+"/general/product-branches/export-data-to-sheet/"+productId, { headers:this.getHeadersWithToken() , responseType: 'blob'});
   }
 
-  exportProductBranchesTemplates(template:string): Observable<Blob> {
+  exportProductBranchesTemplates(template:string ,product_id:string |null= null): Observable<Blob> {
+    let params = {};
+
+    if (product_id) {
+      params = { product_id };
+    }
+
+
     return this._HttpClient.get(`${this.baseURL}/general/product-branches/export-data-to-sheet/templates/${template}`, {
       headers: this.getHeadersWithToken(),
-      responseType: 'blob' 
+      responseType: 'blob' ,
+      params: params
     });
   }
   

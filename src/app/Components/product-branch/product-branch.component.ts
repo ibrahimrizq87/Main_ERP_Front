@@ -61,30 +61,48 @@ export class ProductBranchComponent implements OnInit {
       }
     });
   }
-  // handleExport() {
-  //   const selectedTemplate = this.productImportForm.get('template')?.value;
-  
-  //   if (selectedTemplate === '5') {
-  //     this.exportProductBranchByProduct();
-  //   } else {
-  //     this.exportProductBranchExcel();
-  //   }
-  // }
+
   handleExport(){
 
     const name = this.productImportForm.get('file_name')?.value || 'products template';
         const template =this.productImportForm.get('template')?.value;
 
-        if(template == '5'){
+        // if(template == '5'){
+        //   const product_id =this.productImportForm.get('product_id')?.value;
+
+        //   if(!product_id){
+        //     this.toastr.error('يجب اختيار منتج اولا');
+        //     return;
+        //   }
+
+
+        //   this._ProductBranchesService.exportProductBranches(product_id).subscribe({
+        //     next: (response) => {
+        //       const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        //       const url = window.URL.createObjectURL(blob);
+        //       const link = document.createElement('a');
+        //       link.href = url;
+        //       link.setAttribute('download', name+'.xlsx'); 
+        //       document.body.appendChild(link);
+        //       link.click();
+        //       document.body.removeChild(link);
+        //     },
+        //     error: (err) => {
+        //       console.error("Error downloading file:", err);
+        //     }
+        //   });
+        // }else{
+
           const product_id =this.productImportForm.get('product_id')?.value;
 
-          if(!product_id){
-            this.toastr.error('يجب اختيار منتج اولا');
-            return;
+          if(template == '3' || template == '5'){
+            if(!product_id){
+              this.toastr.error('يجب اختيار منتج اولا');
+              return;
+            }
           }
 
-
-          this._ProductBranchesService.exportProductBranches(product_id).subscribe({
+          this._ProductBranchesService.exportProductBranchesTemplates(template,product_id ).subscribe({
             next: (response) => {
               const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
               const url = window.URL.createObjectURL(blob);
@@ -99,28 +117,10 @@ export class ProductBranchComponent implements OnInit {
               console.error("Error downloading file:", err);
             }
           });
-        }else{
-          this._ProductBranchesService.exportProductBranchesTemplates(template).subscribe({
-            next: (response) => {
-              const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-              const url = window.URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', name+'.xlsx'); 
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            },
-            error: (err) => {
-              console.error("Error downloading file:", err);
-            }
-          });
-        }
- 
-
-
-
+        
       }
+
+
   onFileColorSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -155,56 +155,6 @@ export class ProductBranchComponent implements OnInit {
     }
   }
 
-
-// selectProduct(product:any){
-//   this.selectedProduct = product;
-//   this.closeModal('productModel');
-// }
-
-// exportProductBranchByProduct(){
-//   if (!this.selectedProduct){
-//     this.toastr.error('يجب اختيار منتج اولا');
-//     // alert('يجب اختيار منتج اولا');
-//   }else{
-
-//     // this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
-//     //   next: (response) => {
-//     //     const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-//     //     const url = window.URL.createObjectURL(blob);
-//     //     const link = document.createElement('a');
-//     //     link.href = url;
-//     //     link.setAttribute('download', 'products.xlsx'); 
-//     //     document.body.appendChild(link);
-//     //     link.click();
-//     //     document.body.removeChild(link);
-//     //   },
-//     //   error: (err) => {
-//     //     console.error("Error downloading file:", err);
-//     //     console.log("my error Error downloading file:", err);
-
-//     //   }
-//     // });
-//     this._ProductBranchesService.exportProductBranches(this.selectedProduct.id).subscribe({
-//       next: (response) => {
-//         console.log('hererererer');
-//         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-//         const url = window.URL.createObjectURL(blob);
-//         const link = document.createElement('a');
-//         link.href = url;
-//         link.setAttribute('download', 'products.xlsx'); 
-//         document.body.appendChild(link);
-//         link.click();
-//         document.body.removeChild(link);
-//       },
-//       error: (err) => {
-//         console.error("Error downloading file:", err);
-//       }
-//     });
-    
-
-//   }
-// }
-
 ProductsearchQuery ='';
 onProductSearchChange(){
 }
@@ -217,12 +167,13 @@ handleForm(){
   
         const formData = new FormData();
           const file = this.productImportForm.get('file')?.value;
-  
-        if (file instanceof File) { // Ensure it's a File object
+          formData.append('template', this.productImportForm.get('template')?.value);
+
+        if (file instanceof File) { 
           formData.append('file', file, file.name);
         } else {
           console.error('Invalid file detected:', file);
-          return; // Prevent submission
+          return; 
         }
         this._ProductBranchesService.importProductBranchesTemplates(formData).subscribe({
           next: (response) => {

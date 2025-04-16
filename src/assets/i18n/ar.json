@@ -1,6 +1,27 @@
 {
 
   
+
+
+  
+    "ImportForm": "نموذج الاستيراد",
+    "Export_and_Import_product_Branch": "تصدير واستيراد المنتج حسب الفرع",
+    "Export_and_Import_product": "تصدير واستيراد المنتج",
+    "TEMPLATE": "القالب",
+    "PRICES_ORDERED_BY_PRODUCTS": "الأسعار مرتبة حسب المنتجات",
+    "PRICES_ORDERED_BY_CATEGORIES": "الأسعار مرتبة حسب الفئات",
+    "BRANCHES_ALL_DATA_TEMPLATE1": "جميع الفروع - كافة البيانات (القالب 1)",
+    "BRANCHES_SINGLE_PRICE_TEMPLATE": "فرع واحد - سعر واحد",
+    "BRANCHES_ALL_DATA_TEMPLATE2": "جميع الفروع - كافة البيانات (القالب 2)",
+    "TEMPLATE1": "القالب 1",
+    "TEMPLATE2": "القالب 2",
+    "ALL_DATA_TEMPLATE": "قالب جميع البيانات",
+    "FILE_NAME": "اسم الملف",
+    "FILE_TO_IMPORT": "الملف المراد استيراده",
+
+  
+
+
     "CURRENCY_REPORT": "تقرير العملة",
     "Start Balance": "الرصيد الابتدائي",
     "Current Balance": "الرصيد الحالي",

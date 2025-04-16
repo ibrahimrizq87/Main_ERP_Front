@@ -120,7 +120,7 @@
                   <div class="col-md-12">
                     <div class="card shadow em-card rounded-lg">
                       <div class="card-header bg-white text-black rounded-top pt-3">
-                        <h5>{{ 'addCity.add_city' | translate }}</h5>
+                        <h5>{{ 'Export_and_Import_product' | translate }}</h5>
                       </div>
                       <div class="card-body pb-5">
                         <div class="row">
@@ -129,10 +129,9 @@
                           <div class="form-group col-md-6">
                             <label for="template" class="form-label">{{ 'TEMPLATE' | translate }}</label>
                             <select id="template" formControlName="template"   class="form-control">
-                              <option value="1">template 1</option>
-                              <option value="2">template 2</option>
-
-                              <option value="3">all data</option>
+                              <option value="1">{{ 'TEMPLATE1' | translate }}</option>
+                              <option value="2">{{ 'TEMPLATE2' | translate }}</option>
+                              <option value="3">{{ 'ALL_DATA_TEMPLATE' | translate }}</option>
 
                             </select>                             
                            
@@ -165,29 +164,13 @@
                             <label for="file" class="form-label">{{ 'ACTION' | translate }}</label>
                             <br>
                             <a (click)="exportProductExcel()" class="btn btn-outline-success me-3">{{ 'EXPORT' | translate }}</a>                         
-                            <a class="btn btn-outline-info">{{ 'IMPORT' | translate }}</a>
+                            <a  (click)="handleForm()" class="btn btn-outline-info">{{ 'IMPORT' | translate }}</a>
 
                           </div>
-
-                       
-
-<!-- 
-                          <div class="form-group col-md-6">
-                            <label for="file" class="form-label">{{ 'ACTION' | translate }}</label>
-                            <br>
-                                                     
-                           
-                          </div> -->
-                        
                         </div>
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="mt-4 mb-4">
-                    <button  type="submit" class="btn btn-primary px-4">
-                      <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'addCity.save' | translate }}
-                    </button>
-                  </div> -->
                 </div>
               </div>
             </form>
