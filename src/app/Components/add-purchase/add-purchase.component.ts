@@ -244,9 +244,7 @@ export class AddPurchaseComponent implements OnInit {
 
   }
 
-  trackByDeterminantId(index: number, det: any): number {
-    return det.determinantId;
-  }
+
   onColorChange(event: Event, index: number) {
 
     const selectedProductId = (event.target as HTMLSelectElement).value;
@@ -255,12 +253,8 @@ export class AddPurchaseComponent implements OnInit {
     itemGroup.patchValue({ color: selectedProductId });
     console.log(itemGroup.get('color_id')?.value);
     console.log(selectedProductId);
-
   }
-  
-  // addItem(): void {
-  //   this.items.push(this.createItem());
-  // }
+
   addItem() {
     const items = this.purchasesBillForm.get('items') as FormArray;
     items.push(this.createItem());
@@ -902,7 +896,7 @@ if(this.selectedCheck){
     this.purchasesBillForm.patchValue({ store_id: store.id });
     this.closeModal('storeModal');
   }
-  // Called when store is selected
+
   onFileTypeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
   
@@ -912,7 +906,7 @@ if(this.selectedCheck){
     this.showAllDataExport = value === 'all_data';
     this.showItemsExport = value === 'items_only';
     if (this.purchasesBillForm.get('file_type')?.value === 'manual') {
-      this.addItem(); // Push a default item
+      this.addItem(); 
     } 
   }
   exportAllDataToSheet() {

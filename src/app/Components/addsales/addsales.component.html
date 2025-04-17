@@ -69,21 +69,14 @@
                   </div>
                 </div>
 
-                <!-- Currency -->
-                <!-- <div class="form-group col-md-6">
-                  <label for="currency_id" class="form-label large-text">{{ 'CURRENCY' | translate }}</label>
-                  <select id="currency_id" formControlName="currency_id" class="form-control"
-                  (change)="onCurrencyChange($event)"
-                  [class.is-invalid]="!selectedCurrency  && isSubmited" >
-                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
-                  </select>
+                
+                <div *ngIf="needCurrecyPrice" class="form-group col-md-6">
+                  <label class="form-label large-text">سعر عملة ال ({{forignCurrencyName}})</label>
+                  <input formControlName="currency_price_value" type="number" class="form-control"
+                    (input)="currencyPrice()" />
+                </div>
 
-                  <div class="invalid-feedback" *ngIf="!selectedCurrency  && isSubmited">
-                    {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
-                  </div>
-                </div> -->
 
-                <!-- Notes -->
                 <div class="form-group col-md-12">
                   <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
                   <textarea id="notes" formControlName="notes" class="form-control" placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
@@ -98,9 +91,7 @@
                   <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3 border p-3 rounded">
                     <div class="row">
               
-                      <!-- Product Selection -->
                       <div class="col-md-3">
-
                         <label class="form-label">{{ 'PRODUCT' | translate }}</label>
                         <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
                           {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name : ('PRODUCT' | translate) }}
@@ -108,7 +99,6 @@
                         <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
                       </div>
                     
-                      <!-- Quantity -->
                     
                       <div class="col-md-2">
                         <label for="amount">{{ 'QUANTITY' | translate }}</label>
@@ -155,7 +145,18 @@
 
                       <div class="col-md-1" *ngIf="!item.get('overridePrice')?.value">
                         <label for="price">{{ 'price' | translate }}</label>
-                        <p> {{item.get('price')?.value}}</p>
+                        <p>{{ getFormattedPrice(item) }}</p>
+
+                        <!-- <p>
+                          {{
+                            needCurrecyPrice
+                              ? saleForm.get('currency_price_value')?.value > 0
+                                ? (item.get('price')?.value / saleForm.get('currency_price_value')?.value) | number:'1.2-2'
+                                : item.get('price')?.value | number:'1.2-2'
+                              : item.get('price')?.value | number:'1.2-2'
+                          }}
+                        </p> -->
+                        
                       </div>
 
                       <div class="col-md-1"  *ngIf="item.get('color')?.value">
@@ -173,7 +174,11 @@
                         <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
                         <p>
                           <strong>Total: </strong>
-                          {{item.get('price')?.value * item.get('amount')?.value ? item.get('price')?.value * item.get('amount')?.value:0 }}
+                          {{
+                            (getFormattedPrice(item) * (item.get('amount')?.value || 0)) 
+                            | number:'1.2-2'
+                          }}
+                          <!-- {{getFormattedPrice(item) * item.get('amount')?.value ? getFormattedPrice(item) * item.get('amount')?.value:0 }} -->
                         </p>
                       </div>
 
