@@ -1,8 +1,48 @@
 {
-  
+  "Reports": "Reports",
+    "Product_Moves_Reports": "Product Moves Reports",
+  "Account_Moves_Reports": "Account Moves Reports",
+    "Product_Moves_List": "Product Moves List",
+    "NUMBER_OF_MOVES": "Number of Moves",
+    "EVENT_TYPE": "Event Type",
+    "MOVE_TYPE": "Move Type",
+    "ALL": "All",
+    "IN": "In",
+    "OUT": "Out",
+    "DASHBOARD_Product_Moves": "Dashboard / Product Moves",
+    "Product_Moves_Report": "Product Moves Report"
+,
+  "Purchases_REPORTS": "Purchases Reports",
+  "DASHBOARD_Purchase": "Dashboard → Purchases",
+  "TOTAL_Purchase": "Total Purchases",
+  "Purchase_LIST": "Purchases List",
 
+    "SalesReports": "Sales Reports",
+    "purchases": "Purchases Reports",
 
-  
+    "TOTAL_SALES": "Total Sales",
+    "NUMBER_OF_BILLS": "Number of Bills",
+    "ID": "ID",
+
+    "TIME": "Time",
+    "TOTAL": "Total",
+      
+    "SALES_REPORTS": "Sales Reports",
+    "DASHBOARD_SALES": "Dashboard > Sales",
+    "DAY": "Day",
+    "MONTH": "Month (1-12)",
+    "YEAR": "Year",
+    "BY_MONTH": "By Month",
+    "FROM_TO_DATE": "From-To Date",
+ 
+    "Price_From": "Price From",
+    "Price_To": "Price To",
+    "SELECT_PAYMENT_TYPE": "Select Payment Type",
+    "all": "All",
+    "cash": "Cash",
+    "credit": "Credit",
+    "Search": "Search",
+    "Clear": "Clear",
   
     "ImportForm": "Import Form",
     "Export_and_Import_product_Branch": "Export and Import Product by Branch",

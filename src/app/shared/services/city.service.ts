@@ -61,7 +61,7 @@ export class CityService {
 
   viewAllcitiesByCountry(countryId: string): Observable<any> {
   
-    return this._HttpClient.get(`${this.baseURL}/general/cities-by-country/${countryId}`, { headers:this.getHeadersWithToken() });
+    return this._HttpClient.get(`${this.baseURL}/general/cities/cities-by-country/${countryId}`, { headers:this.getHeadersWithToken() });
   }
   
 }
