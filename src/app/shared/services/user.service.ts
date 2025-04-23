@@ -87,17 +87,33 @@
   viewAllUsers(): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.get(`${this.baseURL}/delegates`,{ headers })
+    return this._HttpClient.get(`${this.baseURL}/general/users`,{ headers })
   }
   deleteUser(userId: number): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.delete(`${this.baseURL}/users/${userId}`, { headers })
+    return this._HttpClient.delete(`${this.baseURL}/general/users/${userId}`, { headers })
   }
   addUser(userData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this._HttpClient.post(`${this.baseURL}/users`, userData ,{ headers })
-  } 
-
+    return this._HttpClient.post(`${this.baseURL}/general/users`, userData ,{ headers })
+  }
+  getUserById(userId: any): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.get(`${this.baseURL}/general/users/${userId}`, { headers })
+  }
+  updateUser(userId: string, userData: FormData): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    userData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/users/${userId}`, userData, { headers })
+  }
+  // general/roles-permissions/roles
+  getAllRoLes(): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.get(`${this.baseURL}/general/roles-permissions/roles`,{ headers })
+  }
 }
