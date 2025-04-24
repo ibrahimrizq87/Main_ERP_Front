@@ -159,8 +159,10 @@ export class ReportsService {
     getAccountMovesReports(
       moveType: string = 'all',
       eventType: string = 'all',
-      storeId: string = 'all',
-      branchId: string = 'all',
+      accountId: string = 'all',
+      amountFrom: string = '',
+      amountTo: string = '',
+
 
       startDate: string = '',
       endDate: string = '',
@@ -173,15 +175,16 @@ export class ReportsService {
     
       if (moveType !== 'all') params = params.set('move_type', moveType);
       if (eventType !== 'all') params = params.set('event_type', eventType);
-      if (storeId !== 'all') params = params.set('store_id', storeId);
-      if (branchId !== 'all') params = params.set('branch_id', branchId);
+      if (accountId !== 'all') params = params.set('account_id', accountId);
+      if (amountFrom) params = params.set('amount_from', amountFrom);
+      if (amountTo) params = params.set('amount_to', amountTo);
 
       if (startDate) params = params.set('startDate', startDate);
       if (endDate) params = params.set('endDate', endDate);
       if (day) params = params.set('day', day);
       if (month) params = params.set('month', month);
       if (year) params = params.set('year', year);
-      return this._HttpClient.get(`${this.baseURL}/reports/product-moves/get-product-moves`, {
+      return this._HttpClient.get(`${this.baseURL}/reports/account-moves/get-account-moves`, {
         headers: this.getHeadersWithToken(),
         params: params
       });

@@ -535,11 +535,9 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('checkModel')"></button>
       </div>
       <div class="modal-body">
-        <!-- Search Input -->
         <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
           [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
 
-        <!-- Accounts Table -->
         <table class="table table-striped">
           <thead>
             <tr>

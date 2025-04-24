@@ -31,42 +31,45 @@ export class AccountMovesReportsComponent {
     day: '',
     month: '',
     year: '',
+    amountTo:'',
+    amountFrom:'',
   };
 
 
   searchDateType = 'from_to_date'; 
-  productMoves:any;
+  accountMoves:any;
   totalCount = 0;
   totalMoves = 0;
+  totalAmount = 0;
   productSearchQuery = '';
-  selectedProduct:any;
   branches:any;
   filteredProducts :any;
   stores: any[] = [];
-
+  selectedAccount:any;
+  accounts:any;
   constructor(
-    private productService: ProductsService,
-    private _StoreService:StoreService,
-    private _ProductBranchesService:ProductBranchesService,
-    private _ReportsService:ReportsService
+    private _ReportsService:ReportsService,
+    private _AccountService: AccountService
   ) {
 
   }
   StoreId = 'all';
   ngOnInit(): void {
-  this.loadStores();
-  this.loadBranches();
-  this.getProductMovesReport();
+  this.loadAccounts();
+  this.getAccountMovesReport();
   }
 
 
-
-  loadBranches(): void {
-    this._ProductBranchesService.viewAllProductBranches().subscribe({
+  selectAccount(account:any){
+    this.selectedAccount = account;
+    this.closeModal();
+  }
+  loadAccounts(): void {
+    this._AccountService.getAllChildren().subscribe({
       next: (response) => {
         if (response) {
           console.log(response)
-          this.branches = response.data; 
+          this.accounts = response.data; 
         }
       },
       error: (err) => {
@@ -76,52 +79,38 @@ export class AccountMovesReportsComponent {
   }
 
 
-  loadStores() {
-    this._StoreService.getAllStores().subscribe({
-      next: (response) => {
-        if (response) {
-          console.log(response);
-          this.stores = response.data;
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
 
- 
 
-  getProductMovesReport(): void {
+
+  getAccountMovesReport(): void {
     const moveType = this.MoveType;
     const eventType = this.EventType;
-
-    const storeId = this.StoreId ;
-    const branchId = this.selectedProduct?.id || 'all';
-
-
+    const accountId = this.selectedAccount?.id ;
+    const amountFrom =this.filters.amountFrom || '';
+    const amountTo =this.filters.amountTo || '';
     const startDate = this.filters.startDate || '';
     const endDate = this.filters.endDate || '';
     const day = this.filters.day || '';
     const month = this.filters.month || '';
     const year = this.filters.year || '';
 
-    this._ReportsService.getProductMovesReports(
+    this._ReportsService.getAccountMovesReports(
       moveType,
       eventType,
-      storeId,
-      branchId,
+      accountId,
+      amountFrom,
+      amountTo,
       startDate,
       endDate,
-
       day,
       month,
       year
     ).subscribe({
       next: (response) => {
         console.log(response);
-        this.productMoves = response.moves || [];
+        this.accountMoves = response.moves || [];
         this.totalCount = response.total_count || 0;
+        this.totalAmount = response.total || 0;
       },
       error: (error) => {
         console.error('Error fetching sales report:', error);
@@ -130,18 +119,26 @@ export class AccountMovesReportsComponent {
   }
   
   clearSearchFields(): void {
-    this.selectedProduct = null;
-    this.StoreId = 'all';
+    this.selectedAccount = null;
+    this.EventType = 'all';
     this.MoveType = 'all';
+
+    this.filters.amountTo = '';
+    this.filters.amountFrom = '';
 
   }
 
   onSearchTypeChange(): void {
-    this.filters = { startDate: '', endDate: '', day: '', month: '', year: '' };
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+    this.filters.month = '';
+    this.filters.year = '';
+
   }
 
-  openProductModal() {
-    const modalElement = document.getElementById('productModel');
+  openModal() {
+    const modalElement = document.getElementById('shiftModal');
     if (modalElement) {
       const modal = new Modal(modalElement);
       modal.show();
@@ -150,23 +147,14 @@ export class AccountMovesReportsComponent {
 
 
 
-  closeProductModal(){
-    const modalElement = document.getElementById('productModel');
+  closeModal(){
+    const modalElement = document.getElementById('shiftModal');
     if (modalElement) {
       const modal = Modal.getInstance(modalElement);
       modal?.hide();
     }
   }
+  searchQuery:string ='';
+  onSearchChange(){}
 
-
-  onProductSearchChange(){}
-  filterProducts(query: string){
-    // Your filtering logic here (e.g., filtering by name)
-    // return this.filteredProducts.filter(product => product.name.includes(query));
-  }
-
-  selectProduct(product: any): void {
-    this.selectedProduct = product;
-    this.closeProductModal();
-  }
 }
