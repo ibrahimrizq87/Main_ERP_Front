@@ -385,6 +385,23 @@
           </li>
 
 
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Roles_System')" style="cursor: pointer;">
+              <i class="fa-solid fa-solid fa-gear me-2"></i>
+              <span>Roles System</span>
+              <i [ngClass]="isDropdownOpen('Roles_System') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Roles_System')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="rolesAndPermissions">
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> Roles and Premessions
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
 
 
         </ul>

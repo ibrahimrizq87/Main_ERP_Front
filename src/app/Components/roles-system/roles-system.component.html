@@ -1,0 +1,95 @@
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold text-dark">Manage Roles</h2>
+        <p class="text-muted mb-0 fs-6">
+          {{ 'DASHBOARD' | translate }}
+          <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+          Roles and Permissions
+        </p>
+      </div>
+    </div>
+  
+    <!-- Tabs -->
+    <ul class="nav nav-tabs rounded shadow-sm mb-4 bg-white">
+      <li class="nav-item">
+        <a class="nav-link px-4" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4" [class.active]="activeTab === 'roles'" (click)="activeTab = 'roles'">Roles</a>
+      </li>
+    </ul>
+  
+    <!-- Selection Card -->
+    <div class="card shadow-sm mb-4 border-0" *ngIf="activeTab === 'users' || activeTab === 'roles'">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6" *ngIf="activeTab === 'users'">
+            <label for="userSelect" class="form-label">Select User</label>
+            <select id="userSelect" class="form-select" (change)="onUserChange($event)">
+              <option [value]="''" disabled selected>Select a user</option>
+              <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+            </select>
+          </div>
+  
+          <div class="col-md-6" *ngIf="activeTab === 'roles'">
+            <label for="roleSelect" class="form-label">Select Role</label>
+            <select id="roleSelect" class="form-select" (change)="onRoleChange($event)">
+                <option [value]="''" disabled selected>Select a role</option>
+              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Permissions Modules -->
+    <div *ngIf="userPermissions && activeTab === 'users'">
+      <div class="row g-4">
+        <div class="col-md-6" *ngFor="let module of userPermissions">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="text-primary mb-3">{{ module.module | titlecase }}</h5>
+              <div class="form-check mb-2" *ngFor="let permission of module.permissions">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [id]="'perm-' + permission.id"
+                  [checked]="permission.has_permission"
+                  (change)="onPermissionUserToggle(module.module, permission)"
+                />
+                <label class="form-check-label" [for]="'perm-' + permission.id">
+                  {{ permission.name }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="rolesPermissions && activeTab === 'roles'">
+        <div class="row g-4">
+          <div class="col-md-6" *ngFor="let module of rolesPermissions">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body">
+                <h5 class="text-primary mb-3">{{ module.module | titlecase }}</h5>
+                <div class="form-check mb-2" *ngFor="let permission of module.permissions">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="'perm-' + permission.id"
+                    [checked]="permission.has_permission"
+                    (change)="onPermissionRoleToggle(module.module, permission)"
+                  />
+                  <label class="form-check-label" [for]="'perm-' + permission.id">
+                    {{ permission.name }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
