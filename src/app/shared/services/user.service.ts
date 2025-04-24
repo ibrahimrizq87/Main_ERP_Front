@@ -141,6 +141,36 @@ export class UserService {
       catchError(this.handleError)
     );
   }
+  assignPermissionsToRole(roleId: number, permissions: number[]): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
+    const formData = new FormData();
+    formData.append('role_id', roleId.toString());
+  
+    permissions.forEach((permId, index) => {
+      formData.append(`permissions[${index}]`, permId.toString());
+    });
+  
+    return this._HttpClient.post(`${this.baseURL}/general/roles-permissions/assign-permissions-to-role`, formData, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  // remove-permissions-from-user
+  removePermissionsFromUser(userId: number, permissions: number[]): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    const formData = new FormData();
+    formData.append('user_id', userId.toString());
+  
+    permissions.forEach((permId, index) => {
+      formData.append(`permissions[${index}]`, permId.toString());
+    });
+  
+    return this._HttpClient.post(`${this.baseURL}/general/roles-permissions/remove-permissions-from-user`, formData, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
 }

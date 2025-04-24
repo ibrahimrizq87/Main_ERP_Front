@@ -40,9 +40,11 @@ export class RolesSystemComponent implements OnInit {
     });
   }
   onUserChange(event: Event): void {
-    const selectedUserId = (event.target as HTMLSelectElement).value;
+    const selectedUserId = +(event.target as HTMLSelectElement).value;
+    this.selectedUserId = selectedUserId;
+  
     if (selectedUserId) {
-      this._UserService.getUserPermissionsForEdit(+selectedUserId).subscribe({
+      this._UserService.getUserPermissionsForEdit(selectedUserId).subscribe({
         next: (response) => {
           if (response) {
             this.userPermissions = response.data;
@@ -56,12 +58,42 @@ export class RolesSystemComponent implements OnInit {
       });
     }
   }
+  
   onPermissionUserToggle(moduleName: string, permission: any): void {
     permission.has_permission = !permission.has_permission;
   
     // Optionally: collect updated permissions or log them
     console.log(`Permission toggled for module: ${moduleName}`, permission);
   }
+  assignPermissionsToSelectedUser(): void {
+    if (!this.selectedUserId || !this.userPermissions) {
+      this.toastr.warning('Please select a user first');
+      return;
+    }
+  
+    const selectedPermissionIds: number[] = [];
+  
+    this.userPermissions.forEach((module: any) => {
+      module.permissions.forEach((permission: any) => {
+        if (permission.has_permission) {
+          selectedPermissionIds.push(permission.id);
+        }
+      });
+    });
+  
+    this._UserService.assignPermissionsToUser(this.selectedUserId, selectedPermissionIds).subscribe({
+      next: () => {
+
+        this.toastr.success('User Permissions assigned successfully!');
+        console.log('User Permissions assigned successfully!');
+      },
+      error: (error) => {
+        console.error('Error assigning permissions:', error);
+        this.toastr.error('Failed to assign permissions');
+      }
+    });
+  }
+  
   onPermissionRoleToggle(moduleName: string, permission: any): void {
     permission.has_permission = !permission.has_permission;
   
@@ -82,9 +114,10 @@ loadRoles():void{
   });
 }
 onRoleChange(event: Event): void {
-  const selectedRoleId = (event.target as HTMLSelectElement).value;
+  const selectedRoleId = +(event.target as HTMLSelectElement).value;
+  this.selectedRoleId = selectedRoleId;
   if (selectedRoleId) {
-    this._UserService.getRolesPermissionsForEdit(+selectedRoleId).subscribe({
+    this._UserService.getRolesPermissionsForEdit(selectedRoleId).subscribe({
       next: (response) => {
         if (response) {
           this.rolesPermissions = response.data;
@@ -98,5 +131,31 @@ onRoleChange(event: Event): void {
     });
   }
 }
+assignPermissionsToSelectedRole(): void {
+  if (!this.selectedRoleId || !this.rolesPermissions) {
+    this.toastr.warning('Please select a user first');
+    return;
+  }
 
+  const selectedPermissionIds: number[] = [];
+
+  this.rolesPermissions.forEach((module: any) => {
+    module.permissions.forEach((permission: any) => {
+      if (permission.has_permission) {
+        selectedPermissionIds.push(permission.id);
+      }
+    });
+  });
+
+  this._UserService.assignPermissionsToRole(this.selectedRoleId, selectedPermissionIds).subscribe({
+    next: () => {
+      this.toastr.success('Roles Permissions assigned successfully!');
+      console.log('Roles Permissions assigned successfully!');
+    },
+    error: (error) => {
+      console.error('Error assigning permissions:', error);
+      this.toastr.error('Failed to assign permissions');
+    }
+  });
+}
 }
