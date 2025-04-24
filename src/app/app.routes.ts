@@ -121,6 +121,10 @@ import { ShowDocumentEntryComponent } from './Components/show-document-entry/sho
 import { CheckDocumentsComponent } from './Components/check-documents/check-documents.component';
 import { CurrencyPriceTrackingComponent } from './Components/currency-price-tracking/currency-price-tracking.component';
 import { RolesSystemComponent } from './Components/roles-system/roles-system.component';
+import { SalesReportsComponent } from './Components/sales-reports/sales-reports.component';
+import { PurchasesReportsComponent } from './Components/purchases-reports/purchases-reports.component';
+import { ProductMovesReportsComponent } from './Components/product-moves-reports/product-moves-reports.component';
+import { AccountMovesReportsComponent } from './Components/account-moves-reports/account-moves-reports.component';
 
 
 export const routes: Routes = [
@@ -138,8 +142,15 @@ export const routes: Routes = [
 
 
 
-        // {path:"show-purchase-bill/:id",component:ShowPurchaseComponent},
 
+        
+        {path:"account-moves-reports",component:AccountMovesReportsComponent},
+
+        {path:"product-moves-reports",component:ProductMovesReportsComponent},
+
+        {path:"purchases-reports",component:PurchasesReportsComponent},
+
+        {path:"sales-reports",component:SalesReportsComponent},
         {path:"currency-price-tracking",component:CurrencyPriceTrackingComponent},
 
         {path:"check-documents/:type",component:CheckDocumentsComponent},

@@ -1,0 +1,174 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5>{{ 'Product_Moves_Report' | translate }}</h5>
+      <span class="text-muted">{{ 'DASHBOARD_Product_Moves' | translate }} <i class="fa-solid fa-chart-line"></i></span>
+    </div>
+  </div>
+  
+  <div class="vendortable rounded shadow-sm p-4 bg-white mb-4">
+    <div class="row gy-2">
+      <!-- Filters -->
+      <div class="col-md-4" *ngIf="searchDateType === 'from_to_date'">
+        <input type="date" class="form-control search" [(ngModel)]="filters.startDate" [placeholder]="'START_DATE' | translate">
+      </div>
+  
+      <div class="col-md-4" *ngIf="searchDateType === 'from_to_date'">
+        <input type="date" class="form-control search" [(ngModel)]="filters.endDate" [placeholder]="'END_DATE' | translate">
+      </div>
+  
+      <div class="col-md-8" *ngIf="searchDateType === 'day'">
+        <input type="date" class="form-control search" [(ngModel)]="filters.day" [placeholder]="'DAY' | translate">
+      </div>
+  
+      <div class="col-md-8" *ngIf="searchDateType === 'by_month'">
+        <input type="number" class="form-control search" [(ngModel)]="filters.month" [placeholder]="'MONTH' | translate">
+      </div>
+  
+      <div class="col-md-8" *ngIf="searchDateType === 'year'">
+        <input type="number" class="form-control search" [(ngModel)]="filters.year" [placeholder]="'YEAR' | translate">
+      </div>
+  
+      <div class="col-md-2">
+        <select (change)="onSearchTypeChange()" class="form-control search" [(ngModel)]="searchDateType">
+          <option value="by_month">{{ 'BY_MONTH' | translate }}</option>
+          <option value="from_to_date">{{ 'FROM_TO_DATE' | translate }}</option>
+          <option value="year">{{ 'YEAR' | translate }}</option>
+          <option value="day">{{ 'DAY' | translate }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="vendortable rounded shadow-sm p-4 bg-white mb-4">
+    <div class="row gy-2">
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="getProductMovesReport()">{{ 'Search' | translate }}</button>
+      </div>
+  
+      <div class="col-md-2">
+        <button class="btn btn-warning w-100" (click)="clearSearchFields()">{{ 'Clear' | translate }}</button>
+      </div>
+
+      <div class="col-md-2">
+        <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal()">
+          {{ selectedProduct ? selectedProduct.product.name : ('PRODUCT' | translate) }}
+        </button>
+      </div>
+
+
+      <div class="col-md-2">
+        <select  class="form-control search" [(ngModel)]="MoveType">
+          <option value="all">{{ 'ALL' | translate }}</option>
+          <option value="in">{{ 'IN' | translate }}</option>
+          <option value="out">{{ 'OUT' | translate }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select  class="form-control search" [(ngModel)]="StoreId">
+            <option value="all">{{ 'ALL' | translate }}</option>
+          <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
+  
+        </select>
+      </div>
+
+
+
+      <div class="col-md-2">
+        <select  class="form-control search" [(ngModel)]="EventType">
+          <option value="all">{{ 'ALL' | translate }}</option>
+          <option value="sales">{{ 'SALES' | translate }}</option>
+          <option value="purchases">{{ 'PURCHASES' | translate }}</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="d-flex justify-content-around mb-3">
+
+    <div>
+      <span class="fw-bold">{{ 'NUMBER_OF_MOVES' | translate }}:</span> {{ totalCount }}
+    </div>
+  </div>
+  
+  <div class="vendortable rounded shadow-sm p-4 bg-white">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'Product_Moves_List' | translate }}</span>
+    </div>
+  
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th class="bg-light">{{ 'ID' | translate }}</th>
+          <th class="bg-light">{{ 'PRODUCT' | translate }}</th>
+          <th class="bg-light">{{ 'DATE' | translate }}</th>
+          <th class="bg-light">{{ 'TIME' | translate }}</th>
+          <th class="bg-light">{{ 'QUANTITY' | translate }}</th>
+          <th class="bg-light">{{ 'EVENT_TYPE' | translate }}</th>
+          <th class="bg-light">{{ 'STORE' | translate }}</th>
+
+          <th class="bg-light">{{ 'MOVE_TYPE' | translate }}</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let move of productMoves">
+          <td>{{ move.id }}</td>
+          <td>{{ move.product.name }}</td>
+          <td>{{ move.date }}</td>
+          <td>{{ move.time }}</td>
+          <td>{{ move.quantity }}</td>
+          <td>{{ move.event_type }}</td>
+          <td>{{ move.store }}</td>
+          <td>{{ move.move_type }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">{{ 'Select_Product' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeProductModal()"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" placeholder="{{ 'Search_Products' | translate }}" [(ngModel)]="productSearchQuery" (ngModelChange)="onProductSearchChange()" />
+  
+          <table class="table table-striped table-hover table-bordered rounded">
+            <thead class="table-dark">
+              <tr>
+                <th>{{ 'CODE' | translate }}</th>
+                <th>{{ 'Product_Name' | translate }}</th>
+                <th>{{ 'Stock' | translate }}</th>
+                <th>{{ 'COLOR' | translate }}</th>
+                <th>{{ 'DETERMINANTS' | translate }}</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let branch of branches"
+                (click)="selectProduct(branch)" style="cursor: pointer;">
+                <td>{{ branch.code }}</td>
+                <td>{{ branch.product.name }}</td>
+                <td>{{ branch.stock }}</td>
+                <td >{{ branch.product_color ? branch.product_color.color.color : "--" }}</td>
+                <td>
+                  <span *ngFor="let determinant of branch.determinantValues; let i = index">
+                    <span class="badge bg-info text-dark me-1">
+                      {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
+                    </span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

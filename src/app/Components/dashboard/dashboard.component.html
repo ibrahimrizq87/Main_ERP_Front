@@ -367,6 +367,47 @@
           </li>
 
 
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
+              <i class="fa-solid fa-solid fa-gear me-2"></i>
+              <span>{{ 'Reports' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('REPORTS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('REPORTS')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="sales-reports">
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'SalesReports' | translate }}
+                </a>
+              </li>
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="purchases-reports">
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'purchases' | translate }}
+                </a>
+              </li>
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="product-moves-reports">
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'Product_Moves_Reports' | translate }}
+                </a>
+              </li>
+
+
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="account-moves-reports">
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'Account_Moves_Reports' | translate }}
+                </a>
+              </li>
+              
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="currency-price-tracking" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{ 'CURRENCY_PRICE_TRACKING' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
+
 
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SYSTEM_SETTING')" style="cursor: pointer;">
@@ -378,7 +419,7 @@
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('SYSTEM_SETTING')">
               <li class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="system-settings">
-                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'sales_purchases.PURCHASES_INVOICE' | translate }}
+                  <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'System_Setting_Nav.SystemSetting' | translate }}
                 </a>
               </li>
             </ul>

@@ -1,8 +1,52 @@
 {
+  "Reports": "تقارير",
 
+    "Product_Moves_Reports": "تقارير تحركات المنتج",
+  "Account_Moves_Reports": "تقارير تحركات الحساب",
+    "Product_Moves_List": "قائمة تحركات المنتج",
+    "NUMBER_OF_MOVES": "عدد التحركات",
+    "EVENT_TYPE": "نوع الحدث",
+    "MOVE_TYPE": "نوع التحرك",
+    "ALL": "الكل",
+    "IN": "دخول",
+    "OUT": "خروج",
+    "DASHBOARD_Product_Moves": "لوحة التحكم / تحركات المنتج",
+    "Product_Moves_Report": "تقرير تحركات المنتج"
+,
+  "Purchases_REPORTS": "تقارير المشتريات",
+  "DASHBOARD_Purchase": "لوحة التحكم → المشتريات",
+  "TOTAL_Purchase": "إجمالي المشتريات",
+  "Purchase_LIST": "قائمة المشتريات"
+,
+
+    "SalesReports": "تقارير المبيعات",
+    "purchases": "تقارير المشتريات",  
+    "TOTAL_SALES": "إجمالي المبيعات",
+    "NUMBER_OF_BILLS": "عدد الفواتير",
+    "ID": "الرقم",
+    "TIME": "الوقت",
+    "TOTAL": "الإجمالي",
   
-
-
+  
+    "SALES_REPORTS": "تقارير المبيعات",
+    "DASHBOARD_SALES": "لوحة التحكم > المبيعات",
+    "DAY": "اليوم",
+    "MONTH": "الشهر (1-12)",
+    "YEAR": "السنة",
+    "BY_MONTH": "حسب الشهر",
+    "FROM_TO_DATE": "من - إلى التاريخ",
+  
+  
+    "Price_From": "السعر من",
+    "Price_To": "السعر إلى",
+    "SELECT_PAYMENT_TYPE": "اختر نوع الدفع",
+    "all": "الكل",
+    "cash": "نقداً",
+    "credit": "بالآجل",
+    "Search": "بحث",
+    "Clear": "مسح"
+,
+  
   
     "ImportForm": "نموذج الاستيراد",
     "Export_and_Import_product_Branch": "تصدير واستيراد المنتج حسب الفرع",
