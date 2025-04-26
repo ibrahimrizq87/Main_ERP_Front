@@ -178,5 +178,20 @@ export class UserService {
       catchError(this.handleError)
     );
   }
+  // Route::group(['prefix' => 'roles-permissions'], function () {
+  //   Route::post('/', [RoleAndPermissionController::class, 'createRole'])->middleware('permission:create roles');
+  //   Route::get('/roles', [RoleAndPermissionController::class, 'getRoles'])->middleware('permission:view roles');
+  //   Route::delete('/roles/{id}', [RoleAndPermissionController::class, 'deleteRole'])->middleware('permission:delete roles');
+  // roles-permissions/roles
+  deleteRole(roleId: number): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.delete(`${this.baseURL}/general/roles-permissions/roles/${roleId}`, { headers })
+  }
+  addRole(roleData: FormData): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this._HttpClient.post(`${this.baseURL}/general/roles-permissions/`, roleData, { headers })
+  }
 
 }

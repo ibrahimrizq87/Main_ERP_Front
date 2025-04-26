@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { DeterminantService } from '../../shared/services/determinants.service';
 import { ToastrService } from 'ngx-toastr';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-product-determinants',
@@ -19,17 +20,33 @@ export class ProductDeterminantsComponent {
   searchTerm: string = '';
   selectedDeterminant: any = null;
 
-  constructor(private _DeterminantService: DeterminantService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _DeterminantService: DeterminantService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.loadDeterminants();
+  }
+
+  openDeterminantModal(determinant: any): void {
+    this.selectedDeterminant = determinant;
+    const modalElement = document.getElementById('determinantModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  closeProductModal(): void {
+    const modalElement = document.getElementById('determinantModal');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
   }
 
   loadDeterminants(): void {
     this._DeterminantService.getAllDeterminants().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response);
           this.determinants = response.data;
           this.filteredDeterminants = [...this.determinants];
         }
@@ -52,8 +69,7 @@ export class ProductDeterminantsComponent {
         },
         error: (err) => {
           console.error(err);
-          // alert('An error occurred while deleting the determinant.');
-          this.toastr.error('حدث خطا اثناء حذف المحدد');
+          this.toastr.error('حدث خطأ أثناء حذف المحدد');
         }
       });
     }
@@ -67,12 +83,5 @@ export class ProductDeterminantsComponent {
         determinant.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
-  }
-
-  openModal(determinant: any): void {
-    this.selectedDeterminant = determinant;
-    const modal = document.getElementById('determinantModal')!;
-    const modalInstance = new (window as any).bootstrap.Modal(modal);
-    modalInstance.show();
   }
 }

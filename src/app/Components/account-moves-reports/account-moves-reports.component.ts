@@ -3,11 +3,9 @@ import { ProductsService } from '../../shared/services/products.service';
 import { FormsModule } from '@angular/forms';
 import { Modal } from 'bootstrap';
 
-import { RouterLinkActive, RouterModule } from '@angular/router';
+import {  RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { AccountService } from '../../shared/services/account.service';
-import { ClientService } from '../../shared/services/client.service';
 import { ReportsService } from '../../shared/services/reports.service';
 import { StoreService } from '../../shared/services/store.service';
 import { ProductBranchesService } from '../../shared/services/product_branches.service';
@@ -15,7 +13,7 @@ import { ProductBranchesService } from '../../shared/services/product_branches.s
 @Component({
   selector: 'app-account-moves-reports',
   standalone: true,
-  imports: [FormsModule,CommonModule,RouterLinkActive,RouterModule,TranslateModule],
+  imports: [FormsModule,CommonModule,RouterModule,TranslateModule],
   templateUrl: './account-moves-reports.component.html',
   styleUrl: './account-moves-reports.component.css'
 })

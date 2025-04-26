@@ -125,6 +125,8 @@ import { SalesReportsComponent } from './Components/sales-reports/sales-reports.
 import { PurchasesReportsComponent } from './Components/purchases-reports/purchases-reports.component';
 import { ProductMovesReportsComponent } from './Components/product-moves-reports/product-moves-reports.component';
 import { AccountMovesReportsComponent } from './Components/account-moves-reports/account-moves-reports.component';
+import { RolesComponent } from './Components/roles/roles.component';
+import { AddRolesComponent } from './Components/add-roles/add-roles.component';
 
 
 export const routes: Routes = [
@@ -314,6 +316,8 @@ export const routes: Routes = [
         {path:"showUser/:id",component:ShowUserComponent},
 
         {path:"rolesAndPermissions",component:RolesSystemComponent},
+        {path:"roles",component:RolesComponent},
+        {path:"addRole",component:AddRolesComponent},
 
     ]},
     {path:"**",component:NotfoundComponent},

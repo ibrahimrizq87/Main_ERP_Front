@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_ROLES' | translate }}</h5>
+        <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'ROLES' | translate }}</span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addRole">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'ROLES_LIST' | translate }}</span>
+            <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search" [(ngModel)]="searchTerm" (input)="searchRoles()">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'ROLE_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'GUARD_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let role of filteredRoles; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ role.name }}</td>
+                <td>{{ role.guard_name }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                   
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteRole(role.id)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
