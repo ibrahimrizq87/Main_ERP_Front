@@ -126,7 +126,7 @@ export class UserService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this._HttpClient.get(`${this.baseURL}/general/roles-permissions/get-role-permissions-for-edit/${roleId}`, { headers })
   }
-  assignPermissionsToUser(userId: number, permissions: number[]): Observable<any> {
+  assignPermissionsToUser(userId: number, permissions: number[], RemovePermissions: number[]): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
@@ -136,12 +136,16 @@ export class UserService {
     permissions.forEach((permId, index) => {
       formData.append(`permissions[${index}]`, permId.toString());
     });
-  
+
+    RemovePermissions.forEach((permId, index) => {
+      formData.append(`remove_permissions[${index}]`, permId.toString());
+    });
+    console.log(permissions , RemovePermissions);
     return this._HttpClient.post(`${this.baseURL}/general/roles-permissions/assign-permissions-to-user`, formData, { headers }).pipe(
       catchError(this.handleError)
     );
   }
-  assignPermissionsToRole(roleId: number, permissions: number[]): Observable<any> {
+  assignPermissionsToRole(roleId: number, permissions: number[] , RemovePermissions: number[]): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
@@ -151,7 +155,9 @@ export class UserService {
     permissions.forEach((permId, index) => {
       formData.append(`permissions[${index}]`, permId.toString());
     });
-  
+    RemovePermissions.forEach((permId, index) => {
+      formData.append(`remove_permissions[${index}]`, permId.toString());
+    });
     return this._HttpClient.post(`${this.baseURL}/general/roles-permissions/assign-permissions-to-role`, formData, { headers }).pipe(
       catchError(this.handleError)
     );

@@ -58,33 +58,8 @@ export class RolesSystemComponent implements OnInit {
     }
   }
 
-  // onPermissionUserToggle(moduleName: string, permission: any): void {
-  //   permission.has_permission = !permission.has_permission;
-
-  //   // Optionally: collect updated permissions or log them
-  //   console.log(`Permission toggled for module: ${moduleName}`, permission);
-  // }
   onPermissionUserToggle(moduleName: string, permission: any): void {
-
     permission.has_permission = !permission.has_permission;
-
-
-    if (!permission.has_permission && this.selectedUserId !== null) {
-      this._UserService.removePermissionsFromUser(this.selectedUserId, [permission.id]).subscribe({
-        next: () => {
-          this.toastr.success('Permission removed successfully!');
-          console.log(`Permission ${permission.id} removed from user ${this.selectedUserId}`);
-        },
-        error: (error) => {
-          console.error('Error removing permission:', error);
-          this.toastr.error('Failed to remove permission');
-
-          permission.has_permission = true;
-        }
-      });
-    }
-
-    console.log(`Permission toggled for module: ${moduleName}`, permission);
   }
 
   assignPermissionsToSelectedUser(): void {
@@ -94,16 +69,19 @@ export class RolesSystemComponent implements OnInit {
     }
 
     const selectedPermissionIds: number[] = [];
+    const unselectedPermissionIds: number[] = [];
 
     this.userPermissions.forEach((module: any) => {
       module.permissions.forEach((permission: any) => {
         if (permission.has_permission) {
           selectedPermissionIds.push(permission.id);
+        }else{
+          unselectedPermissionIds.push(permission.id);
         }
       });
     });
 
-    this._UserService.assignPermissionsToUser(this.selectedUserId, selectedPermissionIds).subscribe({
+    this._UserService.assignPermissionsToUser(this.selectedUserId, selectedPermissionIds ,unselectedPermissionIds).subscribe({
       next: () => {
 
         this.toastr.success('User Permissions assigned successfully!');
@@ -117,10 +95,8 @@ export class RolesSystemComponent implements OnInit {
   }
 
   onPermissionRoleToggle(moduleName: string, permission: any): void {
+    
     permission.has_permission = !permission.has_permission;
-
-
-    console.log(`Permission toggled for module: ${moduleName}`, permission);
   }
   loadRoles(): void {
     this._UserService.getAllRoLes().subscribe({
@@ -160,16 +136,21 @@ export class RolesSystemComponent implements OnInit {
     }
 
     const selectedPermissionIds: number[] = [];
+    const unselectedPermissionIds: number[] = [];
+
 
     this.rolesPermissions.forEach((module: any) => {
       module.permissions.forEach((permission: any) => {
         if (permission.has_permission) {
           selectedPermissionIds.push(permission.id);
+        }else{
+          unselectedPermissionIds.push(permission.id);
+
         }
       });
     });
 
-    this._UserService.assignPermissionsToRole(this.selectedRoleId, selectedPermissionIds).subscribe({
+    this._UserService.assignPermissionsToRole(this.selectedRoleId, selectedPermissionIds ,unselectedPermissionIds).subscribe({
       next: () => {
         this.toastr.success('Roles Permissions assigned successfully!');
         console.log('Roles Permissions assigned successfully!');

@@ -83,12 +83,12 @@
               <div class="card-header bg-secondary text-white rounded-top">
                 <h5 class="mb-0">{{ 'CHECK_MOVES' | translate }}</h5>
               </div>
-            
+
               <div class="card-body">
                 <div *ngIf="check?.checkDocuments?.length > 0; else noMoves">
                   <div *ngFor="let doc of check?.checkDocuments" class="mb-4 border-bottom pb-3">
                     <div class="row">
-            
+
                       <!-- FROM OLD ACCOUNT -->
                       <div class="col-md-6">
                         <h6 class="text-primary fw-bold mb-2">{{ 'FROM_OLD_ACCOUNT' | translate }}</h6>
@@ -187,10 +187,10 @@
                           <p class="mb-0 text-muted">{{ doc.documentable_type }}</p>
                         </div>
                       </div>
-            
-                      <!-- TO OLD ACCOUNT -->
-                    
-            
+
+
+
+
                       <!-- DOCUMENT NOTE -->
                       <div class="col-md-6 mt-3">
                         <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_NOTE' | translate }}</h6>
@@ -198,7 +198,7 @@
                           <p class="mb-0 text-muted">{{ doc.note }}</p>
                         </div>
                       </div>
-            
+
                       <!-- DOCUMENT CREATED DATE -->
                       <div class="col-md-6 mt-3">
                         <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_DATE' | translate }}</h6>
@@ -206,17 +206,17 @@
                           <p class="mb-0 text-muted">{{ doc.created_at }}</p>
                         </div>
                       </div>
-            
+
                     </div>
                   </div>
                 </div>
-            
+
                 <ng-template #noMoves>
                   <p class="text-muted text-center">{{ 'NO_CHECK_MOVES' | translate }}</p>
                 </ng-template>
               </div>
             </div>
-            
+
 
 
 

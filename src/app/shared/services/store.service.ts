@@ -53,4 +53,8 @@ export class StoreService {
     storeData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/general/stores/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
   }
+
+getProductBranchStoreByStoreId(storeId: string): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/product-branch-stores/get-by-store/${storeId}`, { headers:this.getHeadersWithToken() });
+}
 }

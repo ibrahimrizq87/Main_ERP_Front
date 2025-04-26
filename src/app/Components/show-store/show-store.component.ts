@@ -28,15 +28,17 @@ interface StoreData {
   styleUrl: './show-store.component.css'
 })
 export class ShowStoreComponent implements OnInit{
+  productBranchStores: any;
   constructor(
     private _StoreService: StoreService,
     private route: ActivatedRoute
   ) {}
   storeData: StoreData | undefined;
   ngOnInit(): void {
-    const accountId = this.route.snapshot.paramMap.get('id'); 
-    if (accountId) {
-      this.fetchAccountData(accountId);
+    const storeId = this.route.snapshot.paramMap.get('id'); 
+    if (storeId) {
+      this.fetchAccountData(storeId);
+      this.fetchProductBranchStoreByStoreId(storeId);
     }
   }
 
@@ -54,5 +56,19 @@ export class ShowStoreComponent implements OnInit{
       }
     });
   }
-
+ 
+  fetchProductBranchStoreByStoreId(storeId: string): void {
+    this._StoreService.getProductBranchStoreByStoreId(storeId).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          // console.log(response)
+          this.productBranchStores = response.data;
+          console.log("Product Branch store data",this.productBranchStores);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+         console.log(err);
+      }
+    });
+  }
 }
