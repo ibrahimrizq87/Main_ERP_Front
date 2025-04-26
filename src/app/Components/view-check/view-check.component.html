@@ -42,9 +42,11 @@
                 <p class="text-muted">{{ check?.bank_account || '-' }}</p>
               </div>
               <div class="mb-3">
-                <label class="fw-bold">{{ 'NOTE' | translate }}:</label>
-                <p class="text-muted">{{ check?.note }}</p>
+                <label class="fw-bold">{{"NUMBER_OF_MOVES"|translate}}:</label>
+                <p class="text-muted">{{check?.number_of_moves}}</p>
+
               </div>
+
             </div>
 
             <!-- Right Info -->
@@ -69,73 +71,139 @@
                 <label class="fw-bold">{{"CHECK_NUMBER"|translate}}:</label>
                 <p class="text-muted">{{check?.check_number}}</p>
               </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'NOTE' | translate }}:</label>
+                <p class="text-muted">{{ check?.note }}</p>
+              </div>
 
 
             </div>
             <!-- Check Moves Section -->
             <div class="card shadow rounded-lg mb-4 mt-4">
-              <div class="card-header rounded-top">
+              <div class="card-header bg-secondary text-white rounded-top">
                 <h5 class="mb-0">{{ 'CHECK_MOVES' | translate }}</h5>
               </div>
             
-              <div class="card-body bg-light">
+              <div class="card-body">
                 <div *ngIf="check?.checkDocuments?.length > 0; else noMoves">
-                  <div *ngFor="let doc of check?.checkDocuments" class="mb-4 p-3 rounded shadow-sm bg-white">
-                    <div class="row g-4">
-                      
+                  <div *ngFor="let doc of check?.checkDocuments" class="mb-4 border-bottom pb-3">
+                    <div class="row">
+            
                       <!-- FROM OLD ACCOUNT -->
                       <div class="col-md-6">
                         <h6 class="text-primary fw-bold mb-2">{{ 'FROM_OLD_ACCOUNT' | translate }}</h6>
-                        <div class="border rounded p-2">
-                          <p class="mb-1"><strong>{{ 'NAME' | translate }}:</strong> {{ doc.old_source_account?.name }}</p>
-                          <p class="mb-1"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong> {{ doc.old_source_account?.type }}</p>
-                          <p class="mb-1"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong> {{ doc.old_source_account?.current_balance }}</p>
-                          <p class="mb-1"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong> {{ doc.old_source_account?.financial_condition }}</p>
-                          <p class="mb-1"><strong>{{ 'NET_CREDIT' | translate }}:</strong> {{ doc.old_source_account?.net_credit }}</p>
-                          <p class="mb-1"><strong>{{ 'NET_DEBIT' | translate }}:</strong> {{ doc.old_source_account?.net_debit }}</p>
-                          <p class="mb-1"><strong>{{ 'CURRENCY' | translate }}:</strong> {{ doc.old_source_account?.currency?.name }}</p>
-                          <p class="mb-1"><strong>{{ 'START_BALANCE' | translate }}:</strong> {{ doc.old_source_account?.start_balance }}</p>
-                          <p class="mb-1"><strong>{{ 'CREATED_AT' | translate }}:</strong> {{ doc.old_source_account?.created_at }}</p>
-                          <p class="mb-0"><strong>{{ 'UPDATED_AT' | translate }}:</strong> {{ doc.old_source_account?.updated_at }}</p>
+                        <div class="border rounded p-3">
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NAME' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.type }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.current_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.financial_condition }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_CREDIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.net_credit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_DEBIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.net_debit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENCY' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.currency?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'START_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.start_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CREATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.created_at }}</p>
+                          </div>
+                          <div class="d-flex">
+                            <p class="mb-0 me-2"><strong>{{ 'UPDATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.updated_at }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 ">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'TO_OLD_ACCOUNT' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NAME' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.type }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.current_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.financial_condition }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_CREDIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.net_credit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_DEBIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.net_debit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENCY' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.currency?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'START_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.start_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CREATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.created_at }}</p>
+                          </div>
+                          <div class="d-flex">
+                            <p class="mb-0 me-2"><strong>{{ 'UPDATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.updated_at }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- DOCUMENTABLE TYPE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENTABLE_TYPE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.documentable_type }}</p>
                         </div>
                       </div>
             
                       <!-- TO OLD ACCOUNT -->
-                      <div class="col-md-6">
-                        <h6 class="text-primary fw-bold mb-2">{{ 'TO_OLD_ACCOUNT' | translate }}</h6>
-                        <div class="border rounded p-2">
-                          <p class="mb-1"><strong>{{ 'NAME' | translate }}:</strong> {{ doc.old_payed_to?.name }}</p>
-                          <p class="mb-1"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong> {{ doc.old_payed_to?.type }}</p>
-                          <p class="mb-1"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong> {{ doc.old_payed_to?.current_balance }}</p>
-                          <p class="mb-1"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong> {{ doc.old_payed_to?.financial_condition }}</p>
-                          <p class="mb-1"><strong>{{ 'NET_CREDIT' | translate }}:</strong> {{ doc.old_payed_to?.net_credit }}</p>
-                          <p class="mb-1"><strong>{{ 'NET_DEBIT' | translate }}:</strong> {{ doc.old_payed_to?.net_debit }}</p>
-                          <p class="mb-1"><strong>{{ 'CURRENCY' | translate }}:</strong> {{ doc.old_payed_to?.currency?.name }}</p>
-                          <p class="mb-1"><strong>{{ 'START_BALANCE' | translate }}:</strong> {{ doc.old_payed_to?.start_balance }}</p>
-                          <p class="mb-1"><strong>{{ 'CREATED_AT' | translate }}:</strong> {{ doc.old_payed_to?.created_at }}</p>
-                          <p class="mb-0"><strong>{{ 'UPDATED_AT' | translate }}:</strong> {{ doc.old_payed_to?.updated_at }}</p>
+                    
+            
+                      <!-- DOCUMENT NOTE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_NOTE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.note }}</p>
                         </div>
                       </div>
             
-                      <!-- DOCUMENT DETAILS -->
-                      <div class="col-md-6">
-                        <h6 class="text-success fw-bold mt-1">{{ 'DOCUMENTABLE_TYPE' | translate }}</h6>
-                        <div class="border rounded p-2 bg-light">
-                          <p class="mb-1"><strong>{{ 'TYPE' | translate }}:</strong> {{ doc.documentable_type }}</p>
-                        </div>
-                      </div>
-            
-                      <div class="col-md-6">
-                        <h6 class="text-success fw-bold mt-1">{{ 'DOCUMENT_NOTE' | translate }}</h6>
-                        <div class="border rounded p-2 bg-light">
-                          <p class="mb-1">{{ doc.note }}</p>
-                        </div>
-                      </div>
-            
-                      <div class="col-md-6">
-                        <h6 class="text-success fw-bold mt-1">{{ 'DOCUMENT_DATE' | translate }}</h6>
-                        <div class="border rounded p-2 bg-light">
-                          <p class="mb-1">{{ doc.created_at }}</p>
+                      <!-- DOCUMENT CREATED DATE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_DATE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.created_at }}</p>
                         </div>
                       </div>
             
@@ -144,14 +212,13 @@
                 </div>
             
                 <ng-template #noMoves>
-                  <div class="text-center p-4">
-                    <p class="text-muted">{{ 'NO_CHECK_MOVES' | translate }}</p>
-                  </div>
+                  <p class="text-muted text-center">{{ 'NO_CHECK_MOVES' | translate }}</p>
                 </ng-template>
               </div>
             </div>
             
-            
+
+
 
             <!-- Images Section -->
             <div class="col-md-6 mt-4">
