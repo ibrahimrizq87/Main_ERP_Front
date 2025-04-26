@@ -55,37 +55,86 @@
        
         <div class="card shadow em-card rounded-lg mt-4">
           <div class="card-header bg-white text-black rounded-top pt-3">
-            <h5>{{ 'PRODUCT_BRANCH_STORES' | translate }}</h5>
+            <h5 class="mb-0">{{ 'PRODUCT_BRANCH_STORES' | translate }}</h5>
           </div>
           <div class="card-body">
             <div class="row">
-              <div *ngFor="let item of productBranchStores" class="col-md-6 mb-3">
-                <div class="border rounded p-3 h-100">
-                  <div class="mb-2">
-                    <label class="fw-bold">{{ 'PRODUCT_NAME' | translate }}:</label>
-                    <p class="text-muted">{{ item.product_branch?.product?.name }}</p>
+              <div *ngFor="let item of productBranchStores" class="col-md-6 mb-4">
+                <div class="border rounded-lg p-4 h-100 shadow-sm">
+        
+                  <!-- Product Info -->
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <h6 class="fw-bold mb-1">{{ item.product_branch?.product?.name }}</h6>
+                      <small class="text-muted">{{ item.product_branch?.product_color?.name }}</small>
+                    </div>
+                    <span class="badge bg-primary">{{ item.product_branch?.code }}</span>
                   </div>
-                  <div class="mb-2">
-                    <label class="fw-bold">{{ 'PRODUCT_COLOR' | translate }}:</label>
-                    <p class="text-muted">{{ item.product_branch?.product_color?.name }}</p>
+        
+                  <!-- Default Price -->
+                  <div class="mb-3">
+                    <label class="fw-bold d-block">{{ 'DEFAULT_PRICE' | translate }}</label>
+                    <span class="text-success fw-semibold">{{ item.product_branch?.default_price }} $</span>
                   </div>
-                  <div class="mb-2">
-                    <label class="fw-bold">{{ 'STOCK' | translate }}:</label>
-                    <p class="text-muted">{{ item.stock }}</p>
+        
+                  <!-- Determinants -->
+                  <div class="mb-3" *ngIf="item.product_branch?.determinantValues?.length">
+                    <label class="fw-bold d-block">{{ 'PRODUCT_DETERMINANTS' | translate }}</label>
+                    <div class="d-flex flex-wrap">
+                      <span *ngFor="let det of item.product_branch.determinantValues" class="badge bg-light text-dark me-2 mb-2">
+                        {{ det.determinant?.name }}: {{ det.value }}
+                      </span>
+                    </div>
                   </div>
-                  <div class="mb-2">
-                    <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
-                    <p class="text-muted">{{ item.created_at }}</p>
+        
+                  <!-- Purchase Prices -->
+                  <div class="mb-3" *ngIf="item.product_branch?.purchase_prices?.length">
+                    <label class="fw-bold d-block">{{ 'PURCHASE_PRICES' | translate }}</label>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered text-center mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>{{ 'PRICE' | translate }}</th>
+                            <th>{{ 'STOCK' | translate }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let price of item.product_branch.purchase_prices">
+                            <td>{{ price.price }} $</td>
+                            <td>{{ price.stock }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div class="mb-0">
-                    <label class="fw-bold">{{ 'UPDATED_AT' | translate }}:</label>
-                    <p class="text-muted">{{ item.updated_at }}</p>
+        
+                  <!-- Stock -->
+                  <div class="mb-3">
+                    <label class="fw-bold d-block">{{ 'STOCK' | translate }}</label>
+                    <span [ngClass]="{'text-success': item.stock > 0, 'text-danger': item.stock == 0}">
+                      {{ item.stock }}
+                    </span>
                   </div>
+        
+                  <!-- Created / Updated -->
+                  <div class="row">
+                    <div class="col-6">
+                      <small class="d-block fw-bold">{{ 'CREATED_AT' | translate }}</small>
+                      <small class="text-muted">{{ item.created_at }}</small>
+                    </div>
+                    <div class="col-6">
+                      <small class="d-block fw-bold">{{ 'UPDATED_AT' | translate }}</small>
+                      <small class="text-muted">{{ item.updated_at }}</small>
+                    </div>
+                  </div>
+        
                 </div>
               </div>
             </div>
           </div>
         </div>
+        
+        
 
         <!-- Back Button -->
         <div class="mt-4 mb-4">
