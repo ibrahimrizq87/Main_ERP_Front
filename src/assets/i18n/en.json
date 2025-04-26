@@ -910,5 +910,11 @@
   "BACK_IMAGE": "Back Image",
   "START_BALANCE": "Start Balance",
   "ACCOUNT_TYPE": "Account Type",
-  "PRODUCT_BRANCH_STORES": "Product Branch Stores"
+  "PRODUCT_BRANCH_STORES": "Product Branch Stores",
+  "ROLES": "Roles",
+  "MANAGE_ROLES": "Manage Roles",
+  "ROLES_LIST": "Roles List",
+  "ROLE_NAME" : "Role Name",
+  "GUARD_NAME": "Guard Name",
+  "CREATE_ROLE": "Create Role"
 }

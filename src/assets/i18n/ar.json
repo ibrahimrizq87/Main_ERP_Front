@@ -907,5 +907,12 @@
   "BACK_IMAGE": "صورة الظهر",
   "START_BALANCE": "الرصيد الابتدائي",
   "ACCOUNT_TYPE": "نوع الحساب",
-  "PRODUCT_BRANCH_STORES": "فروع المنتجات بالمخزن"
+  "PRODUCT_BRANCH_STORES": "فروع المنتجات بالمخزن",
+  "ROLES": "الأدوار",
+  "MANAGE_ROLES": "إدارة الأدوار",
+  "ROLES_LIST": "قائمة الأدوار",
+  "ROLE_NAME": "اسم الدور",
+  "GUARD_NAME":"اسم الحارس",
+  "CREATE_ROLE": "إنشاء دور"
+
 }
