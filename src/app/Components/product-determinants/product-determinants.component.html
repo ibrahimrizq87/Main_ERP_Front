@@ -1,60 +1,73 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <h5>{{ 'MANAGE_PRODUCT_DETERMINANTS' | translate }}</h5>
-        <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'DETERMINANTS' | translate }}</span>
-    </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductDeterminant"> 
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
-    </a> 
+  <div>
+    <h5>{{ 'MANAGE_PRODUCT_DETERMINANTS' | translate }}</h5>
+    <span class="text-muted">
+      {{ 'DASHBOARD' | translate }} 
+      <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> 
+      {{ 'DETERMINANTS' | translate }}
+    </span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductDeterminant"> 
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a> 
 </div>  
 
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="fw-bold">{{ 'DETERMINANTS_LIST' | translate }}</span>
-            <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search" [(ngModel)]="searchTerm" (input)="searchDeterminants()">
-        </div>
-    </div> 
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold fs-5">{{ 'DETERMINANTS_LIST' | translate }}</span>
+      <input 
+        class="form-control search w-25" 
+        type="search" 
+        placeholder="{{ 'SEARCH' | translate }}" 
+        aria-label="Search" 
+        [(ngModel)]="searchTerm" 
+        (input)="searchDeterminants()">
+    </div>
+  </div> 
 
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <th class="bg-light" scope="col">ID</th>
-                <th class="bg-light" scope="col">{{ 'DETERMINANTS' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let determinant of filteredDeterminants; let i = index">
-                <th scope="row">{{determinant.id}}</th>
-                <td>{{ determinant.name }}</td>
-                <!-- <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>
-
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
-                    </a>
-
-                </td> -->
-
-                <td class="d-flex justify-content-center gap-3 align-items-center" (click)="$event.stopPropagation()">
-                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
-                      <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
-                  </a>
-                  <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDeterminant(determinant.id)"></i>
-               
-              </td>
-            </tr>
-        </tbody>
+  <div class="table-responsive">
+    <table class="table table-hover mt-3">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ 'DETERMINANTS' | translate }}</th>
+          <th scope="col">{{ 'VALUES' | translate }}</th>
+          <th scope="col">{{ 'ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let determinant of filteredDeterminants; let i = index" (click)="openDeterminantModal(determinant)">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ determinant.name }}</td>
+          <td>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+              <span 
+                *ngFor="let val of determinant.values" 
+                class="badge bg-primary bg-opacity-75 rounded-pill px-3 py-2"
+              >
+                {{ val.value }}
+              </span>
+            </div>
+          </td>
+          <td (click)="$event.stopPropagation()" class="d-flex justify-content-center gap-2">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded p-2"></i>
+            </a>
+            <i class="fa-solid fa-trash-can btn1 bg-danger rounded p-2" (click)="deleteDeterminant(determinant.id)"></i>
+          </td>
+        </tr>
+      </tbody>
     </table>
-    <!-- Modal -->
-<!-- Improved Modal -->
-<div class="modal fade" id="determinantModal" tabindex="-1" aria-labelledby="determinantModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Large centered modal -->
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="determinantModal" tabindex="-1" aria-labelledby="determinantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content shadow-lg border-0 rounded-4">
         <div class="modal-header bg-primary text-white rounded-top-4">
           <h5 class="modal-title" id="determinantModalLabel">
-            <i class="fa-solid fa-circle-info me-2"></i>Determinant Details
+            <i class="fa-solid fa-circle-info me-2"></i> {{ 'DETERMINANT_DETAILS' | translate }}
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -79,8 +92,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let val of selectedDeterminant.values; let i = index">
-                    <td class="text-center">{{ i + 1 }}</td>
+                  <tr *ngFor="let val of selectedDeterminant.values; let idx = index">
+                    <td class="text-center">{{ idx + 1 }}</td>
                     <td>{{ val.id }}</td>
                     <td>{{ val.value }}</td>
                   </tr>
@@ -88,16 +101,14 @@
               </table>
             </div>
           </div>
-          
         </div>
         <div class="modal-footer bg-light rounded-bottom-4">
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-            <i class="fa-solid fa-xmark me-1"></i> Close
+            <i class="fa-solid fa-xmark me-1"></i> {{ 'CLOSE' | translate }}
           </button>
         </div>
       </div>
     </div>
   </div>
-  
-  
+
 </div>
