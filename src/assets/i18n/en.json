@@ -909,5 +909,6 @@
   "FRONT_IMAGE": "Front Image",
   "BACK_IMAGE": "Back Image",
   "START_BALANCE": "Start Balance",
-  "ACCOUNT_TYPE": "Account Type"
+  "ACCOUNT_TYPE": "Account Type",
+  "PRODUCT_BRANCH_STORES": "Product Branch Stores"
 }

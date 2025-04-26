@@ -906,5 +906,6 @@
   "FRONT_IMAGE": "صورة الوجه",
   "BACK_IMAGE": "صورة الظهر",
   "START_BALANCE": "الرصيد الابتدائي",
-  "ACCOUNT_TYPE": "نوع الحساب"
+  "ACCOUNT_TYPE": "نوع الحساب",
+  "PRODUCT_BRANCH_STORES": "فروع المنتجات بالمخزن"
 }
