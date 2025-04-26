@@ -120,6 +120,7 @@ import { ShowCityComponent } from './Components/show-city/show-city.component';
 import { ShowDocumentEntryComponent } from './Components/show-document-entry/show-document-entry.component';
 import { CheckDocumentsComponent } from './Components/check-documents/check-documents.component';
 import { CurrencyPriceTrackingComponent } from './Components/currency-price-tracking/currency-price-tracking.component';
+import { RolesSystemComponent } from './Components/roles-system/roles-system.component';
 import { SalesReportsComponent } from './Components/sales-reports/sales-reports.component';
 import { PurchasesReportsComponent } from './Components/purchases-reports/purchases-reports.component';
 import { ProductMovesReportsComponent } from './Components/product-moves-reports/product-moves-reports.component';
@@ -311,6 +312,8 @@ export const routes: Routes = [
         {path:"addUser",component:AddUserComponent},
         {path:"updateUser/:id",component:UpdateUserComponent},
         {path:"showUser/:id",component:ShowUserComponent},
+
+        {path:"rolesAndPermissions",component:RolesSystemComponent},
 
     ]},
     {path:"**",component:NotfoundComponent},

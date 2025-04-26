@@ -16,33 +16,45 @@
               <div class="card-body pb-5">
 
                 <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="name"  class="form-label">Name</label>
+                    <input id="name" formControlName="name" type="text" class="form-control" placeholder="Enter Name" required/>
+                    <div class="alert alert-danger" *ngIf="userForm.get('name')?.errors && userForm.get('name')?.touched">
+                      <p *ngIf="userForm.get('name')?.getError('required')">Name is Required</p>
+                    
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="user_name"  class="form-label">User Name</label>
+                    <input id="user_name" formControlName="user_name" type="text" class="form-control" placeholder="Enter User Name" required/>
+                    <div class="alert alert-danger" *ngIf="userForm.get('user_name')?.errors && userForm.get('user_name')?.touched">
+                      <p *ngIf="userForm.get('user_name')?.getError('required')">User Name is Required</p>
+                    </div>
+                  </div>
 
                   <div class="form-group col-md-6">
-                    <label for="user_name"  class="form-label">User user_name</label>
-                    <input id="user_name" formControlName="user_name" type="text" class="form-control" placeholder="Enter Category user_name" required/>
-                    <div class="alert alert-danger" *ngIf="userForm.get('user_name')?.errors && userForm.get('user_name')?.touched">
-                      <p *ngIf="userForm.get('user_name')?.getError('required')">user_name is Required</p>
-                    
-                    </div>
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="password"  class="form-label">User password</label>
-                    <input id="password" formControlName="password" type="text" class="form-control" placeholder="Enter Category password" required/>
+                    <label for="password"  class="form-label"> Password</label>
+                    <input id="password" formControlName="password" type="password" class="form-control" placeholder="Enter User Password" required/>
                     <div class="alert alert-danger" *ngIf="userForm.get('password')?.errors && userForm.get('password')?.touched">
-                      <p *ngIf="userForm.get('password')?.getError('required')">password is Required</p>
+                      <p *ngIf="userForm.get('password')?.getError('required')">Password is Required</p>
                     
                     </div>
                   </div>
+
                   <div class="form-group col-md-6">
                     <label for="role" class="form-label">Role</label>
-                    <select id="role" formControlName="role" class="form-control">
-                      <option value="admin">admin </option>
-                      <option value="sales">sales</option>
-                      <option value="accountant">accountant</option>
+                    
+                    <select id="role" formControlName="role_id" class="form-control">
+                      <option disabled>Select Role </option>
+                      <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}
                     </select>
-                    <div class="alert alert-danger" *ngIf="userForm.get('role')?.errors && userForm.get('role')?.touched">
-                      <p *ngIf="userForm.get('role')?.hasError('required')">Role is required</p>
+                    <div class="alert alert-danger" *ngIf="userForm.get('role_id')?.errors && userForm.get('role_id')?.touched">
+                      <p *ngIf="userForm.get('role_id')?.hasError('required')">Role is required</p>
                     </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"> Upload Image</label>
+                    <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
                   </div>
                 </div>   
                 

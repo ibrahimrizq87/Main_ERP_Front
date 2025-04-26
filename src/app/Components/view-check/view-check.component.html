@@ -1,82 +1,257 @@
 <div class="mt-3 mb-3">
   <h5>{{ 'ACCOUNT_DETAILS' | translate }}</h5>
-  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'CHECK' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'SHOW_CHECK' | translate }}</span>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }}
+    <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
+    {{ 'CHECK' | translate }}
+    <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
+    {{ 'SHOW_CHECK' | translate }}
+  </span>
 </div>
-<div class="mt-4 mb-4">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card shadow em-card rounded-lg">
-          <div class="card-header bg-white text-black rounded-top pt-3">
-            <h5>{{ 'CHECK_DETAILS' | translate }}</h5>
-          </div>
-          <div class="card-body pb-5">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'FROM_ACCOUNT_ARABIC' | translate }}:</label>
-                  <p class="text-muted">{{ check.source_account.name }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'TO_ACCOUNT_ARABIC' | translate }}:</label>
-                  <p class="text-muted">{{ check.payed_to.name }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'CURRENCY' | translate }}:</label>
-                  <p class="text-muted">{{ check.currency.name }}</p>
-                </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow rounded-lg mb-4">
+        <div class="card-header bg-primary text-white rounded-top">
+          <h5 class="mb-0">{{ 'CHECK_DETAILS' | translate }}</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+
+            <!-- Left Info -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'FROM_ACCOUNT_ARABIC' | translate }}:</label>
+                <p class="text-muted">{{ check?.source_account.name }}</p>
               </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'TYPE' | translate }}:</label>
-                  <p class="text-muted">{{ check.type }}</p>
-                </div>
-                <div class="mb-3">
-                  <label class="fw-bold">{{ 'AMOUNT' | translate }}:</label>
-                  <p class="text-muted">{{ check.amount }}</p>
-                </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'TO_ACCOUNT_ARABIC' | translate }}:</label>
+                <p class="text-muted">{{ check?.payed_to?.name }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'CURRENCY' | translate }}:</label>
+                <p class="text-muted">{{ check?.currency?.name }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'BANK_BRANCH' | translate }}:</label>
+                <p class="text-muted">{{ check?.bank_branch?.name || '-' }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'BANK_ACCOUNT' | translate }}:</label>
+                <p class="text-muted">{{ check?.bank_account || '-' }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{"NUMBER_OF_MOVES"|translate}}:</label>
+                <p class="text-muted">{{check?.number_of_moves}}</p>
+
               </div>
 
-              <div class="col-md-6">
-                <label class="fw-bold">front image:</label>
-<br>
-                <img [src]="check.front_image" alt="">
+            </div>
+
+            <!-- Right Info -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'TYPE' | translate }}:</label>
+                <p class="text-muted">{{ check?.type }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'AMOUNT' | translate }}:</label>
+                <p class="text-muted">{{ check?.amount }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'STATUS' | translate }}:</label>
+                <p class="badge bg-warning text-dark">{{ check?.status }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'DUE_DATE' | translate }}:</label>
+                <p class="text-muted">{{ check?.due_date }}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{"CHECK_NUMBER"|translate}}:</label>
+                <p class="text-muted">{{check?.check_number}}</p>
+              </div>
+              <div class="mb-3">
+                <label class="fw-bold">{{ 'NOTE' | translate }}:</label>
+                <p class="text-muted">{{ check?.note }}</p>
               </div>
 
-              <div class="col-md-6">
-                <label class="fw-bold">back image:</label>
-<br>
-                <img [src]="check.back_image" alt="">
 
+            </div>
+            <!-- Check Moves Section -->
+            <div class="card shadow rounded-lg mb-4 mt-4">
+              <div class="card-header bg-secondary text-white rounded-top">
+                <h5 class="mb-0">{{ 'CHECK_MOVES' | translate }}</h5>
+              </div>
+            
+              <div class="card-body">
+                <div *ngIf="check?.checkDocuments?.length > 0; else noMoves">
+                  <div *ngFor="let doc of check?.checkDocuments" class="mb-4 border-bottom pb-3">
+                    <div class="row">
+            
+                      <!-- FROM OLD ACCOUNT -->
+                      <div class="col-md-6">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'FROM_OLD_ACCOUNT' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NAME' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.type }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.current_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.financial_condition }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_CREDIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.net_credit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_DEBIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.net_debit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENCY' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.currency?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'START_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.start_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CREATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.created_at }}</p>
+                          </div>
+                          <div class="d-flex">
+                            <p class="mb-0 me-2"><strong>{{ 'UPDATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_source_account?.updated_at }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 ">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'TO_OLD_ACCOUNT' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NAME' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.type }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENT_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.current_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.financial_condition }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_CREDIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.net_credit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'NET_DEBIT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.net_debit }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CURRENCY' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.currency?.name }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'START_BALANCE' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.start_balance }}</p>
+                          </div>
+                          <div class="d-flex mb-2">
+                            <p class="mb-0 me-2"><strong>{{ 'CREATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.created_at }}</p>
+                          </div>
+                          <div class="d-flex">
+                            <p class="mb-0 me-2"><strong>{{ 'UPDATED_AT' | translate }}:</strong></p>
+                            <p class="mb-0">{{ doc.old_payed_to?.updated_at }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- DOCUMENTABLE TYPE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENTABLE_TYPE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.documentable_type }}</p>
+                        </div>
+                      </div>
+            
+                      <!-- TO OLD ACCOUNT -->
+                    
+            
+                      <!-- DOCUMENT NOTE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_NOTE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.note }}</p>
+                        </div>
+                      </div>
+            
+                      <!-- DOCUMENT CREATED DATE -->
+                      <div class="col-md-6 mt-3">
+                        <h6 class="text-primary fw-bold mb-2">{{ 'DOCUMENT_DATE' | translate }}</h6>
+                        <div class="border rounded p-3">
+                          <p class="mb-0 text-muted">{{ doc.created_at }}</p>
+                        </div>
+                      </div>
+            
+                    </div>
+                  </div>
+                </div>
+            
+                <ng-template #noMoves>
+                  <p class="text-muted text-center">{{ 'NO_CHECK_MOVES' | translate }}</p>
+                </ng-template>
               </div>
             </div>
+            
+
+
+
+            <!-- Images Section -->
+            <div class="col-md-6 mt-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-header text-center bg-light">
+                  <strong>{{ 'FRONT_IMAGE' | translate }}</strong>
+                </div>
+                <div class="card-body text-center">
+                  <img [src]="check?.front_image" alt="Front Image" class="img-fluid rounded">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mt-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-header text-center bg-light">
+                  <strong>{{ 'BACK_IMAGE' | translate }}</strong>
+                </div>
+                <div class="card-body text-center">
+                  <img [src]="check?.back_image" alt="Back Image" class="img-fluid rounded">
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
-    <div class="mt-4 mb-4">
-        <button type="button" (click)="back()" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
-    </div>
-  </div>
-</div>
 
-
-
-<!-- <div class="container">
-  <div class="row">
-    <div *ngFor="let check of checkDocuments" class="col-md-4">
-      <div class="card">
-        <img [src]="check.frontImage" class="card-img-top" alt="Check Front">
-        <div class="card-body">
-          <h5 class="card-title">Check #{{ check.checkNumber }}</h5>
-          <p class="card-text"><strong>Amount:</strong> {{ check.amount }}</p>
-          <p class="card-text"><strong>Due Date:</strong> {{ check.dueDate }}</p>
-          <p class="card-text"><strong>Payed To:</strong> {{ check.payedTo }}</p>
-          <p class="card-text"><strong>Source Account:</strong> {{ check.sourceAccount }}</p>
-          <p class="card-text"><strong>Status:</strong> <span [ngClass]="getStatusClass(check.status)">{{ check.status }}</span></p>
-        </div>
-        <img [src]="check.backImage" class="card-img-bottom" alt="Check Back">
+      <div class="text-center mb-4">
+        <button type="button" (click)="back()" class="btn btn-outline-primary px-5">
+          {{ 'BACK' | translate }}
+        </button>
       </div>
     </div>
   </div>
-</div> -->
+</div>
