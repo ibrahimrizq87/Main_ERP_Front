@@ -2,6 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
+        <!-- Store Information Card -->
         <div class="card shadow em-card rounded-lg">
           <div class="card-header bg-white text-black rounded-top pt-3">
             <h5>{{ 'STORE_INFORMATION' | translate }}</h5>
@@ -40,7 +41,7 @@
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'COUNTRY_NAME' | translate }}:</label>
-                  <pre class="text-muted">{{ storeData?.city?.country?.name }}</pre>
+                  <p class="text-muted">{{ storeData?.city?.country?.name }}</p>
                 </div>
                 <div class="mb-3">
                   <label class="fw-bold">{{ 'ADDRESS_DESCRIPTION' | translate }}:</label>
@@ -50,14 +51,49 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Back Button -->
-    <div class="mt-4 mb-4">
-      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/stores">
-        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
-      </a>
+       
+        <div class="card shadow em-card rounded-lg mt-4">
+          <div class="card-header bg-white text-black rounded-top pt-3">
+            <h5>{{ 'PRODUCT_BRANCH_STORES' | translate }}</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div *ngFor="let item of productBranchStores" class="col-md-6 mb-3">
+                <div class="border rounded p-3 h-100">
+                  <div class="mb-2">
+                    <label class="fw-bold">{{ 'PRODUCT_NAME' | translate }}:</label>
+                    <p class="text-muted">{{ item.product_branch?.product?.name }}</p>
+                  </div>
+                  <div class="mb-2">
+                    <label class="fw-bold">{{ 'PRODUCT_COLOR' | translate }}:</label>
+                    <p class="text-muted">{{ item.product_branch?.product_color?.name }}</p>
+                  </div>
+                  <div class="mb-2">
+                    <label class="fw-bold">{{ 'STOCK' | translate }}:</label>
+                    <p class="text-muted">{{ item.stock }}</p>
+                  </div>
+                  <div class="mb-2">
+                    <label class="fw-bold">{{ 'CREATED_AT' | translate }}:</label>
+                    <p class="text-muted">{{ item.created_at }}</p>
+                  </div>
+                  <div class="mb-0">
+                    <label class="fw-bold">{{ 'UPDATED_AT' | translate }}:</label>
+                    <p class="text-muted">{{ item.updated_at }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-4 mb-4">
+          <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/stores">
+            <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
