@@ -1,158 +1,126 @@
 {
   "Reports": "تقارير",
-
-    "Product_Moves_Reports": "تقارير تحركات المنتج",
+  "Product_Moves_Reports": "تقارير تحركات المنتج",
   "Account_Moves_Reports": "تقارير تحركات الحساب",
-    "Product_Moves_List": "قائمة تحركات المنتج",
-    "NUMBER_OF_MOVES": "عدد التحركات",
-    "EVENT_TYPE": "نوع الحدث",
-    "MOVE_TYPE": "نوع التحرك",
-    "ALL": "الكل",
-    "IN": "دخول",
-    "OUT": "خروج",
-    "DASHBOARD_Product_Moves": "لوحة التحكم / تحركات المنتج",
-    "Product_Moves_Report": "تقرير تحركات المنتج"
-,
+  "Product_Moves_List": "قائمة تحركات المنتج",
+  "NUMBER_OF_MOVES": "عدد التحركات",
+  "EVENT_TYPE": "نوع الحدث",
+  "MOVE_TYPE": "نوع التحرك",
+  "ALL": "الكل",
+  "IN": "دخول",
+  "OUT": "خروج",
+  "DASHBOARD_Product_Moves": "لوحة التحكم / تحركات المنتج",
+  "Product_Moves_Report": "تقرير تحركات المنتج",
   "Purchases_REPORTS": "تقارير المشتريات",
   "DASHBOARD_Purchase": "لوحة التحكم → المشتريات",
   "TOTAL_Purchase": "إجمالي المشتريات",
-  "Purchase_LIST": "قائمة المشتريات"
-,
-
-    "SalesReports": "تقارير المبيعات",
-    "purchases": "تقارير المشتريات",  
-    "TOTAL_SALES": "إجمالي المبيعات",
-    "NUMBER_OF_BILLS": "عدد الفواتير",
-    "ID": "الرقم",
-    "TIME": "الوقت",
-    "TOTAL": "الإجمالي",
-  
-  
-    "SALES_REPORTS": "تقارير المبيعات",
-    "DASHBOARD_SALES": "لوحة التحكم > المبيعات",
-    "DAY": "اليوم",
-    "MONTH": "الشهر (1-12)",
-    "YEAR": "السنة",
-    "BY_MONTH": "حسب الشهر",
-    "FROM_TO_DATE": "من - إلى التاريخ",
-  
-  
-    "Price_From": "السعر من",
-    "Price_To": "السعر إلى",
-    "SELECT_PAYMENT_TYPE": "اختر نوع الدفع",
-    "all": "الكل",
-    "cash": "نقداً",
-    "credit": "بالآجل",
-    "Search": "بحث",
-    "Clear": "مسح"
-,
-  
-  
-    "ImportForm": "نموذج الاستيراد",
-    "Export_and_Import_product_Branch": "تصدير واستيراد المنتج حسب الفرع",
-    "Export_and_Import_product": "تصدير واستيراد المنتج",
-    "TEMPLATE": "القالب",
-    "PRICES_ORDERED_BY_PRODUCTS": "الأسعار مرتبة حسب المنتجات",
-    "PRICES_ORDERED_BY_CATEGORIES": "الأسعار مرتبة حسب الفئات",
-    "BRANCHES_ALL_DATA_TEMPLATE1": "جميع الفروع - كافة البيانات (القالب 1)",
-    "BRANCHES_SINGLE_PRICE_TEMPLATE": "فرع واحد - سعر واحد",
-    "BRANCHES_ALL_DATA_TEMPLATE2": "جميع الفروع - كافة البيانات (القالب 2)",
-    "TEMPLATE1": "القالب 1",
-    "TEMPLATE2": "القالب 2",
-    "ALL_DATA_TEMPLATE": "قالب جميع البيانات",
-    "FILE_NAME": "اسم الملف",
-    "FILE_TO_IMPORT": "الملف المراد استيراده",
-
-  
-
-
-    "CURRENCY_REPORT": "تقرير العملة",
-    "Start Balance": "الرصيد الابتدائي",
-    "Current Balance": "الرصيد الحالي",
-    "Net Debit": "صافي المدين",
-    "Net Credit": "صافي الدائن",
-    "Currency": "العملة",
-    "Financial Condition": "الحالة المالية",
-    "CURRENCY_VALUE_CHANGES": "تغييرات قيمة العملة",
-    "Old Value": "القيمة القديمة",
-    "New Value": "القيمة الجديدة",
-    "Type": "النوع",
-    "Account": "الحساب",
-    "Created At": "تاريخ الإنشاء",
-    "GAIN_LOSS_RECORDS": "سجل الأرباح/الخسائر",
-    "Amount": "المبلغ",
-    "EVENT": "الحدث"
-  ,  
-
-
-"COLORS": "الألوان",
-"CURRENCY_PRICE_TRACKING": "تتبع أسعار العملات",
-
-
-"PAYMENT_CHECK":"مستند شيك صادر",
-"ENTRY_CHECK":"مستند حركة شيك",
-"RECEIPT_CHECK":"مستند شيك وارد",
-
-
-
-  "CURRENCY_PRICE":"سعر العملة",
-    "manageColor": {
-      "manage_color": "إدارة الألوان",
-      "dashboard": "لوحة التحكم",
-      "colors": "الألوان",
-      "colors_list": "قائمة الألوان",
-      "color_name": "اسم اللون",
-      "actions": "الإجراءات",
-      "edit": "تعديل",
-      "delete": "حذف"
-    }
-  ,  
-    "addColor": {
-      "manage_color": "إدارة الألوان",
-      "dashboard": "لوحة التحكم",
-      "color": "اللون",
-      "create_color": "إضافة لون",
-      "add_color": "إضافة لون",
-      "color_name_ar": "اسم اللون (بالعربية)",
-      "enter_color_name_ar": "أدخل اسم اللون بالعربية",
-      "save": "حفظ"
-    },
-  
-
-
+  "Purchase_LIST": "قائمة المشتريات",
+  "SalesReports": "تقارير المبيعات",
+  "purchases": "تقارير المشتريات",
+  "TOTAL_SALES": "إجمالي المبيعات",
+  "NUMBER_OF_BILLS": "عدد الفواتير",
+  "ID": "الرقم",
+  "TIME": "الوقت",
+  "TOTAL": "الإجمالي",
+  "SALES_REPORTS": "تقارير المبيعات",
+  "DASHBOARD_SALES": "لوحة التحكم > المبيعات",
+  "DAY": "اليوم",
+  "MONTH": "الشهر (1-12)",
+  "YEAR": "السنة",
+  "BY_MONTH": "حسب الشهر",
+  "FROM_TO_DATE": "من - إلى التاريخ",
+  "Price_From": "السعر من",
+  "Price_To": "السعر إلى",
+  "SELECT_PAYMENT_TYPE": "اختر نوع الدفع",
+  "all": "الكل",
+  "cash": "نقداً",
+  "credit": "بالآجل",
+  "Search": "بحث",
+  "Clear": "مسح",
+  "ImportForm": "نموذج الاستيراد",
+  "Export_and_Import_product_Branch": "تصدير واستيراد المنتج حسب الفرع",
+  "Export_and_Import_product": "تصدير واستيراد المنتج",
+  "TEMPLATE": "القالب",
+  "PRICES_ORDERED_BY_PRODUCTS": "الأسعار مرتبة حسب المنتجات",
+  "PRICES_ORDERED_BY_CATEGORIES": "الأسعار مرتبة حسب الفئات",
+  "BRANCHES_ALL_DATA_TEMPLATE1": "جميع الفروع - كافة البيانات (القالب 1)",
+  "BRANCHES_SINGLE_PRICE_TEMPLATE": "فرع واحد - سعر واحد",
+  "BRANCHES_ALL_DATA_TEMPLATE2": "جميع الفروع - كافة البيانات (القالب 2)",
+  "TEMPLATE1": "القالب 1",
+  "TEMPLATE2": "القالب 2",
+  "ALL_DATA_TEMPLATE": "قالب جميع البيانات",
+  "FILE_NAME": "اسم الملف",
+  "FILE_TO_IMPORT": "الملف المراد استيراده",
+  "CURRENCY_REPORT": "تقرير العملة",
+  "Start Balance": "الرصيد الابتدائي",
+  "Current Balance": "الرصيد الحالي",
+  "Net Debit": "صافي المدين",
+  "Net Credit": "صافي الدائن",
+  "Currency": "العملة",
+  "Financial Condition": "الحالة المالية",
+  "CURRENCY_VALUE_CHANGES": "تغييرات قيمة العملة",
+  "Old Value": "القيمة القديمة",
+  "New Value": "القيمة الجديدة",
+  "Type": "النوع",
+  "Account": "الحساب",
+  "Created At": "تاريخ الإنشاء",
+  "GAIN_LOSS_RECORDS": "سجل الأرباح/الخسائر",
+  "Amount": "المبلغ",
+  "EVENT": "الحدث",
+  "COLORS": "الألوان",
+  "CURRENCY_PRICE_TRACKING": "تتبع أسعار العملات",
+  "PAYMENT_CHECK": "مستند شيك صادر",
+  "ENTRY_CHECK": "مستند حركة شيك",
+  "RECEIPT_CHECK": "مستند شيك وارد",
+  "CURRENCY_PRICE": "سعر العملة",
+  "manageColor": {
+    "manage_color": "إدارة الألوان",
+    "dashboard": "لوحة التحكم",
+    "colors": "الألوان",
+    "colors_list": "قائمة الألوان",
+    "color_name": "اسم اللون",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف"
+  },
+  "addColor": {
+    "manage_color": "إدارة الألوان",
+    "dashboard": "لوحة التحكم",
+    "color": "اللون",
+    "create_color": "إضافة لون",
+    "add_color": "إضافة لون",
+    "color_name_ar": "اسم اللون (بالعربية)",
+    "enter_color_name_ar": "أدخل اسم اللون بالعربية",
+    "save": "حفظ"
+  },
   "CLIENTS": "العملاء",
-
-"UPDATE_VENDOR": "تحديث المورد",
+  "UPDATE_VENDOR": "تحديث المورد",
   "ADD_VENDOR": "إضافة مورد",
-"VENDOR_NAME_EN": "اسم المورد (بالإنجليزية)",
+  "VENDOR_NAME_EN": "اسم المورد (بالإنجليزية)",
   "VENDORS_LIST": "قائمة الموردين",
   "MANAGE_VENDORS": "إدارة الموردين",
   "VENDOR_NAME_AR": "اسم المورد (بالعربية)",
-"VENDOR_NAME_Ar": "اسم المورد (بالعربية)",
+  "VENDOR_NAME_Ar": "اسم المورد (بالعربية)",
   "CLEINTS_LIST": "قائمة الزبائن",
-"MANAGE_CLEINTS":"إدارة الزبائن",
-"DELEGATES_LIST": "قائمة المندوبين",
-"MANAGE_DELEGATES":"إدارة المندوبين",
-"OLD_IMAGE": "الصورة القديمة",
+  "MANAGE_CLEINTS": "إدارة الزبائن",
+  "DELEGATES_LIST": "قائمة المندوبين",
+  "MANAGE_DELEGATES": "إدارة المندوبين",
+  "OLD_IMAGE": "الصورة القديمة",
   "CLIENT_NAME": "اسم الزبون",
-
-    "UPLOAD_IMAGE": "رفع صورة",
-    "ADDRESSES": "العناوين",
-    "ADDRESS_NAME": "اسم العنوان",
-    "ADDRESS_NAME_REQUIRED": "اسم العنوان مطلوب.",
-    "ADDRESS_DESCRIPTION": "وصف العنوان",
-    "PLEASE_SELECT_A_COUNTRY_HAS_CITIES": "يرجى اختيار بلد يحتوي على مدن.",
-    "ADD_ADDRESS": "إضافة عنوان",
-    "PHONES": "أرقام الهواتف",
-    "PHONE_NAME": "اسم الهاتف",
-    "ADD_PHONE": "إضافة هاتف",
-    "ADD_CLIENT": "إضافة عميل",
-    "CLIENT_NAME_AR": "اسم العميل (بالعربية)",
-    "CLIENT_NAME_EN": "اسم العميل (بالإنجليزية)"
-,
-  
-
-"UPDATE_DELEGATE": "تحديث المندوب",
+  "UPLOAD_IMAGE": "رفع صورة",
+  "ADDRESSES": "العناوين",
+  "ADDRESS_NAME": "اسم العنوان",
+  "ADDRESS_NAME_REQUIRED": "اسم العنوان مطلوب.",
+  "ADDRESS_DESCRIPTION": "وصف العنوان",
+  "PLEASE_SELECT_A_COUNTRY_HAS_CITIES": "يرجى اختيار بلد يحتوي على مدن.",
+  "ADD_ADDRESS": "إضافة عنوان",
+  "PHONES": "أرقام الهواتف",
+  "PHONE_NAME": "اسم الهاتف",
+  "ADD_PHONE": "إضافة هاتف",
+  "ADD_CLIENT": "إضافة عميل",
+  "CLIENT_NAME_AR": "اسم العميل (بالعربية)",
+  "CLIENT_NAME_EN": "اسم العميل (بالإنجليزية)",
+  "UPDATE_DELEGATE": "تحديث المندوب",
   "ADD_DELEGATE": "إضافة مندوب",
   "DELEGATE_NAME_AR": "اسم المندوب (بالعربية)",
   "DELEGATE_NAME_EN": "اسم المندوب (بالإنجليزية)",
@@ -161,32 +129,23 @@
   "ACCEPTED_FORMATS": "الصيغ المقبولة: JPG, PNG, GIF",
   "ACCOUNT_CATEGORY": "فئة الحساب",
   "CATEGORY_REQUIRED": "اختيار الفئة مطلوب.",
-
-
-    "paymentDocuments": {
-
-
-      "DATE": "التاريخ",
-
-
-
-      "MANAGE_PAYMENT_DOCUMENTS": "إدارة مستندات الدفع",
-      "DASHBOARD": "لوحة التحكم",
-      "PAYMENT_DOCUMENT": "مستند الدفع",
-      "FROM_TO_ACCOUNT": "من/إلى الحساب",
-      "FROM_TO_ACCOUNT_COMPANY": "من/إلى حساب الشركة",
-      "DELEGATE": "المندوب",
-      "AMOUNT": "المبلغ",
-      "ORGANIZATION": "المنظمة",
-      "ACTIONS": "الإجراءات",
-      "APPROVE": "موافقة",
-      "REJECT": "رفض",
-      "CURRENCY": "العملة",
-      "WAITING": "في الانتظار",
-      "Documents_List": "قائمة المستندات"
-    }
-  
-,
+  "paymentDocuments": {
+    "DATE": "التاريخ",
+    "MANAGE_PAYMENT_DOCUMENTS": "إدارة مستندات الدفع",
+    "DASHBOARD": "لوحة التحكم",
+    "PAYMENT_DOCUMENT": "مستند الدفع",
+    "FROM_TO_ACCOUNT": "من/إلى الحساب",
+    "FROM_TO_ACCOUNT_COMPANY": "من/إلى حساب الشركة",
+    "DELEGATE": "المندوب",
+    "AMOUNT": "المبلغ",
+    "ORGANIZATION": "المنظمة",
+    "ACTIONS": "الإجراءات",
+    "APPROVE": "موافقة",
+    "REJECT": "رفض",
+    "CURRENCY": "العملة",
+    "WAITING": "في الانتظار",
+    "Documents_List": "قائمة المستندات"
+  },
   "addTransaction": {
     "ADD_TRANSACTION": "إضافة معاملة",
     "DASHBOARD": "لوحة التحكم",
@@ -214,42 +173,34 @@
     "ENTER_RECEIVER": "أدخل المستلم",
     "SAVE": "حفظ",
     "SELECT_ACCOUNT": "اختر الحساب"
-  }
-,
+  },
   "accountCategories": {
     "CLIENTS": "العملاء",
     "VENDORS": "الموردين",
     "CATEGORY_NAME": "اسم التصنيف",
     "DELEGATES": "المناديب"
-
   },
-
-
-    "WAITING": "في انتظار الموافقة",
-    "APPROVED": "تمت الموافقة",
-    "REJECTED": " مرفوض",
+  "WAITING": "في انتظار الموافقة",
+  "APPROVED": "تمت الموافقة",
+  "REJECTED": " مرفوض",
   "PRODUCT_CATEGORY": "فئة المنتج",
   "MANAGE_PRODUCT_CATEGORIES": "إدارة فئات المنتجات",
-"HRM_SYSTEM": " إدارة مستخدمين النظام",
-"MAIN_ACCOUNTS": "(الزمم) الحسابات الرئيسية",
+  "HRM_SYSTEM": " إدارة مستخدمين النظام",
+  "MAIN_ACCOUNTS": "(الزمم) الحسابات الرئيسية",
   "CATEGORIES": "الفئات",
   "COUNTRYS": "الدول",
   "COUNTRY": "الدولة",
-"USERS": "المستخدمين",
+  "USERS": "المستخدمين",
   "CLIENT": "العميل",
-  "PYMENT_TYPE":"نوع الدفع",
+  "PYMENT_TYPE": "نوع الدفع",
   "SHOW_BRANCHES": "إظهار الفروع",
   "HIDE_BRANCHES": "إخفاء الفروع",
   "COLOR": "اللون",
-
   "COLORS_AVAILABLE": "الألوان المتاحة",
   "ADDITIONAL_IMAGES": "صور إضافية",
   "PRICING": "التسعير",
   "PRODUCT_DETAILS": "تفاصيل المنتج",
-
   "STOCK_AVAILABLE": "المخزون المتاح",
-
-
   "addCountry": {
     "country_name_en": "اسم البلد بالإنجليزية",
     "country_name_ar": "اسم البلد بالعربية",
@@ -264,7 +215,7 @@
     "enter_country_name": "أدخل اسم البلد",
     "country_required": "اسم البلد مطلوب.",
     "save": "حفظ"
-},
+  },
   "manageCountry": {
     "manage_country": "إدارة البلد",
     "dashboard": "لوحة القيادة",
@@ -275,8 +226,7 @@
     "actions": "الإجراءات",
     "edit": "تعديل",
     "delete": "حذف"
-},
-
+  },
   "UPDATED_AT": "تم التحديث في",
   "PARENT ACCOUNT": "الحساب الرئيسي",
   "CURRENCY ABBREVIATION": "اختصار العملة",
@@ -285,44 +235,38 @@
   "CURRENT_BALANCE": "الرصيد الحالي",
   "NET_DEBIT": "صافي المدين",
   "NET_CREDIT": "صافي الدائن",
-  "FINANCIAL_CONDITION": "الحالة المالية"
-
-  ,
-    "mainAccountNav": {
-      "children": "الأطفال",
-      "delete_child": "حذف الطفل",
-      "add_child": "إضافة فرع",
-      "child_title": "عنوان الفرع",
-      "child_title_placeholder": "أدخل عنوان الفرع...",
-      "choose_account": "اختر الحساب",
-      "cancel": "إلغاء",
-      "selectAccount": "اختر الحساب",
-      "searchAccount": "ابحث عن الحساب...",
-      "accountName": "اسم الحساب",
-      "create": "إنشاء إعداد التنقل للحساب الرئيسي",
-      "title": "العنوان",
-      "enterTitle": "أدخل العنوان",
-      "titleRequired": "العنوان مطلوب.",
-      "order": "الترتيب",
-      "enterOrder": "أدخل الترتيب",
-      "orderRequired": "الترتيب مطلوب ويجب أن يكون رقمًا.",
-      "save": "حفظ",
-      "list": "قائمة إعدادات التنقل للحساب الرئيسي",
-      "edit": "تعديل",
-      "delete": "حذف"
-    },  
-  
-    "System_Setting": {
-      "account": "إعداد حسابات",
-      "general_setting": "إعدادات عامة"
-    }
-  
-,
+  "FINANCIAL_CONDITION": "الحالة المالية",
+  "mainAccountNav": {
+    "children": "الأطفال",
+    "delete_child": "حذف الطفل",
+    "add_child": "إضافة فرع",
+    "child_title": "عنوان الفرع",
+    "child_title_placeholder": "أدخل عنوان الفرع...",
+    "choose_account": "اختر الحساب",
+    "cancel": "إلغاء",
+    "selectAccount": "اختر الحساب",
+    "searchAccount": "ابحث عن الحساب...",
+    "accountName": "اسم الحساب",
+    "create": "إنشاء إعداد التنقل للحساب الرئيسي",
+    "title": "العنوان",
+    "enterTitle": "أدخل العنوان",
+    "titleRequired": "العنوان مطلوب.",
+    "order": "الترتيب",
+    "enterOrder": "أدخل الترتيب",
+    "orderRequired": "الترتيب مطلوب ويجب أن يكون رقمًا.",
+    "save": "حفظ",
+    "list": "قائمة إعدادات التنقل للحساب الرئيسي",
+    "edit": "تعديل",
+    "delete": "حذف"
+  },
+  "System_Setting": {
+    "account": "إعداد حسابات",
+    "general_setting": "إعدادات عامة"
+  },
   "System_Setting_Nav": {
-  "SystemSetting": "إعدادات النظام",
-  "Account_Setting": "إعدادات الحساب"
-},
-
+    "SystemSetting": "إعدادات النظام",
+    "Account_Setting": "إعدادات الحساب"
+  },
   "LANGUAGE": "اللغة",
   "ACCOUNT_GROUP": "مجموعة الحساب",
   "MANAGE_ACCOUNTING": "إدارة المحاسبة",
@@ -714,7 +658,6 @@
     "DOCUMENTS": "مستندات الدفع",
     "RECEIPT_DOCUMENT": "مستند قبض",
     "CHECK_DOCUMENTS": "مستندات الشيك",
-
     "PAYMENT_DOCUMENT": "مستند صرف",
     "INSTALLMENT_DOCUMENT": "مستند قيد",
     "CREDIT_NOTE_DOCUMENT": "مستند اشعار دائن",
@@ -832,7 +775,6 @@
   "CREATOR": "المنشئ",
   "PARENT": "الأب",
   "NET_BALANCE": "الرصيد الصافي",
-
   "LAST_TRANSACTION": "آخر عملية",
   "LAST_UPDATE_CREATOR": "آخر تحديث بواسطة",
   "BANK_BRANCH_INFORMATION": "معلومات فرع البنك",
@@ -938,27 +880,31 @@
   "COMPLETED": "مكتمل",
   "CHANGE_STATUS": "تغيير الحالة",
   "APPROVED_PURCHASES_LIST": "قائمة المشتريات المعتمدة",
-  
-    "MANAGE_SALES": "إدارة المبيعات",
-    "SALES": "المبيعات",
-    "ADD_SALE": "إضافة مبيعات",
-    "SALES_LIST": "قائمة المبيعات",
- 
-    "MANAGE_SALES_BILLS": "إدارة فواتير المبيعات",
-    "SALES_BILL_DETAILS": "تفاصيل فاتورة المبيعات",
-    "SALE": "مبيعات",
-    "PURCHASED_FROM": "مشتريات من",
-    "SELECT_CUSTOMERS": "اختر العملاء",
-    
-    "SALES_BILLS": "فواتير المبيعات",
-
-      "BILL_TYPE_REQUIRED": "نوع الفاتورة مطلوب",
-      "INVOICE_DATE_REQUIRED": "تاريخ الفاتورة مطلوب",
-      "DUE_DATE_REQUIRED": "تاريخ الاستحقاق مطلوب",
-      "TAX_TYPE_REQUIRED": "نوع الضريبة مطلوب",
-      "QUANTITY_REQUIRED": "الكمية مطلوبة",
-      "TOTAL_PRICE_REQUIRED": "السعر الإجمالي مطلوب"
-    
- 
-  
+  "MANAGE_SALES": "إدارة المبيعات",
+  "SALES": "المبيعات",
+  "ADD_SALE": "إضافة مبيعات",
+  "SALES_LIST": "قائمة المبيعات",
+  "MANAGE_SALES_BILLS": "إدارة فواتير المبيعات",
+  "SALES_BILL_DETAILS": "تفاصيل فاتورة المبيعات",
+  "SALE": "مبيعات",
+  "PURCHASED_FROM": "مشتريات من",
+  "SELECT_CUSTOMERS": "اختر العملاء",
+  "SALES_BILLS": "فواتير المبيعات",
+  "BILL_TYPE_REQUIRED": "نوع الفاتورة مطلوب",
+  "INVOICE_DATE_REQUIRED": "تاريخ الفاتورة مطلوب",
+  "DUE_DATE_REQUIRED": "تاريخ الاستحقاق مطلوب",
+  "TAX_TYPE_REQUIRED": "نوع الضريبة مطلوب",
+  "QUANTITY_REQUIRED": "الكمية مطلوبة",
+  "TOTAL_PRICE_REQUIRED": "السعر الإجمالي مطلوب",
+  "CHECK_MOVES": "حركات الشيك",
+  "FROM_OLD_ACCOUNT": "من الحساب القديم",
+  "TO_OLD_ACCOUNT": "إلى الحساب القديم",
+  "DOCUMENT_NOTE": "ملاحظة",
+  "DOCUMENT_DATE": "تاريخ الإنشاء",
+  "NO_CHECK_MOVES": "لا توجد حركات.",
+  "DOCUMENTABLE_TYPE": "نوع المستند",
+  "FRONT_IMAGE": "صورة الوجه",
+  "BACK_IMAGE": "صورة الظهر",
+  "START_BALANCE": "الرصيد الابتدائي",
+  "ACCOUNT_TYPE": "نوع الحساب"
 }

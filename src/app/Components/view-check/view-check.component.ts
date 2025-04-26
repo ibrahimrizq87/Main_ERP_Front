@@ -27,10 +27,10 @@ export class ViewCheckComponent {
   }
 
 
-  back(){
-    this._Router.navigate(['/dashboard/check_list/waiting']);
-
+  back() {
+    this._Router.navigate([`/dashboard/check_list/${this.check?.status}`]);
   }
+  
 
   getParams() {
     this.route.paramMap.subscribe(params => {
