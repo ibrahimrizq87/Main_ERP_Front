@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { ProductsService } from '../../shared/services/products.service';
 import { FormsModule } from '@angular/forms';
 import { Modal } from 'bootstrap';
-
 import {  RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReportsService } from '../../shared/services/reports.service';
-import { StoreService } from '../../shared/services/store.service';
-import { ProductBranchesService } from '../../shared/services/product_branches.service';
+import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-account-moves-reports',

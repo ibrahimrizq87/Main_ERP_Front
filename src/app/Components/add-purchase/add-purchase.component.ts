@@ -450,10 +450,7 @@ export class AddPurchaseComponent implements OnInit {
           formData.append('payment_type', 'cash');
 
 
-          if(this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value){
-            formData.append('currency_price_value', this.purchasesBillForm.get('currency_price_value')?.value);
-
-          }
+      
 
 
         } else if (this.purchasesBillForm.get('check_id')?.value && this.purchasesBillForm.get('payment_type')?.value == 'check') {
@@ -461,6 +458,11 @@ export class AddPurchaseComponent implements OnInit {
           formData.append('payment_type', 'check');
           formData.append('check_id', this.purchasesBillForm.get('check_id')?.value);
         }
+      }
+
+      if(this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value){
+        formData.append('currency_price_value', this.purchasesBillForm.get('currency_price_value')?.value);
+
       }
       formData.append('vendor_id', this.purchasesBillForm.get('vendor_id')?.value);
       console.log(this.purchasesBillForm.get('vendor_id')?.value);
