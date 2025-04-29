@@ -366,7 +366,21 @@
             </ul>
           </li>
 
-
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('PRODUCT_INTERNAL_MOVES')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'product_Internal_moves ' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('PRODUCT_INTERNAL_MOVES') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('PRODUCT_INTERNAL_MOVES')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="productInternalMoves/waiting">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'product_Internal_moves' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
