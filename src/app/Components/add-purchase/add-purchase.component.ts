@@ -76,7 +76,7 @@ export class AddPurchaseComponent implements OnInit {
       check_id: [''],
       // items: this.fb.array([this.createItem()]),
       items: this.fb.array([]),
-      
+
       supplier_id: [null],
       cash_id: [null],
       notes: [''],
@@ -99,21 +99,21 @@ export class AddPurchaseComponent implements OnInit {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-  
+
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-  
+
       // Check type (optional, backend also validates it)
       const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
       if (!allowedTypes.includes(file.type)) {
         this.toastr.error('الملف يجب أن يكون من نوع xlsx أو csv');
         return;
       }
-  
+
       this.selectedFile = file;
     }
   }
-  
+
   loadChecks() {
     this._CheckService.getCheckByPayedToAccount('112').subscribe({
       next: (response) => {
@@ -137,7 +137,7 @@ export class AddPurchaseComponent implements OnInit {
     this.loadChecks();
   }
   currencyPriceValue: number = 0;
-  currencyPrice(){
+  currencyPrice() {
     const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
     // if ((currencyPriceValue * this.totalPayed) > this.total) {
@@ -221,7 +221,7 @@ export class AddPurchaseComponent implements OnInit {
     });
   }
 
- 
+
   onStoreChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedStore = selectedValue;
@@ -427,12 +427,12 @@ export class AddPurchaseComponent implements OnInit {
 
   }
   handleForm() {
-    if(this.purchasesBillForm.get('file_type')?.value != 'manual'){
+    if (this.purchasesBillForm.get('file_type')?.value != 'manual') {
 
       this.items.clear();
 
-      }
-    if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value){
+    }
+    if (this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value) {
       this.toastr.error('يجب ادخال سعر الصرف');
       // alert('يجب ادخال سعر الصرف');
       return;
@@ -450,7 +450,7 @@ export class AddPurchaseComponent implements OnInit {
           formData.append('payment_type', 'cash');
 
 
-      
+
 
 
         } else if (this.purchasesBillForm.get('check_id')?.value && this.purchasesBillForm.get('payment_type')?.value == 'check') {
@@ -460,7 +460,7 @@ export class AddPurchaseComponent implements OnInit {
         }
       }
 
-      if(this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value){
+      if (this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value) {
         formData.append('currency_price_value', this.purchasesBillForm.get('currency_price_value')?.value);
 
       }
@@ -477,123 +477,125 @@ export class AddPurchaseComponent implements OnInit {
       formData.append('total_payed', this.totalPayed.toString());
       formData.append('notes', this.purchasesBillForm.get('notes')?.value || '');
       formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
-       if(this.purchasesBillForm.get('file_type')?.value == 'items_only'||this.purchasesBillForm.get('file_type')?.value == 'all_data'){
-      formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
-      if (this.selectedFile) {
-        formData.append('file', this.selectedFile, this.selectedFile.name);
-      } else {
-        this.toastr.error('يرجى اختيار ملف');
-        return;
+      if (this.purchasesBillForm.get('file_type')?.value == 'items_only' || this.purchasesBillForm.get('file_type')?.value == 'all_data') {
+        formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
+        if (this.selectedFile) {
+          formData.append('file', this.selectedFile, this.selectedFile.name);
+        } else {
+          this.toastr.error('يرجى اختيار ملف');
+          return;
+        }
+        // formData.append("file", this.purchasesBillForm.get('file')?.value);   
+        //   const file = this.purchasesBillForm.get('file')?.value;  
+        //   if (file instanceof File) { // Ensure it's a File object
+        //     formData.append('file', file, file.name);
+        //   } else {
+        //     console.error('Invalid file detected:', file);
+        //     return; // Prevent submission
+        //   }     
       }
-      // formData.append("file", this.purchasesBillForm.get('file')?.value);   
-    //   const file = this.purchasesBillForm.get('file')?.value;  
-    //   if (file instanceof File) { // Ensure it's a File object
-    //     formData.append('file', file, file.name);
-    //   } else {
-    //     console.error('Invalid file detected:', file);
-    //     return; // Prevent submission
-    //   }     
-     }
-     
-    if(this.purchasesBillForm.get('file_type')?.value == 'manual'){
-      if (this.items && this.items.controls) {
-        this.items.controls.forEach((itemControl, index) => {
-          const itemValue = itemControl.value;
 
-          if (itemValue.neededSerialNumbers > 0) {
-            this.toastr.error('يجب ادخال كل السيريا المطلوب');
-            // alert('يجب ادخال كل السيريا المطلوب')
-            error = true;
+      if (this.purchasesBillForm.get('file_type')?.value == 'manual') {
+        if (this.items && this.items.controls) {
+          this.items.controls.forEach((itemControl, index) => {
+            const itemValue = itemControl.value;
 
-            return;
+            if (itemValue.neededSerialNumbers > 0) {
+              this.toastr.error('يجب ادخال كل السيريا المطلوب');
+              // alert('يجب ادخال كل السيريا المطلوب')
+              error = true;
 
-          }
+              return;
 
-          if (itemValue) {
+            }
+
+            if (itemValue) {
 
 
-            if(itemValue.type == 'product'){
-              formData.append(`items[${index}][product_id]`, itemValue.product_id);
-              const determinants = itemControl.get('determinants')?.value;
-              if (determinants.length > 0) {
+              if (itemValue.type == 'product') {
+                formData.append(`items[${index}][product_id]`, itemValue.product_id);
+                const determinants = itemControl.get('determinants')?.value;
+                if (determinants.length > 0) {
 
-                determinants.forEach((determinant_item: any, internalIndex: number) => {
-                  formData.append(`items[${index}][determinant_values][${internalIndex}][determinant_value_id]`, determinant_item.selected_id);
-  
+                  determinants.forEach((determinant_item: any, internalIndex: number) => {
+                    formData.append(`items[${index}][determinant_values][${internalIndex}][determinant_value_id]`, determinant_item.selected_id);
+
+                  });
+
+                }
+
+
+              } else if (itemValue.type == 'branch') {
+                formData.append(`items[${index}][product_branch_id]`, itemValue.product_id);
+
+              }
+              formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
+              formData.append(`items[${index}][price]`, itemValue.price || '0');
+
+              if (itemValue.colors.length > 0) {
+
+                if (itemValue.color_id) {
+                  formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
+
+                } else {
+                  this.toastr.error('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                  // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
+                  error = true;
+                  return;
+                }
+              }
+              const serialNumbers = itemControl.get('serialNumbers')?.value;
+
+              if (serialNumbers.length > 0) {
+
+                serialNumbers.forEach((item: any, internalIndex: number) => {
+                  formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+
                 });
-  
               }
 
 
-            }else if(itemValue.type == 'branch'){
-              formData.append(`items[${index}][product_branch_id]`, itemValue.product_id);
 
             }
-            formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
-            formData.append(`items[${index}][price]`, itemValue.price || '0');
-
-            if (itemValue.colors.length > 0) {
-
-              if (itemValue.color_id) {
-                formData.append(`items[${index}][product_color_id]`, itemValue.color_id);
-
-              } else {
-                this.toastr.error('لازم تضيف لون للمنتجات اللى ليها اللوان');
-                // alert('لازم تضيف لون للمنتجات اللى ليها اللوان');
-                error = true;
-                return;
-              }
-            }
-            const serialNumbers = itemControl.get('serialNumbers')?.value;
-
-            if (serialNumbers.length > 0) {
-
-              serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
-
-              });
-            }
-           
-           
-
-          }
-        });}
+          });
+        }
       }
       if (!error) {
         if (this.purchasesBillForm.get('file_type')?.value == 'manual') {
-          
-        this._PurchasesService.addPurchase(formData).subscribe({
-          next: (response) => {
-            if (response) {
-              this.toastr.success('تم اضافه الفاتوره بنجاح');
-              console.log(response);
+
+          this._PurchasesService.addPurchase(formData).subscribe({
+            next: (response) => {
+              if (response) {
+                this.toastr.success('تم اضافه الفاتوره بنجاح');
+                console.log(response);
+                this.isLoading = false;
+                this._Router.navigate(['/dashboard/purchases/waiting']);
+              }
+            },
+
+            error: (err: HttpErrorResponse) => {
+              this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
               this.isLoading = false;
-              this._Router.navigate(['/dashboard/purchases/waiting']);
-            }
-          },
+              this.msgError = [];
 
-          error: (err: HttpErrorResponse) => {
-            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
-            this.isLoading = false;
-            this.msgError = [];
+              if (err.error && err.error.errors) {
 
-            if (err.error && err.error.errors) {
-
-              for (const key in err.error.errors) {
-                if (err.error.errors[key] instanceof Array) {
-                  this.msgError.push(...err.error.errors[key]);
-                } else {
-                  this.msgError.push(err.error.errors[key]);
+                for (const key in err.error.errors) {
+                  if (err.error.errors[key] instanceof Array) {
+                    this.msgError.push(...err.error.errors[key]);
+                  } else {
+                    this.msgError.push(err.error.errors[key]);
+                  }
                 }
               }
-            }
 
-            console.error(this.msgError);
-          },
+              console.error(this.msgError);
+            },
 
-        });
-      }}
-      if(this.purchasesBillForm.get('file_type')?.value == 'items_only'||this.purchasesBillForm.get('file_type')?.value == 'all_data'){
+          });
+        }
+      }
+      if (this.purchasesBillForm.get('file_type')?.value == 'items_only' || this.purchasesBillForm.get('file_type')?.value == 'all_data') {
         this._PurchasesService.importProducts(formData).subscribe({
           next: (response) => {
             if (response) {
@@ -654,20 +656,20 @@ export class AddPurchaseComponent implements OnInit {
   selectcheck(check: any) {
     this.purchasesBillForm.patchValue({ 'check_id': check.id })
     this.selectedCheck = check;
-    this.needCurrecyPrice =false;
-    this.forignCurrencyName ='';
+    this.needCurrecyPrice = false;
+    this.forignCurrencyName = '';
 
 
-    if(this.currency.id != check.currency.id){
-      this.needCurrecyPrice =true;
-      this.forignCurrencyName =check.currency.name;
+    if (this.currency.id != check.currency.id) {
+      this.needCurrecyPrice = true;
+      this.forignCurrencyName = check.currency.name;
 
     }
-    
-    if(this.selectedVendor){
-      if(this.selectedVendor.currency.id != this.currency.id){
-        this.needCurrecyPrice =true;
-        this.forignCurrencyName =this.selectedVendor.currency.name;
+
+    if (this.selectedVendor) {
+      if (this.selectedVendor.currency.id != this.currency.id) {
+        this.needCurrecyPrice = true;
+        this.forignCurrencyName = this.selectedVendor.currency.name;
 
       }
     }
@@ -736,56 +738,56 @@ export class AddPurchaseComponent implements OnInit {
     if (this.selectedPopUP == 'cash') {
       this.selectedCashAccount = account;
       this.purchasesBillForm.patchValue({ 'cash_id': account.id })
-      this.needCurrecyPrice =false;
-      this.forignCurrencyName ='';
+      this.needCurrecyPrice = false;
+      this.forignCurrencyName = '';
 
 
-      if(this.currency.id != account.currency.id){
-        this.needCurrecyPrice =true;
-        this.forignCurrencyName =account.currency.name;
+      if (this.currency.id != account.currency.id) {
+        this.needCurrecyPrice = true;
+        this.forignCurrencyName = account.currency.name;
 
       }
-      
-      if(this.selectedVendor){
-        if(this.selectedVendor.currency.id != this.currency.id){
-          this.needCurrecyPrice =true;
-          this.forignCurrencyName =this.selectedVendor.currency.name;
+
+      if (this.selectedVendor) {
+        if (this.selectedVendor.currency.id != this.currency.id) {
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = this.selectedVendor.currency.name;
 
         }
       }
 
-    
-      
+
+
     } else if (this.selectedPopUP == 'vendor') {
       this.selectedVendor = account;
       this.purchasesBillForm.patchValue({ 'vendor_id': account.id })
 
-    this.needCurrecyPrice =false;
-    this.forignCurrencyName ='';
+      this.needCurrecyPrice = false;
+      this.forignCurrencyName = '';
 
-if(this.currency.id != account.currency.id){
-  this.needCurrecyPrice =true;
-  this.forignCurrencyName =account.currency.name;
+      if (this.currency.id != account.currency.id) {
+        this.needCurrecyPrice = true;
+        this.forignCurrencyName = account.currency.name;
 
 
-}
+      }
 
-if(this.selectedCashAccount){
-  if(this.selectedCashAccount.currency.id != this.currency.id){
-    this.needCurrecyPrice =true;
-    this.forignCurrencyName =this.selectedCashAccount.currency.name;
+      if (this.selectedCashAccount) {
+        if (this.selectedCashAccount.currency.id != this.currency.id) {
+          this.needCurrecyPrice = true;
+          this.forignCurrencyName = this.selectedCashAccount.currency.name;
 
-  }
-}
+        }
+      }
 
-if(this.selectedCheck){
-  if(this.selectedCheck.currency.id != this.currency.id){
-    this.needCurrecyPrice =true;
+      if (this.selectedCheck) {
+        if (this.selectedCheck.currency.id != this.currency.id) {
+          this.needCurrecyPrice = true;
 
-    this.forignCurrencyName =this.selectedCheck.currency.name;
+          this.forignCurrencyName = this.selectedCheck.currency.name;
 
-  }
-}
+        }
+      }
 
 
     }
@@ -798,7 +800,19 @@ if(this.selectedCheck){
   ProductsearchQuery = '';
   selectedProduct: any;
   onProductSearchChange() {
+    const query = this.ProductsearchQuery.toLowerCase();
+    this.filteredProducts = this.Products.filter(product => {
 
+      const productMatches = product.product.name.toLowerCase().includes(query) ||
+        product.product.id.toString().includes(query);
+
+
+      const branchMatches = product.branches.some((branch: { code: { toString: () => string | string[]; }; stock: { toString: () => string | string[]; }; }) =>
+        branch.code.toString().includes(query) ||
+        branch.stock.toString().includes(query));
+
+      return productMatches || branchMatches;
+    });
   }
   getDeterminants(item: AbstractControl<any, any>): FormArray {
     return item.get('determinants') as FormArray;
@@ -892,7 +906,7 @@ if(this.selectedCheck){
       store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
     );
   }
-  
+
   selectStore(store: any) {
     this.selectedStore = store;
     this.purchasesBillForm.patchValue({ store_id: store.id });
@@ -901,15 +915,15 @@ if(this.selectedCheck){
 
   onFileTypeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
-  
+
     this.showManual = value === 'manual';
     this.showFile = value === 'all_data' || value === 'items_only';
-  
+
     this.showAllDataExport = value === 'all_data';
     this.showItemsExport = value === 'items_only';
     if (this.purchasesBillForm.get('file_type')?.value === 'manual') {
-      this.addItem(); 
-    } 
+      this.addItem();
+    }
   }
   exportAllDataToSheet() {
     this._PurchasesService.exportAllDataToSheet().subscribe({
@@ -918,7 +932,7 @@ if(this.selectedCheck){
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'PurchaseAllData.xlsx'); 
+        link.setAttribute('download', 'PurchaseAllData.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -935,7 +949,7 @@ if(this.selectedCheck){
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'PurchaseItemsOnly.xlsx'); 
+        link.setAttribute('download', 'PurchaseItemsOnly.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -954,7 +968,7 @@ if(this.selectedCheck){
 interface Account {
   id: string;
   name: string;
-  currency:Currency
+  currency: Currency
 }
 
 interface Currency {
