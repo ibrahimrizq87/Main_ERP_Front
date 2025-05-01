@@ -40,9 +40,9 @@ export class ProductInternalMovesService {
   getProductMovesById(id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/product-internal-moves/${id}`, { headers: this.getHeadersWithToken() })
   }
-  updatePurchase(purchaseId: string, PurchaseData: FormData): Observable<any> {
-    PurchaseData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills/${purchaseId}`, PurchaseData, { headers: this.getHeadersWithToken() })
+  updateProductMovesById(productMoveId: string, productMoveData: FormData): Observable<any> {
+    productMoveData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/product-internal-moves/${productMoveId}`, productMoveData, { headers: this.getHeadersWithToken() })
   }
   deleteProductMoves(productMoveId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/product-internal-moves/${productMoveId}`, { headers: this.getHeadersWithToken() })

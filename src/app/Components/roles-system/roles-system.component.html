@@ -2,11 +2,11 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark">Manage Roles</h2>
+            <h2 class="fw-bold text-dark">{{"MANAGE_ROLES"|translate}}</h2>
             <p class="text-muted mb-0 fs-6">
                 {{ 'DASHBOARD' | translate }}
                 <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
-                Roles and Permissions
+               {{"PERMISSIONS"|translate}}
             </p>
         </div>
     </div>
@@ -14,10 +14,10 @@
 
     <ul class="nav nav-tabs rounded shadow-sm mb-4 bg-white">
         <li class="nav-item">
-            <a class="nav-link px-4" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">Users</a>
+            <a class="nav-link px-4" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">{{"USERS"|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link px-4" [class.active]="activeTab === 'roles'" (click)="activeTab = 'roles'">Roles</a>
+            <a class="nav-link px-4" [class.active]="activeTab === 'roles'" (click)="activeTab = 'roles'">{{"ROLES"|translate }}</a>
         </li>
     </ul>
 
@@ -26,17 +26,17 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6" *ngIf="activeTab === 'users'">
-                    <label for="userSelect" class="form-label">Select User</label>
+                    <label for="userSelect" class="form-label">{{"SELECT_USER"|translate}}</label>
                     <select id="userSelect" class="form-select" (change)="onUserChange($event)">
-                        <option [value]="''" disabled selected>Select a user</option>
+                        <option [value]="''" disabled selected>{{"SELECT_USER"|translate}}</option>
                         <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
                     </select>
                 </div>
 
                 <div class="col-md-6" *ngIf="activeTab === 'roles'">
-                    <label for="roleSelect" class="form-label">Select Role</label>
+                    <label for="roleSelect" class="form-label">{{"SELECT_USER"|translate}}</label>
                     <select id="roleSelect" class="form-select" (change)="onRoleChange($event)">
-                        <option [value]="''" disabled selected>Select a role</option>
+                        <option [value]="''" disabled selected>{{"SELECT_ROLE"|translate }}</option>
                         <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
                     </select>
                 </div>

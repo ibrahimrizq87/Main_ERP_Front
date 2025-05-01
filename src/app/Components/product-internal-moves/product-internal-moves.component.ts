@@ -85,23 +85,22 @@ export class ProductInternalMovesComponent implements OnInit {
     }
   }
   deleteProductMove(productMoveId: number): void {
-    if (confirm('Are you sure you want to delete this productMove?')) {
+    if (confirm('هل أنت متأكد أنك تريد حذف حركة المنتج؟')) {
       this._ProductInternalMovesService.deleteProductMoves(productMoveId).subscribe({
         next: (response) => {
           if (response) {
-            this.toastr.success('تم حذف Product Move بنجاح');
+            this.toastr.success('تم حذف حركة المنتج بنجاح');
             this.router.navigate([`/dashboard/productInternalMoves/${this.status}`]);
             this.loadProductMoves(this.status);
-
           }
         },
         error: (err) => {
-          this.toastr.error('حدث خطا اثناء حذف Product Move');
+          this.toastr.error('حدث خطأ أثناء حذف حركة المنتج');
           console.error(err);
-
         }
       });
     }
   }
+  
 
 }

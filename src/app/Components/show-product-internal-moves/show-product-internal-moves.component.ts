@@ -3,11 +3,12 @@ import { ProductInternalMovesService } from '../../shared/services/product-inter
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-show-product-internal-moves',
   standalone: true,
-  imports: [RouterModule,CommonModule],
+  imports: [RouterModule,CommonModule,TranslateModule],
   templateUrl: './show-product-internal-moves.component.html',
   styleUrl: './show-product-internal-moves.component.css'
 })

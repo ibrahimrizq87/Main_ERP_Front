@@ -341,7 +341,7 @@ filteredStores: any[] = [];
         this._ProductInternalMovesService.addProductInternalMoves(formData).subscribe({
           next: (response) => {
             if (response) {
-              this.toastr.success('تم اضافه Move بنجاح');
+              this.toastr.success('تمت إضافة حركة المنتج بنجاح');
               console.log(response);
               this.isLoading = false;
               this._Router.navigate(['/dashboard/productInternalMoves/waiting']);
@@ -351,7 +351,7 @@ filteredStores: any[] = [];
           error: (err: HttpErrorResponse) => {
             this.isLoading = false;
             this.msgError = [];
-            this.toastr.error('حدث خطا اثناء اضافه Move');
+            this.toastr.error("حدث خطأ ما");
             if (err.error && err.error.errors) {
 
               for (const key in err.error.errors) {
@@ -416,6 +416,10 @@ filteredStores: any[] = [];
   ProductsearchQuery = '';
   selectedProduct: any;
   onProductSearchChange() {
+    const query = this.ProductsearchQuery.toLowerCase();
+    this.filteredProducts = this.Products.filter(product =>
+      product.product_branch.product.name.toLowerCase().includes(query) || product.product_branch.code.toString().includes(query)||product.product_branch.stock.toString().includes(query)
+    );
 
   }
 

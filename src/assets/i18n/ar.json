@@ -913,6 +913,20 @@
   "ROLES_LIST": "قائمة الأدوار",
   "ROLE_NAME": "اسم الدور",
   "GUARD_NAME":"اسم الحارس",
-  "CREATE_ROLE": "إنشاء دور"
+  "CREATE_ROLE": "إنشاء دور",
+  "MANAGE_PRODUCT_INTERNAL_MOVES": "إدارة حركات المنتج الداخلية",
+  "PRODUCT_INTERNAL_MOVES": "حركات المنتج الداخلية",
+  "PRODUCT_INTERNAL_MOVES_LIST": "قائمة حركات المنتج الداخلية",
+  "SUPERVISOR_NAME": "اسم المشرف",
+  "FROM_STORE": "من المخزن",
+  "TO_STORE": "إلى المخزن",
+  "PRODUCT_INTERNAL_MOVE_DETAILS": "تفاصيل حركة المنتج الداخلية",
+  "CREATE_PRODUCT_INTERNAL_MOVES": "إنشاء حركة منتج داخلية",
+  "MOVE_ID": "معرف الحركة",
+  "STATUS": "الحالة",
+  "PERMISSIONS": "الأذونات",
+  "SELECT_USER":"اختر المستخدم",
+  "SELECT_ROLE":"اختر الدور"
+
 
 }

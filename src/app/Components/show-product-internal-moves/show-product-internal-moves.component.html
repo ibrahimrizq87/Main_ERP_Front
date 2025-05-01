@@ -1,36 +1,36 @@
 <div class="container my-4">
     <div class="card shadow-lg rounded-4 border-0">
       <div class="card-header rounded-top py-3 px-4">
-        <h4 class="mb-0"><i class="bi bi-truck"></i> Product Move Details</h4>
+        <h4 class="mb-0"><i class="bi bi-truck"></i> {{ 'PRODUCT_INTERNAL_MOVE_DETAILS' | translate }}</h4>
       </div>
   
       <div class="card-body px-4 py-4">
         <div class="row mb-3">
           <div class="col-md-6">
-            <p><strong><i class="bi bi-hash"></i> Move ID:</strong> {{ productMoveData?.id }}</p>
-            <p><strong><i class="bi bi-person-fill"></i> Creator:</strong> {{ productMoveData?.creator?.name }}</p>
-            <p><strong><i class="bi bi-box-arrow-in-right"></i> From Store:</strong> {{ productMoveData?.from_store?.name }}</p>
-            <p><strong><i class="bi bi-box-arrow-in-left"></i> To Store:</strong> {{ productMoveData?.to_store?.name }}</p>
+            <p><strong><i class="bi bi-hash"></i> {{ "MOVE_ID" | translate}}:</strong> {{ productMoveData?.id }}</p>
+            <p><strong><i class="bi bi-person-fill"></i> {{"CREATOR"|translate}} :</strong> {{ productMoveData?.creator?.name }}</p>
+            <p><strong><i class="bi bi-box-arrow-in-right"></i> {{"FROM_STORE"|translate}}:</strong> {{ productMoveData?.from_store?.name }}</p>
+            <p><strong><i class="bi bi-box-arrow-in-left"></i> {{"TO_STORE"|translate }}:</strong> {{ productMoveData?.to_store?.name }}</p>
           </div>
   
           <div class="col-md-6">
-            <p><strong><i class="bi bi-person-badge-fill"></i> Supervisor:</strong> {{ productMoveData?.supervisor_name }}</p>
-            <p><strong><i class="bi bi-info-circle-fill"></i> Status:</strong> 
+            <p><strong><i class="bi bi-person-badge-fill"></i> {{"SUPERVISOR_NAME"|translate}}:</strong> {{ productMoveData?.supervisor_name }}</p>
+            <p><strong><i class="bi bi-info-circle-fill"></i> {{"STATUS"|translate}}:</strong> 
               <span class="badge bg-warning text-dark text-uppercase">{{ productMoveData?.status }}</span>
             </p>
-            <p><strong><i class="bi bi-calendar-plus-fill"></i> Created At:</strong> {{ productMoveData?.created_at | date:'medium' }}</p>
-            <p><strong><i class="bi bi-calendar-check-fill"></i> Updated At:</strong> {{ productMoveData?.updated_at | date:'medium' }}</p>
+            <p><strong><i class="bi bi-calendar-plus-fill"></i> {{"CREATED_AT"|translate}}:</strong> {{ productMoveData?.created_at | date:'medium' }}</p>
+            <p><strong><i class="bi bi-calendar-check-fill"></i> {{"UPDATED_AT"|translate}}:</strong> {{ productMoveData?.updated_at | date:'medium' }}</p>
           </div>
         </div>
   
         <div *ngIf="productMoveData?.note" class="alert alert-info">
-          <strong>Note:</strong> {{ productMoveData?.note }}
+          <strong>{{"NOTE"|translate}}:</strong> {{ productMoveData?.note }}
         </div>
       </div>
   
       <div class="card-footer text-end bg-white px-4 py-3">
         <a class="btn btn-secondary px-4" [routerLink]="['/dashboard/productInternalMoves', productMoveData?.status]">
-          <i class="bi bi-arrow-left"></i> Back
+          <i class="bi bi-arrow-left"></i> {{ 'BACK' | translate }}
         </a>
       </div>
     </div>

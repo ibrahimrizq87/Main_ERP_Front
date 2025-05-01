@@ -1,8 +1,8 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
-    <h5>{{ 'MANAGE_productMoveS' | translate }}</h5>
+    <h5>{{ 'MANAGE_PRODUCT_INTERNAL_MOVES' | translate }}</h5>
     <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
-      {{ 'productMoveS' | translate }}</span>
+      {{ 'PRODUCT_INTERNAL_MOVES' | translate }}</span>
   </div>
   <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductInternalMoves">
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
@@ -44,7 +44,7 @@
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="fw-bold">{{ 'productMoveS_LIST' | translate }}</span>
+      <span class="fw-bold">{{ 'PRODUCT_INTERNAL_MOVES_LIST' | translate }}</span>
       <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search"
         [(ngModel)]="searchTerm" (input)="filteredProductMoves()">
 
@@ -86,11 +86,11 @@
               [routerLink]="['/dashboard/showProductInternalMoves', productMove.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
-
+<!-- 
             <a class="nav-link" routerLinkActive="active"
               [routerLink]="['/dashboard/updateProductInternalMoves', productMove.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
-            </a>
+            </a> -->
             <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteProductMove(productMove.id)"
               title="{{ 'DELETE' | translate }}"></i>
           </div>

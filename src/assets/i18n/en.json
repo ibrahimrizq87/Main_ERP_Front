@@ -916,5 +916,18 @@
   "ROLES_LIST": "Roles List",
   "ROLE_NAME" : "Role Name",
   "GUARD_NAME": "Guard Name",
-  "CREATE_ROLE": "Create Role"
+  "CREATE_ROLE": "Create Role",
+  "MANAGE_PRODUCT_INTERNAL_MOVES": "Manage Product Internal Moves",
+  "PRODUCT_INTERNAL_MOVES": "Product Internal Moves",
+  "PRODUCT_INTERNAL_MOVES_LIST": "Product Internal Moves List",
+  "SUPERVISOR_NAME": "Supervisor Name",
+  "FROM_STORE": "From Store",
+  "TO_STORE": "To Store",
+  "CREATE_PRODUCT_INTERNAL_MOVES": "Create Product Internal Moves",
+  "PRODUCT_INTERNAL_MOVES_DETAILS": "Product Internal Moves Details",
+  "MOVE_ID": "Move ID",
+  "STATUS": "Status",
+  "PERMISSIONS": "Permissions",
+  "SELECT_USER": "Select User",
+  "SELECT_ROLE": "Select Role"
 }
