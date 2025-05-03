@@ -38,8 +38,8 @@ export class AddAccountCategoryComponent {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const newStatus = params.get('type');
-
-      if(newStatus != 'client' && newStatus != 'vendor' && newStatus != 'delegate'){
+      
+      if(newStatus != 'client' && newStatus != 'vendor' && newStatus != 'delegate'  && newStatus != 'employee'){
         // alert('worng type');
         this.toastr.error('خطا في نوع ');
         this._Router.navigate(['/dashboard/account-categories/client']);

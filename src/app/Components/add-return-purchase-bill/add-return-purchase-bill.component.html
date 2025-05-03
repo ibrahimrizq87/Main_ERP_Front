@@ -157,13 +157,23 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="d-flex align-items-center mb-2">
-                              <input formControlName="barcode" type="text" class="form-control me-2"
+                              <!-- <input formControlName="barcode" type="text" class="form-control me-2"
                                 placeholder="Enter barcode" />
   
                               <button type="button" class="btn btn-success" (click)="addParcode(i)">
                                 add
-                              </button>
+                              </button> -->
+
+                              <div class="d-flex align-items-center mb-2">
+                                <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
+                                  placeholder="Enter barcode" (change)="onBarcodeSelect($event ,i)" />
+                                <datalist id="barcodeList">
+                                  <option *ngFor="let barcode of item.get('productSerialNumbers')?.value"
+                                    [value]="barcode.serial_number">
+                                    {{ barcode.serial_number }}
+                                  </option>
+                                </datalist>
+    
                             </div>
                           </div>
   

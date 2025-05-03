@@ -60,6 +60,7 @@ export class AddReturnPurchaseBillComponent {
     private _AccountService: AccountService,
     private _PurchasesService: PurchasesService,
     private _Router: Router,
+    private _ProductsService:ProductsService,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
     private toastr: ToastrService
@@ -107,7 +108,6 @@ export class AddReturnPurchaseBillComponent {
     });
   }
   ngOnInit(): void {
-    // this.loadProducts();
     this.loadDefaultCurrency();
     this.loadStores();
     this.loadSuppliers();
@@ -118,6 +118,26 @@ export class AddReturnPurchaseBillComponent {
   currencyPrice(){
     const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
+  }
+
+  getSerialNumbers(productId: string, storeId: string, index: number) {
+    console.log('productId', productId);
+    console.log('storeId', storeId);
+    this._ProductsService.getSerialNumbers(productId, storeId).subscribe({
+      next: (response) => {
+        if (response) {
+          this.serialNumber = response.data;
+          const itemsArray = this.purchasesBillForm.get('items') as FormArray;
+          const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+          itemGroup.patchValue({ productSerialNumbers: this.serialNumber });
+          console.log("serials" , response.data);
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   loadDefaultCurrency() {
@@ -239,6 +259,7 @@ export class AddReturnPurchaseBillComponent {
       barcode: [null],
       branch_data: [null],
       determinants: this.fb.array([]),
+      productSerialNumbers: [[]],
 
       serialNumbers: [[]],
       neededSerialNumbers: [0],
@@ -249,21 +270,60 @@ export class AddReturnPurchaseBillComponent {
     });
   }
 
+
+  onBarcodeSelect(barcode: Event, index: number) {
+    {
+      const selectedValue = (barcode.target as HTMLSelectElement).value;
+
+      const items = this.purchasesBillForm.get('items') as FormArray;
+      const item = items.at(index) as FormGroup;
+
+      const neededBars = item.get('neededSerialNumbers')?.value;
+      if (neededBars == 0) {
+        item.patchValue({ barcode: null });
+        return;
+      }
+      let tempList = item.get('serialNumbers')?.value || [];
+      let isdublicated = false;
+      tempList.forEach((item: any) => {
+        if (item.barcode == selectedValue) {
+          this.toastr.error('هذا السيريال موجود بالفعل');
+          isdublicated = true;
+          return;
+        }
+      });
+
+      if (isdublicated) {
+        item.patchValue({ barcode: null });
+
+        return;
+      }
+      if (selectedValue) {
+        tempList.push({ barcode: selectedValue })
+        item.patchValue({ serialNumbers: tempList });
+        console.log(tempList);
+        item.patchValue({ barcode: null });
+        item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+      }
+    }
+  }
+
+
+
   removeSerialNumber(serialNumber: string, index: number) {
     const items = this.purchasesBillForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
-    // const barcode =item.get('barcode')?.value;
     const neededBars = item.get('neededSerialNumbers')?.value;
-
-    // let tempList =(item.get('serialNumbers')?.value).filter( item=> item.barcode != serialNumber);
     const serialNumbers = item.get('serialNumbers')?.value;
-
     if (serialNumbers && Array.isArray(serialNumbers)) {
       const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
+
   addParcode(index: number) {
     const items = this.purchasesBillForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
@@ -668,6 +728,12 @@ console.log('branch: ',branch);
           determinants: branch?.product_branch.determinantValues
         }
       });
+
+console.log('product: ', branch.product_branch.product.id);
+console.log('selectedStore: ', this.selectedStore.id);
+console.log('product: ', branch.product_branch.product.id);
+
+      this.getSerialNumbers(branch.product_branch.product.id, this.selectedStore.id, this.productIndex);
 
     this.closeProductModel();
   }
