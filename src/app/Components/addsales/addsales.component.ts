@@ -46,8 +46,8 @@ export class AddsalesComponent implements OnInit {
   delegates: any[] = [];
   cashAccounts: any[] = [];
   productDeterminants: any[] = [];
-  dynamicInputs: FormArray<FormControl>; 
-  inputDisabled: boolean[] = []; 
+  dynamicInputs: FormArray<FormControl>;
+  inputDisabled: boolean[] = [];
   overrideCount: number = 0;
   selectedCheck: any;
   total = 0;
@@ -227,7 +227,7 @@ export class AddsalesComponent implements OnInit {
     const selectedValue = (event.target as HTMLSelectElement).value;
 
     this.selectedCurrency = selectedValue;
-    }
+  }
 
   loadProducts(storeId: string) {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
@@ -404,11 +404,11 @@ export class AddsalesComponent implements OnInit {
       const currencyPrice = this.saleForm.get('currency_price_value')?.value;
 
       if (itemValue) {
-        if(currencyPrice){
-          if(this.needCurrecyPrice && currencyPrice >0){
+        if (currencyPrice) {
+          if (this.needCurrecyPrice && currencyPrice > 0) {
             this.total += +(((itemValue.amount || 0) * (itemValue.price || 0) / currencyPrice).toFixed(2));
           }
-        }else{
+        } else {
           this.total += (itemValue.amount || 0) * (itemValue.price || 0);
         }
       }
@@ -418,15 +418,15 @@ export class AddsalesComponent implements OnInit {
   getFormattedPrice(item: any): number {
     const price = item.get('price')?.value || 0;
     const currencyValue = this.saleForm.get('currency_price_value')?.value || 0;
-  
+
     if (this.needCurrecyPrice && currencyValue > 0) {
       return +(price / currencyValue).toFixed(2);
     }
-  
-      return price;
+
+    return price;
 
   }
-  
+
 
   disableInput(itemIndex: number, inputIndex: number): void {
     const items = this.saleForm.get('items') as FormArray;
@@ -467,7 +467,7 @@ export class AddsalesComponent implements OnInit {
     this.isSubmited = true;
 
 
-    if(this.saleForm.get('payment_type')?.value == 'cash' && this.selectedClient && this.needCurrecyPrice && !this.saleForm.get('currency_price_value')?.value){
+    if (this.saleForm.get('payment_type')?.value == 'cash' && this.selectedClient && this.needCurrecyPrice && !this.saleForm.get('currency_price_value')?.value) {
       this.toastr.error('يجب ادخال سعر الصرف');
       return;
     }
@@ -489,7 +489,7 @@ export class AddsalesComponent implements OnInit {
 
 
 
-      if(this.saleForm.get('currency_price_value')?.value){
+      if (this.saleForm.get('currency_price_value')?.value) {
         formData.append('currency_price_value', this.saleForm.get('currency_price_value')?.value);
       }
 
@@ -733,7 +733,7 @@ export class AddsalesComponent implements OnInit {
 
 
     }
-    
+
 
     this.cdr.detectChanges();
     this.closeModal('shiftModal');
@@ -743,6 +743,10 @@ export class AddsalesComponent implements OnInit {
   ProductsearchQuery = '';
   selectedProduct: any;
   onProductSearchChange() {
+    const query = this.ProductsearchQuery.toLowerCase();
+    this.filteredProducts = this.Products.filter(product =>
+      product.product_branch.product.name.toLowerCase().includes(query) || product.product_branch.code.toString().includes(query) || product.product_branch.stock.toString().includes(query)
+    );
 
   }
 
@@ -828,7 +832,7 @@ export class AddsalesComponent implements OnInit {
 interface Account {
   id: string;
   name: string;
-  account:Account;
+  account: Account;
   currency: Currency
 }
 

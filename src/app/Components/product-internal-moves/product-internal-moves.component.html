@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5>{{ 'MANAGE_PRODUCT_INTERNAL_MOVES' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
+      {{ 'PRODUCT_INTERNAL_MOVES' | translate }}</span>
+  </div>
+  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductInternalMoves">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+<div class="container">
+  <header
+    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+
+      <li>
+        <a (click)="changeStatus('waiting')" class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'waiting', 'inactive-tab': status !== 'waiting'}">
+          {{ 'WAITING' | translate }}
+        </a>
+      </li>
+      <li>
+        <a (click)="changeStatus('approved')" class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'approved', 'inactive-tab': status !== 'approved'}">
+          {{ 'APPROVED' | translate }}
+        </a>
+      </li>
+      <li>
+        <a (click)="changeStatus('rejected')" class="nav-link px-2"
+          [ngClass]="{'active-tab': status === 'rejected', 'inactive-tab': status !== 'rejected'}">
+          {{ 'REJECTED' | translate }}
+        </a>
+      </li>
+    </ul>
+
+
+  </header>
+</div>
+
+
+
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'PRODUCT_INTERNAL_MOVES_LIST' | translate }}</span>
+      <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search"
+        [(ngModel)]="searchTerm" (input)="filteredProductMoves()">
+
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'SUPERVISOR_NAME' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'FROM_STORE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'TO_STORE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let productMove of filteredMoves; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ productMove?.supervisor_name ||'N/A' }}</td>
+        <td>{{ productMove?.from_store?.name || 'N/A' }}</td>
+        <td>{{ productMove?.to_store?.name ||"N/A"}}</td>
+        <td>
+          <div class="d-flex justify-content-around align-items-center">
+            <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info"
+              (click)="ManageChangeStatus('approved' ,productMove.id)">
+              approve
+            </a>
+            <a *ngIf="status == 'approved' || status == 'waiting'" class="btn btn-danger"
+              (click)="ManageChangeStatus('rejected',productMove.id)">
+              reject
+            </a>
+            <a *ngIf="status == 'rejected'" class="btn btn-success"
+              (click)="ManageChangeStatus('waiting',productMove.id)">
+              waiting
+            </a>
+
+            <a class="nav-link" routerLinkActive="active"
+              [routerLink]="['/dashboard/showProductInternalMoves', productMove.id]">
+              <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
+            </a>
+<!-- 
+            <a class="nav-link" routerLinkActive="active"
+              [routerLink]="['/dashboard/updateProductInternalMoves', productMove.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+            </a> -->
+            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteProductMove(productMove.id)"
+              title="{{ 'DELETE' | translate }}"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

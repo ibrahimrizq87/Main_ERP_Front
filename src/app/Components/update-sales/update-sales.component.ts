@@ -38,7 +38,7 @@ export class UpdateSalesComponent {
  selectedType: string = 'purchase';
  selectedStore: string = '';
  checks:any;
-
+salesData:any;
  delegates:any[]=[];
  cashAccounts:any[]=[];
  productDeterminants: any[] = [];
@@ -122,6 +122,7 @@ loadSaleBill(id:string){
       next: (response) => {
         if (response) {
           const UnitsData = response.data;
+          this.salesData = UnitsData;
           console.log("purchase data", UnitsData)
           this.saleForm.patchValue({
             invoice_date: [this.getTodayDate()],
@@ -919,7 +920,7 @@ selectedClient:any | null= null;
     }
   onCancel(){
     this.saleForm.reset();
-    this._Router.navigate(['/dashboard/sales']);
+    this._Router.navigate(['/dashboard/sales/'+this.salesData?.status]);
   }
 }
 

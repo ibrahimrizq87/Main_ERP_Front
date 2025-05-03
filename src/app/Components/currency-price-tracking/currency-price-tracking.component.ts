@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
 import { AccountService } from '../../shared/services/account.service';
-import { Router, RouterLinkActive, RouterModule } from '@angular/router';
-import { CurrencyService } from '../../shared/services/currency.service';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormSubmittedEvent, FormsModule } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-
+import {  FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-currency-price-tracking',
   standalone: true,
-  imports: [RouterLinkActive,RouterModule,CommonModule,TranslateModule,FormsModule],
+  imports: [RouterModule,CommonModule,TranslateModule,FormsModule],
   templateUrl: './currency-price-tracking.component.html',
   styleUrl: './currency-price-tracking.component.css'
 })
@@ -28,28 +25,28 @@ export class CurrencyPriceTrackingComponent {
 
   switch (record.type) {
     case 'purchase_bill':
-      this._Router.navigate(['/dashboard/showPurchase/'+record.id]);
+      this._Router.navigate(['/dashboard/showPurchase/'+record.model_id]);
       break;
 
       
     case 'sale_bill':
-      this._Router.navigate(['/dashboard/showSale/'+record.id]);
+      this._Router.navigate(['/dashboard/showSale/'+record.model_id]);
       break;
 
       case 'payment_document':
-        this._Router.navigate(['/dashboard/showPaymentDocument/'+record.id]);
+        this._Router.navigate(['/dashboard/showPaymentDocument/'+record.model_id]);
         break;
 
 
         case 'entry_document':
-          this._Router.navigate(['/dashboard/showEntryDocument/'+record.id]);
+          this._Router.navigate(['/dashboard/showEntryDocument/'+record.model_id]);
           break;
 
           case 'check':
-            this._Router.navigate(['/dashboard/check/'+record.id]);
+            this._Router.navigate(['/dashboard/check/'+record.model_id]);
             break;
             case 'check_document':
-              this._Router.navigate(['/dashboard/showPurchase/'+record.id]);
+              this._Router.navigate(['/dashboard/showPurchase/'+record.model_id]);
               break;
     default:
       console.log('Unknown type:', record.type);

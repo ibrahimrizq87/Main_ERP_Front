@@ -22,35 +22,37 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="invoice_date" class="form-label large-text">{{ 'INVOICE_DATE' | translate }}</label>
-                  <input id="invoice_date" formControlName="invoice_date" type="date" class="form-control" 
-                  [class.is-invalid]="saleForm.get('date')?.invalid && isSubmited" />
+                  <input id="invoice_date" formControlName="invoice_date" type="date" class="form-control"
+                    [class.is-invalid]="saleForm.get('date')?.invalid && isSubmited" />
 
-                  
+
                   <div class="text-danger" *ngIf="saleForm.get('date')?.invalid&& isSubmited">
                     {{ 'INVOICE_DATE' | translate }} {{ 'IS_REQUIRED' | translate }}
                   </div>
-                 
+
                 </div>
 
                 <div class="form-group col-md-6">
                   <label class="form-label">{{ 'CLIENT' | translate }}</label>
-                  <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'vendor')">
+                  <button type="button" class="btn btn-outline-primary w-100"
+                    (click)="openModal('shiftModal' , 'vendor')">
                     {{ selectedClient ? selectedClient.account.name : ('CLIENT' | translate) }}
                   </button>
-                 
+
                   <input type="hidden" formControlName="supplier_id" [value]="selectedClient?.account.id" />
                   <div class="text-danger" *ngIf="!selectedClient && isSubmited">
                     {{ 'Vendor' | translate }} {{ 'IS_REQUIRED' | translate }}
                   </div>
                 </div>
-                
+
                 <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
                   <br>
                   <a (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
                     {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
                   </a>
-                  <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
+                  <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1"
+                    (click)="removeCurrentDelegate()"></i>
 
                 </div>
 
@@ -58,8 +60,7 @@
                 <div class="form-group col-md-6">
                   <label for="store_id" class="form-label large-text">{{ 'STORE' | translate }}</label>
                   <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)"
-                  [class.is-invalid]="!selectedStore  && isSubmited" 
-                  >
+                    [class.is-invalid]="!selectedStore  && isSubmited">
                     <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
                   </select>
 
@@ -69,7 +70,7 @@
                   </div>
                 </div>
 
-                
+
                 <div *ngIf="needCurrecyPrice" class="form-group col-md-6">
                   <label class="form-label large-text">سعر عملة ال ({{forignCurrencyName}})</label>
                   <input formControlName="currency_price_value" type="number" class="form-control"
@@ -79,75 +80,73 @@
 
                 <div class="form-group col-md-12">
                   <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
-                  <textarea id="notes" formControlName="notes" class="form-control" placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
+                  <textarea id="notes" formControlName="notes" class="form-control"
+                    placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
                 </div>
 
                 <div class="form-group col-md-12" *ngIf="selectedClient">
                   فئة السعر: {{selectedClient.price_category.name}}
                 </div>
 
-              <div class="form-group col-md-12" *ngIf="selectedClient">
-                <div formArrayName="items" class="mt-4 ">
-                  <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="mb-3 border p-3 rounded">
-                    <div class="row">
-              
-                      <div class="col-md-3">
-                        <label class="form-label">{{ 'PRODUCT' | translate }}</label>
-                        <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
-                          {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name : ('PRODUCT' | translate) }}
-                        </button>
-                        <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
-                      </div>
-                    
-                    
-                      <div class="col-md-2">
-                        <label for="amount">{{ 'QUANTITY' | translate }}</label>
-                        <input formControlName="amount" type="number" class="form-control" (input)="onAmountChange(i)"   [readonly]="!item.get('product')?.value"
-                        [class.is-invalid]="item.get('amount')?.invalid && isSubmited"
+                <div class="form-group col-md-12" *ngIf="selectedClient">
+                  <div formArrayName="items" class="mt-4 ">
+                    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+                      class="mb-3 border p-3 rounded">
+                      <div class="row">
 
-                        />
-                        <p class="text-warning" *ngIf="!item.get('product')?.value ">
-                          اختر المنتج اولا
-                        </p>
-
-                        <div class="text-danger" *ngIf="item.get('product')?.value && item.get('amount')?.invalid && isSubmited ">
-                          {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                        <div class="col-md-3">
+                          <label class="form-label">{{ 'PRODUCT' | translate }}</label>
+                          <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
+                            {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name :
+                            ('PRODUCT' | translate) }}
+                          </button>
+                          <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
                         </div>
-                      </div>
-
-                      <div class="col-md-2" >
-                      <label>
-
-                      <input 
-                      type="checkbox" 
-                      class="form-check-input" 
-                      formControlName="overridePrice"
-                    />
-                    {{ 'OVERRIDE_PRICE' | translate }}
-                  </label>
-                </div>
-
-                  
 
 
-              
-                      <!-- Total Price -->
-                      <div class="col-md-2" *ngIf="item.get('overridePrice')?.value">
-                        <label for="price">{{ 'price' | translate }}</label>
-                        <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
-                        [class.is-invalid]="item.get('price')?.invalid && isSubmited"
-                        />
-                        <div class="text-danger" *ngIf="item.get('price')?.invalid && isSubmited ">
-                          {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                        <div class="col-md-2">
+                          <label for="amount">{{ 'QUANTITY' | translate }}</label>
+                          <input formControlName="amount" type="number" class="form-control" (input)="onAmountChange(i)"
+                            [readonly]="!item.get('product')?.value"
+                            [class.is-invalid]="item.get('amount')?.invalid && isSubmited" />
+                          <p class="text-warning" *ngIf="!item.get('product')?.value ">
+                            اختر المنتج اولا
+                          </p>
+
+                          <div class="text-danger"
+                            *ngIf="item.get('product')?.value && item.get('amount')?.invalid && isSubmited ">
+                            {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                          </div>
                         </div>
-                      </div>
+
+                        <div class="col-md-2">
+                          <label>
+
+                            <input type="checkbox" class="form-check-input" formControlName="overridePrice" />
+                            {{ 'OVERRIDE_PRICE' | translate }}
+                          </label>
+                        </div>
 
 
-                      <div class="col-md-1" *ngIf="!item.get('overridePrice')?.value">
-                        <label for="price">{{ 'price' | translate }}</label>
-                        <p>{{ getFormattedPrice(item) }}</p>
 
-                        <!-- <p>
+
+
+                        <!-- Total Price -->
+                        <div class="col-md-2" *ngIf="item.get('overridePrice')?.value">
+                          <label for="price">{{ 'price' | translate }}</label>
+                          <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
+                            [class.is-invalid]="item.get('price')?.invalid && isSubmited" />
+                          <div class="text-danger" *ngIf="item.get('price')?.invalid && isSubmited ">
+                            {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                          </div>
+                        </div>
+
+
+                        <div class="col-md-1" *ngIf="!item.get('overridePrice')?.value">
+                          <label for="price">{{ 'price' | translate }}</label>
+                          <p>{{ getFormattedPrice(item) }}</p>
+
+                          <!-- <p>
                           {{
                             needCurrecyPrice
                               ? saleForm.get('currency_price_value')?.value > 0
@@ -156,166 +155,168 @@
                               : item.get('price')?.value | number:'1.2-2'
                           }}
                         </p> -->
-                        
-                      </div>
 
-                      <div class="col-md-1"  *ngIf="item.get('color')?.value">
-                        <label>color</label>
+                        </div>
 
-                        <img [src]="item.get('color')?.value.image" alt="" height="30" width="30"> 
-                        {{ item.get('color')?.value.color.color }}
+                        <div class="col-md-1" *ngIf="item.get('color')?.value">
+                          <label>color</label>
 
-                 
-                       
-                      </div>
+                          <img [src]="item.get('color')?.value.image" alt="" height="30" width="30">
+                          {{ item.get('color')?.value.color.color }}
 
 
-                      <div class="col-md-2">
-                        <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
-                        <p>
-                          <strong>Total: </strong>
-                          {{
-                            (getFormattedPrice(item) * (item.get('amount')?.value || 0)) 
+
+                        </div>
+
+
+                        <div class="col-md-2">
+                          <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
+                          <p>
+                            <strong>Total: </strong>
+                            {{
+                            (getFormattedPrice(item) * (item.get('amount')?.value || 0))
                             | number:'1.2-2'
-                          }}
-                          <!-- {{getFormattedPrice(item) * item.get('amount')?.value ? getFormattedPrice(item) * item.get('amount')?.value:0 }} -->
-                        </p>
-                      </div>
+                            }}
+                            <!-- {{getFormattedPrice(item) * item.get('amount')?.value ? getFormattedPrice(item) * item.get('amount')?.value:0 }} -->
+                          </p>
+                        </div>
 
 
-                      <div class="form-group col-md-12 mt-4"  *ngIf="item.get('neededSerialNumbers')?.value>0 || item.get('serialNumbers')?.value.length>0 ">
-                        <label>{{ 'BARCODES' | translate }}</label>
-                        <div class="alert-warning text-center">
-                          <strong>needed serial numbers: </strong>
-                          {{item.get('neededSerialNumbers')?.value}}
+                        <div class="form-group col-md-12 mt-4"
+                          *ngIf="item.get('neededSerialNumbers')?.value>0 || item.get('serialNumbers')?.value.length>0 ">
+                          <label>{{ 'BARCODES' | translate }}</label>
+                          <div class="alert-warning text-center">
+                            <strong>needed serial numbers: </strong>
+                            {{item.get('neededSerialNumbers')?.value}}
                           </div>
 
 
-                          <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0" >
-                            <div *ngFor="let serialNumber of item.get('serialNumbers')?.value" class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                          <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
+                            <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
+                              class="col-md-3 row p-1 m-2 rounded .bg-light border">
                               <div class="col-md-10">
-                               {{serialNumber.barcode}}
+                                {{serialNumber.barcode}}
                               </div>
                               <div class="col-md-2">
-                                <a class="btn-close" aria-label="Close" (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
+                                <a class="btn-close" aria-label="Close"
+                                  (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
 
                               </div>
-                              </div>
-
                             </div>
 
-                     
-                            <div class="d-flex align-items-center mb-2">
-                              <input
-                                formControlName="barcode"
-                                list="barcodeList"
-                                type="text"
-                                class="form-control me-2"
-                                placeholder="Enter barcode"
-                                (change)="onBarcodeSelect($event ,i)"
-                              />
-                              <datalist id="barcodeList">
-                                <option *ngFor="let barcode of item.get('productSerialNumbers')?.value" [value]="barcode.serial_number">
-                                  {{ barcode.serial_number }}
-                                </option>
-                              </datalist>
-                            </div>
-                    
-                      </div>
-              
-                      <!-- Remove Item -->
-                      <div class="col-md-12">
-                        <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
-                          <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
-                        </button>
+                          </div>
+
+
+                          <div class="d-flex align-items-center mb-2">
+                            <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
+                              placeholder="Enter barcode" (change)="onBarcodeSelect($event ,i)" />
+                            <datalist id="barcodeList">
+                              <option *ngFor="let barcode of item.get('productSerialNumbers')?.value"
+                                [value]="barcode.serial_number">
+                                {{ barcode.serial_number }}
+                              </option>
+                            </datalist>
+                          </div>
+
+                        </div>
+
+                        <!-- Remove Item -->
+                        <div class="col-md-12">
+                          <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
+                            <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <!-- Add Item -->
+                  <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
+                    <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
+                  </button>
+
+
+
+
+
+
+                  <div class=" text-black bg-secoundry border rounded  row  mt-3">
+                    <div class="card-header text-center"> الدفع </div>
+
+                    <div class="form-group col-md-12">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown"
+                          (change)="paymentTriggerChange()" />
+                        {{ 'SHOW_CASH_ACCOUNTS' | translate }}
+                      </label>
+                    </div>
+
+
+                    <div
+                      *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'"
+                      class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('shiftModal' , 'cash')">
+                        {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
+                      </button>
+                      <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
+
+                    </div>
+                    <div
+                      *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'"
+                      class="form-group col-md-6">
+                      <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
+                      <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
+
+                    </div>
+
+
+
+
+                    <div
+                      *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'check'"
+                      class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('checkModel' , '')">
+                        {{ selectedCheck ? selectedCheck.payed_to.name : ('SELECT_CHECK_ACCOUNTS' | translate) }}
+                      </button>
+                      <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
+
+                    </div>
+
+
+
+
+                  </div>
+
+
+
+
+
+                  <div class="form-group col-md-6">
+
+                    <p><strong>Total: </strong>{{total}}</p>
+                    <p><strong>Total Payed: </strong>{{totalPayed}}</p>
+                    <p><strong>the rest: </strong>{{total -totalPayed}}</p>
+
+                  </div>
+
+
+
+
+
                 </div>
-              
-                <!-- Add Item -->
-                <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
-                  <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
-                </button>
 
 
 
 
 
 
-                <div  class=" text-black bg-secoundry border rounded  row  mt-3" >
-                  <div class="card-header text-center">  الدفع </div>
-                 
-                  <div class="form-group col-md-12">
-                    <label class="form-check-label">
-                      <input 
-                        type="checkbox" 
-                        class="form-check-input" 
-                        formControlName="showCashAccountsDropdown"
-                        (change)="paymentTriggerChange()"
-                      />
-                      {{ 'SHOW_CASH_ACCOUNTS' | translate }}
-                    </label>
-                  </div>
-
-
-                  <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'" class="form-group col-md-6">
-                    <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('shiftModal' , 'cash')">
-                      {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
-                    </button>
-                    <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
-
-                  </div>
-                  <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'" class="form-group col-md-6">
-                    <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
-                    <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
-
-                  </div>
 
 
 
-
-                  <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'check'" class="form-group col-md-6">
-                    <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('checkModel' , '')">
-                      {{ selectedCheck ? selectedCheck.payed_to.name  : ('SELECT_CHECK_ACCOUNTS' | translate) }}
-                    </button>
-                    <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
-
-                  </div>
-                
-
-
-          
-                    </div>
-
-
-
-
-
-                    <div class="form-group col-md-6">
-          
-                      <p><strong>Total: </strong>{{total}}</p>
-                      <p><strong>Total Payed: </strong>{{totalPayed}}</p>
-                      <p><strong>the rest: </strong>{{total -totalPayed}}</p>
-
-                    </div>
-                    
-                        
-                    
-
-
-              </div>
-
-              
-
-            
-
-
-                 
-                      
- 
               </div>
             </div>
           </div>
@@ -329,7 +330,7 @@
       </div>
       <!-- <p *ngIf="msgError" class="alert alert-danger">{{msgError}}</p> -->
       <div class="mt-4 mb-4">
-        <button  type="submit" class="btn btn-primary px-4">
+        <button type="submit" class="btn btn-primary px-4">
           <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
         </button>
       </div>
@@ -392,13 +393,8 @@
       </div>
       <div class="modal-body">
         <!-- Search Input -->
-        <input
-          type="text"
-          class="form-control mb-3"
-          [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="ProductsearchQuery"
-          (ngModelChange)="onProductSearchChange()"
-        />
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="ProductsearchQuery" (ngModelChange)="onProductSearchChange()" />
 
         <!-- Accounts Table -->
 
@@ -411,28 +407,28 @@
               <th>Stock</th>
               <th>Color</th>
               <th>determinants</th>
-        
+
             </tr>
           </thead>
           <tbody>
-              <!-- Main Product Row -->
-          
-              <!-- Branches -->
-              <tr *ngFor="let branch of Products" (click)="selectProduct(branch)" style="cursor: pointer;">
-                <td>{{ branch.product_branch.code }}</td>
-                <td>{{ branch.product_branch.product.name }}</td>
-                <td>{{ branch.product_branch.stock }}</td>
-                <td *ngIf="branch.product_branch.product_color">{{ branch.product_branch.product_color.color.color}}</td>
-                <td *ngIf="!branch.product_branch.product_color"> -- </td>
+            <!-- Main Product Row -->
 
-                <td>
-                  <span *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
-                    <span class="badge bg-info text-dark me-1">
-                      {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
-                    </span>
+            <!-- Branches -->
+            <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
+              <td>{{ branch.product_branch.code }}</td>
+              <td>{{ branch.product_branch.product.name }}</td>
+              <td>{{ branch.product_branch.stock }}</td>
+              <td *ngIf="branch.product_branch.product_color">{{ branch.product_branch.product_color.color.color}}</td>
+              <td *ngIf="!branch.product_branch.product_color"> -- </td>
+
+              <td>
+                <span *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
+                  <span class="badge bg-info text-dark me-1">
+                    {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
                   </span>
-                </td>
-              </tr>
+                </span>
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -456,23 +452,18 @@
       </div>
       <div class="modal-body">
         <!-- Search Input -->
-        <input
-          type="text"
-          class="form-control mb-3"
-          [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onCheckSearchChange()"
-        />
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
 
         <!-- Accounts Table -->
         <table class="table table-striped">
           <thead>
             <tr>
-                <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
 
             </tr>
           </thead>
@@ -491,7 +482,3 @@
     </div>
   </div>
 </div>
-
-
-
-

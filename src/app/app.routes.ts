@@ -126,6 +126,10 @@ import { AddRolesComponent } from './Components/add-roles/add-roles.component';
 import { AddReturnPurchaseBillComponent } from './Components/add-return-purchase-bill/add-return-purchase-bill.component';
 import { ReturnPurchaseBillsComponent } from './Components/return-purchase-bills/return-purchase-bills.component';
 import { ViewReturnPurchaseBillComponent } from './Components/view-return-purchase-bill/view-return-purchase-bill.component';
+import { AddProductInternalMovesComponent } from './Components/add-product-internal-moves/add-product-internal-moves.component';
+import { ProductInternalMovesComponent } from './Components/product-internal-moves/product-internal-moves.component';
+import { UpdateProductInternalMovesComponent } from './Components/update-product-internal-moves/update-product-internal-moves.component';
+import { ShowProductInternalMovesComponent } from './Components/show-product-internal-moves/show-product-internal-moves.component';
 
 
 export const routes: Routes = [
@@ -190,7 +194,12 @@ export const routes: Routes = [
         {path:"approvedPurchases",component:ApprovedPurchasesComponent},
         {path:"updatePurchase/:id",component:UpdatePurchaseComponent},
         {path:"showPurchase/:id",component:ShowPurchaseComponent},
+         
 
+        {path:"addProductInternalMoves",component:AddProductInternalMovesComponent},
+        {path:"productInternalMoves/:status",component:ProductInternalMovesComponent},
+        {path:"updateProductInternalMoves/:id",component:UpdateProductInternalMovesComponent},
+        {path:"showProductInternalMoves/:id",component:ShowProductInternalMovesComponent},
 
 
 
