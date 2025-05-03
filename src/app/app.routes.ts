@@ -64,17 +64,13 @@ import { UpdatePriceCategoryComponent } from './Components/update-price-category
 import { BankAccountsComponent } from './Components/bank-accounts/bank-accounts.component';
 import { AddBankAccountsComponent } from './Components/add-bank-accounts/add-bank-accounts.component';
 import { UpdateBankAccountsComponent } from './Components/update-bank-accounts/update-bank-accounts.component';
-// import { AdditionalInfoComponent } from './Components/additional-info/additional-info.component';
 import { AddCheckComponent } from './Components/add-check/add-check.component';
 import { ViewCheckComponent } from './Components/view-check/view-check.component';
 import { CheckOperationsComponent } from './Components/check-operations/check-operations.component';
 import { AddPurchaseComponent } from './Components/add-purchase/add-purchase.component';
 import { UpdatePurchaseComponent } from './Components/update-purchase/update-purchase.component';
 import { ShowPurchaseComponent } from './Components/show-purchase/show-purchase.component';
-import { OrderComponent } from './Components/order/order.component';
-import { AddOrderComponent } from './Components/add-order/add-order.component';
 import { UpdateOrderComponent } from './Components/update-order/update-order.component';
-import { ShowOrderComponent } from './Components/show-order/show-order.component';
 import { AddsalesComponent } from './Components/addsales/addsales.component';
 import { UpdateSalesComponent } from './Components/update-sales/update-sales.component';
 import { ShowSalesComponent } from './Components/show-sales/show-sales.component';
@@ -127,6 +123,9 @@ import { ProductMovesReportsComponent } from './Components/product-moves-reports
 import { AccountMovesReportsComponent } from './Components/account-moves-reports/account-moves-reports.component';
 import { RolesComponent } from './Components/roles/roles.component';
 import { AddRolesComponent } from './Components/add-roles/add-roles.component';
+import { AddReturnPurchaseBillComponent } from './Components/add-return-purchase-bill/add-return-purchase-bill.component';
+import { ReturnPurchaseBillsComponent } from './Components/return-purchase-bills/return-purchase-bills.component';
+import { ViewReturnPurchaseBillComponent } from './Components/view-return-purchase-bill/view-return-purchase-bill.component';
 
 
 export const routes: Routes = [
@@ -145,16 +144,15 @@ export const routes: Routes = [
 
 
 
-        
+        {path:"add-return-purchase",component:AddReturnPurchaseBillComponent},
+        {path:"return-purchase/:status",component:ReturnPurchaseBillsComponent},
+        {path:"show-return-purchase/:id",component:ViewReturnPurchaseBillComponent},
+
         {path:"account-moves-reports",component:AccountMovesReportsComponent},
-
         {path:"product-moves-reports",component:ProductMovesReportsComponent},
-
         {path:"purchases-reports",component:PurchasesReportsComponent},
-
         {path:"sales-reports",component:SalesReportsComponent},
         {path:"currency-price-tracking",component:CurrencyPriceTrackingComponent},
-
         {path:"check-documents/:type",component:CheckDocumentsComponent},
 
         {path:"colors",component:ColorsComponent},
@@ -215,7 +213,6 @@ export const routes: Routes = [
         {path:"addcheck",component:AddCheckComponent},        
         {path:"check/:id",component:ViewCheckComponent},
         {path:"createVendor",component:CreateVendorComponent},
-        //   {path:"document/:type",component:AddDocumentComponent},
         {path:"addDocument/:type",component:AddDocumentComponent},
         {path:"document/:type/:status",component:DocumentsComponent},
         {path:"check_list/:status",component:CheckManagementComponent},
@@ -237,10 +234,9 @@ export const routes: Routes = [
         {path:"group",component:GroupComponent},
         {path:"addGroup",component:AddGroupComponent},
         {path:"updateGroup/:id",component:UpdateGroupComponent},
-        // {path:"addtionalInformation",component:AdditionalInfoComponent},
+
         {path:"city",component:CityComponent},
         {path:"bank",component:ManageBankComponent},
-
         {path:"addCity",component:AddCityComponent},
         {path:"updateCity/:id",component:UpdateCityComponent},
         {path:"showCity/:id",component:ShowCityComponent},
@@ -300,10 +296,7 @@ export const routes: Routes = [
         {path:"addPriceCategory",component:AddPriceCategoryComponent},
         {path:"updateCategory/:id",component:UpdatePriceCategoryComponent},
 
-        {path:"orders",component:OrderComponent},
-        {path:"addOrder",component:AddOrderComponent},
         {path:"updateOrder/:id",component:UpdateOrderComponent},
-        {path:"showOrder/:id",component:ShowOrderComponent},
          
         {path:"sales/:status",component:SalesComponent},
         {path:"addSale",component:AddsalesComponent},

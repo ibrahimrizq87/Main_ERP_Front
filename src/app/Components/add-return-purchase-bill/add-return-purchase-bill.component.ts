@@ -1,0 +1,728 @@
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { StoreService } from '../../shared/services/store.service';
+import { CurrencyService } from '../../shared/services/currency.service';
+import { ProductsService } from '../../shared/services/products.service';
+import { AccountService } from '../../shared/services/account.service';
+import { PurchasesService } from '../../shared/services/purchases.service';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { Modal } from 'bootstrap';
+import { CheckService } from '../../shared/services/check.service';
+import { ToastrService } from 'ngx-toastr';
+import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
+
+@Component({
+  selector: 'app-add-return-purchase-bill',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule],
+  templateUrl: './add-return-purchase-bill.component.html',
+  styleUrl: './add-return-purchase-bill.component.css'
+})
+export class AddReturnPurchaseBillComponent {
+
+  // private productSubscription: Subscription = Subscription.EMPTY;
+  isSubmited = false;
+  serialNumber: SerialNumber[] = [];
+  purchasesBillForm: FormGroup;
+  Products: any[] = [];
+  msgError: any[] = [];
+  isLoading: boolean = false;
+  currency: any;
+  stores: any[] = [];
+  vendors: any[] = [];
+  selectedType: string = 'purchase';
+  selectedStore: any;
+  checks: any;
+  storeSearchTerm: string = '';
+  delegates: any[] = [];
+  cashAccounts: any[] = [];
+  productDeterminants: any[] = [];
+  inputDisabled: boolean[] = []; // Tracks which inputs are disabled
+  overrideCount: number = 0;
+  selectedCheck: any;
+  total = 0;
+  totalPayed = 0;
+  showFile = false;
+  showAllDataExport = false;
+  showItemsExport = false;
+  selectedFile: File | null = null;
+  needCurrecyPrice: boolean = false;
+  forignCurrencyName = '';
+
+  constructor(private fb: FormBuilder,
+    private _StoreService: StoreService,
+    private _CurrencyService: CurrencyService,
+    private _ProductBranchStoresService:ProductBranchStoresService,
+    private _AccountService: AccountService,
+    private _PurchasesService: PurchasesService,
+    private _Router: Router,
+    private cdr: ChangeDetectorRef,
+    private _CheckService: CheckService,
+    private toastr: ToastrService
+  ) {
+    
+    this.purchasesBillForm = this.fb.group({
+      invoice_date: [this.getTodayDate()],
+      payed_price: [null],
+      currency_price_value: [null],
+      vendor_id: ['', Validators.required],
+      store_id: ['', Validators.required],
+      payment_type: ['cash'],
+      check_id: [''],
+      items: this.fb.array([]),
+      supplier_id: [null],
+      cash_id: [null],
+      notes: [''],
+      showCashAccountsDropdown: [false],
+    });
+      this.addItem(); 
+    
+  }
+
+  getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  
+  loadChecks() {
+    this._CheckService.getCheckByPayedToAccount('112').subscribe({
+      next: (response) => {
+        if (response) {
+          const cashAccounts = response.data;
+          console.log("checks", cashAccounts)
+          this.checks = cashAccounts;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  ngOnInit(): void {
+    // this.loadProducts();
+    this.loadDefaultCurrency();
+    this.loadStores();
+    this.loadSuppliers();
+    this.loadCashAccounts();
+    this.loadChecks();
+  }
+  currencyPriceValue: number = 0;
+  currencyPrice(){
+    const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
+    this.currencyPriceValue = currencyPriceValue;
+  }
+
+  loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+        }
+        console.log(err);
+      }
+    });
+  }
+
+
+  loadSuppliers(): void {
+    this._AccountService.getAccountsByParent('621').subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("suppliers", response)
+          const Suppliers = response.data;
+          Suppliers.forEach((account: { hasChildren: any; id: any; }) => {
+            account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
+          });
+          this.vendors = Suppliers;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+  loadProducts(storeId: string) {
+    this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
+      next: (response) => {
+        if (response) {
+          this.Products = response.data;
+
+          console.log('product branches', this.Products);
+          this.filteredProducts = this.Products;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+
+  loadCashAccounts(): void {
+    this._AccountService.getAccountsByParent('111').subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("CashAccounts", response)
+          const cashAccounts = response.data;
+          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
+            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
+          });
+
+          this.cashAccounts = cashAccounts;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
+  }
+
+  loadStores() {
+    this._StoreService.getAllStores().subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          this.stores = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+ 
+  onStoreChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStore = selectedValue;
+  }
+
+
+
+  addItem() {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    items.push(this.createItem());
+  }
+
+  removeItem(index: number): void {
+    this.items.removeAt(index);
+  }
+
+
+
+  createItem(): FormGroup {
+    return this.fb.group({
+      amount: [null, Validators.required],
+      price: ['', Validators.required],
+      product_id: ['', Validators.required],
+      product: [null],
+      type: [null],
+      need_serial: [false],
+      barcode: [null],
+      branch_data: [null],
+      determinants: this.fb.array([]),
+
+      serialNumbers: [[]],
+      neededSerialNumbers: [0],
+
+
+      // dynamicInputs: this.fb.array([])
+
+    });
+  }
+
+  removeSerialNumber(serialNumber: string, index: number) {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    // const barcode =item.get('barcode')?.value;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+
+    // let tempList =(item.get('serialNumbers')?.value).filter( item=> item.barcode != serialNumber);
+    const serialNumbers = item.get('serialNumbers')?.value;
+
+    if (serialNumbers && Array.isArray(serialNumbers)) {
+      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+      item.patchValue({ serialNumbers: tempList });
+      item.patchValue({ neededSerialNumbers: neededBars + 1 });
+    }
+  }
+  addParcode(index: number) {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const barcode = item.get('barcode')?.value;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+
+    tempList.forEach(() => {
+
+    });
+
+
+
+    if (barcode) {
+      tempList.push({ barcode: barcode })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+    }
+  }
+  updateDynamicInputs(index: number, amount: number): void {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    let dynamicInputs = item.get('dynamicInputs') as FormArray<FormControl>;
+    if (!dynamicInputs) {
+      dynamicInputs = this.fb.array([]);
+      item.setControl('dynamicInputs', dynamicInputs);
+    }
+
+    const currentLength = dynamicInputs.length;
+    if (currentLength < amount) {
+      for (let i = currentLength; i < amount; i++) {
+        dynamicInputs.push(this.fb.control('', Validators.required));
+      }
+    } else if (currentLength > amount) {
+      for (let i = currentLength - 1; i >= amount; i--) {
+        dynamicInputs.removeAt(i);
+      }
+    }
+  }
+
+  onAmountChange(index: number): void {
+
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const amount = item.get('amount')?.value || 0;
+    if (item.get('product')?.value?.need_serial_number) {
+      if (typeof amount === 'number' && amount >= 0) {
+        item.patchValue({ neededSerialNumbers: amount })
+
+      } else {
+        console.warn('Invalid amount:', amount);
+      }
+    }
+
+    // this.calculateTotal();
+
+  }
+  payedAmount() {
+    if ((this.purchasesBillForm.get('payed_price')?.value || 0) > this.total) {
+      this.purchasesBillForm.patchValue({ payed_price: this.total });
+    }
+
+    // if(this.currencyPriceValue>0){
+    //   this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
+    // }
+    this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0);
+  }
+  paymentTriggerChange() {
+    // const value = (event.target as HTMLSelectElement).value;
+    if (!this.purchasesBillForm.get('showCashAccountsDropdown')?.value) {
+      // console.log(true)
+      this.totalPayed = 0;
+      // this.purchasesBillForm.patchValue({payed_price: 0});
+
+    } else {
+      this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0);
+
+    }
+  }
+  onPrice() {
+    this.total = 0;
+    this.items.controls.forEach((itemControl) => {
+      const itemValue = itemControl.value;
+      console.log('amount', itemValue.amount);
+      console.log('price', itemValue.price);
+
+      if (itemValue) {
+        this.total += (itemValue.amount || 0) * (itemValue.price || 0);
+      }
+    });
+  }
+
+  // isDisabled = true; // Change this condition dynamically
+
+
+  disableInput(itemIndex: number, inputIndex: number): void {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(itemIndex) as FormGroup;
+    const dynamicInputs = item.get('dynamicInputs') as FormArray<FormControl>;
+
+    const control = dynamicInputs.at(inputIndex);
+    if (control) control.disable();
+  }
+
+
+  get items() {
+    return (this.purchasesBillForm.get('items') as FormArray);
+  }
+
+
+
+  onPaymentTypeChange(event: Event) {
+
+  }
+  handleForm() {
+   
+    if(this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value){
+      this.toastr.error('يجب ادخال سعر الصرف');
+      // alert('يجب ادخال سعر الصرف');
+      return;
+    }
+    this.isSubmited = true;
+    if (this.purchasesBillForm.valid) {
+      this.isLoading = true;
+      let error = false;
+
+      const formData = new FormData();
+      if (this.purchasesBillForm.get('showCashAccountsDropdown')?.value) {
+        if (this.purchasesBillForm.get('cash_id')?.value && this.purchasesBillForm.get('payment_type')?.value == 'cash') {
+          formData.append('payed_from_account_id', this.purchasesBillForm.get('cash_id')?.value);
+          formData.append('payment_type', 'cash');
+        } else if (this.purchasesBillForm.get('check_id')?.value && this.purchasesBillForm.get('payment_type')?.value == 'check') {
+          formData.append('payment_type', 'check');
+          formData.append('check_id', this.purchasesBillForm.get('check_id')?.value);
+        }
+      }
+      if(this.needCurrecyPrice && this.purchasesBillForm.get('currency_price_value')?.value){
+        formData.append('currency_price_value', this.purchasesBillForm.get('currency_price_value')?.value);
+      }
+
+      formData.append('vendor_id', this.purchasesBillForm.get('vendor_id')?.value);
+      console.log(this.purchasesBillForm.get('vendor_id')?.value);
+      formData.append('store_id', this.purchasesBillForm.get('store_id')?.value);
+      formData.append('invoice_date', this.purchasesBillForm.get('date')?.value);
+      formData.append('total', this.total.toString());
+      formData.append('total_payed', this.totalPayed.toString());
+      formData.append('notes', this.purchasesBillForm.get('notes')?.value || '');
+      formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
+
+  
+     
+      if (this.items && this.items.controls) {
+        this.items.controls.forEach((itemControl, index) => {
+          const itemValue = itemControl.value;
+
+          if (itemValue.neededSerialNumbers > 0) {
+            this.toastr.error('يجب ادخال كل السيريا المطلوب');
+            error = true;
+
+            return;
+
+          }
+
+          if (itemValue) {
+
+            formData.append(`items[${index}][product_branch_id]`, itemValue.product_id);
+            formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
+            formData.append(`items[${index}][price]`, itemValue.price || '0');
+            const serialNumbers = itemControl.get('serialNumbers')?.value;
+            if (serialNumbers.length > 0) {
+              serialNumbers.forEach((item: any, internalIndex: number) => {
+                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+              });
+            }
+           
+
+          }
+        });
+      }
+      
+      if (!error) {
+          
+        this._PurchasesService.addReturnPurchase(formData).subscribe({
+          next: (response) => {
+            if (response) {
+              this.toastr.success('تم اضافه الفاتوره بنجاح');
+              console.log(response);
+              this.isLoading = false;
+              this._Router.navigate(['/dashboard/return-purchase/waiting']);
+            }
+          },
+
+          error: (err: HttpErrorResponse) => {
+            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
+            this.isLoading = false;
+            this.msgError = [];
+
+            if (err.error && err.error.errors) {
+
+              for (const key in err.error.errors) {
+                if (err.error.errors[key] instanceof Array) {
+                  this.msgError.push(...err.error.errors[key]);
+                } else {
+                  this.msgError.push(err.error.errors[key]);
+                }
+              }
+            }
+
+            console.error(this.msgError);
+          },
+
+        });
+      }
+
+      
+    } else {
+      Object.keys(this.purchasesBillForm.controls).forEach((key) => {
+        const control = this.purchasesBillForm.get(key);
+        if (control && control.invalid) {
+          console.log(`Invalid Field: ${key}`, control.errors);
+        }
+      });
+    }
+  }
+
+  filteredAccounts: Account[] = [];
+  selectedPopUP: string = '';
+  searchQuery: string = '';
+  selectedCashAccount: Account | null = null;
+  selecteddelegateAccount: Account | null = null;
+  selectedVendor: Account | null = null;
+
+  onCheckSearchChange() {
+
+  }
+
+  selectcheck(check: any) {
+    this.purchasesBillForm.patchValue({ 'check_id': check.id })
+    this.selectedCheck = check;
+    this.needCurrecyPrice =false;
+    this.forignCurrencyName ='';
+
+
+    if(this.currency.id != check.currency.id){
+      this.needCurrecyPrice =true;
+      this.forignCurrencyName =check.currency.name;
+
+    }
+    
+    if(this.selectedVendor){
+      if(this.selectedVendor.currency.id != this.currency.id){
+        this.needCurrecyPrice =true;
+        this.forignCurrencyName =this.selectedVendor.currency.name;
+
+      }
+    }
+    this.closeModal('checkModel');
+  }
+  closeModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+
+  openModal(modalId: string, type: string) {
+    if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
+
+      this.selectedPopUP = type;
+      if (type == 'cash') {
+        this.filteredAccounts = this.cashAccounts;
+      } else if (type == 'delegate') {
+        this.filteredAccounts = this.delegates;
+      } else if (type == 'vendor') {
+        this.filteredAccounts = this.vendors;
+
+      }
+
+
+    }
+
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+
+
+  onSearchChange() {
+
+
+    if (this.selectedPopUP == 'cash') {
+      this.filteredAccounts = this.cashAccounts.filter(account =>
+        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+
+    }else if (this.selectedPopUP == 'vendor') {
+      this.filteredAccounts = this.vendors.filter(account =>
+        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+  }
+
+
+
+  selectAccount(account: Account) {
+    if (this.selectedPopUP == 'cash') {
+      this.selectedCashAccount = account;
+      this.purchasesBillForm.patchValue({ 'cash_id': account.id })
+      this.needCurrecyPrice =false;
+      this.forignCurrencyName ='';
+
+
+      if(this.currency.id != account.currency.id){
+        this.needCurrecyPrice =true;
+        this.forignCurrencyName =account.currency.name;
+
+      }
+      
+      if(this.selectedVendor){
+        if(this.selectedVendor.currency.id != this.currency.id){
+          this.needCurrecyPrice =true;
+          this.forignCurrencyName =this.selectedVendor.currency.name;
+
+        }
+      }
+
+    
+      
+    } else if (this.selectedPopUP == 'vendor') {
+      this.selectedVendor = account;
+      this.purchasesBillForm.patchValue({ 'vendor_id': account.id })
+
+    this.needCurrecyPrice =false;
+    this.forignCurrencyName ='';
+
+if(this.currency.id != account.currency.id){
+  this.needCurrecyPrice =true;
+  this.forignCurrencyName =account.currency.name;
+
+
+}
+
+if(this.selectedCashAccount){
+  if(this.selectedCashAccount.currency.id != this.currency.id){
+    this.needCurrecyPrice =true;
+    this.forignCurrencyName =this.selectedCashAccount.currency.name;
+
+  }
+}
+
+if(this.selectedCheck){
+  if(this.selectedCheck.currency.id != this.currency.id){
+    this.needCurrecyPrice =true;
+
+    this.forignCurrencyName =this.selectedCheck.currency.name;
+
+  }
+}
+
+
+    }
+    this.cdr.detectChanges();
+    this.closeModal('shiftModal');
+  }
+
+  filteredProducts: any;
+
+  ProductsearchQuery = '';
+  selectedProduct: any;
+  onProductSearchChange() {
+
+  }
+  getDeterminants(item: AbstractControl<any, any>): FormArray {
+    return item.get('determinants') as FormArray;
+  }
+
+
+  selectProduct(branch: any ) {
+    const itemsArray = this.purchasesBillForm.get('items') as FormArray;
+    const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+console.log('branch: ',branch);
+    itemGroup.patchValue({ product: branch.product_branch.product });
+    itemGroup.patchValue({ product_id: branch.product_branch.id });
+    
+      itemGroup.patchValue({ type: 'branch' });
+      itemGroup.patchValue({
+        branch_data: {
+          color: branch?.product_branch.product_color,
+          determinants: branch?.product_branch.determinantValues
+        }
+      });
+
+    this.closeProductModel();
+  }
+  productIndex: number = -1;
+  openProductModal(index: number) {
+    this.productIndex = index;
+    const modalElement = document.getElementById('productModel');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+
+
+
+  closeProductModel() {
+    const modalElement = document.getElementById('productModel');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+  filteredStores() {
+    if (!this.storeSearchTerm) return this.stores;
+    const term = this.storeSearchTerm.toLowerCase();
+    return this.stores.filter(store =>
+      store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
+    );
+  }
+  
+  selectStore(store: any) {
+    this.selectedStore = store;
+    this.purchasesBillForm.patchValue({ store_id: store.id });
+    this.loadProducts(store.id);
+    this.closeModal('storeModal');
+  }
+
+
+  onTotalChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.total = Number(input.value);
+  }
+}
+
+interface Account {
+  id: string;
+  name: string;
+  currency:Currency
+}
+
+interface Currency {
+  id: string;
+  name: string;
+}
+interface SerialNumber {
+  serialNumber: string;
+}

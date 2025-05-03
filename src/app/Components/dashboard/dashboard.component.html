@@ -358,11 +358,21 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('SALES_PURCHASES')">
+              
               <li class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="purchases/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.PURCHASES_INVOICE' | translate }}
                 </a>
               </li>
+
+           
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="return-purchase/waiting">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.RETURN_PURCHASES_INVOICE' | translate }}
+                </a>
+              </li>
+
+
             </ul>
           </li>
 

@@ -1,0 +1,424 @@
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'MANAGE_PURCHASES_BILLS' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i
+        [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'PURCHASES_BILLS' | translate }} <i
+        [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CREATE_BILL' | translate }}</span>
+  </div>
+  <div class="mt-4 mb-4">
+    <form [formGroup]="purchasesBillForm" (ngSubmit)="handleForm()">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow em-card rounded-lg">
+              <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5 class="large-text">{{ 'PURCHASES_BILL_DETAILS' | translate }}</h5>
+              </div>
+              <div class="card-body pb-5">
+                <div class="row">
+  
+                  <div class="form-group col-md-6">
+                    <label for="invoice_date" class="form-label large-text">{{ 'INVOICE_DATE' | translate }}</label>
+                    <input id="invoice_date" formControlName="invoice_date" type="date" class="form-control"
+                      [class.is-invalid]="purchasesBillForm.get('date')?.invalid && isSubmited" />
+                    <div class="text-danger" *ngIf="purchasesBillForm.get('date')?.invalid&& isSubmited">
+                      {{ 'Vendor' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </div>
+  
+                  </div>
+  
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'SUPPLIER' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openModal('shiftModal' , 'vendor')">
+                      {{ selectedVendor ? selectedVendor.name : ('SUPPLIER' | translate) }}
+                    </button>
+  
+                    <input type="hidden" formControlName="supplier_id" [value]="selectedVendor?.id" />
+                    <div class="text-danger" *ngIf="!selectedVendor && isSubmited">
+                      {{ 'Vendor' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <div class="form-group col-md-6">
+                      <label class="form-label">{{ 'STORE' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('storeModal', 'store')">
+                        {{ selectedStore ? selectedStore?.name : ('STORE' | translate) }}
+                      </button>
+  
+                      <input type="hidden" formControlName="store_id" [value]="selectedStore?.id" />
+                      <div class="text-danger" *ngIf="!selectedStore && isSubmited">
+                        {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
+                      </div>
+                    </div>
+  
+                    <div class="invalid-feedback" *ngIf="!selectedStore  && isSubmited">
+                      {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </div>
+                  </div>
+  
+                  <div *ngIf="needCurrecyPrice" class="form-group col-md-6">
+                    <label class="form-label large-text">سعر عملة ال ({{forignCurrencyName}})</label>
+                    <input formControlName="currency_price_value" type="number" class="form-control"
+                      (input)="currencyPrice()" />
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
+                    <textarea id="notes" formControlName="notes" class="form-control"
+                      placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <div formArrayName="items" class="mt-4 ">
+                      <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+                        class="mb-3 border p-3 rounded">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label class="form-label">{{ 'PRODUCT' | translate }}</label>
+                            <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
+                              {{ item.get('product')?.value?.name ? item.get('product')?.value.name : ('PRODUCT' |
+                              translate) }}
+                            </button>
+                            <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
+                          </div>
+  
+  
+                          <div class="col-md-2">
+                            <label for="amount">{{ 'QUANTITY' | translate }}</label>
+                            <input formControlName="amount" type="number" class="form-control" (input)="onAmountChange(i)"
+                              [readonly]="!item.get('product')?.value"
+                              [class.is-invalid]="item.get('amount')?.invalid && isSubmited" />
+                            <p class="text-warning" *ngIf="!item.get('product')?.value ">
+                              اختر المنتج اولا
+                            </p>
+  
+                            <div class="text-danger"
+                              *ngIf="item.get('product')?.value && item.get('amount')?.invalid && isSubmited ">
+                              {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                            </div>
+                          </div>
+  
+  
+                          <div class="col-md-2">
+                            <label for="price">{{ 'PRICE' | translate }} <span
+                                *ngIf="needCurrecyPrice">({{forignCurrencyName}})</span></label>
+                            <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
+                              [class.is-invalid]="item.get('price')?.invalid && isSubmited" />
+                            <div class="text-danger" *ngIf="item.get('price')?.invalid && isSubmited ">
+                              {{ 'price' | translate }} {{ 'IS_REQUIRED' | translate }}
+                            </div>
+                          </div>
+  
+                      
+                          <div class="col-md-2" *ngIf="item.get('branch_data')?.value">
+                            <label for="price">{{ 'COLOR' | translate }}</label>
+                            <p>
+                              {{item.get('branch_data')?.value.color.color.color }}
+                            </p>
+                          </div> 
+  
+                          <div class="col-md-2" *ngIf="item.get('type')?.value == 'branch'">
+                            <label for="price">{{ 'DETERMINANTS' | translate }}</label>
+  
+                            <span *ngFor="let determinant of item.get('branch_data')?.value.determinants; let i = index">
+                              <span class="badge bg-info text-dark me-1">
+                                {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}                              </span>
+                            </span>
+                          </div>
+  
+                          <div class="col-md-2">
+                            <label for="price">{{ 'TOTAL_PRICE' | translate }}</label>
+                            <p>
+                              <strong>Total: </strong>
+                              {{item.get('price')?.value * item.get('amount')?.value ? item.get('price')?.value *
+                              item.get('amount')?.value:0 }}
+                            </p>
+                          </div>
+
+                          <div class="form-group col-md-12 mt-4"
+                            *ngIf="item.get('neededSerialNumbers')?.value>0 || item.get('serialNumbers')?.value.length>0 ">
+                            <label>{{ 'BARCODES' | translate }}</label>
+                            <div class="alert-warning text-center">
+                              <strong>needed serial numbers: </strong>
+                              {{item.get('neededSerialNumbers')?.value}}
+                            </div>
+  
+  
+                            <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
+                              <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
+                                class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                                <div class="col-md-10">
+                                  {{serialNumber.barcode}}
+                                </div>
+                                <div class="col-md-2">
+                                  <a class="btn-close" aria-label="Close"
+                                    (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <input formControlName="barcode" type="text" class="form-control me-2"
+                                placeholder="Enter barcode" />
+  
+                              <button type="button" class="btn btn-success" (click)="addParcode(i)">
+                                add
+                              </button>
+                            </div>
+                          </div>
+  
+
+                          <div class="col-md-12">
+                            <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
+                              <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <!-- Add Item -->
+                    <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
+                      <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
+                    </button>
+                  </div>
+                  <div class=" text-black bg-secoundry border rounded  row  mt-3">
+                    <div class="card-header text-center"> الدفع </div>
+  
+                    <div class="form-group col-md-12">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown"
+                          (change)="paymentTriggerChange()" />
+                        {{ 'SHOW_CASH_ACCOUNTS' | translate }}
+                      </label>
+                    </div>
+  
+                    <div class="form-group col-md-12" *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
+                      <label for="payment_type" class="form-label large-text"> اختر طريقة الدفع </label>
+                      <select id="payment_type" formControlName="payment_type" class="form-control"
+                        (change)="onPaymentTypeChange($event)">
+                        <option value="cash">نقدى</option>
+                        <option value="check">شيك</option>
+                      </select>
+                    </div>
+  
+                    <div
+                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
+                      class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('shiftModal' , 'cash')">
+                        {{ selectedCashAccount ? selectedCashAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
+                      </button>
+                      <input type="hidden" formControlName="cash_id" [value]="selectedCashAccount?.id" />
+  
+                    </div>
+                    <div
+                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'cash'"
+                      class="form-group col-md-4">
+                      <label class="form-label large-text">
+                        <span *ngIf="needCurrecyPrice">({{forignCurrencyName}})</span>سوف يتم دفع هذا المبلغ</label>
+                      <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
+                    </div>
+
+                    <div
+                      *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value && purchasesBillForm.get('payment_type')?.value == 'check'"
+                      class="form-group col-md-6">
+                      <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
+                      <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('checkModel' , '')">
+                        {{ selectedCheck ? selectedCheck.payed_to.name : ('SELECT_CHECK_ACCOUNTS' | translate) }}
+                      </button>
+                      <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
+  
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <p><strong>Total: </strong>{{total}}</p>
+                    <p><strong>Total Payed: </strong>{{totalPayed}}</p>
+                    <p><strong>the rest: </strong>{{total -totalPayed}}</p>
+  
+                  </div>
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+        <div class="mt-4 mb-4">
+          <button type="submit" class="btn btn-primary px-4">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+  
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+  
+  
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+                style="cursor: pointer;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ account.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Store Modal -->
+  <div class="modal fade" id="storeModal" tabindex="-1" aria-labelledby="storeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'CHOOSE_STORE' | translate }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" [(ngModel)]="storeSearchTerm"
+            placeholder="{{ 'SEARCH' | translate }}" />
+  
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>{{ 'ID' | translate }}</th>
+                <th>{{ 'STORE' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let store of filteredStores()" (click)="selectStore(store)"
+                class="cursor-pointer hover-highlight">
+                <td>{{ store.id }}</td>
+                <td>{{ store.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeProductModel()"></button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="form-control mb-3"
+            [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="ProductsearchQuery"
+            (ngModelChange)="onProductSearchChange()"
+          />
+  
+          <table class="table table-striped table-hover table-bordered rounded">
+            <thead class="table-dark">
+              <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Stock</th>
+                <th>Color</th>
+                <th>determinants</th>
+          
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let branch of Products" (click)="selectProduct(branch)" style="cursor: pointer;">
+                  <td>{{ branch.product_branch.code }}</td>
+                  <td>{{ branch.product_branch.product.name }}</td>
+                  <td>{{ branch.product_branch.stock }}</td>
+                  <td *ngIf="branch.product_branch.product_color">{{ branch.product_branch.product_color.color.color}}</td>
+                  <td *ngIf="!branch.product_branch.product_color"> -- </td>
+  
+                  <td>
+                    <span *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
+                      <span class="badge bg-info text-dark me-1">
+                        {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
+                      </span>
+                    </span>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="checkModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('checkModel')"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
+  
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
+  
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let check of checks; let i = index" (click)="selectcheck(check)" style="cursor: pointer;">
+                <td>{{ check.check_number }}</td>
+                <td>{{ check.amount }}</td>
+                <td>{{ check.source_account.name }}</td>
+                <td>{{ check.payed_to.name }}</td>
+                <td>{{ check.due_date }}</td>
+  
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
