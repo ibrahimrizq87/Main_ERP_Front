@@ -53,6 +53,14 @@ export class ProductsService {
     return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers/${productId}/${storeId}`,{ headers:this.getHeadersWithToken()  });
   }
 
+  getSerialNumbersForReturnSales(productId:string , storeId:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers-for-return-sales/${productId}/${storeId}`,{ headers:this.getHeadersWithToken()  });
+  }
+
+  
+
+
+
   viewProductById(id:any): Observable<any>{
     return this._HttpClient.get(this.baseURL+"/general/products/"+id, { headers:this.getHeadersWithToken() });
   }
