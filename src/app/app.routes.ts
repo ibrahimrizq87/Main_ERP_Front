@@ -134,6 +134,10 @@ import { ReturnSalesComponent } from './Components/return-sales/return-sales.com
 import { AddReturnSalesComponent } from './Components/add-return-sales/add-return-sales.component';
 import { UpdateReturnSalesComponent } from './Components/update-return-sales/update-return-sales.component';
 import { ViewReturnSalesComponent } from './Components/view-return-sales/view-return-sales.component';
+import { EmployeesComponent } from './Components/employees/employees.component';
+import { AddEmployeeComponent } from './Components/add-employee/add-employee.component';
+import { UpdateEmployeesComponent } from './Components/update-employees/update-employees.component';
+import { ShowEmployeeComponent } from './Components/show-employee/show-employee.component';
 
 
 export const routes: Routes = [
@@ -330,6 +334,11 @@ export const routes: Routes = [
         {path:"rolesAndPermissions",component:RolesSystemComponent},
         {path:"roles",component:RolesComponent},
         {path:"addRole",component:AddRolesComponent},
+
+        {path:"employees",component:EmployeesComponent},
+        {path:"add-employee",component:AddEmployeeComponent},
+        {path:"update-employee/:id",component:UpdateEmployeesComponent},
+        {path:"show-employee/:id",component:ShowEmployeeComponent},
 
     ]},
     {path:"**",component:NotfoundComponent},

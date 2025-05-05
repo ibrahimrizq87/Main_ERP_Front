@@ -935,5 +935,13 @@
   "SELECT_ROLE": "Select Role",
   "UPDATE_RETURN_SALES": "Update Return Sales",
   "RETURN_SALES": "Return Sales Invoice",
-  "IMPORT_ACCOUNT": "Import Account"
+  "IMPORT_ACCOUNT": "Import Account",
+  "ADD_EMPLOYEE": "Add Employee",
+  "EMPLOYEES": "Employees",
+  "EMPLOYEE_LIST": "Employee List",
+  "CREATE_EMPLOYEE":"Create Employee",
+  "EMPLOYEE_NAME_AR": "Employee Name (Arabic)",
+  "EMPLOYEE_NAME_EN": "Employee Name (English)",
+  "JOIN_DATE": "Join Date",
+  "MANAGE_EMPLOYEES": "Manage Employees"
 }

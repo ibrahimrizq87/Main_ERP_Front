@@ -176,7 +176,7 @@
     "SELECT_ACCOUNT": "اختر الحساب"
   },
   "accountCategories": {
-    "EMPLOYEE": "الموظفين",
+    "EMPLOYEES": "الموظفين",
 
     "CLIENTS": "العملاء",
     "VENDORS": "الموردين",
@@ -933,6 +933,17 @@
   "SELECT_ROLE":"اختر الدور",
   "UPDATE_RETURN_SALES": "تحديث مرتجعات المبيعات",
   "RETURN_SALES": "مرتجعات فاتورة المبيعات",
-  "IMPORT_ACCOUNT": "استيراد حساب"
+  "IMPORT_ACCOUNT": "استيراد حساب",
+  "ADD_EMPLOYEE": "إضافة موظف",
+  "EMPLOYEES": "الموظفين",
+  "EMPLOYEES_LIST": "قائمة الموظفين",
+  "CREATE_EMPLOYEE": "إنشاء موظف",
+  "EMPLOYEE_NAME_AR": "اسم الموظف (عربي)",
+  "EMPLOYEE_NAME_EN": "اسم الموظف (إنجليزي)",
+  "JOIN_DATE": "تاريخ الانضمام",
+  "MANAGE_EMPLOYEES": "إدارة الموظفين"
+
+
+
 
 }
