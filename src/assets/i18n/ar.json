@@ -932,6 +932,7 @@
   "SELECT_USER":"اختر المستخدم",
   "SELECT_ROLE":"اختر الدور",
   "UPDATE_RETURN_SALES": "تحديث مرتجعات المبيعات",
-  "RETURN_SALES": "مرتجعات فاتورة المبيعات"
+  "RETURN_SALES": "مرتجعات فاتورة المبيعات",
+  "IMPORT_ACCOUNT": "استيراد حساب"
 
 }

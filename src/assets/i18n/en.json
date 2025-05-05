@@ -934,5 +934,6 @@
   "SELECT_USER": "Select User",
   "SELECT_ROLE": "Select Role",
   "UPDATE_RETURN_SALES": "Update Return Sales",
-  "RETURN_SALES": "Return Sales Invoice"
+  "RETURN_SALES": "Return Sales Invoice",
+  "IMPORT_ACCOUNT": "Import Account"
 }
