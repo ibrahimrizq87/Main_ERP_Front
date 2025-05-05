@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 interface Account {
   id: string;
@@ -35,7 +36,7 @@ export class AccountsComponent implements OnInit {
   accountImportForm: FormGroup = new FormGroup({
     file: new FormControl(null, [Validators.required]),
   });
-  constructor(private _AccountService: AccountService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private _AccountService: AccountService, private router: Router, private route: ActivatedRoute,private toastr:ToastrService) { }
 
   ngOnInit(): void {
     // this.getParams();
@@ -135,7 +136,8 @@ export class AccountsComponent implements OnInit {
         console.log(response);
         if (response) {
           this.isLoading = false; 
-          this.closeModal('ImportForm');       
+          this.closeModal('ImportForm');  
+          this.toastr.success('تم استيراد البيانات بنجاح');     
         }
       },
       error: (err: HttpErrorResponse) => {
