@@ -1,4 +1,5 @@
 {
+  "RETURN_PURCHASES_INVOICE": "فاتورة مرتجع المشتريات",
   "Reports": "تقارير",
   "Product_Moves_Reports": "تقارير تحركات المنتج",
   "Account_Moves_Reports": "تقارير تحركات الحساب",
@@ -175,6 +176,8 @@
     "SELECT_ACCOUNT": "اختر الحساب"
   },
   "accountCategories": {
+    "EMPLOYEE": "الموظفين",
+
     "CLIENTS": "العملاء",
     "VENDORS": "الموردين",
     "CATEGORY_NAME": "اسم التصنيف",

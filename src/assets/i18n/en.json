@@ -1,4 +1,5 @@
 {
+  "RETURN_PURCHASES_INVOICE": "Return Purchases Invoice",
   "Reports": "Reports",
   "Product_Moves_Reports": "Product Moves Reports",
   "Account_Moves_Reports": "Account Moves Reports",
@@ -171,6 +172,7 @@
     "SELECT_ACCOUNT": "Select Account"
   },
   "accountCategories": {
+    "EMPLOYEE": "employee",
     "CLIENTS": "Clients",
     "VENDORS": "Vendors",
     "CATEGORY_NAME": " categpry name",
