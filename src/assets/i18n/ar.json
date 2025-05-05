@@ -672,7 +672,8 @@
     "SALES_INVOICE": "فاتورة مبيعات",
     "SALES_SHIPMENT": "ارسالية مبيعات",
     "PURCHASES_INVOICE": "فاتورة مشتريات",
-    "PURCHASES_SHIPMENT": "ارسالية مشتريات"
+    "PURCHASES_SHIPMENT": "ارسالية مشتريات",
+    "RETURN_PURCHASES_INVOICE": "مرتجع فاتورة مشتريات"
   },
   "MANAGE_CHECKS": "إدارة الشيكات",
   "CHECK_OPERATION": "عملية الشيك",
@@ -926,7 +927,8 @@
   "STATUS": "الحالة",
   "PERMISSIONS": "الأذونات",
   "SELECT_USER":"اختر المستخدم",
-  "SELECT_ROLE":"اختر الدور"
-
+  "SELECT_ROLE":"اختر الدور",
+  "UPDATE_RETURN_SALES": "تحديث مرتجعات المبيعات",
+  "RETURN_SALES": "مرتجعات فاتورة المبيعات"
 
 }

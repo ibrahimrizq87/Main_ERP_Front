@@ -130,6 +130,10 @@ import { AddProductInternalMovesComponent } from './Components/add-product-inter
 import { ProductInternalMovesComponent } from './Components/product-internal-moves/product-internal-moves.component';
 import { UpdateProductInternalMovesComponent } from './Components/update-product-internal-moves/update-product-internal-moves.component';
 import { ShowProductInternalMovesComponent } from './Components/show-product-internal-moves/show-product-internal-moves.component';
+import { ReturnSalesComponent } from './Components/return-sales/return-sales.component';
+import { AddReturnSalesComponent } from './Components/add-return-sales/add-return-sales.component';
+import { UpdateReturnSalesComponent } from './Components/update-return-sales/update-return-sales.component';
+import { ViewReturnSalesComponent } from './Components/view-return-sales/view-return-sales.component';
 
 
 export const routes: Routes = [
@@ -311,6 +315,12 @@ export const routes: Routes = [
         {path:"addSale",component:AddsalesComponent},
         {path:"updateSale/:id",component:UpdateSalesComponent},
         {path:"showSale/:id",component:ShowSalesComponent},
+
+        {path:"return-sales/:status",component:ReturnSalesComponent},
+        {path:"add-return-sale",component:AddReturnSalesComponent},
+        {path:"update-return-sale/:id",component:UpdateReturnSalesComponent},
+        {path:"show-return-sale/:id",component:ViewReturnSalesComponent},
+
 
         {path:"users",component:UserComponent},
         {path:"addUser",component:AddUserComponent},
