@@ -1,0 +1,180 @@
+#register {
+    background-color: #f0f2f5;
+    font-family: 'Arial', sans-serif;
+    background-image: url("/images/registeration.jpg"); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 20px 0px;  
+}
+input{
+ margin: 2px 0px;
+}
+label{
+margin: 8px 0px;
+}
+.head-sign{
+    position: relative;
+    
+    
+    
+}
+.head-sign h2{
+    position:absolute;
+    left:60px;
+    bottom: -10px;
+    transform:translateX(-50%,-50%);
+    font-size: 1.8em;
+}
+.head-sign h2:nth-child(1){
+    color:transparent;
+    -webkit-text-stroke: 1px #03a9f4;
+
+}
+.head-sign h2:nth-child(2){
+    color:#03a9f4;
+    -webkit-text-stroke: 2px #03a9f4;
+    animation: animate 3s ease-in-out infinite;
+
+}
+@keyframes animate
+{
+    0%,100%{
+        clip-path: polygon(2% 43%, 15% 38%, 26% 44%, 42% 53%, 58% 54%, 74% 53%, 87% 47%, 95% 44%, 100% 43%, 99% 100%, 0% 100%);    
+    }
+    50%{
+        clip-path: polygon(0 57%, 17% 63%, 33% 63%, 47% 56%, 60% 45%, 77% 31%, 90% 28%, 100% 28%, 99% 100%, 0% 100%);
+        
+    }
+}
+@media screen and (max-width :1200px){
+    .head-sign h2{
+        position:absolute;
+        left:95px;
+        bottom: -10px;
+        transform:translateX(-50%,-50%);
+        font-size: 1.3em;
+    }
+   } 
+
+@media screen and (max-width :992px){
+    .head-sign h2{
+        position:absolute;
+        left:55px;
+        bottom: -10px;
+        transform:translateX(-50%,-50%);
+        font-size: 1.3em;
+    }
+  }
+
+  @media screen and (max-width :768px){
+    .head-sign h2{
+        position:absolute;
+        left:45px;
+        bottom: -10px;
+        transform:translateX(-50%,-50%);
+        font-size: 1.3em;
+    }
+  }
+   @media screen and (max-width :576px){
+    .head-sign h2{
+        position:absolute;
+        left:40px;
+        bottom: -10px;
+        transform:translateX(-50%,-50%);
+        font-size: 1.2em;
+    }
+  }
+.registration-form {
+    background: rgba(219, 216, 216, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    animation: fadeInUp 1s ease-out;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.registration-form h2 {
+    color: #1230AE;
+    margin-bottom: 1.5rem;
+    /* font-size: 1.5rem; */
+    animation: bounceIn 1s ease;
+}
+
+.btn-primary {
+    background-color: #4f7daf;
+    border-color: #4f7daf;
+}
+
+.btn-primary:focus ,.btn-primary:hover{
+    background-color: #79ace4 !important;
+    border-color: #79ace4 !important;
+}
+
+.btn-active {
+    background-color: #4b0a70 !important; 
+    border-color: #2e033f !important;
+    color: #fff;
+}
+/* .btn-image{
+    background-color: #b94fce ;
+    border-color: #b94fce;
+    color:white
+}
+.btn-image:focus,.btn-image:hover{
+    background-color: #c181da ;
+    border-color: #c181da;
+    color:white
+} */
+.form-control {
+    border-radius: 0.25rem;
+}
+
+#message {
+    font-size: 1rem;
+    font-weight: bold;
+}
+label{
+    font-style: italic;
+    font-weight: bold;
+    color:#130b5e;
+
+}
+
+.form-control:focus{
+    border-color: #79ace4 !important;
+    /* box-shadow: none !important; */
+    box-shadow: 0 0 0 .2rem #90bef0;
+}
+
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 767px) {
+    .registration-form {
+        padding: 1.5rem;
+    }
+}

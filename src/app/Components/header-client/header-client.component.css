@@ -1,0 +1,226 @@
+
+.navbar-nav .nav-link.active{
+    color:#fff;
+    
+    font-weight: bold !important;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif !important;
+
+}
+.navbar-nav .nav-link{
+    color:#fff;
+   
+    font-weight: 500 !important;
+   
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif !important;
+}
+.logo{
+    width:110px
+}
+.formsearch .form-control{
+    background-color: rgba(84, 170, 240, 0.356);
+    border:none;
+    /* border-radius: 0 !important;  */
+    
+}
+.formsearch .form-control::placeholder{
+    color:white;
+}
+.formsearch i{
+    background-color:  rgba(84, 170, 240, 0.555);
+    padding: 20px;
+  border-radius: 20%;
+  color:white;
+}
+.navbar{
+    background-color: rgba(19, 18, 18, 0.295);
+}
+.navbar-nav .nav-item{
+    padding-inline: 10px;
+}
+.navbar-brand{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+.navbar-toggler{
+    border:none;
+    
+}
+.navbar-toggler .fa-bars{
+    font-size: 25px;
+   
+    
+} 
+
+.navbar-toggler:focus{
+    box-shadow: none;
+
+}
+.navbar-nav .nav-link.active{
+    position: relative;
+    
+   border:#3A6D8C 3px solid;
+   border-radius: 40%;
+}
+.navbar-nav .nav-link.active::before{
+    content: "";
+width:72%;
+height: 2px;
+background-image: linear-gradient(to right,#3A6D8C,#DEE5D4);
+position: absolute;
+left:15%;
+top:70%; 
+opacity: 1;
+}
+.navbar-nav .nav-link{
+    position: relative;
+}
+.navbar-nav .nav-link::before{
+content: "";
+ width:0%;
+height: 2px;
+background-image: linear-gradient(to right,#3A6D8C,#DEE5D4);
+position: absolute;
+left:15%;
+top:70%; 
+transition: all 0.5s;
+-webkit-transition:all 0.5s ;
+-moz-transition:all 0.5s ;
+-ms-transition:all 0.5s;
+-o-transition:all 0.5s;
+opacity: 0;
+ 
+}
+
+.navbar-nav .nav-link:focus::before{
+ width:72%;
+ opacity: 1;
+}
+@media screen and (max-width :990px){
+    
+    .navbar-nav .nav-link.active::before{
+        width: 45px;
+        left:50%;
+        background-color:black;
+        transform: translate(-50%);
+        -webkit-transform:translate(-50%) ;
+        -moz-transform:translate(-50%) ;
+        -ms-transform:translate(-50%);
+        -o-transform:translate(-50%);
+        
+    }
+    .navbar-nav{
+        background-color: #fff;
+        padding-block: 15px;
+        text-align: center;
+        
+    }
+    .navbar-nav .nav-link.active{
+        color:black;
+        font-weight: 100;
+        padding-block: 12px;
+        
+        font-size: 13px;
+    }
+    .navbar-nav .nav-link{
+        color:black;
+        font-weight: 100;
+        padding-block: 12px;
+        font-size: 13px;
+    }
+    .btn-register{
+        margin-top: 5px;
+    }
+
+}
+
+.btn-register{
+    background-image:linear-gradient(to right,rgba(185, 172, 185, 0.521),rgba(9, 134, 236, 0.521)) ; 
+    transition: all 1s;
+    color:#DBCC95;
+    margin-left:4px;
+}
+.btn-register:hover{
+    color:#CD8D7A;
+    background-color:rgba(9, 134, 236, 0.521);
+}
+.imgprofile{
+    width: 50px;
+    margin:8px;
+    height: 50px;
+}
+.notifiaction{
+    color: #6A9AB0 !important;
+}
+.spanBadge{
+   background-color: #78a7bd; 
+   /* bottom:20 !important; */
+   left: 15px;
+}
+.position-relative {
+    cursor: pointer;
+  }
+  
+  .notification-dropdown {
+    position: absolute;
+    top: 85px;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f8f9fa;
+  }
+  
+  .dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  
+  .dropdown-list li {
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer;
+  }
+  
+  .text-muted {
+    padding: 10px;
+    text-align: center;
+  }
+  /* Button styling */
+  .btn-outline-light {
+    border-width: 2px;
+  }
+  
+  .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .navbar-nav {
+      margin-bottom: 1rem;
+    }
+    
+    .d-flex {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .btn {
+      width: 45%;
+    }
+  }
+
+  .logoimg{
+    width:20%;
+}
