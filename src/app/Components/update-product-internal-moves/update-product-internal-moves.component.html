@@ -159,10 +159,11 @@
                 </ul>
             </div>
             <!-- <p *ngIf="msgError" class="alert alert-danger">{{msgError}}</p> -->
-            <div class="mt-4 mb-4">
+            <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
                 <button type="submit" class="btn btn-primary px-4">
                     <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
                 </button>
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
             </div>
         </div>
     </form>

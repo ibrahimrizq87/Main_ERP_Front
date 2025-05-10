@@ -130,6 +130,14 @@ import { AddProductInternalMovesComponent } from './Components/add-product-inter
 import { ProductInternalMovesComponent } from './Components/product-internal-moves/product-internal-moves.component';
 import { UpdateProductInternalMovesComponent } from './Components/update-product-internal-moves/update-product-internal-moves.component';
 import { ShowProductInternalMovesComponent } from './Components/show-product-internal-moves/show-product-internal-moves.component';
+import { ReturnSalesComponent } from './Components/return-sales/return-sales.component';
+import { AddReturnSalesComponent } from './Components/add-return-sales/add-return-sales.component';
+import { UpdateReturnSalesComponent } from './Components/update-return-sales/update-return-sales.component';
+import { ViewReturnSalesComponent } from './Components/view-return-sales/view-return-sales.component';
+import { EmployeesComponent } from './Components/employees/employees.component';
+import { AddEmployeeComponent } from './Components/add-employee/add-employee.component';
+import { UpdateEmployeesComponent } from './Components/update-employees/update-employees.component';
+import { ShowEmployeeComponent } from './Components/show-employee/show-employee.component';
 
 
 export const routes: Routes = [
@@ -312,6 +320,12 @@ export const routes: Routes = [
         {path:"updateSale/:id",component:UpdateSalesComponent},
         {path:"showSale/:id",component:ShowSalesComponent},
 
+        {path:"return-sales/:status",component:ReturnSalesComponent},
+        {path:"add-return-sale",component:AddReturnSalesComponent},
+        {path:"update-return-sale/:id",component:UpdateReturnSalesComponent},
+        {path:"show-return-sale/:id",component:ViewReturnSalesComponent},
+
+
         {path:"users",component:UserComponent},
         {path:"addUser",component:AddUserComponent},
         {path:"updateUser/:id",component:UpdateUserComponent},
@@ -320,6 +334,11 @@ export const routes: Routes = [
         {path:"rolesAndPermissions",component:RolesSystemComponent},
         {path:"roles",component:RolesComponent},
         {path:"addRole",component:AddRolesComponent},
+
+        {path:"employees",component:EmployeesComponent},
+        {path:"add-employee",component:AddEmployeeComponent},
+        {path:"update-employee/:id",component:UpdateEmployeesComponent},
+        {path:"show-employee/:id",component:ShowEmployeeComponent},
 
     ]},
     {path:"**",component:NotfoundComponent},

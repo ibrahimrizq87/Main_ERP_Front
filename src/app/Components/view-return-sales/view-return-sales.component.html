@@ -1,0 +1,44 @@
+<div class="container my-5">
+    <div class="card shadow rounded-4 border-0">
+      <div class="card-header rounded-top py-3 px-4 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Return Sales Bill #{{ storeData?.id || 'N/A' }}</h4>
+        <span class="badge bg-info text-dark">{{ storeData?.date || 'N/A' }}</span>
+      </div>
+      <div class="card-body px-4 py-4">
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <p><strong>Client:</strong> {{ storeData?.client?.name || 'N/A' }}</p>
+            <p><strong>Delegate:</strong> {{ storeData?.delegate?.name || 'N/A' }}</p>
+            <p><strong>Store:</strong> {{ storeData?.store?.[0] || storeData?.store?.name || 'N/A' }}</p>
+          </div>
+          <div class="col-md-6">
+            <p>
+              <strong>Payment Type:</strong>
+              <span class="badge bg-info text-dark text-uppercase">{{ storeData?.payment_type || 'N/A' }}</span>
+            </p>
+            <p>
+              <strong>Status:</strong>
+              <span class="badge bg-warning text-dark text-capitalize">{{ storeData?.status || 'N/A' }}</span>
+            </p>
+            <p><strong>Note:</strong> {{ storeData?.note || 'No note' }}</p>
+          </div>
+        </div>
+  
+        <hr>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Total: <span class="text-success fw-bold">{{ storeData?.total || '0.00' }} EGP</span></h5>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <h5>Total Payed: <span class="text-danger fw-bold">{{ storeData?.total_payed || '0.00' }} EGP</span></h5>
+          </div>
+        </div>
+        <div class="card-footer text-end bg-white px-4 py-3">
+            <a class="btn btn-secondary px-4" [routerLink]="['/dashboard/return-sales/', storeData?.status]">Back</a>
+          </div>
+      </div>
+    </div>
+  </div>
+  

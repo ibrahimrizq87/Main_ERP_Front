@@ -41,9 +41,9 @@
             <tr *ngFor="let currency of clients; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ currency.account.name }}</td>
-                <td>{{ currency.account_category.name }}</td>
-                <td>{{ currency.delegate.name }}</td>
-                <td>{{ currency.price_category.name }}</td>
+                <td>{{ currency.account_category? currency.account_category.name : "---" }}</td>
+                <td>{{ currency.delegate ? currency.delegate.name : "--" }}</td>
+                <td>{{ currency.price_category? currency.price_category.name : "--" }}</td>
 
                 
                 <td>

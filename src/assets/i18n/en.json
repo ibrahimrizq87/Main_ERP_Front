@@ -1,4 +1,6 @@
 {
+
+  "EMPLOYEE":"employee",
   "RETURN_PURCHASES_INVOICE": "Return Purchases Invoice",
   "Reports": "Reports",
   "Product_Moves_Reports": "Product Moves Reports",
@@ -751,7 +753,8 @@
     "SALES_INVOICE": "Sales Invoice",
     "SALES_SHIPMENT": "Sales Shipment",
     "PURCHASES_INVOICE": "Purchase Invoice",
-    "PURCHASES_SHIPMENT": "Purchase Shipment"
+    "PURCHASES_SHIPMENT": "Purchase Shipment",
+    "RETURN_PURCHASES_INVOICE": "Return Purchases Invoice"
   },
   "UNITS": "Units",
   "MANAGE_PRODUCT_DETERMINANTS": "Manage Product Determinants",
@@ -931,5 +934,16 @@
   "STATUS": "Status",
   "PERMISSIONS": "Permissions",
   "SELECT_USER": "Select User",
-  "SELECT_ROLE": "Select Role"
+  "SELECT_ROLE": "Select Role",
+  "UPDATE_RETURN_SALES": "Update Return Sales",
+  "RETURN_SALES": "Return Sales Invoice",
+  "IMPORT_ACCOUNT": "Import Account",
+  "ADD_EMPLOYEE": "Add Employee",
+  "EMPLOYEES": "Employees",
+  "EMPLOYEE_LIST": "Employee List",
+  "CREATE_EMPLOYEE":"Create Employee",
+  "EMPLOYEE_NAME_AR": "Employee Name (Arabic)",
+  "EMPLOYEE_NAME_EN": "Employee Name (English)",
+  "JOIN_DATE": "Join Date",
+  "MANAGE_EMPLOYEES": "Manage Employees"
 }

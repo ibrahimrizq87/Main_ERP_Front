@@ -473,7 +473,11 @@ filteredStores: any[] = [];
       modal?.hide();
     }
   }
-
+  onCancel(): void {
+    this.productMoves.reset();
+   
+    this._Router.navigate(['/dashboard/productInternalMoves/waiting']); 
+  }  
 }
 
 

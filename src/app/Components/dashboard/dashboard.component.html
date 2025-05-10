@@ -136,6 +136,11 @@
                   <i class="fa-solid fa-users me-2"></i> {{'accountCategories.DELEGATES' | translate}}
                 </a>
               </li>
+              <li class="nav-item nested">
+                <a class="nav-link" routerLink="employees" routerLinkActive="active">
+                  <i class="fa-solid fa-users me-2"></i> {{'accountCategories.EMPLOYEES' | translate}}
+                </a>
+              </li>
 
               <li class="nav-item nested">
                 <a class="nav-link" routerLink="vendors" routerLinkActive="active">
@@ -353,10 +358,13 @@
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.SALES_INVOICE' | translate }}
                 </a>
               </li>
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="return-sales/waiting">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_SALES' | translate }}
+                </a>
+              </li>
             </ul>
           </li>
-
-
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES_PURCHASES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>

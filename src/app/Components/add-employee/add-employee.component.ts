@@ -1,20 +1,17 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {  Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountCategoriesService } from '../../shared/services/account_categories.service';
 import { CurrencyService } from '../../shared/services/currency.service';
-import { PriceService } from '../../shared/services/price.service';
 import { Modal } from 'bootstrap';
-import { AccountService } from '../../shared/services/account.service';
 import { ClientService } from '../../shared/services/client.service';
 import { CityService } from '../../shared/services/city.service';
 import { CountryService } from '../../shared/services/country.service';
-import { DelegateService } from '../../shared/services/delegate.service';
 import { ToastrService } from 'ngx-toastr';
+import { EmployeeService } from '../../shared/services/employee.service';
 
 
 @Component({
@@ -27,17 +24,14 @@ import { ToastrService } from 'ngx-toastr';
 export class AddEmployeeComponent {
 
 
-
   msgError: string = '';
   isLoading: boolean = false;
   type ='employee';
   isSubmitted = false;
-  selectedCaegory :any;
+  selectedCategory :any;
   selectedCurrency:any;
   currencies:any;
-  clientForm!: FormGroup;
-  priceCategories:any;
-  selectedPriceCaegory:any;
+  employeeForm!: FormGroup;
   countries: any[] = [];
   categories:any;
   filteredAccounts :Account []=[];
@@ -45,61 +39,41 @@ export class AddEmployeeComponent {
 
   addressFromData : AddressFromData[]=[];
   onCategoryChange(event:Event){
-    this.selectedCaegory = (event.target as HTMLSelectElement).value;
+    this.selectedCategory = (event.target as HTMLSelectElement).value;
   }
 
 
-  onPriceCategoryChange(event:Event){
-    this.selectedPriceCaegory = (event.target as HTMLSelectElement).value;
-  }
+
 
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.clientForm.patchValue({ image: file });
+      this.employeeForm.patchValue({ image: file });
     }
   }
 
-
-  // <select id="price_category_id" (change)="onPriceCategoryChange($event)" formControlName="price_category_id" class="form-control"
-                        
-  // [class.is-invalid]="!selectedCaegory && isSubmitted"
-
-  // >
-  //   <option *ngFor="let priceCategory of priceCategories" [value]="priceCategory.id">
-  //     {{ priceCategory.name }}
-  //   </option>
-  // </select>
-  // <div class="invalid-feedback" *ngIf="!selectedPriceCaegory && isSubmitted">
-  constructor(private _AccountService:AccountService ,
+  constructor(
         private _Router: Router,
-        private translate: TranslateService,
         private _CountryService:CountryService,
-        private _ClientService: ClientService,
+        private _EmployeeService: EmployeeService,
         private  _CityService:CityService,
-        private _PriceService: PriceService,
         private fb: FormBuilder,
-        private _DelegateService: DelegateService,
-
         private _CurrencyService:CurrencyService,
         private _AccountCategoriesService:AccountCategoriesService,
         private toastr: ToastrService,
   ) {
-    this.clientForm = this.fb.group({
+    this.employeeForm = this.fb.group({
+     
       ar: ['', [Validators.required, Validators.maxLength(255)]],
       en: ['', [Validators.required, Validators.maxLength(255)]],
-
-      salary: [Validators.required],
-      join_date: [Validators.required],
-
       account_category_id: ['', Validators.required],
       image: [null], 
       currency_id: ['', Validators.required],
-
       addresses: this.fb.array([]),
-
-      phones: this.fb.array([])
+      phones: this.fb.array([]),
+      salary: ['', [Validators.required, Validators.min(1)]],
+      join_date: ['', Validators.required],
     });
   }
 
@@ -118,16 +92,18 @@ export class AddEmployeeComponent {
   }
   selectedCity:any;
   get addresses(): FormArray {
-    return this.clientForm.get('addresses') as FormArray;
+    return this.employeeForm.get('addresses') as FormArray;
   }
   onCityChange(event:Event){
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedCity =selectedValue;
   }
+  // Getter for phones
   get phones(): FormArray {
-    return this.clientForm.get('phones') as FormArray;
+    return this.employeeForm.get('phones') as FormArray;
   }
 
+  // Add new address
   addAddress(): void {
 
 
@@ -147,7 +123,6 @@ export class AddEmployeeComponent {
 onCurrencyChange(event:Event){
   this.selectedCurrency = (event.target as HTMLSelectElement).value;
 }
-selecteddelegateAccount:Account | null= null;
 
 
 
@@ -157,7 +132,8 @@ selecteddelegateAccount:Account | null= null;
 
     this.loadCurrency();
     this.loadCategories();
-    this.loadPriceCategories();
+    
+    
     this.loadCountries();
 
   }
@@ -185,13 +161,13 @@ selecteddelegateAccount:Account | null= null;
   onFileSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.clientForm.patchValue({ image: file });
+      this.employeeForm.patchValue({ image: file });
     }
   }
 
 
   loadCategories(): void {
-    this._AccountCategoriesService.getAllAccountCategoryByType('client').subscribe({
+    this._AccountCategoriesService.getAllAccountCategoryByType('employee').subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -205,32 +181,9 @@ selecteddelegateAccount:Account | null= null;
   }
 
 
-  loadPriceCategories(): void {
-    this._PriceService.viewAllCategory().subscribe({
-      next: (response) => {
-        if (response) {
-          console.log(response);
-          this.priceCategories = response.data;
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+ 
 
-  // loadDelegates(): void {
-  //   this._DelegateService.getAllDelegates().subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         this.delegates = response.data;
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
+  
 
 
   loadCurrency(): void {
@@ -252,24 +205,36 @@ selecteddelegateAccount:Account | null= null;
 
   handleForm() {
    this.isSubmitted  = true;
-    if (this.clientForm.valid) {
+    if (this.employeeForm.valid) {
       this.isLoading = true;
 
 
 
 
+      // 'addresses' => 'nullable|array',
+      // 'addresses.*.address_description' => 'nullable|string|max:500',
+      // 'addresses.*.address_name' => 'required|string|max:255',
+      // 'addresses.*.city_id' =>  'required|exists:cities,id',
 
+
+     
+      // 'phones' => 'nullable|array',
+      // 'phones.*.phone_name' => 'nullable|string|max:255',
+      // 'phones.*.phone' => 'required|string|max:255',
+      
       const formData = new FormData();
-      formData.append('name[ar]', this.clientForm.get('ar')?.value);
-      formData.append('name[en]', this.clientForm.get('en')?.value);
-      formData.append('delegate_id', this.clientForm.get('delegate_id')?.value);
-      formData.append('price_category_id', this.clientForm.get('price_category_id')?.value);
-      if( this.clientForm.get('image')?.value){
-        formData.append('image', this.clientForm.get('image')?.value);
+      formData.append('name[ar]', this.employeeForm.get('ar')?.value);
+      formData.append('name[en]', this.employeeForm.get('en')?.value);
+      
+    
+      if( this.employeeForm.get('image')?.value){
+        formData.append('image', this.employeeForm.get('image')?.value);
       }
-      formData.append('account_category_id', this.clientForm.get('account_category_id')?.value);
-      formData.append('currency_id', this.clientForm.get('currency_id')?.value);
-
+      formData.append('account_category_id', this.employeeForm.get('account_category_id')?.value);
+      formData.append('currency_id', this.employeeForm.get('currency_id')?.value);
+      
+      formData.append('salary', this.employeeForm.get('salary')?.value);
+      formData.append('join_date', this.employeeForm.get('join_date')?.value);
 
    this.addresses.controls.forEach((element,index) => {
         formData.append(`addresses[${index}][address_description]`, element.get('address_description')?.value ||'');
@@ -283,7 +248,7 @@ selecteddelegateAccount:Account | null= null;
         formData.append(`phones[${index}][phone]`, element.get('phone')?.value );
      
       });
-      this._ClientService.addClient(formData).subscribe({
+      this._EmployeeService.addEmployee(formData).subscribe({
         next: (response) => {
           console.log(response);
           if (response) {
@@ -301,21 +266,29 @@ selecteddelegateAccount:Account | null= null;
       });
     }else{
       this.toastr.error('خطا في البيانات المدخله');
+      // alert('invalid')
     }
   }
 
 
-
+  
   selectedCountry: string = '';
 
   onCountryChange(event:Event ,index:number){
+
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedCountry =selectedValue;
     this.loadCities( this.selectedCountry ,index);
+
+
   }
   cities:City [] =[];
 
   loadCities(id:string ,index:number): void {
+
+    console.log('id',id);
+    console.log('index',index);
+
     this._CityService.viewAllcitiesByCountry(id).subscribe({
       next: (response) => {
         if (response) {
@@ -331,7 +304,30 @@ selecteddelegateAccount:Account | null= null;
     });
   }
 
- 
+        openModal(modalId: string) {
+      
+          const modalElement = document.getElementById(modalId);
+          if (modalElement) {
+            const modal = new Modal(modalElement);
+            modal.show();
+          }
+        }
+
+
+          
+          
+
+
+            closeModal(modalId: string) {
+              const modalElement = document.getElementById(modalId);
+              if (modalElement) {
+                const modal = Modal.getInstance(modalElement);
+                modal?.hide();
+              }
+            }
+            searchQuery: string = '';
+
+          
           
       
 }
