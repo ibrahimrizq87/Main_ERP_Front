@@ -1,0 +1,87 @@
+<div class="container my-5" *ngIf="storeData">
+    <div class="card shadow-lg rounded-lg border-0">
+      <img
+        [src]="storeData.cover_image"
+        alt="Product Cover"
+        class="card-img-top img-fluid rounded-top"
+        style="max-height: 400px; object-fit: cover"
+      />
+  
+      <div class="card-body">
+        <h3 class="card-title text-primary">{{ storeData.name }}</h3>
+        <p class="card-text text-muted">
+          <strong>Description:</strong> {{ storeData.description }}
+        </p>
+  
+        <div class="mb-3">
+          <strong>Stock:</strong>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': storeData.stock > 0,
+              'bg-danger': storeData.stock === 0
+            }"
+          >
+            {{ storeData.stock > 0 ? storeData.stock + ' in stock' : 'Out of Stock' }}
+          </span>
+        </div>
+  
+        <div class="mb-3">
+          <strong>Category:</strong>
+          <div class="d-flex align-items-center mt-2">
+            <img
+              [src]="storeData.productCategory?.image"
+              alt="Category Image"
+              width="50"
+              height="50"
+              class="rounded-circle me-2 border"
+            />
+            <span class="text-secondary">{{ storeData.productCategory?.name }}</span>
+          </div>
+        </div>
+  
+        <div *ngIf="storeData.colors?.length" class="mb-4">
+          <strong>Available Colors:</strong>
+          <div class="d-flex gap-3 mt-2 flex-wrap">
+            <div
+              *ngFor="let item of storeData.colors"
+              class="p-2 border rounded d-flex align-items-center"
+            >
+              <div
+                class="rounded-circle me-2"
+                style="width: 20px; height: 20px"
+                [style.backgroundColor]="item.color?.color"
+              ></div>
+              <span class="text-capitalize">{{ item.color?.color }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <div *ngIf="storeData.images?.length">
+          <strong>More Images:</strong>
+          <div class="row mt-3">
+            <div class="col-md-3 mb-3" *ngFor="let img of storeData.images">
+              <img
+                [src]="img.image"
+                alt="Product Image"
+                class="img-thumbnail shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="card-footer text-end text-muted small">
+        <div>Created at: {{ storeData.created_at }}</div>
+        <div>Last updated: {{ storeData.updated_at }}</div>
+      </div>
+      <div class="card-footer text-end">
+        <button
+          class="btn btn-primary"
+          (click)="goToBranches()"
+        >
+          Home
+        </button>
+    </div>
+  </div>
+  

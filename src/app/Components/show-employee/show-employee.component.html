@@ -1,1 +1,132 @@
-<p>show-employee works!</p>
+<div class="mt-4 mb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5>{{ 'EMPLOYEE_DETAILS' | translate }}</h5>
+            </div>
+  
+            <div class="card-body">
+              <div class="row g-3">
+  
+                <!-- Basic Info -->
+                <div class="col-md-4">
+                  <strong>{{ 'NAME' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.name }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'NAME_EN' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.name_lang.en }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'NAME_AR' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.name_lang.ar }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'ACCOUNT_TYPE' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.type }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'ACCOUNT_CATEGORY' | translate }}:</strong>
+                  <p>{{ employeeData?.account_category?.name }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'CURRENCY' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.currency?.name }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'START_BALANCE' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.start_balance }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'NET_CREDIT' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.net_credit }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'NET_DEBIT' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.net_debit }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'CURRENT_BALANCE' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.current_balance }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'FINANCIAL_CONDITION' | translate }}:</strong>
+                  <p>{{ employeeData?.account?.financial_condition }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'JOIN_DATE' | translate }}:</strong>
+                  <p>{{ employeeData?.join_date }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'SALARY' | translate }}:</strong>
+                  <p>{{ employeeData?.salary }}</p>
+                </div>
+  
+                <!-- Phones -->
+                <div class="col-md-12">
+                  <strong>{{ 'PHONES' | translate }}:</strong>
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let phone of employeeData.phones">
+                      {{ phone?.phone_name }} - {{ phone?.phone }}
+                    </li>
+                  </ul>
+                </div>
+  
+                <!-- Addresses -->
+                <div class="col-md-12">
+                  <strong>{{ 'ADDRESSES' | translate }}:</strong>
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let address of employeeData.addresses">
+                      {{ address?.address_name }} - {{ address?.address_description }}
+                    </li>
+                  </ul>
+                </div>
+  
+                <!-- Image -->
+                <div class="col-md-4 text-center">
+                  <strong>{{ 'IMAGE' | translate }}:</strong><br />
+                  <img
+                    [src]="employeeData.image ? employeeData.image : 'assets/images/default.jpg'"
+                    alt="employee"
+                    class="img-thumbnail mt-2"
+                    width="120"
+                    height="120"
+                  />
+                </div>
+  
+                <!-- Creator -->
+                <div class="col-md-4">
+                  <strong>{{ 'CREATED_BY' | translate }}:</strong>
+                  <p>{{ employeeData.creator.name }}</p>
+                </div>
+  
+                <div class="col-md-4">
+                  <strong>{{ 'CREATOR_USERNAME' | translate }}:</strong>
+                  <p>{{ employeeData?.creator?.user_name }}</p>
+                </div>
+  
+              </div> <!-- end row -->
+            </div> <!-- end card-body -->
+          </div> <!-- end card -->
+          <button class="btn btn-primary mt-3" (click)="goBack()">
+            <i class="fa-solid fa-arrow-left"></i> {{ 'BACK' | translate }} 
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

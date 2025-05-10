@@ -943,5 +943,7 @@
   "EMPLOYEE_NAME_AR": "Employee Name (Arabic)",
   "EMPLOYEE_NAME_EN": "Employee Name (English)",
   "JOIN_DATE": "Join Date",
-  "MANAGE_EMPLOYEES": "Manage Employees"
+  "MANAGE_EMPLOYEES": "Manage Employees",
+  "EMPLOYEE_DETAILS": "Employee Details",
+  "UPDATE_EMPLOYEE": "Update Employee"
 }

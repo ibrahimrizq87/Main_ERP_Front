@@ -941,8 +941,9 @@
   "EMPLOYEE_NAME_AR": "اسم الموظف (عربي)",
   "EMPLOYEE_NAME_EN": "اسم الموظف (إنجليزي)",
   "JOIN_DATE": "تاريخ الانضمام",
-  "MANAGE_EMPLOYEES": "إدارة الموظفين"
-
+  "MANAGE_EMPLOYEES": "إدارة الموظفين",
+  "EMPLOYEE_DETAILS": "تفاصيل الموظف",
+  "UPDATE_EMPLOYEE": "تحديث الموظف"
 
 
 

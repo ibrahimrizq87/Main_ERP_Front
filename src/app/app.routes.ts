@@ -138,11 +138,18 @@ import { EmployeesComponent } from './Components/employees/employees.component';
 import { AddEmployeeComponent } from './Components/add-employee/add-employee.component';
 import { UpdateEmployeesComponent } from './Components/update-employees/update-employees.component';
 import { ShowEmployeeComponent } from './Components/show-employee/show-employee.component';
+import { RegisterComponent } from './Components/register/register.component';
+import { LoginClientComponent } from './Components/login-client/login-client.component';
+import { HomeComponent } from './Components/home/home.component';
+import { ShowproductBranchesClientComponent } from './Components/showproduct-branches-client/showproduct-branches-client.component';
 
 
 export const routes: Routes = [
-    {path:"",component:LoginComponent},
+    {path:"",component:HomeComponent},
     {path:"login",component:LoginComponent},
+    {path:"register",component:RegisterComponent},
+    {path:"loginClient",component:LoginClientComponent},
+    {path:"showProductClient/:id",component:ShowproductBranchesClientComponent},
     {path:"dashboard",component:DashboardComponent,children:[
         
         

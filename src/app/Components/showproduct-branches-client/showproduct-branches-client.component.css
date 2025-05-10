@@ -1,0 +1,14 @@
+.card-img-top {
+    border-bottom: 2px solid #eee;
+  }
+  
+  .badge {
+    font-size: 0.95rem;
+    padding: 0.5em 0.8em;
+  }
+  
+  img.img-thumbnail {
+    max-height: 150px;
+    object-fit: cover;
+  }
+  

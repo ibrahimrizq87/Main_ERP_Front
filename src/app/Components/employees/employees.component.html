@@ -21,40 +21,52 @@
         </div>
     </div>
 
-    <table class="table mt-3">
-        <thead>
+    <div class="table-responsive">
+        <table class="table align-middle text-center">
+          <thead class="table-light">
             <tr>
-                <th class="bg-light" scope="col">#</th>
-                <th class="bg-light" scope="col">{{ 'NAME' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+              <th scope="col">#</th>
+              <th scope="col">{{ 'NAME' | translate }}</th>
+              <th scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
+              <th scope="col">{{ 'IMAGE' | translate }}</th>
+              <th scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr *ngFor="let employee of filteredEmployee; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ employee.name }}</td>
-                <td>{{ employee.account_category.name }}</td>
-                <td>
-                    <img [src]="employee.image ? employee.image : 'images/image.jpg'"
-                        alt="{{ employee.name || 'Default Product' }}" width="50" height="50" />
-                </td>
-                <td class="d-flex justify-content-center gap-3 align-items-center">
+              <td class="align-middle">{{ i + 1 }}</td>
+              <td class="align-middle">{{ employee.account.name }}</td>
+              <td class="align-middle">{{ employee.account_category.name }}</td>
+              <td class="align-middle">
+                <div style="width: 60px; margin: auto;">
+                  <img
+                    [src]="employee.image ? employee.image : 'images/image.jpg'"
+                    alt="{{ employee.name || 'Default' }}"
+                    class="rounded-circle"
+                    width="50"
+                    height="50"
+                  />
+                </div>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex justify-content-center gap-2">
                     <a class="nav-link" routerLinkActive="active"
-                        [routerLink]="['/dashboard/show-employee', employee.id]">
-                        <i class="fa-solid fa-eye btn1 bg-primary rounded"
-                            title="{{ 'VIEW_EMPLOYEE' | translate }}"></i>
-                    </a>
-                    <a class="nav-link" routerLinkActive="active"
-                        [routerLink]="['/dashboard/update-delegate', employee.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded"
-                            title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
-                    </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteEmployee(employee.id)"
-                        title="{{ 'DELETE_EMPLOYEE' | translate }}"></i>
-                </td>
+                    [routerLink]="['/dashboard/show-employee', employee.id]">
+                    <i class="fa-solid fa-eye btn1 bg-primary rounded"
+                        title="{{ 'VIEW_EMPLOYEE' | translate }}"></i>
+                </a>
+                <a class="nav-link" routerLinkActive="active"
+                [routerLink]="['/dashboard/update-employee', employee.id]">
+                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                    title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
+            </a>
+            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteEmployee(employee.id)"
+                title="{{ 'DELETE_EMPLOYEE' | translate }}"></i>
+                </div>
+              </td>
             </tr>
-        </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+      
 </div>

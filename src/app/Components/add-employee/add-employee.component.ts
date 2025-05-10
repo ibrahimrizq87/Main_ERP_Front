@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {  Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -36,7 +36,7 @@ export class AddEmployeeComponent {
   categories:any;
   filteredAccounts :Account []=[];
 
-
+  readonly maxImageSize = 2048 * 1024;
   addressFromData : AddressFromData[]=[];
   onCategoryChange(event:Event){
     this.selectedCategory = (event.target as HTMLSelectElement).value;
@@ -46,12 +46,7 @@ export class AddEmployeeComponent {
 
 
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.employeeForm.patchValue({ image: file });
-    }
-  }
+
 
   constructor(
         private _Router: Router,
@@ -68,15 +63,39 @@ export class AddEmployeeComponent {
       ar: ['', [Validators.required, Validators.maxLength(255)]],
       en: ['', [Validators.required, Validators.maxLength(255)]],
       account_category_id: ['', Validators.required],
-      image: [null], 
+     
       currency_id: ['', Validators.required],
       addresses: this.fb.array([]),
       phones: this.fb.array([]),
       salary: ['', [Validators.required, Validators.min(1)]],
       join_date: ['', Validators.required],
+      image: [null, this.validateImage.bind(this)]
     });
   }
+  selectedFile: File | null = null;
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.employeeForm.patchValue({ image: file });
+    }
+  }
+  validateImage(control: AbstractControl): ValidationErrors | null {
+    const file = this.selectedFile;
+    if (file) {
+      const fileType = file.type;
+      const fileSize = file.size;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+      if (!allowedTypes.includes(fileType)) {
+        return { invalidFileType: true };
+      }
+      if (fileSize > this.maxImageSize) {
+        return { fileTooLarge: true };
+      }
+    }
+    return null;
+  }
   loadCountries(): void {
     this._CountryService.viewAllcountries().subscribe({
       next: (response) => {
@@ -158,12 +177,7 @@ onCurrencyChange(event:Event){
   removePhone(index: number): void {
     this.phones.removeAt(index);
   }
-  onFileSelect(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.employeeForm.patchValue({ image: file });
-    }
-  }
+  
 
 
   loadCategories(): void {
@@ -227,9 +241,7 @@ onCurrencyChange(event:Event){
       formData.append('name[en]', this.employeeForm.get('en')?.value);
       
     
-      if( this.employeeForm.get('image')?.value){
-        formData.append('image', this.employeeForm.get('image')?.value);
-      }
+      
       formData.append('account_category_id', this.employeeForm.get('account_category_id')?.value);
       formData.append('currency_id', this.employeeForm.get('currency_id')?.value);
       
@@ -241,8 +253,10 @@ onCurrencyChange(event:Event){
         formData.append(`addresses[${index}][address_name]`, element.get('address_name')?.value );
         formData.append(`addresses[${index}][city_id]`, element.get('city_id')?.value);
       });
-
-
+      console.log(this.selectedFile)
+      if (this.selectedFile) {
+        formData.append('image', this.selectedFile);
+      }
       this.phones.controls.forEach((element,index) => {
         formData.append(`phones[${index}][phone_name]`, element.get('phone_name')?.value ||'');
         formData.append(`phones[${index}][phone]`, element.get('phone')?.value );
@@ -254,7 +268,7 @@ onCurrencyChange(event:Event){
           if (response) {
             this.toastr.success('تم اضافه العميل بنجاح');
             this.isLoading = false;
-            this._Router.navigate(['/dashboard/clients']);
+            this._Router.navigate(['/dashboard/employees']);
           }
         },
         error: (err: HttpErrorResponse) => {
