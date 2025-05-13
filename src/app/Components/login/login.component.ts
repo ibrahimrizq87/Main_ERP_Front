@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { UserService } from '../../shared/services/user.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,7 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-// import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../shared/services/auth.service';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,17 +16,43 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   msgError: string = '';
   isLoading: boolean = false;
 
-  constructor(private _UserService:UserService ,
-    private _Router: Router,private toastr:ToastrService) {}
+  constructor(
+    private _UserService: UserService,
+    private _Router: Router,
+    private toastr: ToastrService,
+    private _AuthService: AuthService
+  ) {}
 
   loginForm: FormGroup = new FormGroup({
     user_name: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
   });
+
+  ngOnInit(): void {
+    // Only check auth state if token exists
+    if (localStorage.getItem('Token')) {
+      this.getMyInfo();
+    }
+  }
+
+  getMyInfo() {
+    this._AuthService.getMyInfo().subscribe({
+      next: (response) => {
+        if (response) {
+          this.redirectBasedOnRole(response.data.user.role);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        // Clear invalid token if request fails
+        localStorage.removeItem('Token');
+        console.log(err);
+      }
+    });
+  }
 
   handleForm() {
     if (this.loginForm.valid) {
@@ -37,43 +64,41 @@ export class LoginComponent {
 
       this._UserService.setLogin(formData).subscribe({
         next: (response) => {
-          // console.log(response);
           if (response) {
-            this.isLoading = false;
-
-          
             localStorage.setItem('Token', response.data.token);
             this.toastr.success(response.message);
-            // alert(response.message);
-
-            // Call saveUserData() to decode and store the access_token
-            // this._UserService.saveUserData();
-
-          
-            this._Router.navigate(['/dashboard']);
+            
+            // Get user info after successful login
+            this._AuthService.getMyInfo().subscribe({
+              next: (userInfo) => {
+                console.log(userInfo);
+                this.isLoading = false;
+                this.redirectBasedOnRole(userInfo.data.user.role);
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this._Router.navigate(['/']);
+              }
+            });
           }
         },
         error: (err: HttpErrorResponse) => {
-          this.toastr.error('حدث خطا اثناء تسجيل الدخول');
           this.isLoading = false;
-          if(err.status == 422){
+          if(err.status == 422) {
             this.msgError = err.error.errors;
           }
-          this.toastr.error(err.error.message);
-          // alert(err.error.message);
-
-          // console.log(err);
-          // console.log(err.error.message);  
-          // console.log(err.error.errors);     
-   
-          // console.log(err.status);          
-     
-          // console.log('herere');
-
-
+          this.toastr.error(err.error.message || 'حدث خطا اثناء تسجيل الدخول');
         }
       });
     }
   }
 
+  private redirectBasedOnRole(role: string): void {
+    if (role === 'worker'|| role === 'admin') {
+      this._Router.navigate(['/dashboard']);
+    } else {
+      // Default route for client or any other role
+      this._Router.navigate(['/']);
+    }
+  }
 }

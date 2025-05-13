@@ -407,6 +407,21 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('COMPANY_Branches')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'COMPANY_Branches' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('COMPANY_Branches') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('COMPANY_Branches')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="companyBranches">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'COMPANY_Branches' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
               <span>{{ 'Reports' | translate }}</span>

@@ -55,5 +55,11 @@ getProductBranchById(id: string): Observable<any> {
   }
 
 
+getMyInfo(): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/get-my-info`, { headers: this.getHeadersWithToken() });   
+}
+logout(userData: FormData): Observable<any> {
+  return this._HttpClient.post(`${this.baseURL}/client/logout`, {userData}, { headers: this.getHeadersWithToken() });
+}
 
 }

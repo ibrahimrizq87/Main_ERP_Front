@@ -142,213 +142,223 @@ import { RegisterComponent } from './Components/register/register.component';
 import { LoginClientComponent } from './Components/login-client/login-client.component';
 import { HomeComponent } from './Components/home/home.component';
 import { ShowproductBranchesClientComponent } from './Components/showproduct-branches-client/showproduct-branches-client.component';
+import { RoleGuard } from './shared/guards/role.guard';
+import { CompanyBranchesComponent } from './Components/company-branches/company-branches.component';
+import { AddCompanyBranchComponent } from './Components/add-company-branch/add-company-branch.component';
+import { UpdateCompanyBranchesComponent } from './Components/update-company-branches/update-company-branches.component';
+import { ShowCompanyBranchesComponent } from './Components/show-company-branches/show-company-branches.component';
 
 
 export const routes: Routes = [
-    {path:"",component:HomeComponent},
-    {path:"login",component:LoginComponent},
-    {path:"register",component:RegisterComponent},
-    {path:"loginClient",component:LoginClientComponent},
-    {path:"showProductClient/:id",component:ShowproductBranchesClientComponent},
-    {path:"dashboard",component:DashboardComponent,children:[
-        
-        
-        {path:"system-settings",component:SystemSettingsComponent,children:[
-            {path:"account-setting",component:AccountSettingsComponent},
-            {path:"general-setting",component:GeneralSettingsComponent},
-
-        ]},
+    { path: "", component: HomeComponent },
+    { path: "login", component: LoginComponent },
+    { path: "register", component: RegisterComponent },
+    { path: "loginClient", component: LoginClientComponent },
+    { path: "showProductClient/:id", component: ShowproductBranchesClientComponent },
+    {
+        path: "dashboard", component: DashboardComponent
+        , children: [
 
 
+            {
+                path: "system-settings", component: SystemSettingsComponent, children: [
+                    { path: "account-setting", component: AccountSettingsComponent },
+                    { path: "general-setting", component: GeneralSettingsComponent },
+
+                ]
+            },
+
+            { path: "add-return-purchase", component: AddReturnPurchaseBillComponent },
+            { path: "return-purchase/:status", component: ReturnPurchaseBillsComponent },
+            { path: "show-return-purchase/:id", component: ViewReturnPurchaseBillComponent },
+
+            { path: "account-moves-reports", component: AccountMovesReportsComponent },
+            { path: "product-moves-reports", component: ProductMovesReportsComponent },
+            { path: "purchases-reports", component: PurchasesReportsComponent },
+            { path: "sales-reports", component: SalesReportsComponent },
+            { path: "currency-price-tracking", component: CurrencyPriceTrackingComponent },
+            { path: "check-documents/:type", component: CheckDocumentsComponent },
+
+            { path: "colors", component: ColorsComponent },
+            { path: "add-color", component: AddColorComponent },
+            { path: "update-color/:id", component: UpdateColorComponent },
+
+
+            { path: "product-moves", component: ProductMovesComponent },
+            { path: "add-product-move", component: AddProductMoveComponent },
+            { path: "update-product-move", component: UpdateProductMoveComponent },
+
+            { path: "clients", component: ClientsComponent },
+            { path: "add-client", component: AddClientsComponent },
+            { path: "update-client/:id", component: UpdateClientsComponent },
+            { path: "testing", component: TestingDesignComponent },
+
+
+            { path: "vendors", component: VendorsComponent },
+            { path: "add-vendor", component: AddVendorComponent },
+            { path: "update-vendor/:id", component: UpdateVendorComponent },
+
+            { path: "delegates", component: DelegatesComponent },
+            { path: "add-delegate", component: AddDelegateComponent },
+            { path: "update-delegate/:id", component: UpdateDelegateComponent },
+
+
+            { path: "update-account-category/:id", component: UpdateAccountCategoriesComponent },
+            { path: "add-account-category/:type", component: AddAccountCategoryComponent },
+            { path: "account-categories/:type", component: AccountCategoriesComponent },
+
+            { path: "check-operation", component: CheckOperationsComponent },
+
+            { path: "addPurchase", component: AddPurchaseComponent },
+            { path: "purchases/:status", component: PurchasesComponent },
+            { path: "approvedPurchases", component: ApprovedPurchasesComponent },
+            { path: "updatePurchase/:id", component: UpdatePurchaseComponent },
+            { path: "showPurchase/:id", component: ShowPurchaseComponent },
+
+
+            { path: "addProductInternalMoves", component: AddProductInternalMovesComponent },
+            { path: "productInternalMoves/:status", component: ProductInternalMovesComponent },
+            { path: "updateProductInternalMoves/:id", component: UpdateProductInternalMovesComponent },
+            { path: "showProductInternalMoves/:id", component: ShowProductInternalMovesComponent },
 
 
 
-        {path:"add-return-purchase",component:AddReturnPurchaseBillComponent},
-        {path:"return-purchase/:status",component:ReturnPurchaseBillsComponent},
-        {path:"show-return-purchase/:id",component:ViewReturnPurchaseBillComponent},
-
-        {path:"account-moves-reports",component:AccountMovesReportsComponent},
-        {path:"product-moves-reports",component:ProductMovesReportsComponent},
-        {path:"purchases-reports",component:PurchasesReportsComponent},
-        {path:"sales-reports",component:SalesReportsComponent},
-        {path:"currency-price-tracking",component:CurrencyPriceTrackingComponent},
-        {path:"check-documents/:type",component:CheckDocumentsComponent},
-
-        {path:"colors",component:ColorsComponent},
-        {path:"add-color",component:AddColorComponent},
-        {path:"update-color/:id",component:UpdateColorComponent},
-
-        
-        {path:"product-moves",component:ProductMovesComponent},
-        {path:"add-product-move",component:AddProductMoveComponent},
-        {path:"update-product-move",component:UpdateProductMoveComponent},
-
-        {path:"clients",component:ClientsComponent},
-        {path:"add-client",component:AddClientsComponent},
-        {path:"update-client/:id",component:UpdateClientsComponent},
-        {path:"testing",component:TestingDesignComponent},
-
-        
-        {path:"vendors",component:VendorsComponent},
-        {path:"add-vendor",component:AddVendorComponent},
-        {path:"update-vendor/:id",component:UpdateVendorComponent},
-        
-        {path:"delegates",component:DelegatesComponent},
-        {path:"add-delegate",component:AddDelegateComponent},
-        {path:"update-delegate/:id",component:UpdateDelegateComponent},
-
-
-        {path:"update-account-category/:id",component:UpdateAccountCategoriesComponent},
-        {path:"add-account-category/:type",component:AddAccountCategoryComponent},
-        {path:"account-categories/:type",component:AccountCategoriesComponent},
-
-        {path:"check-operation",component:CheckOperationsComponent},
-        
-        {path:"addPurchase",component:AddPurchaseComponent},
-        {path:"purchases/:status",component:PurchasesComponent},
-        {path:"approvedPurchases",component:ApprovedPurchasesComponent},
-        {path:"updatePurchase/:id",component:UpdatePurchaseComponent},
-        {path:"showPurchase/:id",component:ShowPurchaseComponent},
-         
-
-        {path:"addProductInternalMoves",component:AddProductInternalMovesComponent},
-        {path:"productInternalMoves/:status",component:ProductInternalMovesComponent},
-        {path:"updateProductInternalMoves/:id",component:UpdateProductInternalMovesComponent},
-        {path:"showProductInternalMoves/:id",component:ShowProductInternalMovesComponent},
+            { path: "showPaymentDocument/:id", component: ShowPaymentDocumentComponent },
+            { path: "updatePaymentDocument/:id", component: UpdatePaymentDocumentComponent },
+            { path: "updateEntryDocument/:id", component: UpdateEntryDocumentComponent },
+            { path: "showEntryDocument/:id", component: ShowDocumentEntryComponent },
+            { path: "productCategories", component: ProductCategoryComponent },
+            { path: "addCategory", component: AddProductCategoryComponent },
+            { path: "updateproductCategory/:id", component: UpdateProductCategoryComponent },
 
 
 
-        {path:"showPaymentDocument/:id",component:ShowPaymentDocumentComponent},
-        {path:"updatePaymentDocument/:id",component:UpdatePaymentDocumentComponent},
-        {path:"updateEntryDocument/:id",component:UpdateEntryDocumentComponent},
-        {path:"showEntryDocument/:id",component:ShowDocumentEntryComponent},
-        {path:"productCategories",component:ProductCategoryComponent},
-        {path:"addCategory",component:AddProductCategoryComponent},
-        {path:"updateproductCategory/:id",component:UpdateProductCategoryComponent},
-
-        
-        
-        {path:"countries",component:CountriesComponent},
-        {path:"showCountry/:id",component:ShowCountryComponent},
-        {path:"updateCountry/:id",component:UpdateCountryComponent},
-        {path:"addCountry",component:AddCountryComponent},
-
-        
-        {path:"addcheck",component:AddCheckComponent},        
-        {path:"check/:id",component:ViewCheckComponent},
-        {path:"createVendor",component:CreateVendorComponent},
-        {path:"addDocument/:type",component:AddDocumentComponent},
-        {path:"document/:type/:status",component:DocumentsComponent},
-        {path:"check_list/:status",component:CheckManagementComponent},
-
-        {path:"documentEntry/:status",component:DocumentEntryComponent},
-        {path:"addDocumentEntry",component:AddDocumentEntryComponent},
+            { path: "countries", component: CountriesComponent },
+            { path: "showCountry/:id", component: ShowCountryComponent },
+            { path: "updateCountry/:id", component: UpdateCountryComponent },
+            { path: "addCountry", component: AddCountryComponent },
 
 
-        {path:"updateVendor/:id",component:UpdateVendorComponent},
-        {path:"showVendor/:id",component:ShowVendorComponent},
+            { path: "addcheck", component: AddCheckComponent },
+            { path: "check/:id", component: ViewCheckComponent },
+            { path: "createVendor", component: CreateVendorComponent },
+            { path: "addDocument/:type", component: AddDocumentComponent },
+            { path: "document/:type/:status", component: DocumentsComponent },
+            { path: "check_list/:status", component: CheckManagementComponent },
 
-        {path:"createCustomer",component:CreateCustomerComponent},
-        {path:"updateCustomer",component:UpdateCustomerComponent},
-        {path:"showCustomer",component:ShowCustomerComponent},
-
-        {path:"createSupplier",component:CreateSupplierComponent},
-        {path:"updateSupplier",component:UpdateSupplierComponent},
-        {path:"showSupplier",component:ShowSupplierComponent},
-        {path:"group",component:GroupComponent},
-        {path:"addGroup",component:AddGroupComponent},
-        {path:"updateGroup/:id",component:UpdateGroupComponent},
-
-        {path:"city",component:CityComponent},
-        {path:"bank",component:ManageBankComponent},
-        {path:"addCity",component:AddCityComponent},
-        {path:"updateCity/:id",component:UpdateCityComponent},
-        {path:"showCity/:id",component:ShowCityComponent},
-
-        {path:"currency",component:CurrencyComponent},
-        {path:"addCurrency",component:AddCurrencyComponent},
-        {path:"updateCurrency/:id",component:UpdateCurrencyComponent},
-
-        {path:"customer",component:CustomerComponent},
-        {path:"supplier",component:SupplierComponent},
-        {path:"accounting",component:AccountingComponent},
-        {path:"accounting/:type",component:AccountingComponent},
-        {path:"addAccount/:type",component:AddAccountComponent},
-        {path:"showAccount/:id",component:ShowAccountComponent},
-        {path:"updateAccount/:id",component:UpdateAccountComponent},
-        {path:"accounts",component:AccountsComponent},
-         
-        {path:"stores",component:StoresComponent},
-        {path:"addStore",component:AddStoreComponent},
-        {path:"updateStore/:id",component:UpdateStoreComponent},
-        {path:"showStore/:id",component:ShowStoreComponent},
-         
-        {path:"products",component:ProductsComponent},
-        {path:"addProduct",component:AddProductComponent},
-        {path:"updateProduct/:id",component:UpdateProductComponent},
-        {path:"showProduct/:id",component:ShowProductComponent},
-
-        {path:"productUnit",component:ProductUnitComponent},
-        {path:"addProductUnit",component:AddProductUnitComponent},
-        {path:"updateProductUnit/:id",component:UpdateProductUnitComponent},
-
-        {path:"banks",component:BanksComponent},
-        {path:"addBank",component:AddBankComponent},
-        {path:"updateBank/:id",component:UpdateBankComponent},
-         
-        {path:"bankBranch",component:BankBranchComponent},
-        {path:"addBankBranch",component:AddBankBranchComponent},
-        {path:"updateBankBranch/:id",component:UpdateBankBranchComponent},
-        {path:"showBankBranch/:id",component:ShowBankBranchComponent},
-
-        {path:"bankAccounts",component:BankAccountsComponent},
-        {path:"addBankAccount",component:AddBankAccountsComponent},
-        {path:"updateBankAccount/:id",component:UpdateBankAccountsComponent},
-
-        {path:"productBranch",component:ProductBranchComponent},
-        {path:"addProductBranch",component:AddProductBranchComponent},
-        {path:"updateProductBranch/:id",component:UpdateProductBranchComponent},
-        {path:"showProductBranch/:id",component:ViewProductBranchComponent},
-
-        {path:"productDeterminants",component:ProductDeterminantsComponent},
-        {path:"addProductDeterminant",component:AddProductDeterminantsComponent},
-        {path:"update-determinant/:id",component:UpdateDeterminantComponent},
+            { path: "documentEntry/:status", component: DocumentEntryComponent },
+            { path: "addDocumentEntry", component: AddDocumentEntryComponent },
 
 
-        
-        {path:"priceCategory",component:PriceCategoryComponent},
-        {path:"addPriceCategory",component:AddPriceCategoryComponent},
-        {path:"updateCategory/:id",component:UpdatePriceCategoryComponent},
+            { path: "updateVendor/:id", component: UpdateVendorComponent },
+            { path: "showVendor/:id", component: ShowVendorComponent },
 
-        {path:"updateOrder/:id",component:UpdateOrderComponent},
-         
-        {path:"sales/:status",component:SalesComponent},
-        {path:"addSale",component:AddsalesComponent},
-        {path:"updateSale/:id",component:UpdateSalesComponent},
-        {path:"showSale/:id",component:ShowSalesComponent},
+            { path: "createCustomer", component: CreateCustomerComponent },
+            { path: "updateCustomer", component: UpdateCustomerComponent },
+            { path: "showCustomer", component: ShowCustomerComponent },
 
-        {path:"return-sales/:status",component:ReturnSalesComponent},
-        {path:"add-return-sale",component:AddReturnSalesComponent},
-        {path:"update-return-sale/:id",component:UpdateReturnSalesComponent},
-        {path:"show-return-sale/:id",component:ViewReturnSalesComponent},
+            { path: "createSupplier", component: CreateSupplierComponent },
+            { path: "updateSupplier", component: UpdateSupplierComponent },
+            { path: "showSupplier", component: ShowSupplierComponent },
+            { path: "group", component: GroupComponent },
+            { path: "addGroup", component: AddGroupComponent },
+            { path: "updateGroup/:id", component: UpdateGroupComponent },
+
+            { path: "city", component: CityComponent },
+            { path: "bank", component: ManageBankComponent },
+            { path: "addCity", component: AddCityComponent },
+            { path: "updateCity/:id", component: UpdateCityComponent },
+            { path: "showCity/:id", component: ShowCityComponent },
+
+            { path: "currency", component: CurrencyComponent },
+            { path: "addCurrency", component: AddCurrencyComponent },
+            { path: "updateCurrency/:id", component: UpdateCurrencyComponent },
+
+            { path: "customer", component: CustomerComponent },
+            { path: "supplier", component: SupplierComponent },
+            { path: "accounting", component: AccountingComponent },
+            { path: "accounting/:type", component: AccountingComponent },
+            { path: "addAccount/:type", component: AddAccountComponent },
+            { path: "showAccount/:id", component: ShowAccountComponent },
+            { path: "updateAccount/:id", component: UpdateAccountComponent },
+            { path: "accounts", component: AccountsComponent },
+
+            { path: "stores", component: StoresComponent },
+            { path: "addStore", component: AddStoreComponent },
+            { path: "updateStore/:id", component: UpdateStoreComponent },
+            { path: "showStore/:id", component: ShowStoreComponent },
+
+            { path: "products", component: ProductsComponent },
+            { path: "addProduct", component: AddProductComponent },
+            { path: "updateProduct/:id", component: UpdateProductComponent },
+            { path: "showProduct/:id", component: ShowProductComponent },
+
+            { path: "productUnit", component: ProductUnitComponent },
+            { path: "addProductUnit", component: AddProductUnitComponent },
+            { path: "updateProductUnit/:id", component: UpdateProductUnitComponent },
+
+            { path: "banks", component: BanksComponent },
+            { path: "addBank", component: AddBankComponent },
+            { path: "updateBank/:id", component: UpdateBankComponent },
+
+            { path: "bankBranch", component: BankBranchComponent },
+            { path: "addBankBranch", component: AddBankBranchComponent },
+            { path: "updateBankBranch/:id", component: UpdateBankBranchComponent },
+            { path: "showBankBranch/:id", component: ShowBankBranchComponent },
+
+            { path: "bankAccounts", component: BankAccountsComponent },
+            { path: "addBankAccount", component: AddBankAccountsComponent },
+            { path: "updateBankAccount/:id", component: UpdateBankAccountsComponent },
+
+            { path: "productBranch", component: ProductBranchComponent },
+            { path: "addProductBranch", component: AddProductBranchComponent },
+            { path: "updateProductBranch/:id", component: UpdateProductBranchComponent },
+            { path: "showProductBranch/:id", component: ViewProductBranchComponent },
+
+            { path: "productDeterminants", component: ProductDeterminantsComponent },
+            { path: "addProductDeterminant", component: AddProductDeterminantsComponent },
+            { path: "update-determinant/:id", component: UpdateDeterminantComponent },
 
 
-        {path:"users",component:UserComponent},
-        {path:"addUser",component:AddUserComponent},
-        {path:"updateUser/:id",component:UpdateUserComponent},
-        {path:"showUser/:id",component:ShowUserComponent},
 
-        {path:"rolesAndPermissions",component:RolesSystemComponent},
-        {path:"roles",component:RolesComponent},
-        {path:"addRole",component:AddRolesComponent},
+            { path: "priceCategory", component: PriceCategoryComponent },
+            { path: "addPriceCategory", component: AddPriceCategoryComponent },
+            { path: "updateCategory/:id", component: UpdatePriceCategoryComponent },
 
-        {path:"employees",component:EmployeesComponent},
-        {path:"add-employee",component:AddEmployeeComponent},
-        {path:"update-employee/:id",component:UpdateEmployeesComponent},
-        {path:"show-employee/:id",component:ShowEmployeeComponent},
+            { path: "updateOrder/:id", component: UpdateOrderComponent },
 
-    ]},
-    {path:"**",component:NotfoundComponent},
+            { path: "sales/:status", component: SalesComponent },
+            { path: "addSale", component: AddsalesComponent },
+            { path: "updateSale/:id", component: UpdateSalesComponent },
+            { path: "showSale/:id", component: ShowSalesComponent },
+
+            { path: "return-sales/:status", component: ReturnSalesComponent },
+            { path: "add-return-sale", component: AddReturnSalesComponent },
+            { path: "update-return-sale/:id", component: UpdateReturnSalesComponent },
+            { path: "show-return-sale/:id", component: ViewReturnSalesComponent },
 
 
+            { path: "users", component: UserComponent },
+            { path: "addUser", component: AddUserComponent },
+            { path: "updateUser/:id", component: UpdateUserComponent },
+            { path: "showUser/:id", component: ShowUserComponent },
+
+            { path: "rolesAndPermissions", component: RolesSystemComponent },
+            { path: "roles", component: RolesComponent },
+            { path: "addRole", component: AddRolesComponent },
+
+            { path: "employees", component: EmployeesComponent },
+            { path: "add-employee", component: AddEmployeeComponent },
+            { path: "update-employee/:id", component: UpdateEmployeesComponent },
+            { path: "show-employee/:id", component: ShowEmployeeComponent },
+            
+            { path: "companyBranches", component: CompanyBranchesComponent },
+            { path: "addCompanyBranch", component: AddCompanyBranchComponent },
+            { path: "updateCompanyBranch/:id", component: UpdateCompanyBranchesComponent },
+            { path: "showCompanyBranch/:id", component: ShowCompanyBranchesComponent },
+
+        ], canActivate: [RoleGuard],
+        data: { roles: ['admin','worker'] }
+    },
+    { path: "**", component: NotfoundComponent },
 ];

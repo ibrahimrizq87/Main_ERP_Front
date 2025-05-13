@@ -189,7 +189,7 @@ export class RegisterComponent {
             this.isLoading = false;
             this.toastr.success(response.message);
             setTimeout(() => {
-              this._Router.navigate(['/loginClient']);
+              this._Router.navigate(['/login']);
             }, 2000);
           }
         },
