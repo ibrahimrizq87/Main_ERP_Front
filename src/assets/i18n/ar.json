@@ -177,7 +177,6 @@
   },
   "accountCategories": {
     "EMPLOYEES": "الموظفين",
-
     "CLIENTS": "العملاء",
     "VENDORS": "الموردين",
     "CATEGORY_NAME": "اسم التصنيف",
@@ -916,7 +915,7 @@
   "MANAGE_ROLES": "إدارة الأدوار",
   "ROLES_LIST": "قائمة الأدوار",
   "ROLE_NAME": "اسم الدور",
-  "GUARD_NAME":"اسم الحارس",
+  "GUARD_NAME": "اسم الحارس",
   "CREATE_ROLE": "إنشاء دور",
   "MANAGE_PRODUCT_INTERNAL_MOVES": "إدارة حركات المنتج الداخلية",
   "PRODUCT_INTERNAL_MOVES": "حركات المنتج الداخلية",
@@ -929,8 +928,8 @@
   "MOVE_ID": "معرف الحركة",
   "STATUS": "الحالة",
   "PERMISSIONS": "الأذونات",
-  "SELECT_USER":"اختر المستخدم",
-  "SELECT_ROLE":"اختر الدور",
+  "SELECT_USER": "اختر المستخدم",
+  "SELECT_ROLE": "اختر الدور",
   "UPDATE_RETURN_SALES": "تحديث مرتجعات المبيعات",
   "RETURN_SALES": "مرتجعات فاتورة المبيعات",
   "IMPORT_ACCOUNT": "استيراد حساب",
@@ -943,8 +942,20 @@
   "JOIN_DATE": "تاريخ الانضمام",
   "MANAGE_EMPLOYEES": "إدارة الموظفين",
   "EMPLOYEE_DETAILS": "تفاصيل الموظف",
-  "UPDATE_EMPLOYEE": "تحديث الموظف"
-
-
-
+  "UPDATE_EMPLOYEE": "تحديث الموظف",
+  "COMPANY_BRANCHES": "فروع الشركة",
+  "COMPANY_BRANCHES_LIST": "قائمة فروع الشركة",
+  "MANAGE_COMPANY_BRANCHES": "إدارة فروع الشركة",
+  "COMPANY_NAME": "اسم الشركة",
+  "latitude": "خط العرض",
+  "LONG": "خط الطول",
+  "REDIUS": "نصف القطر",
+  "ADD_COMPANY_BRANCH": "إضافة فرع شركة",
+  "UPDATE_COMPANY_BRANCH": "تحديث فرع الشركة",
+  "LOCATION": "الموقع",
+  "CLICK_ON_MAP_TO_SELECT_LOCATION": "انقر على الخريطة لاختيار الموقع",
+  "RADIUS_METERS": "نصف القطر (بالمتر)",
+  "COORDINATES": "الإحداثيات",
+  "ADDRESS_DETAILS": "تفاصيل العنوان",
+  "DESCRIPTION": "الوصف"
 }

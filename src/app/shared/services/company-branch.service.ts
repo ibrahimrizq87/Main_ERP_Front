@@ -32,7 +32,7 @@ export class CompanyBranchService {
   
  
 
-  updateComanyBranch(groupId: string, comapnyBranchData: FormData): Observable<any> {
+  updateCompanyBranch(groupId: string, comapnyBranchData: FormData): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     comapnyBranchData.append('_method', 'PUT');
