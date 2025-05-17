@@ -422,6 +422,21 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('VECATIONS')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'VECATIONS' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('VECATIONS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('VECATIONS')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'VECATIONS' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
               <span>{{ 'Reports' | translate }}</span>

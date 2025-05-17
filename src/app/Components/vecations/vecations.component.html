@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'MANAGE_VECATIONS' | translate }}</h5>
+        <span class="text-muted">
+            {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'VECATIONS' |
+            translate }}
+        </span>
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-vecation">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'VECATIONS_LIST' | translate }}</span>
+
+            <input class="form-control search w-25" type="search" [(ngModel)]="searchTerm" (input)="filterVecations()"
+                placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">{{ 'start_date' | translate }}</th>
+              <th scope="col">{{ 'end_date' | translate }}</th>
+              <th scope="col">{{ 'reason' | translate }}</th>
+              <th scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vecation of filteredVecation; let i = index">
+              <td class="align-middle">{{ i + 1 }}</td>
+              <td class="align-middle">{{ vecation.start_date }}</td>
+              <td class="align-middle">{{ vecation.end_date}}</td>
+              <td class="align-middle">{{ vecation.reason }}</td>
+              <td class="align-middle">
+                <div class="d-flex justify-content-center gap-2">
+                    <a class="nav-link" routerLinkActive="active"
+                    [routerLink]="['/dashboard/show-vecation', vecation.id]">
+                    <i class="fa-solid fa-eye btn1 bg-primary rounded"
+                        title="{{ 'VIEW_vecation' | translate }}"></i>
+                </a>
+                <a class="nav-link" routerLinkActive="active"
+                [routerLink]="['/dashboard/update-vecation', vecation.id]">
+                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                    title="{{ 'EDIT_vecation' | translate }}"></i>
+            </a>
+            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteVecation(vecation.id)"
+                title="{{ 'DELETE_vecation' | translate }}"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+</div>

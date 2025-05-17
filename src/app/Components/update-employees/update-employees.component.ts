@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { CompanyBranchService } from '../../shared/services/company-branch.service';
 
 @Component({
   selector: 'app-update-employees',
@@ -22,7 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class UpdateEmployeesComponent {
 
 
-  msgError: string = '';
+  msgErrors: any[] = [];
   isLoading: boolean = false;
   type = 'employee';
   isSubmitted = false;
@@ -33,7 +34,7 @@ export class UpdateEmployeesComponent {
   countries: any[] = [];
   categories: any;
   filteredAccounts: Account[] = [];
-
+  companyBranches: any[] = [];
   readonly maxImageSize = 2048 * 1024;
   addressFromData: AddressFromData[] = [];
   onCategoryChange(event: Event) {
@@ -56,6 +57,7 @@ export class UpdateEmployeesComponent {
     private _AccountCategoriesService: AccountCategoriesService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
+    private _CompanyBranchService: CompanyBranchService
   ) {
     this.employeeForm = this.fb.group({
 
@@ -68,9 +70,39 @@ export class UpdateEmployeesComponent {
       phones: this.fb.array([]),
       salary: ['', [Validators.required, Validators.min(1)]],
       join_date: ['', Validators.required],
-      image: [null, this.validateImage.bind(this)]
+      image: [null, this.validateImage.bind(this)],
+      bonus_type: ['', Validators.required],
+      hourly_bonus_amount: [''],
+      start_time: ['', Validators.required],
+      end_time: ['', Validators.required],
+      location_attendance_needed: [false],
+      company_branch_id: [''],
+      vacation_days: this.fb.array([]),
+      user_name: ['', [Validators.required, Validators.maxLength(255)]],
+      password: ['', [Validators.required]],
     });
   }
+  get vacationDays(): FormArray {
+    return this.employeeForm.get('vacation_days') as FormArray;
+  }
+
+  
+onVacationDayChange(day: string, event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (!target) return;
+  
+  const isChecked = target.checked;
+  const vacationDaysArray = this.vacationDays;
+  
+  if (isChecked) {
+    vacationDaysArray.push(this.fb.control(day));
+  } else {
+    const index = vacationDaysArray.controls.findIndex(x => x.value === day);
+    if (index >= 0) {
+      vacationDaysArray.removeAt(index);
+    }
+  }
+}
   selectedFile: File | null = null;
 
   onFileSelected(event: any): void {
@@ -154,6 +186,7 @@ export class UpdateEmployeesComponent {
     this.loadCurrency();
     this.loadCategories();
     this.loadCountries();
+    this.loadCompanyBranches();
 
   }
   fetchEmployeeId(employeeId: string): void {
@@ -287,6 +320,24 @@ export class UpdateEmployeesComponent {
         formData.append(`phones[${index}][phone]`, element.get('phone')?.value);
 
       });
+      formData.append('bonus_type', this.employeeForm.get('bonus_type')?.value);
+      formData.append('hourly_bonus_amount', this.employeeForm.get('hourly_bonus_amount')?.value || '');
+
+      formData.append('start_time', this.employeeForm.get('start_time')?.value);
+      formData.append('end_time', this.employeeForm.get('end_time')?.value);
+
+      const locationAttendanceValue = this.employeeForm.get('location_attendance_needed')?.value ? 1 : 0;
+      formData.append('location_attendance_needed', locationAttendanceValue.toString());
+      console.log(this.employeeForm.get('location_attendance_needed')?.value);
+      formData.append('company_branch_id', this.employeeForm.get('company_branch_id')?.value || '');
+      formData.append('user_name', this.employeeForm.get('user_name')?.value);
+      formData.append('password', this.employeeForm.get('password')?.value);
+      const selectedVacationDays = this.vacationDays.value;
+      if (selectedVacationDays && selectedVacationDays.length > 0) {
+        selectedVacationDays.forEach((day: string) => {
+          formData.append('vacation_days[]', day);
+        });
+      }
       const employeeID = this.route.snapshot.paramMap.get('id');
       if (employeeID) {
         this._EmployeeService.updateEmployee(employeeID, formData).subscribe({
@@ -301,7 +352,7 @@ export class UpdateEmployeesComponent {
           error: (err: HttpErrorResponse) => {
             this.toastr.error('حدث خطا اثناء اضافه العميل');
             this.isLoading = false;
-            this.msgError = err.error.error;
+            this.msgErrors = err.error.errors;
             console.log(err);
           }
         });
@@ -368,7 +419,20 @@ export class UpdateEmployeesComponent {
     }
   }
   searchQuery: string = '';
+  loadCompanyBranches(): void {
+    this._CompanyBranchService.viewallCompanyBranch().subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          this.companyBranches = response.data;
 
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
   goBack() {
     this._Router.navigate(['/dashboard/employees']);

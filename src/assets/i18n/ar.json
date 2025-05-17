@@ -957,5 +957,34 @@
   "RADIUS_METERS": "نصف القطر (بالمتر)",
   "COORDINATES": "الإحداثيات",
   "ADDRESS_DETAILS": "تفاصيل العنوان",
-  "DESCRIPTION": "الوصف"
+  "DESCRIPTION": "الوصف",
+  "COMMESSIONS": "العمولات",
+  "ADD_COMMISSION": "إضافة عمولة",
+  "PRECENTAGE":" النسبة المئوية",
+  "location_attendance_needed": "مطلوب موقع الحضور",
+  "SELECT_COMPANY_BRANCH": "اختر فرع الشركة",
+  "hourly_bonus_amount": "مبلغ المكافأة بالساعة",
+  "start_time": "وقت البدء",
+  "end_time": "وقت الانتهاء",
+  "VACATION_DAYS": "أيام الإجازة",
+  "SELECT_VACATION_DAYS":"اختر أيام الإجازة",
+  "SATURDAY":"السبت",
+  "SUNDAY":"الأحد",
+  "MONDAY":"الاثنين",
+  "TUESDAY":"الثلاثاء",
+  "WEDNESDAY":"الأربعاء",
+  "THURSDAY":"الخميس",
+  "FRIDAY":"الجمعة",
+  "PLEASE_SELECT_AT_LEAST_ONE_DAY":"يرجى اختيار يوم واحد على الأقل",
+  "VECATIONS": "الإجازات",
+  "ADD_VECATION": "إضافة إجازة",
+  "start_date": "تاريخ البدء",
+  "end_date": "تاريخ الانتهاء",
+  "reason": "السبب",
+  "VECATIONS_LIST": "قائمة الإجازات",
+  "MANAGE_VECATIONS":"إدارة الإجازات",
+  "END_DATE_MUST_BE_AFTER_START_DATE": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء"
+
+  
+
 }

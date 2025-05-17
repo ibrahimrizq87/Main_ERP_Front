@@ -147,6 +147,10 @@ import { CompanyBranchesComponent } from './Components/company-branches/company-
 import { AddCompanyBranchComponent } from './Components/add-company-branch/add-company-branch.component';
 import { UpdateCompanyBranchesComponent } from './Components/update-company-branches/update-company-branches.component';
 import { ShowCompanyBranchesComponent } from './Components/show-company-branches/show-company-branches.component';
+import { VecationsComponent } from './Components/vecations/vecations.component';
+import { AddVecationComponent } from './Components/add-vecation/add-vecation.component';
+import { UpdateVecationComponent } from './Components/update-vecation/update-vecation.component';
+import { ShowVecationComponent } from './Components/show-vecation/show-vecation.component';
 
 
 export const routes: Routes = [
@@ -351,6 +355,12 @@ export const routes: Routes = [
             { path: "add-employee", component: AddEmployeeComponent },
             { path: "update-employee/:id", component: UpdateEmployeesComponent },
             { path: "show-employee/:id", component: ShowEmployeeComponent },
+
+
+            { path: "vecations", component: VecationsComponent },
+            { path: "add-vecation", component: AddVecationComponent },
+            { path: "update-vecation/:id", component: UpdateVecationComponent },
+            { path: "show-vecation/:id", component: ShowVecationComponent },
             
             { path: "companyBranches", component: CompanyBranchesComponent },
             { path: "addCompanyBranch", component: AddCompanyBranchComponent },

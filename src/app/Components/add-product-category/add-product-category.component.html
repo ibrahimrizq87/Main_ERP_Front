@@ -38,6 +38,9 @@
                     </label>
                     <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
                   </div>
+                  <div class="form-group col-md-3" *ngIf="categoryImage">
+                    <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
+                  </div>
                   <div class="border rounded p-3 mt-3">
                     <h5>{{ 'COMMESSIONS' | translate }}</h5>
                     <div formArrayName="commissions">
@@ -103,13 +106,11 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-success mt-2" (click)="addCommissions()">+ {{
-                            'ADD_PHONE' | translate }}</button>
+                            'ADD_COMMISSION' | translate }}</button>
                     </div>
                 </div>
 
-                  <div class="form-group col-md-3" *ngIf="categoryImage">
-                    <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
-                  </div>
+              
   
                 </div>
               </div>
