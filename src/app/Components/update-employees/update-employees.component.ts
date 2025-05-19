@@ -206,7 +206,7 @@ export class UpdateEmployeesComponent {
 
 
   loadCategories(): void {
-    this._AccountCategoriesService.getAllAccountCategoryByType('client').subscribe({
+    this._AccountCategoriesService.getAllAccountCategoryByType('employee').subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
