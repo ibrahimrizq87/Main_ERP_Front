@@ -988,7 +988,8 @@
   "reason": "Reason",
   "VECATIONS_LIST": "Vacations List",
   "MANAGE_VECATIONS":"Manage Vacations",
-  "END_DATE_MUST_BE_AFTER_START_DATE": "End Date must be after Start Date"
+  "END_DATE_MUST_BE_AFTER_START_DATE": "End Date must be after Start Date",
+  "UPDATE_VECATION":"Update Vacation"
  
   
 }

@@ -985,7 +985,8 @@
   "reason": "السبب",
   "VECATIONS_LIST": "قائمة الإجازات",
   "MANAGE_VECATIONS":"إدارة الإجازات",
-  "END_DATE_MUST_BE_AFTER_START_DATE": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء"
+  "END_DATE_MUST_BE_AFTER_START_DATE": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء",
+  "UPDATE_VECATION":"تحديث الإجازة"
 
   
 

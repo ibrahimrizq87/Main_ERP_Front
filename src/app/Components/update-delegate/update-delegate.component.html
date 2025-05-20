@@ -1,148 +1,399 @@
 <div class="mt-3 mb-3">
-    <h5 class="large-text">{{ 'DELEGATE' | translate }}</h5>
-    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CATEGORY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
-  </div>
-  <div class="mt-4 mb-4">
-    <form [formGroup]="delegateForm" (ngSubmit)="handleForm()">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card shadow em-card rounded-lg">
-                <div class="card-header bg-white text-black rounded-top pt-3">
-                  <h5 class="large-text">{{ 'UPDATE_DELEGATE' | translate }}</h5>
+  <h5 class="large-text">{{ 'DELEGATE' | translate }}</h5>
+  <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CATEGORY' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+  <form [formGroup]="delegateForm" (ngSubmit)="handleForm()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'UPDATE_DELEGATE' | translate }}</h5>
+            </div>
+
+            <div class="card-body pb-5">
+              <div class="row">
+
+                <!-- Name Arabic -->
+                <div class="form-group col-md-6">
+                  <label for="nameAr" class="form-label large-text">{{ 'DELEGATE_NAME_AR' | translate }}</label>
+                  <input id="nameAr" formControlName="nameAr" type="text" class="form-control" required
+                    placeholder="{{ 'DELEGATE_NAME_AR' | translate }}"
+                    [class.is-invalid]="delegateForm.get('nameAr')?.invalid && isSubmitted" />
+                  <div class="invalid-feedback" *ngIf="delegateForm.get('nameAr')?.invalid && isSubmitted">
+                    <p *ngIf="delegateForm.get('nameAr')?.hasError('required')">
+                      {{ 'NAME_REQUIRED' | translate }}
+                    </p>
+                    <p *ngIf="delegateForm.get('nameAr')?.hasError('maxlength')">
+                      {{ 'MAX_LENGTH_255' | translate }}
+                    </p>
+                  </div>
                 </div>
-                
-                <div class="card-body pb-5">
-                  <div class="row">
-                    
-                    <!-- Name Arabic -->
-                    <div class="form-group col-md-6">
-                      <label for="nameAr" class="form-label large-text">{{ 'DELEGATE_NAME_AR' | translate }}</label>
-                      <input id="nameAr" formControlName="nameAr" type="text" class="form-control" required
-                        placeholder="{{ 'DELEGATE_NAME_AR' | translate }}"
-                        [class.is-invalid]="delegateForm.get('nameAr')?.invalid && isSubmitted" 
-                      />
-                      <div class="invalid-feedback" *ngIf="delegateForm.get('nameAr')?.invalid && isSubmitted">
-                        <p *ngIf="delegateForm.get('nameAr')?.hasError('required')">
-                          {{ 'NAME_REQUIRED' | translate }}
-                        </p>
-                        <p *ngIf="delegateForm.get('nameAr')?.hasError('maxlength')">
-                          {{ 'MAX_LENGTH_255' | translate }}
-                        </p>
-                      </div>
-                    </div>
-      
-                    <!-- Name English -->
-                    <div class="form-group col-md-6">
-                      <label for="nameEn" class="form-label large-text">{{ 'DELEGATE_NAME_EN' | translate }}</label>
-                      <input id="nameEn" formControlName="nameEn" type="text" class="form-control" required
-                        placeholder="{{ 'DELEGATE_NAME_EN' | translate }}"
-                        [class.is-invalid]="delegateForm.get('nameEn')?.invalid && isSubmitted" 
-                      />
-                      <div class="invalid-feedback" *ngIf="delegateForm.get('nameEn')?.invalid && isSubmitted">
-                        <p *ngIf="delegateForm.get('nameEn')?.hasError('required')">
-                          {{ 'NAME_REQUIRED' | translate }}
-                        </p>
-                        <p *ngIf="delegateForm.get('nameEn')?.hasError('maxlength')">
-                          {{ 'MAX_LENGTH_255' | translate }}
-                        </p>
-                      </div>
-                    </div>
-      
-                    <!-- Phone Number 1 -->
-                    <div class="form-group col-md-6">
-                      <label for="phone1" class="form-label large-text">{{ 'PHONE_NUMBER_1' | translate }}</label>
-                      <input id="phone1" formControlName="phone_number_1" type="text" class="form-control" required
-                        placeholder="{{ 'PHONE_NUMBER_1' | translate }}"
-                        [class.is-invalid]="delegateForm.get('phone_number_1')?.invalid && isSubmitted"
-                      />
-                      <div class="invalid-feedback" *ngIf="delegateForm.get('phone_number_1')?.invalid && isSubmitted">
-                        <p *ngIf="delegateForm.get('phone_number_1')?.hasError('required')">
-                          {{ 'PHONE_REQUIRED' | translate }}
-                        </p>
-                        <p *ngIf="delegateForm.get('phone_number_1')?.hasError('maxlength')">
-                          {{ 'MAX_LENGTH_255' | translate }}
-                        </p>
-                      </div>
-                    </div>
-      
-                    <!-- Phone Number 2 -->
-                    <div class="form-group col-md-6">
-                      <label for="phone2" class="form-label large-text">{{ 'PHONE_NUMBER_2' | translate }}</label>
-                      <input id="phone2" formControlName="phone_number_2" type="text" class="form-control"
-                        placeholder="{{ 'PHONE_NUMBER_2' | translate }}"
-                        [class.is-invalid]="delegateForm.get('phone_number_2')?.invalid && isSubmitted"
-                      />
-                      <div class="invalid-feedback" *ngIf="delegateForm.get('phone_number_2')?.invalid && isSubmitted">
-                        <p *ngIf="delegateForm.get('phone_number_2')?.hasError('maxlength')">
-                          {{ 'MAX_LENGTH_255' | translate }}
-                        </p>
-                      </div>
-                    </div>
-      
-                    <!-- Image Upload -->
-                    <div class="form-group col-md-4">
-                      <label for="image" class="form-label large-text">{{ 'IMAGE' | translate }}</label>
-                      <input id="image" type="file" class="form-control" (change)="onFileSelected($event)" />
-                      <small class="form-text text-muted">{{ 'ACCEPTED_FORMATS' | translate }}</small>
-                    </div>
-      
-                    <div class="form-group col-md-2">
-                      <img *ngIf="currentImage"  [src]="currentImage" alt="" height="80" width="80">
-                    </div>
-                    
-                    <!-- Account Category -->
-                    <div class="form-group col-md-6">
-                      <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate }}</label>
-                      <select id="account_category_id" (change)="onCategoryChange($event)" formControlName="account_category_id" class="form-control"
-                      
-                      [class.is-invalid]="!selectedCaegory && isSubmitted"
 
-                      >
-                        <option *ngFor="let category of categories" [value]="category.id">
-                          {{ category.name }}
-                        </option>
-                      </select>
-                      <div class="invalid-feedback" *ngIf="!selectedCaegory && isSubmitted">
-                        <p *ngIf="delegateForm.get('account_category_id')?.hasError('required')">
-                          {{ 'CATEGORY_REQUIRED' | translate }}
-                        </p>
-                      </div>
-                    </div>
+                <!-- Name English -->
+                <div class="form-group col-md-6">
+                  <label for="nameEn" class="form-label large-text">{{ 'DELEGATE_NAME_EN' | translate }}</label>
+                  <input id="nameEn" formControlName="nameEn" type="text" class="form-control" required
+                    placeholder="{{ 'DELEGATE_NAME_EN' | translate }}"
+                    [class.is-invalid]="delegateForm.get('nameEn')?.invalid && isSubmitted" />
+                  <div class="invalid-feedback" *ngIf="delegateForm.get('nameEn')?.invalid && isSubmitted">
+                    <p *ngIf="delegateForm.get('nameEn')?.hasError('required')">
+                      {{ 'NAME_REQUIRED' | translate }}
+                    </p>
+                    <p *ngIf="delegateForm.get('nameEn')?.hasError('maxlength')">
+                      {{ 'MAX_LENGTH_255' | translate }}
+                    </p>
+                  </div>
 
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="user_name" class="form-label">User Name</label>
+                  <input id="user_name" formControlName="user_name" type="text" class="form-control"
+                    placeholder="Enter User Name" required />
+                  <div class="alert alert-danger"
+                    *ngIf="delegateForm.get('user_name')?.errors && delegateForm.get('user_name')?.touched">
+                    <p *ngIf="delegateForm.get('user_name')?.getError('required')">User Name is Required</p>
+                  </div>
+                </div>
 
-                    <div class="form-group col-md-6">
-                        <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
-                        <select class="form-control" (change)="onCurrencyChange($event)"   formControlName="currency_id"
-                        [class.is-invalid]="isSubmitted && !selectedCurrency "
-                        
-                        >
-                          <option>{{ 'SELECT_CURRENCY' | translate }}</option>
-                          <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
-                          </option>
-                        </select>
-                        <div *ngIf="isSubmitted && !selectedCurrency " class="invalid-feedback">
-                         
-                         {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
-                        </div>                
-                      </div>
-
+                <div class="form-group col-md-6">
+                  <label for="password" class="form-label"> Password</label>
+                  <input id="password" formControlName="password" type="password" class="form-control"
+                    placeholder="Enter User Password" required />
+                  <div class="alert alert-danger"
+                    *ngIf="delegateForm.get('password')?.errors && delegateForm.get('password')?.touched">
+                    <p *ngIf="delegateForm.get('password')?.getError('required')">Password is Required</p>
 
                   </div>
                 </div>
-      
-             
-      
+                <div class="form-group col-md-6">
+                  <label for="salary" class="form-label large-text">{{ 'SALARY' | translate }}</label>
+                  <input id="salary" formControlName="salary" type="number" class="form-control"
+                    placeholder="{{ 'SALARY' | translate }}"
+                    [class.is-invalid]="delegateForm.get('salary')?.invalid && isSubmitted" />
+                  <div class="invalid-feedback" *ngIf="delegateForm.get('salary')?.invalid && isSubmitted">
+                    <p *ngIf="delegateForm.get('salary')?.hasError('required')">
+                      {{ 'NAME_REQUIRED' | translate }}
+                    </p>
+                    <p *ngIf="delegateForm.get('salary')?.hasError('maxlength')">
+                      {{ 'MAX_LENGTH_255' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="join_date" class="form-label large-text">{{ 'JOIN_DATE' | translate }}</label>
+                  <input id="join_date" formControlName="join_date" type="date" class="form-control"
+                    [class.is-invalid]="delegateForm.get('join_date')?.invalid && isSubmitted" />
+
+
+                  <div class="text-danger" *ngIf="delegateForm.get('join_date')?.invalid&& isSubmitted">
+                    {{ 'JOIN_DATE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                  </div>
+
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label large-text">{{ 'start_time' | translate }}</label>
+                  <input formControlName="start_time" type="time" class="form-control"
+                    placeholder="{{ 'start_time' | translate }}"
+                    [class.is-invalid]="isSubmitted && delegateForm.get('start_time')?.invalid">
+                </div>
+                <!-- 'end_time' => 'required|date_format:H:i', -->
+                <div class="col-md-6">
+                  <label class="form-label large-text">{{ 'end_time' | translate }}</label>
+                  <input formControlName="end_time" type="time" class="form-control"
+                    placeholder="{{ 'end_time' | translate }}"
+                    [class.is-invalid]="isSubmitted && delegateForm.get('end_time')?.invalid">
+                </div>
+                <!-- daily_attendance_needed' => 'required|boolean', -->
+                <div class="row">
+                  <div class="d-flex  gap-2">
+                    <label class="form-label large-text">{{ 'location_attendance_needed' | translate }}</label>
+                    <input formControlName="location_attendance_needed" type="checkbox" class="form-check-input mt-3"
+                      [class.is-invalid]="isSubmitted && delegateForm.get('location_attendance_needed')?.invalid">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <select id="company_branch" class="form-control" formControlName="company_branch_id"
+                    [class.is-invalid]="delegateForm.get('company_branch_id')?.errors && isSubmitted"
+                    [disabled]="!companyBranches.length">
+                    <option value="" disabled>{{ 'SELECT_COMPANY_BRANCH' | translate }}</option>
+                    <option *ngFor="let companyBranch of companyBranches" [value]="companyBranch.id">
+                      {{ companyBranch.name }}
+                    </option>
+                  </select>
+                </div>
+
+
+
+
+                <div class="row">
+                  <!-- Image Upload -->
+                  <div class="form-group col-md-4">
+                    <label for="image" class="form-label large-text">{{ 'IMAGE' | translate }}</label>
+                    <input id="image" type="file" class="form-control" (change)="onFileSelected($event)" />
+                    <small class="form-text text-muted">{{ 'ACCEPTED_FORMATS' | translate }}</small>
+                  </div>
+    
+                  <div class="form-group col-md-2">
+                    <img *ngIf="currentImage"  [src]="currentImage" alt="" height="80" width="80">
+                  </div>
+
+                  <!-- Account Category -->
+                  <div class="form-group col-md-6">
+                    <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate
+                      }}</label>
+                    <select id="account_category_id" (change)="onCategoryChange($event)"
+                      formControlName="account_category_id" class="form-control"
+                      [class.is-invalid]="!selectedCaegory && isSubmitted">
+                      <option *ngFor="let category of categories" [value]="category.id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="!selectedCaegory && isSubmitted">
+                      <p *ngIf="delegateForm.get('account_category_id')?.hasError('required')">
+                        {{ 'CATEGORY_REQUIRED' | translate }}
+                      </p>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                    <select class="form-control" (change)="onCurrencyChange($event)" formControlName="currency_id"
+                      [class.is-invalid]="isSubmitted && !selectedCurrency ">
+                      <option disabled >{{ 'SELECT_CURRENCY' | translate }}</option>
+                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
+                      </option>
+                    </select>
+                    <div *ngIf="isSubmitted && !selectedCurrency " class="invalid-feedback">
+
+                      {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="border rounded p-3 mt-2">
+                  <h5>{{ 'ADDRESSES' | translate }}</h5>
+                  <div formArrayName="addresses">
+                    <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i"
+                      class="row mt-2 border rounded shadow p-3">
+  
+  
+  
+                      <div class="col-md-4">
+                        <input formControlName="address_name" type="text" class="form-control"
+                          placeholder="{{ 'ADDRESS_NAME' | translate }}"
+                          [class.is-invalid]="isSubmitted && address.get('address_name')?.invalid">
+  
+                        <div class="invalid-feedback" *ngIf="isSubmitted && address.get('address_name')?.invalid">
+                          <p *ngIf="address.get('address_name')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="address.get('address_name')?.hasError('maxlength')">
+                            {{ 'MAX_LENGTH_255' | translate }}
+                          </p>
+                        </div>
+  
+                      </div>
+  
+  
+  
+  
+                      <div class="col-md-3">
+                        <select class="form-control" (change)="onCountryChange($event ,i)" formControlName="country_id">
+                          <option disabled>{{ 'SELECT_COUNTRY' | translate }}</option>
+                          <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
+                          </option>
+                        </select>
+                      </div>
+  
+  
+  
+                      <div class="form-group col-md-4 ">
+                        <select *ngIf="address.get('cities')?.value.length>0" class="form-control"
+                          (change)="onCityChange($event)" formControlName="city_id"
+                          [class.is-invalid]="isSubmitted && address.get('city_id')?.invalid">
+                          <!-- <option>{{ 'SELECT_CURRENCY' | translate }}</option> -->
+                          <option *ngFor="let city of address.get('cities')?.value" [value]="city.id">{{ city.name }}
+                          </option>
+                        </select>
+  
+                        <div class="invalid-feedback" *ngIf="isSubmitted && address.get('city_id')?.invalid">
+                          <p>
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+  
+                        </div>
+  
+                        <div *ngIf="address.get('cities')?.value.length<=0" class="alert alert-warning">
+                          {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
+                        </div>
+                        <!-- <div class="alert alert-danger" *ngIf="bankBranchForm.get('country_id')?.errors && bankBranchForm.get('country_id')?.touched">
+                              <p *ngIf="bankBranchForm.get('country_id')?.getError('required')">{{ 'addCity.city_required' | translate }}</p>
+                            </div> -->
+                      </div>
+  
+  
+                      <div class="col-md-10 mt-2">
+                        <input formControlName="address_description" type="text" class="form-control"
+                          placeholder="{{ 'ADDRESS_DESCRIPTION' | translate }}">
+                      </div>
+  
+  
+  
+                      <div class="col-md-2 mt-2">
+                        <button type="button" class="btn btn-danger" (click)="removeAddress(i)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+  
+  
+                    </div>
+                    <button type="button" class="btn btn-success mt-2" (click)="addAddress()">+ {{ 'ADD_ADDRESS' |
+                      translate }}</button>
+                  </div>
+                </div>
+                <div class="border rounded p-3 mt-3">
+                  <h5>{{ 'PHONES' | translate }}</h5>
+                  <div formArrayName="phones">
+                    <div *ngFor="let phone of phones.controls; let i = index" [formGroupName]="i" class="row">
+                      <div class="col-md-6">
+                        <input formControlName="phone_name" type="text" class="form-control"
+                          placeholder="{{ 'PHONE_NAME' | translate }}">
+                      </div>
+                      <div class="col-md-5">
+                        <input formControlName="phone" type="text" class="form-control"
+                          placeholder="{{ 'PHONE' | translate }}"
+                          [class.is-invalid]="isSubmitted && phone.get('phone')?.invalid">
+  
+                        <div class="invalid-feedback" *ngIf="isSubmitted && phone.get('phone')?.invalid">
+                          <p *ngIf="phone.get('phone')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="phone.get('phone')?.hasError('maxlength')">
+                            {{ 'MAX_LENGTH_255' | translate }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="button" class="btn btn-danger" (click)="removePhone(i)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-success mt-2" (click)="addPhone()">+ {{ 'ADD_PHONE' | translate
+                      }}</button>
+                  </div>
+                </div>
+                <div class="border rounded p-3 mt-3">
+                  <h5>{{ 'VACATION_DAYS' | translate }}</h5>
+                  <div class="form-group">
+                    <label class="form-label large-text mb-3">{{ 'SELECT_VACATION_DAYS' | translate }}</label>
+                    <div class="row g-3"> 
+  
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2"> 
+                          <input class="form-check-input m-0" type="checkbox" id="saturday" 
+                                 (change)="onVacationDayChange('Saturday', $event)">
+                          <label class="form-check-label mb-0" for="saturday">  
+                            {{ 'SATURDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                     
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="sunday" 
+                                 (change)="onVacationDayChange('Sunday', $event)">
+                          <label class="form-check-label mb-0" for="sunday">
+                            {{ 'SUNDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                    
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="monday" 
+                                 (change)="onVacationDayChange('Monday', $event)">  
+                          <label class="form-check-label mb-0" for="monday">
+                            {{ 'MONDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                    
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="tuesday" 
+                                 (change)="onVacationDayChange('Tuesday', $event)">  
+                          <label class="form-check-label mb-0" for="tuesday">
+                            {{ 'TUESDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                     
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="wednesday" 
+                                 (change)="onVacationDayChange('Wednesday', $event)">  
+                          <label class="form-check-label mb-0" for="wednesday">
+                            {{ 'WEDNESDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                     
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="thursday" 
+                                 (change)="onVacationDayChange('Thursday', $event)">  
+                          <label class="form-check-label mb-0" for="thursday">
+                            {{ 'THURSDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                      
+                     
+                      <div class="col-md-3">
+                        <div class="form-check d-flex align-items-center gap-2">
+                          <input class="form-check-input m-0" type="checkbox" id="friday" 
+                                 (change)="onVacationDayChange('Friday', $event)">  
+                          <label class="form-check-label mb-0" for="friday">
+                            {{ 'FRIDAY' | translate }}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="invalid-feedback mt-2" *ngIf="delegateForm.get('vacation_days')?.invalid && isSubmitted">
+                      {{ 'PLEASE_SELECT_AT_LEAST_ONE_DAY' | translate }}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
-                <button type="submit" class="btn btn-primary px-4 large-text">
-                  <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
-                </button>
-                <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-              </div>
+
             </div>
+
+
+          </div>
+          <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+            <button type="submit" class="btn btn-primary px-4 large-text">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+          </div>
+          <div *ngIf="msgErrors && msgErrors.length>0" class="alert alert-danger mt-3">
+            <ul>
+              <li *ngFor="let error of msgErrors">{{ error }}</li>
+            </ul>
           </div>
         </div>
-      </form>
-      
-  </div>
+      </div>
+    </div>
+  </form>
+
+</div>
