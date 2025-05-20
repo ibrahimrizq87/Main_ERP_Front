@@ -67,9 +67,27 @@
 
 
 
+                <div class="form-group col-md-6" *ngIf="type == 'receipt' || type == 'payment'">
+                
+                  <a (click)="togglePayBill()" class="btn btn-info">
+                    {{ type === 'receipt'? ('PAY_BILL' | translate) : 'PAY_RETURN_BILL' | translate}}
+                  </a> 
+                </div> 
 
 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6" *ngIf="pay_bill">
+
+                  <label class="form-label">{{ 'SELECT_SALE_BILL' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openSalesModal('salesModal')">
+                      {{ selectedBill ? selectedBill.total +" => "+ selectedBill.date : ('SELECT_SALE_BILL' | translate) }}
+                    </button>
+  
+                    <input type="hidden" formControlName="sale_bill_id" [value]="selectedBill?.id" />
+          
+                </div> 
+
+                <!-- <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label">
                     {{ 'addTransaction.DELEGATE' | translate }}
                   </label>
@@ -78,7 +96,7 @@
                     {{ selecteddelegateAccount ? selecteddelegateAccount.name : ('addTransaction.SELECT_ACCOUNT' | translate) }}
                   </a>
                   <i class="ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1" (click)="removeCurrentDelegate()"></i>
-                </div>
+                </div> -->
 
                 <!-- Date -->
                 <div class="form-group col-md-6">
@@ -93,7 +111,7 @@
                   <label for="amount" class="form-label">
                     {{ 'addTransaction.AMOUNT' | translate }}
                   </label>
-                  <input id="amount" formControlName="amount" type="number" step="0.01" class="form-control"
+                  <input id="amount" formControlName="amount" (input)="changeAmount()" type="number" step="0.01" class="form-control"
                     [placeholder]="'addTransaction.ENTER_AMOUNT' | translate" />
                 </div>
 
@@ -181,6 +199,54 @@
               style="cursor: pointer;">
               <td>{{ i + 1 }}</td>
               <td>{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="salesModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'SELECT_SALES_BILL' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('salesModal')"></button>
+      </div>
+      <div class="modal-body">
+        <!-- <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.SEARCH_ACCOUNT' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" /> -->
+
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.SEARCH_ACCOUNT' | translate"/>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'AMOUNT' | translate }}</th>
+              <th>{{ 'DATE' | translate }}</th>
+              <th>{{ 'DELEGATE' | translate }}</th>
+              <th>{{ 'TOTAL_PAID' | translate }}</th>
+              <th>{{ 'PAYMENT_TYPE' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bill of saleBills; let i = index" (click)="selectBill(bill)"
+              style="cursor: pointer;">
+              <td>{{ bill.id}}</td>
+               <td>{{ bill.total }}</td>
+              <td>{{ bill.date }}</td>
+                <td>{{ bill.delegate?  bill.delegate.name :'----'}}</td>
+                <td>{{ bill.total_paid}}</td>
+                <td>{{ bill.payment_type}}</td>
+
             </tr>
           </tbody>
         </table>

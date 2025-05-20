@@ -1,0 +1,26 @@
+#branchMap {
+    height: 100%;
+    min-height: 500px;
+    border-radius: 0.25rem;
+  }
+  
+  .card {
+    border-radius: 0.5rem;
+  }
+  
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
+  
+  .list-group-item {
+    border-left: none;
+    border-right: none;
+  }
+  
+  .list-group-item:first-child {
+    border-top: none;
+  }
+  
+  .list-group-item:last-child {
+    border-bottom: none;
+  }

@@ -1,0 +1,216 @@
+<div class="mt-3 mb-3">
+    <h5>{{ 'MANAGE_COMPANY_BRANCHES' | translate }}</h5>
+    <span class="text-muted">
+        {{ 'DASHBOARD' | translate }}
+        <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
+        {{ 'COMPANY_BRANCHES' | translate }}
+        <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
+        {{ 'ADD_COMPANY_BRANCH' | translate }}
+    </span>
+</div>
+
+<div class="mt-4 mb-4">
+    <form [formGroup]="companyBranchForm" (ngSubmit)="handleForm()">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3">
+                            <h5>{{ 'ADD_COMPANY_BRANCH' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="form-label">
+                                        {{ 'NAME' | translate }}
+                                    </label>
+                                    <input id="name" formControlName="name" type="text" class="form-control"
+                                        [placeholder]="'NAME' | translate"
+                                        [class.is-invalid]="companyBranchForm.get('name')?.errors && isSubmitted" />
+
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('name')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('name')?.getError('required')">
+                                            {{ 'NAME_REQUIRED' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 mt-4">
+                                    <label for="description" class="form-label">
+                                        {{ 'DESCRIPTION' | translate }}
+                                    </label>
+                                    <textarea id="description" formControlName="description" class="form-control"
+                                        [placeholder]="'DESCRIPTION' | translate"
+                                        [class.is-invalid]="companyBranchForm.get('description')?.errors && isSubmitted"></textarea>
+
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('description')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('description')?.getError('required')">
+                                            {{ 'DESCRIPTION_REQUIRED' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6 mt-4">
+                                    <label for="country" class="form-label">
+                                        {{ 'COUNTRY' | translate }}
+                                    </label>
+                                    <select id="country" class="form-control" (change)="onCountryChange($event)"
+                                        formControlName="country_id"
+                                        [class.is-invalid]="companyBranchForm.get('country_id')?.errors && isSubmitted">
+                                        <option value="" disabled>{{ 'SELECT_COUNTRY' | translate }}</option>
+                                        <option *ngFor="let country of countries" [value]="country.id">
+                                            {{ country.name }}
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('country_id')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('country_id')?.getError('required')">
+                                            {{ 'COUNTRY_REQUIRED' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6 mt-4">
+                                    <label for="city" class="form-label">
+                                        {{ 'CITY' | translate }}
+                                    </label>
+                                    <select id="city" class="form-control" formControlName="city_id"
+                                        [class.is-invalid]="companyBranchForm.get('city_id')?.errors && isSubmitted"
+                                        [disabled]="!cities.length">
+                                        <option value="" disabled>{{ 'SELECT_CITY' | translate }}</option>
+                                        <option *ngFor="let city of cities" [value]="city.id">
+                                            {{ city.name }}
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('city_id')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('city_id')?.getError('required')">
+                                            {{ 'CITY_REQUIRED' | translate }}
+                                        </p>
+                                    </div>
+                                    <div *ngIf="!cities.length && companyBranchForm.get('country_id')?.value"
+                                        class="alert alert-warning mt-2">
+                                        {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 mt-4">
+                                    <label for="address_details" class="form-label">
+                                        {{ 'ADDRESS_DETAILS' | translate }}
+                                    </label>
+                                    <textarea id="address_details" formControlName="address_details"
+                                        class="form-control" [placeholder]="'ADDRESS_DETAILS' | translate"
+                                        [class.is-invalid]="companyBranchForm.get('address_details')?.errors && isSubmitted"></textarea>
+
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('address_details')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('address_details')?.getError('required')">
+                                            {{ 'ADDRESS_DETAILS_REQUIRED' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Image Upload -->
+                                <div class="form-group">
+                                    <label class="form-label">{{ 'UPLOAD_IMAGE' | translate }}</label>
+                                    <input type="file" class="form-control" (change)="onFileSelected($event)"
+                                        accept="image/*">
+                                </div>
+                                <div class="border rounded p-3 mt-3">
+                                    <h5>{{ 'PHONES' | translate }}</h5>
+                                    <div formArrayName="phones">
+                                        <div *ngFor="let phone of phones.controls; let i = index" [formGroupName]="i"
+                                            class="row">
+                                            <div class="col-md-6">
+                                                <input formControlName="phone_name" type="text" class="form-control"
+                                                    placeholder="{{ 'PHONE_NAME' | translate }}">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input formControlName="phone" type="text" class="form-control"
+                                                    placeholder="{{ 'PHONE' | translate }}"
+                                                    [class.is-invalid]="isSubmitted && phone.get('phone')?.invalid">
+
+                                                <div class="invalid-feedback"
+                                                    *ngIf="isSubmitted && phone.get('phone')?.invalid">
+                                                    <p *ngIf="phone.get('phone')?.hasError('required')">
+                                                        {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                                                    </p>
+                                                    <p *ngIf="phone.get('phone')?.hasError('maxlength')">
+                                                        {{ 'MAX_LENGTH_255' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-danger" (click)="removePhone(i)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-success mt-2" (click)="addPhone()">+ {{
+                                            'ADD_PHONE' | translate }}</button>
+                                    </div>
+                                </div>
+                                <!-- Map Section -->
+                                <div class="form-group col-md-12 mt-4">
+                                    <label class="form-label">
+                                        {{ 'LOCATION' | translate }}
+                                    </label>
+                                    <div class="alert alert-info">
+                                        {{ 'CLICK_ON_MAP_TO_SELECT_LOCATION' | translate }}
+                                    </div>
+                                    <div leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)"
+                                        style="height: 400px; width: 100%;">
+                                    </div>
+                                </div>
+
+                                <!-- Radius Input -->
+                                <div class="form-group col-md-6 mt-4">
+                                    <label for="radius" class="form-label">
+                                        {{ 'RADIUS_METERS' | translate }}
+                                    </label>
+                                    <input id="radius" formControlName="radius" type="number" class="form-control"
+                                        (change)="onRadiusChange()" [placeholder]="'ENTER_RADIUS' | translate"
+                                        [class.is-invalid]="companyBranchForm.get('radius')?.errors && isSubmitted" />
+
+                                    <div class="invalid-feedback"
+                                        *ngIf="companyBranchForm.get('radius')?.errors && isSubmitted">
+                                        <p *ngIf="companyBranchForm.get('radius')?.getError('min')">
+                                            {{ 'RADIUS_MUST_BE_POSITIVE' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Coordinates Display -->
+                                <div class="form-group col-md-6 mt-4">
+                                    <label class="form-label">
+                                        {{ 'COORDINATES' | translate }}
+                                    </label>
+                                    <div class="form-control-plaintext">
+                                        <span
+                                            *ngIf="companyBranchForm.value.latitude && companyBranchForm.value.longitude">
+                                            Lat: {{ companyBranchForm.value.latitude | number:'1.4-4' }},
+                                            Lng: {{ companyBranchForm.value.longitude | number:'1.4-4' }}
+                                        </span>
+                                        <span
+                                            *ngIf="!companyBranchForm.value.latitude || !companyBranchForm.value.longitude"
+                                            class="text-muted">
+                                            {{ 'NO_LOCATION_SELECTED' | translate }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 mb-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+                        {{ 'SAVE' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

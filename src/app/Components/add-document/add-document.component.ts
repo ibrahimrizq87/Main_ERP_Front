@@ -10,6 +10,7 @@ import { Modal } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { CurrencyService } from '../../shared/services/currency.service';
+import { SalesService } from '../../shared/services/sales.service';
 
 
 @Component({
@@ -36,6 +37,9 @@ export class AddDocumentComponent {
   parent_accounts_company: any;
   needCurrecyPrice = false;
   type: string | null = '';
+  pay_bill =false;
+
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -43,6 +47,8 @@ export class AddDocumentComponent {
     private _CurrencyService:CurrencyService,
     private _AccountService: AccountService,
     private _PaymentDocumentService: PaymentDocumentService,
+    private _SalesService: SalesService,
+
     private toastr: ToastrService,
   ) {
 
@@ -51,7 +57,7 @@ export class AddDocumentComponent {
       from_to_account: [null, Validators.required],
       from_to_account_company: [null, Validators.required],
       note_id: [null],
-      // currency_name: [null],
+      sale_bill_id: [null],
       delegate_id: [null],
       date: [this.getTodayDate()],
       amount: [null, [Validators.required, Validators.min(0)]],
@@ -65,12 +71,41 @@ export class AddDocumentComponent {
   }
 
 
+togglePayBill(){
+this.pay_bill = !this.pay_bill;
 
+if(this.selectedAccount){
+    if(this.type =='receipt'){
+          this.loadBills(this.selectedAccount.id);
+          }else if(this.type =='payment'){
+          this.loadReturnBills(this.selectedAccount.id);
+    }
+}
+
+}
 
   caculateAmountInLocalCurrency() {
     const amount =this.transactionForm.get('amount')?.value|| 0;
     const currency_value = this.transactionForm.get('currency_value')?.value || 0;
     this.amountInLocalCurrency = amount * currency_value;
+
+
+  const value = this.transactionForm.get('amount')?.value | 0;
+  if(this.pay_bill && this.selectedBill){
+    const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
+    // console.log('to be paid:' , toBePaid)
+    // console.log('total:' , this.selectedBill.total)
+    // console.log('total paid:' , this.selectedBill.total_paid)
+    // console.log('value:' , value)
+
+    if(toBePaid < value){
+           this.transactionForm.patchValue({'amount':toBePaid});
+
+    }
+  }
+
+
+
   }
   getTodayDate(): string {
     const today = new Date();
@@ -217,6 +252,12 @@ export class AddDocumentComponent {
       alert('فى حالة وجود حساب بعملة اجنبية يجب ان يكو ن الحساب الاخر بنفس العملة او بعملة الشركة');
       isCorrectCurrency = false;
     }
+
+
+    if(this.pay_bill && !this.selectedBill){
+      alert('يجب اختيار فاتورة للتسدسد');
+      isCorrectCurrency = false;
+    }
     if(this.needCurrecyPrice && this.transactionForm.get('currency_value')?.value == null){
       isCorrectCurrency = false;
     }
@@ -234,6 +275,17 @@ export class AddDocumentComponent {
       if(this.transactionForm.get('currency_value')?.value){
         formData.append('currency_price_value', this.transactionForm.get('currency_value')?.value);
       }
+
+         if(this.pay_bill && this.transactionForm.get('sale_bill_id')?.value){
+          if(this.type =='receipt'){
+            formData.append('sale_bill_id', this.transactionForm.get('sale_bill_id')?.value);
+          }else if(this.type =='payment'){
+            formData.append('return_sale_bill', this.transactionForm.get('sale_bill_id')?.value);
+          }
+
+
+
+    }
 
 
       
@@ -318,6 +370,14 @@ export class AddDocumentComponent {
       this.transactionForm.patchValue({'from_to_account':account.id})
 
 
+      if(this.pay_bill){
+        if(this.type =='receipt'){
+          this.loadBills(account.id);
+          }else if(this.type =='payment'){
+          this.loadReturnBills(account.id);
+          }
+      }
+
       this.needCurrecyPrice = false;
       if(this.selectedAccount) {
         if(this.selectedAccount.currency.id != this.currency.id){
@@ -342,6 +402,61 @@ export class AddDocumentComponent {
 
 
 
+
+
+  loadReturnBills(clientId: string) {
+    this._SalesService.getReturnBillsByClientId(clientId).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("bills bills response:", response)
+          this.saleBills = response.data;
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+
+saleBills :any;
+
+
+  loadBills(clientId: string) {
+    this._SalesService.getBillsByClientId(clientId).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("bills bills response:", response)
+          this.saleBills = response.data;
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+changeAmount(){
+  const value = this.transactionForm.get('amount')?.value | 0;
+  if(this.pay_bill && this.selectedBill){
+    const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
+    console.log(toBePaid)
+        console.log(this.selectedBill.total)
+    console.log(this.selectedBill.total_paid)
+
+    if(toBePaid < value){
+           this.transactionForm.patchValue({'amount':toBePaid});
+
+    }
+  }
+
+
+}
+
   removeCurrentDelegate(){
     this.selecteddelegateAccount =null;
    this.transactionForm.patchValue({'delegate_id':null});
@@ -355,6 +470,14 @@ export class AddDocumentComponent {
       }
     }
   
+selectBill(bill:any){
+  this.selectedBill = bill;
+  this.transactionForm.patchValue({'sale_bill_id':bill.id});
+  this.closeModal('salesModal');
+}
+
+
+    selectedBill:any;
     openModal(modalId: string , type:string) {
 
       this.selectedPopUP = type;
@@ -366,6 +489,17 @@ export class AddDocumentComponent {
         this.filteredAccounts =this.accounts;
 
       }
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = new Modal(modalElement);
+        modal.show();
+      }
+    }
+
+
+       openSalesModal(modalId: string) {
+
+   
       const modalElement = document.getElementById(modalId);
       if (modalElement) {
         const modal = new Modal(modalElement);

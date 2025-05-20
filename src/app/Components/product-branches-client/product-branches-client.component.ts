@@ -59,9 +59,11 @@ throw new Error('Method not implemented.');
   viewProduct(productId: any) {
     this.router.navigate(['/showProductClient', productId]);
     }
-    addToCart(productId: any) {
+    addToCart(productId: any,default_price: any) {
       const formData = new FormData();
-      formData.append('product_id', productId);
+      formData.append('product_branch_id', productId);
+      formData.append('quantity', '1'); 
+      formData.append('price', default_price);
       this._AuthService.addProductBranchById(formData).subscribe({
         next: (response) => {
           if (response) {

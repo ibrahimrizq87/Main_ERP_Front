@@ -8,7 +8,11 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      
+        <div class="d-flex" *ngIf="isLoggedIn">
+          <button class="btn btn-danger" (click)="logout()">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+          </button>
+        </div>
      
       </div>
         

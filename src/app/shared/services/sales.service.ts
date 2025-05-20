@@ -71,6 +71,11 @@ export class SalesService {
   }
 
 
+    getBillsByClientId(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/sale-bills/get-by-client-id/"+id, { headers:this.getHeadersWithToken() })
+  }
+  
+
   ////////////////////////////////////////////
 
 
@@ -106,5 +111,10 @@ export class SalesService {
     salesData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/return-sale-bills/${saleId}`, salesData, { headers })
   }
+
+    getReturnBillsByClientId(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/return-sale-bills/get-by-client-id/"+id, { headers:this.getHeadersWithToken() })
+  }
+  
 
 }

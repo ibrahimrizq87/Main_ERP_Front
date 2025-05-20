@@ -26,7 +26,7 @@ export class AuthService {
 
   private getHeadersWithToken(): HttpHeaders {
     const currentLang = this.translate.currentLang || (localStorage.getItem('lang') || 'ar');
-    const token = localStorage.getItem('ClientToken');
+    const token = localStorage.getItem('Token');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Accept-Language': currentLang
@@ -55,5 +55,11 @@ getProductBranchById(id: string): Observable<any> {
   }
 
 
+getMyInfo(): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/get-my-info`, { headers: this.getHeadersWithToken() });   
+}
+logout(userData: FormData): Observable<any> {
+  return this._HttpClient.post(`${this.baseURL}/client/logout`, {userData}, { headers: this.getHeadersWithToken() });
+}
 
 }

@@ -31,6 +31,52 @@
             </ul>
           </li>
 
+
+
+
+            <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('HR_SYS')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'HR_SYSTEM' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('HR_SYS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('HR_SYS')">
+             
+             
+                <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'VECATIONS' | translate }}
+                </a>
+              </li>
+
+
+               <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'VECATION_REQUESTS' | translate }}
+                </a>
+              </li>
+
+
+
+               <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'ATTENDANCE_REPORTS' | translate }}
+                </a>
+              </li>
+
+
+
+             <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'SALARY_REPORTS' | translate }}
+                </a>
+              </li>
+
+
+            </ul>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Groups')" style="cursor: pointer;">
               <i class="fa-solid fa-layer-group me-2"></i>
@@ -406,6 +452,32 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('COMPANY_Branches')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'COMPANY_BRANCHES' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('COMPANY_Branches') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('COMPANY_Branches')">
+              <li class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="companyBranches">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'COMPANY_BRANCHES' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('VECATIONS')" style="cursor: pointer;">
+              <i class="fa-solid fa-cart-shopping me-2"></i>
+              <span>{{ 'VECATIONS' | translate }}</span>
+              <i [ngClass]="isDropdownOpen('VECATIONS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+            </a>
+          
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('VECATIONS')">
+            
+            </ul>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
