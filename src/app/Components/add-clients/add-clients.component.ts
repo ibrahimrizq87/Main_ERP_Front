@@ -62,16 +62,6 @@ export class AddClientsComponent {
   }
 
 
-  // <select id="price_category_id" (change)="onPriceCategoryChange($event)" formControlName="price_category_id" class="form-control"
-                        
-  // [class.is-invalid]="!selectedCaegory && isSubmitted"
-
-  // >
-  //   <option *ngFor="let priceCategory of priceCategories" [value]="priceCategory.id">
-  //     {{ priceCategory.name }}
-  //   </option>
-  // </select>
-  // <div class="invalid-feedback" *ngIf="!selectedPriceCaegory && isSubmitted">
   constructor(private _AccountService:AccountService ,
         private _Router: Router,
         private translate: TranslateService,
@@ -87,23 +77,18 @@ export class AddClientsComponent {
         private toastr: ToastrService,
   ) {
     this.clientForm = this.fb.group({
-      // name: this.fb.group({
-      //   ar: ['', [Validators.required, Validators.maxLength(255)]],
-      //   : ['', [Validators.required, Validators.maxLength(255)]]
-      // }),
+
       ar: ['', [Validators.required, Validators.maxLength(255)]],
       en: ['', [Validators.required, Validators.maxLength(255)]],
 
       delegate_id: ['', Validators.required],
       price_category_id: [''],
       account_category_id: ['', Validators.required],
-      image: [null], // File upload
+      payment_type: ['cash', Validators.required],
+
+      image: [null], 
       currency_id: ['', Validators.required],
-
-      // Addresses as a FormArray
       addresses: this.fb.array([]),
-
-      // Phones as a FormArray
       phones: this.fb.array([])
     });
   }
