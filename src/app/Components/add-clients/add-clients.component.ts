@@ -80,12 +80,17 @@ export class AddClientsComponent {
 
       ar: ['', [Validators.required, Validators.maxLength(255)]],
       en: ['', [Validators.required, Validators.maxLength(255)]],
-
+      user_name: ['', [Validators.required, Validators.maxLength(255)]],
+      password: ['', [Validators.required]],
       delegate_id: ['', Validators.required],
       price_category_id: [''],
       account_category_id: ['', Validators.required],
       payment_type: ['cash', Validators.required],
-
+      has_max_sales: [false],
+      max_sales_amount: [''],
+      bill_no: [''],
+      max_payment_day: [''],
+      payment_day: [''],
       image: [null], 
       currency_id: ['', Validators.required],
       addresses: this.fb.array([]),
@@ -249,7 +254,39 @@ removeCurrentDelegate(){
 
   handleForm() {
    this.isSubmitted  = true;
-    if (this.clientForm.valid) {
+
+  let isValid = true;
+  let errorMessage = '';
+  if(this.clientForm.get('payment_type')?.value != 'cash'){
+
+
+    if(this.clientForm.get('has_max_sales')?.value && !this.clientForm.get('max_sales_amount')?.value){
+          isValid =false;
+  }
+
+
+  if(this.clientForm.get('payment_type')?.value == 'mounthly'){
+
+
+    if(!this.clientForm.get('payment_day')?.value){
+          isValid =false;
+  }
+
+    
+    
+  }else if(this.clientForm.get('payment_type')?.value == 'bill_no'){
+
+    if(!this.clientForm.get('bill_no')?.value || !this.clientForm.get('max_payment_day')?.value ){
+          isValid =false;
+  }
+
+  }else{
+    isValid =false;
+
+  }
+  }
+   
+    if (this.clientForm.valid && isValid) {
       this.isLoading = true;
 
 
@@ -284,6 +321,29 @@ removeCurrentDelegate(){
         formData.append(`addresses[${index}][city_id]`, element.get('city_id')?.value);
       });
 
+
+    formData.append(`payment_type`,this.clientForm.get('payment_type')?.value);
+
+    if(this.clientForm.get('payment_type')?.value == 'mounthly'){
+    formData.append(`payment_day`,this.clientForm.get('payment_day')?.value);
+    }else if(this.clientForm.get('payment_type')?.value == 'bill_no'){
+    formData.append(`bill_number`,this.clientForm.get('bill_no')?.value);
+    formData.append(`bill_limit_day_number`,this.clientForm.get('max_payment_day')?.value);
+      
+  }
+    if(this.clientForm.get('payment_type')?.value != 'cash'){
+          if(this.clientForm.get('has_max_sales')?.value){
+            formData.append(`has_sales_limit`,'1');
+            formData.append(`max_sales`,this.clientForm.get('max_sales_amount')?.value);
+          }else{
+          formData.append(`has_sales_limit`,'0');
+          }
+
+    }
+
+
+        formData.append(`user_name`, this.clientForm.get('user_name')?.value);
+        formData.append(`password`, this.clientForm.get('password')?.value );
 
       this.phones.controls.forEach((element,index) => {
         formData.append(`phones[${index}][phone_name]`, element.get('phone_name')?.value ||'');

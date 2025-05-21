@@ -50,6 +50,28 @@
                           </p>
                         </div>
                       </div>
+
+
+                           <div class="form-group col-md-6">
+                  <label for="user_name" class="form-label">User Name</label>
+                  <input id="user_name" formControlName="user_name" type="text" class="form-control"
+                    placeholder="Enter User Name" required />
+                  <div class="alert alert-danger"
+                    *ngIf="clientForm.get('user_name')?.errors && clientForm.get('user_name')?.touched">
+                    <p *ngIf="clientForm.get('user_name')?.getError('required')">User Name is Required</p>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="password" class="form-label"> Password</label>
+                  <input id="password" formControlName="password" type="password" class="form-control"
+                    placeholder="Enter User Password" required />
+                  <div class="alert alert-danger"
+                    *ngIf="clientForm.get('password')?.errors && clientForm.get('password')?.touched">
+                    <p *ngIf="clientForm.get('password')?.getError('required')">Password is Required</p>
+
+                  </div>
+                </div>
            
                   </div>
     
@@ -114,10 +136,16 @@
                       </div>
 
 
-                        <div class="form-group col-md-6" *ngIf="clientForm.get('payment_type')?.value == 'bill_no'">
+                        <div class="form-group col-md-3" *ngIf="clientForm.get('payment_type')?.value == 'bill_no'">
                         <label for="bill_no" class="form-label large-text">{{ 'bill_no' | translate }}</label>
                         <input formControlName="bill_no" type="number" class="form-control"
                                  placeholder="{{ 'bill_no' | translate }}">
+                      </div>
+
+                      <div class="form-group col-md-3" *ngIf="clientForm.get('payment_type')?.value == 'bill_no'">
+                        <label for="max_payment_day" class="form-label large-text">{{ 'max_payment_day' | translate }}</label>
+                        <input formControlName="max_payment_day" type="number" class="form-control"
+                                 placeholder="{{ 'max_payment_day' | translate }}">
                       </div>
 
 
@@ -140,13 +168,21 @@
                       </div>
 
 
+                      <div class="form-group col-md-6" *ngIf="clientForm.get('has_max_sales')?.value">
+                        <label for="max_sales_amount" class="form-label large-text">{{ 'max_sales_amount' | translate }}</label>
+                        <input formControlName="max_sales_amount" type="number" class="form-control"
+                                 placeholder="{{ 'max_sales_amount' | translate }}">
+                      </div>
+
+
+                      
+
+
                     <div class="form-group col-md-6">
                         <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate }}</label>
                         <select id="account_category_id" (change)="onCategoryChange($event)" formControlName="account_category_id" class="form-control"
                         
-                        [class.is-invalid]="!selectedCaegory && isSubmitted"
-  
-                        >
+                        [class.is-invalid]="!selectedCaegory && isSubmitted">
                           <option *ngFor="let category of categories" [value]="category.id">
                             {{ category.name }}
                           </option>

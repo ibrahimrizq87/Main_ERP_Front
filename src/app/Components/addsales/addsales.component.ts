@@ -150,7 +150,7 @@ export class AddsalesComponent implements OnInit {
   }
 
   loadSuppliers(): void {
-    this._ClientService.getAllClients().subscribe({
+    this._ClientService.getClientsForSales().subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
@@ -707,9 +707,23 @@ export class AddsalesComponent implements OnInit {
       this.saleForm.patchValue({ 'delegate_id': account.id })
 
     } else if (this.selectedPopUP == 'vendor') {
+
+
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
+
+      if(this.selectedClient.delegate){
+        this.selecteddelegateAccount= this.selectedClient.delegate;
+        this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
+      }
+
+    //   if(this.selectedClient.payment_type == 'cash'){
+    // this.saleForm.patchValue({'showCashAccountsDropdown' : true})
+    //   this.totalPayed = (this.saleForm.get('payed_price')?.value || 0);
+    
+  
+    //   }
 
 
       this.needCurrecyPrice = false;
@@ -782,7 +796,9 @@ export class AddsalesComponent implements OnInit {
 
 
     productBranchStore.product_branch.prices.forEach((price: any) => {
-      if (price.id == this.selectedClient.price_category.id) {
+
+      // if(){}
+      if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
         price.prices.forEach((price: any) => {

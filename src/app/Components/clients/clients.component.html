@@ -32,6 +32,7 @@
                 <th class="bg-light" scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'DELEGATE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'PRICE_CATEGORY' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'STATUS' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
 
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
@@ -39,12 +40,22 @@
         </thead>
         <tbody>
             <tr *ngFor="let currency of clients; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ currency.account.name }}</td>
-                <td>{{ currency.account_category? currency.account_category.name : "---" }}</td>
-                <td>{{ currency.delegate ? currency.delegate.name : "--" }}</td>
-                <td>{{ currency.price_category? currency.price_category.name : "--" }}</td>
+                <th scope="row">{{ currency.id }}</th>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.account_category? currency.account_category : "---" }}</td>
+                <td>{{ currency.delegate ? currency.delegate : "--" }}</td>
+                <td>{{ currency.price_category? currency.price_category : "--" }}</td>
+                <td>{{ currency.is_suspended ? 'susbended' : "Active" }}</td>
 
+    <!-- $clientsData [] = [           
+            'id'              => $client->id , 
+            'name'            => $client->accont? $client->accont->name[$locale]:null , 
+            'price_category'  => $client->priceCategory? $client->priceCategory->name:null , 
+            'account_category'=> $client->accountCategory? $client->accountCategory->name:null , 
+            'delegate'        => $client->delegate? $client->delegate->accont ? $client->delegate->accont->name[$locale]:null :null , 
+            'image'           => $client->image? asset($client->image):null , 
+            'is_suspended'    => $client->is_suspended, 
+        ]; -->
                 
                 <td>
                     <img 
