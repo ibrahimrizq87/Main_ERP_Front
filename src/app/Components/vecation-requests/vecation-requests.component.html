@@ -1,0 +1,116 @@
+<div class="container">
+    <!-- Main Tabs (Old/New) -->
+    <header
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li>
+                <a (click)="changeMainTab('old')" class="nav-link px-2"
+                    [ngClass]="{'active-tab': activeMainTab === 'old', 'inactive-tab': activeMainTab !== 'old'}">
+                    {{ 'OLD' | translate }}
+                </a>
+            </li>
+            <li>
+                <a (click)="changeMainTab('new')" class="nav-link px-2"
+                    [ngClass]="{'active-tab': activeMainTab === 'new', 'inactive-tab': activeMainTab !== 'new'}">
+                    {{ 'NEW' | translate }}
+                </a>
+            </li>
+          
+        </ul>
+    </header>
+
+    <!-- Sub Tabs (Pending/Approved/Rejected) - Only shown when a main tab is selected -->
+    <header *ngIf="showSubTabs"
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li>
+                <a (click)="changeSubTab('pending')" class="nav-link px-2"
+                    [ngClass]="{'active-tab': activeSubTab === 'pending', 'inactive-tab': activeSubTab !== 'pending'}">
+                    {{ 'PENDING' | translate }}
+                </a>
+            </li>
+            <li>
+                <a (click)="changeSubTab('approved')" class="nav-link px-2"
+                    [ngClass]="{'active-tab': activeSubTab === 'approved', 'inactive-tab': activeSubTab !== 'approved'}">
+                    {{ 'APPROVED' | translate }}
+                </a>
+            </li>
+            <li>
+                <a (click)="changeSubTab('rejected')" class="nav-link px-2"
+                    [ngClass]="{'active-tab': activeSubTab === 'rejected', 'inactive-tab': activeSubTab !== 'rejected'}">
+                    {{ 'REJECTED' | translate }}
+                </a>
+            </li>
+        </ul>
+    </header>
+
+    <!-- Initial instruction (shown when no main tab is selected) -->
+    <div *ngIf="!activeMainTab" class="alert alert-info text-center">
+        {{ 'SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS' | translate }}
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Requests Table (shown only when a main tab is selected) -->
+    <div *ngIf="activeMainTab && !isLoading" class="mt-4">
+        <h4 class="mb-3">{{ activeMainTab  }} {{ activeSubTab }} Requests</h4>
+
+        <div *ngIf="requests.length === 0" class="alert alert-info">
+            No {{ activeSubTab }} requests found
+        </div>
+
+        <div *ngIf="requests.length > 0" class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Employee Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                       
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th scope="col">{{ 'ACTIONS' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let request of requests; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ request.employee_name || 'N/A' }}</td>
+                        <td>{{ request.start_date | date:'mediumDate' }}</td>
+                        <td>{{ request.end_date | date:'mediumDate' }}</td>
+                       
+                        <td>{{ request.reason || 'N/A' }}</td>
+                        <td>
+                            <span [ngClass]="{
+                  'badge bg-warning': request.status === 'pending',
+                  'badge bg-success': request.status === 'approved',
+                  'badge bg-danger': request.status === 'rejected'
+                }">
+                                {{ request.status | uppercase }}
+                            </span>
+                        </td>
+                        <td class="align-middle">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a class="nav-link" routerLinkActive="active"
+                                    [routerLink]="['/dashboard/show-vecation-requests', request.id]">
+                                    <i class="fa-solid fa-eye btn1 bg-primary rounded"
+                                        title="{{ 'VIEW_vecation' | translate }}"></i>
+                                </a>
+
+                                <i class="fa-solid fa-trash-can btn1 bg-danger rounded"
+                                    (click)="deleteVecationRequest(request.id)"
+                                    title="{{ 'DELETE_vecation' | translate }}"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

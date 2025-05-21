@@ -151,6 +151,8 @@ import { VecationsComponent } from './Components/vecations/vecations.component';
 import { AddVecationComponent } from './Components/add-vecation/add-vecation.component';
 import { UpdateVecationComponent } from './Components/update-vecation/update-vecation.component';
 import { ShowVecationComponent } from './Components/show-vecation/show-vecation.component';
+import { VecationRequestsComponent } from './Components/vecation-requests/vecation-requests.component';
+import { ShowVecationRequestsComponent } from './Components/show-vecation-requests/show-vecation-requests.component';
 
 
 export const routes: Routes = [
@@ -366,6 +368,9 @@ export const routes: Routes = [
             { path: "addCompanyBranch", component: AddCompanyBranchComponent },
             { path: "updateCompanyBranch/:id", component: UpdateCompanyBranchesComponent },
             { path: "showCompanyBranch/:id", component: ShowCompanyBranchesComponent },
+
+            { path: "vecationRequests", component: VecationRequestsComponent },
+            {path: "show-vecation-requests/:id", component: ShowVecationRequestsComponent},
 
         ], canActivate: [RoleGuard],
         data: { roles: ['admin','worker'] }
