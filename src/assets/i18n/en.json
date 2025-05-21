@@ -989,7 +989,9 @@
   "VECATIONS_LIST": "Vacations List",
   "MANAGE_VECATIONS":"Manage Vacations",
   "END_DATE_MUST_BE_AFTER_START_DATE": "End Date must be after Start Date",
-  "UPDATE_VECATION":"Update Vacation"
- 
-  
+  "UPDATE_VECATION":"Update Vacation",
+  "NEW":"New",
+  "OLD":"Old",
+  "VECATION_REQUESTS":"Vacation Requests",
+  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"Select Old or New to view requests"
 }

@@ -986,7 +986,14 @@
   "VECATIONS_LIST": "قائمة الإجازات",
   "MANAGE_VECATIONS":"إدارة الإجازات",
   "END_DATE_MUST_BE_AFTER_START_DATE": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء",
-  "UPDATE_VECATION":"تحديث الإجازة"
+  "UPDATE_VECATION":"تحديث الإجازة",
+  "NEW":"جديد",
+  "OLD":"قديم",
+  "VECATION_REQUESTS":"طلبات الإجازة",
+  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"اختر جديد أو قديم لعرض الطلبات"
+ 
+
+
 
   
 

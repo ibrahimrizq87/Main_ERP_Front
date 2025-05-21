@@ -1,0 +1,23 @@
+.badge {
+    font-size: 0.9em;
+    padding: 0.5em 0.75em;
+    font-weight: 500;
+}
+
+.btn {
+    min-width: 120px;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.card-footer {
+    border-top: 1px solid rgba(0,0,0,.125);
+}
