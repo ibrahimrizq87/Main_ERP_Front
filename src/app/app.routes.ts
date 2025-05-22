@@ -154,6 +154,7 @@ import { ShowVecationComponent } from './Components/show-vecation/show-vecation.
 import { VecationRequestsComponent } from './Components/vecation-requests/vecation-requests.component';
 import { ShowVecationRequestsComponent } from './Components/show-vecation-requests/show-vecation-requests.component';
 import { AttendanceReportsComponent } from './Components/attendance-reports/attendance-reports.component';
+import { ShowAttendanceDetailsComponent } from './Components/show-attendance-details/show-attendance-details.component';
 
 
 export const routes: Routes = [
@@ -374,6 +375,8 @@ export const routes: Routes = [
             {path: "show-vecation-requests/:id", component: ShowVecationRequestsComponent},
 
             {path:"attendance-reports",component:AttendanceReportsComponent},
+            {path:"show-attendance/:id",component:ShowAttendanceDetailsComponent},
+
 
         ], canActivate: [RoleGuard],
         data: { roles: ['admin','worker'] }

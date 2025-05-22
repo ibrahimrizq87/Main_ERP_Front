@@ -6,11 +6,12 @@ import { EmployeeService } from '../../shared/services/employee.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-attendance-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [RouterLinkActive, RouterModule,CommonModule, FormsModule, TranslateModule],
   templateUrl: './attendance-reports.component.html',
   styleUrl: './attendance-reports.component.css'
 })
@@ -20,7 +21,7 @@ export class AttendanceReportsComponent implements OnInit {
   selectedMonth: string = this.getCurrentMonth();
   attendanceData: any[] = [];
   isLoading: boolean = false;
-
+ date =this.getTodayDate()
   constructor(
     private _AttendanceService: AttendanceService,
     private toastr: ToastrService,
@@ -32,8 +33,11 @@ export class AttendanceReportsComponent implements OnInit {
   }
 
 
+type = 'employee';
+onDayChange(){
+        this.loadAttendanceData();
 
-
+}
   approveAttendance(record :any , status :boolean){
 
  const formData = new FormData();
@@ -117,6 +121,16 @@ getRowClass(record: any): string {
     return `${year}-${month}`;
   }
 
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
   loadEmployees(): void {
     this._EmployeeService.getAllEmployees().subscribe({
       next: (response) => {
@@ -143,8 +157,16 @@ getRowClass(record: any): string {
     }
   }
 
+  onTypeChange()
+  {
+    if(this.type =='day'){
+      this.loadAttendanceData();
+    }
+  }
   loadAttendanceData(): void {
-    if (!this.selectedEmployeeId) {
+
+    if(this.type == 'employee'){
+  if (!this.selectedEmployeeId) {
       this.toastr.warning('Please select an employee');
       return;
     }
@@ -163,6 +185,25 @@ getRowClass(record: any): string {
           this.isLoading = false;
         }
       });
+    }else if(this.type == 'day'){
+
+
+    this.isLoading = true;
+    this._AttendanceService.getAttendanceByDate(this.date)
+      .subscribe({
+        next: (response) => {
+          this.attendanceData = response.data.data|| [];
+          console.log(this.attendanceData);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to load attendance data');
+          this.isLoading = false;
+        }
+      });
+    }
+  
   }
   getSelectedEmployeeName(): string {
     if (!this.selectedEmployeeId) return '';
