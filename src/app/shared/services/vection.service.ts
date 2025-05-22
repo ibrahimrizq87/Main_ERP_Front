@@ -72,6 +72,11 @@ export class VectionService {
     body.append('request_id', request_id);
     return this._HttpClient.post(`${this.baseURL}/employee/vecation-requests/update-approval`, body, { headers:this.getHeadersWithToken() });
   }
+  
+  getRequestsByEmployee(id: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/vecation-requests/employee-requests/${id}`, { headers:this.getHeadersWithToken() });
+  }
+
 
 
 }

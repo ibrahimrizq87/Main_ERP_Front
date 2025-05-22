@@ -1,5 +1,15 @@
+
 <div class="container">
-    <!-- Main Tabs (Old/New) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h5>{{ 'MANAGE_VECATION_REQUESTS' | translate }}</h5>
+            <span class="text-muted">
+                {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'VECATION_REQUESTS' |
+                translate }}
+            </span>
+        </div>
+       
+    </div>
     <header
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
@@ -15,11 +25,8 @@
                     {{ 'NEW' | translate }}
                 </a>
             </li>
-          
         </ul>
     </header>
-
-    <!-- Sub Tabs (Pending/Approved/Rejected) - Only shown when a main tab is selected -->
     <header *ngIf="showSubTabs"
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
@@ -42,29 +49,35 @@
                 </a>
             </li>
         </ul>
+        <div class="mb-3">
+            <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
+            <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
+                <option value="" selected>{{ 'ALL_EMPLOYEES' | translate }}</option>
+                <option *ngFor="let employee of employees" [value]="employee.id">
+                    {{ employee?.account?.name }}
+                </option>
+            </select>
+        </div>
     </header>
 
-    <!-- Initial instruction (shown when no main tab is selected) -->
     <div *ngIf="!activeMainTab" class="alert alert-info text-center">
         {{ 'SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS' | translate }}
     </div>
 
-    <!-- Loading Indicator -->
     <div *ngIf="isLoading" class="text-center">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 
-    <!-- Requests Table (shown only when a main tab is selected) -->
     <div *ngIf="activeMainTab && !isLoading" class="mt-4">
         <h4 class="mb-3">{{ activeMainTab  }} {{ activeSubTab }} Requests</h4>
 
-        <div *ngIf="requests.length === 0" class="alert alert-info">
+        <div *ngIf="filteredRequests.length === 0" class="alert alert-info">
             No {{ activeSubTab }} requests found
         </div>
 
-        <div *ngIf="requests.length > 0" class="table-responsive">
+        <div *ngIf="filteredRequests.length > 0" class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
                     <tr>
@@ -72,26 +85,24 @@
                         <th>Employee Name</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                       
                         <th>Reason</th>
                         <th>Status</th>
                         <th scope="col">{{ 'ACTIONS' | translate }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let request of requests; let i = index">
+                    <tr *ngFor="let request of filteredRequests; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{ request.employee_name || 'N/A' }}</td>
                         <td>{{ request.start_date | date:'mediumDate' }}</td>
                         <td>{{ request.end_date | date:'mediumDate' }}</td>
-                       
                         <td>{{ request.reason || 'N/A' }}</td>
                         <td>
                             <span [ngClass]="{
-                  'badge bg-warning': request.status === 'pending',
-                  'badge bg-success': request.status === 'approved',
-                  'badge bg-danger': request.status === 'rejected'
-                }">
+                                'badge bg-warning': request.status === 'pending',
+                                'badge bg-success': request.status === 'approved',
+                                'badge bg-danger': request.status === 'rejected'
+                            }">
                                 {{ request.status | uppercase }}
                             </span>
                         </td>

@@ -993,5 +993,14 @@
   "NEW":"New",
   "OLD":"Old",
   "VECATION_REQUESTS":"Vacation Requests",
-  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"Select Old or New to view requests"
+  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"Select Old or New to view requests",
+  "SELECT_EMPLOYEE": "Select Employee",
+  "ATTENDANCE_REPORTS":"Attendance Reports",
+  "MANAGE_VECATION_REQUESTS":"Manage Vacation Requests",
+  "MANAGE_ATTENDANCE_REPORTS":"Manage Attendance Reports",
+  "WEEKDAY":"Weekday",
+  "CHECK_IN":"Check In",
+  "CHECK_OUT":"Check Out",
+  "VACATION":"Vacation",
+  "VACATION_REQUEST":"Vacation Request"
 }

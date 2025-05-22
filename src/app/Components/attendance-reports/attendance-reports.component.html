@@ -1,0 +1,88 @@
+<!-- src/app/Components/attendance-reports/attendance-reports.component.html -->
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h5>{{ 'MANAGE_ATTENDANCE_REPORTS' | translate }}</h5>
+            <span class="text-muted">
+                {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
+                {{ 'ATTENDANCE_REPORTS' | translate }}
+            </span>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
+                        <option value="" disabled selected>{{ 'SELECT_EMPLOYEE' | translate }}</option>
+                        <option *ngFor="let employee of employees" [value]="employee.id">
+                            {{ employee?.account?.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
+                    <input type="month" id="monthSelect" class="form-control" 
+                           [(ngModel)]="selectedMonth" 
+                           (change)="onMonthChange()"
+                           [max]="getCurrentMonth()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div *ngIf="attendanceData.length > 0" class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ 'ATTENDANCE_REPORT_FOR' | translate }} 
+                {{ getSelectedEmployeeName() }} - 
+                {{ selectedMonth | date: 'MMMM yyyy' }}
+            </h5>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>{{ 'DATE' | translate }}</th>
+                            <th>{{ 'WEEKDAY' | translate }}</th>
+                            <th>{{ 'STATUS' | translate }}</th>
+                            <th>{{ 'CHECK_IN' | translate }}</th>
+                            <th>{{ 'CHECK_OUT' | translate }}</th>
+                            <th>{{ 'VACATION' | translate }}</th>
+                            <th>{{ 'VACATION_REQUEST' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let record of attendanceData">
+                            <td>{{ record.date | date: 'mediumDate' }}</td>
+                            <td>{{ record.weekday }}</td>
+                            <td>
+                                <span>
+                                    {{ record?.attendance?.status | translate }}
+                                </span>
+                            </td>
+                            <td>{{record?.attendance?.check_in}} </td>
+                            <td>{{ record?.attendance?.check_out  }}</td>
+                            <td>
+                                {{ record?.vacation?.reason || 'N/A' }}
+                            </td>
+                            <td>{{ record?.vacationRequest||'N/A' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && attendanceData.length === 0 && selectedEmployeeId" class="alert alert-info">
+        {{ 'NO_ATTENDANCE_DATA_FOUND' | translate }}
+    </div>
+</div>
