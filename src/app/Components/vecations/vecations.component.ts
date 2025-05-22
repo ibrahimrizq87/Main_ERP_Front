@@ -48,17 +48,17 @@ export class VecationsComponent {
     );
   }
   deleteVecation(vecation_id: number): void {
-    if (confirm('Are you sure you want to delete this Vecation?')) {
+    if (confirm('هل انت متاكد من حذف الاجازة')) {
       this._VectionService.deleteVecation(vecation_id).subscribe({
         next: (response) => {
           if (response) {
-            this.toastr.success('تم حذف Vecation بنجاح');
+            this.toastr.success( "تم حذف الاجازة بنجاح");
             this.router.navigate(['/dashboard/vecations']);
             this.loadVecations();
           }
         },
         error: (err) => {
-          this.toastr.error(' Vecation حدث خطا اثناء حذف ');
+          this.toastr.error(' فشل في حذف الاجازة');
           console.error(err);
         }
       });

@@ -1,26 +1,36 @@
-import { Component } from '@angular/core';
+// src/app/Components/vecation-requests/vecation-requests.component.ts
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import {  VectionService } from '../../shared/services/vection.service';
+import { VectionService } from '../../shared/services/vection.service';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { EmployeeService } from '../../shared/services/employee.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vecation-requests',
   standalone: true,
-  imports: [CommonModule, TranslateModule,RouterLink,RouterModule,RouterLinkActive],
+  imports: [CommonModule, TranslateModule, RouterLink, RouterModule, RouterLinkActive, FormsModule],
   templateUrl: './vecation-requests.component.html',
   styleUrls: ['./vecation-requests.component.css']
 })
-export class VecationRequestsComponent {
-
-  activeMainTab: 'old' | 'new' | null = null; 
+export class VecationRequestsComponent implements OnInit {
+  activeMainTab: 'old' | 'new' | null = null;
   activeSubTab: 'pending' | 'approved' | 'rejected' = 'pending';
   requests: any[] = [];
+  filteredRequests: any[] = [];
   isLoading: boolean = false;
   showSubTabs: boolean = false;
+  employees: any[] = [];
+  selectedEmployeeId: string | null = null;
 
-  constructor(private _VectionService: VectionService,private toastr:ToastrService) {}
+  constructor(
+    private _VectionService: VectionService,
+    private toastr: ToastrService,
+    private _EmployeeService: EmployeeService
+  ) {}
 
   changeMainTab(tab: 'old' | 'new'): void {
     this.activeMainTab = tab;
@@ -29,9 +39,37 @@ export class VecationRequestsComponent {
     this.loadRequests();
   }
 
+  ngOnInit(): void {
+    this.loadEmployees();
+  }
+
   changeSubTab(tab: 'pending' | 'approved' | 'rejected'): void {
     this.activeSubTab = tab;
     this.loadRequests();
+  }
+
+  onEmployeeChange(): void {
+    if (!this.selectedEmployeeId) {
+      this.filteredRequests = [...this.requests];
+    } else {
+      this.filterRequestsByEmployee(this.selectedEmployeeId);
+    }
+  }
+
+  filterRequestsByEmployee(employeeId: string): void {
+    if (!this.activeMainTab) return;
+
+    this.isLoading = true;
+    this._VectionService.getRequestsByEmployee(employeeId).subscribe({
+      next: (response) => {
+        this.filteredRequests = response.data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
+    });
   }
 
   loadRequests(): void {
@@ -41,6 +79,7 @@ export class VecationRequestsComponent {
     this._VectionService.getByStatus(this.activeSubTab, this.activeMainTab).subscribe({
       next: (response) => {
         this.requests = response.data;
+        this.filteredRequests = [...this.requests]; // Initialize filteredRequests with all requests
         console.log(this.requests);
         this.isLoading = false;
       },
@@ -57,7 +96,6 @@ export class VecationRequestsComponent {
         next: (response) => {
           if (response) {
             this.toastr.success('تم حذف Vecation Requestبنجاح');
-            // this.router.navigate(['/dashboard/vecations']);
             this.loadRequests();
           }
         },
@@ -67,5 +105,19 @@ export class VecationRequestsComponent {
         }
       });
     }
+  }
+
+  loadEmployees(): void {
+    this._EmployeeService.getAllEmployees().subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          this.employees = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 }

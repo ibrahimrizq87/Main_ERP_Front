@@ -990,7 +990,18 @@
   "NEW":"جديد",
   "OLD":"قديم",
   "VECATION_REQUESTS":"طلبات الإجازة",
-  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"اختر جديد أو قديم لعرض الطلبات"
+  "SELECT_OLD_OR_NEW_TO_VIEW_REQUESTS":"اختر جديد أو قديم لعرض الطلبات",
+  "SELECT_EMPLOYEE":"اختر الموظف",
+  "ATTENDANCE_REPORTS":"تقارير الحضور",
+  "MANAGE_VECATION_REQUESTS":"إدارة طلبات الإجازة",
+  "MANAGE_ATTENDANCE_REPORTS":"إدارة تقارير الحضور",
+  "WEEKDAY":"اليوم",
+  "CHECK_IN":"تسجيل الدخول",
+  "CHECK_OUT":"تسجيل الخروج",
+  "VACATION":"إجازة",
+  "VACATION_REQUEST":"طلب إجازة"
+
+
  
 
 
