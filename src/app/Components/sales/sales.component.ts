@@ -33,6 +33,13 @@ export class SalesComponent implements OnInit {
     });
     this.loadSales(this.status); 
   }
+
+
+
+
+  dateChange(){
+    
+  }
   ManageChangeStatus(status:string ,id:string){
     this._SalesService.UpdateSaleBillStatus(id ,status ).subscribe({
       next: (response) => {

@@ -53,4 +53,10 @@ export class ClientService {
     storeData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/general/clients/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
   }
+
+
+  getClientsForSales(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/clients/get-clients-add-sales` ,{ headers:this.getHeadersWithToken() });
+  }
+ 
 }

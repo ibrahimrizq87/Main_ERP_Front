@@ -57,6 +57,12 @@
       <span class="fw-bold large-text">{{ 'SALES_LIST' | translate }}</span>
       <input class="form-control search w-25" type="search" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
     </div>
+
+     <div class="d-flex justify-content-between align-items-center mb-3">
+      <input (change)="dateChange()" class="form-control search w-25" type="date" placeholder="{{ 'SEARCH' | translate }}" aria-label="Search">
+    </div>
+
+
   </div>
 
   <table class="table mt-3">
@@ -66,17 +72,26 @@
         <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'TOTAL_PAID' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'CLIENT_STATUS' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PRICE_OVERRIDE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'NEED_ADMIN_APPROVE' | translate }}</th>
+
         <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let sale of sales; let i = index">
         <th scope="row">{{ i + 1 }}</th>
-        <td>{{ sale.client.name }}</td>
+        <td>{{ sale.client }}</td>
         <td>{{ sale.date || 'N/A' }}</td>
         <td>{{ sale.total }}</td>
+        <td>{{ sale.total_paid }}</td>
         <td>{{ sale.payment_type }}</td>
+        <td>{{ sale.is_client_susbended ? 'Susbended': 'Active' }}</td>
+        <td>{{ sale.price_override ? 'overrided': 'none' }}</td>
+        <td>{{ sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid) ? 'admin': 'clear' }}</td>
 
         <!-- <td>
           <img [src]="product.image" alt="{{ product.name_ar }}" width="50" height="50" />
@@ -97,7 +112,7 @@
             <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
               approve
             </a>
-            <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
+            <a  *ngIf="status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
               reject
             </a>
             <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',sale.id)">
@@ -114,10 +129,10 @@
             
             (click)="changeStatus(sale.id)"
             ></i> -->
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
+            <a  *ngIf="status != 'approved'" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
             </a>
-            <i
+            <i  *ngIf="status != 'approved'"
               class="fa-solid fa-trash-can btn1 bg-danger rounded"
               (click)="deleteSale(sale.id)"
               title="{{ 'DELETE' | translate }}"
