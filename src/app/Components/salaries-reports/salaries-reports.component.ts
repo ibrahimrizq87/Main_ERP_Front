@@ -19,6 +19,7 @@ export class SalariesReportsComponent implements OnInit {
   selectedMonth: string = this.getCurrentMonth();
   salariesData: any = null;
   isLoading: boolean = false;
+  searchOption: 'month' | 'employee' = 'month'; // Default to month search
 
   constructor(
     private _SalaryService: SalaryService,
@@ -28,7 +29,9 @@ export class SalariesReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
-    this.loadSalariesData();
+    if (this.searchOption === 'month') {
+      this.loadSalariesByMonth();
+    }
   }
 
   getCurrentMonth(): string {
@@ -52,15 +55,28 @@ export class SalariesReportsComponent implements OnInit {
     });
   }
 
+  onSearchOptionChange(): void {
+    this.salariesData = null;
+    if (this.searchOption === 'month') {
+      this.loadSalariesByMonth();
+    } else {
+      this.selectedEmployeeId = '';
+    }
+  }
+
   onEmployeeChange(): void {
-    this.loadSalariesData();
+    if (this.searchOption === 'employee' && this.selectedEmployeeId) {
+      this.loadSalariesByEmployee();
+    }
   }
 
   onMonthChange(): void {
-    this.loadSalariesData();
+    if (this.searchOption === 'month') {
+      this.loadSalariesByMonth();
+    }
   }
 
-  loadSalariesData(): void {
+  loadSalariesByMonth(): void {
     if (!this.selectedMonth) {
       this.toastr.warning('Please select a month');
       return;
@@ -69,20 +85,48 @@ export class SalariesReportsComponent implements OnInit {
     this.isLoading = true;
     this.salariesData = null;
     
-    this._SalaryService.getSalariesReports(this.selectedMonth, this.selectedEmployeeId)
+    this._SalaryService.getSalaryByMonth(this.selectedMonth)
       .subscribe({
         next: (response) => {
           this.salariesData = response.data || null;
-          console.log('Salaries data:', this.salariesData);
+          console.log('Salaries by month:', this.salariesData);
           this.isLoading = false;
           
           if (!this.salariesData) {
-            this.toastr.info('No salary data found for the selected criteria');
+            this.toastr.info('No salary data found for the selected month');
           }
         },
         error: (err) => {
           console.error(err);
-          this.toastr.error('Failed to load salary data');
+          this.toastr.error('Failed to load salary data by month');
+          this.isLoading = false;
+        }
+      });
+  }
+
+  loadSalariesByEmployee(): void {
+    if (!this.selectedEmployeeId) {
+      this.toastr.warning('Please select an employee');
+      return;
+    }
+
+    this.isLoading = true;
+    this.salariesData = null;
+    
+    this._SalaryService.getSalaryByEmployee(this.selectedEmployeeId)
+      .subscribe({
+        next: (response) => {
+          this.salariesData = response.data || null;
+          console.log('Salaries by employee:', this.salariesData);
+          this.isLoading = false;
+          
+          if (!this.salariesData) {
+            this.toastr.info('No salary data found for the selected employee');
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to load salary data by employee');
           this.isLoading = false;
         }
       });

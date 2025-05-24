@@ -3,17 +3,20 @@ import { AttendanceService } from '../../shared/services/attendance.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-show-attendance-details',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './show-attendance-details.component.html',
   styleUrl: './show-attendance-details.component.css'
 })
 export class ShowAttendanceDetailsComponent {
 
-
+    attendanceData : any = null;
+    attendancesData : any = null;
+    
     constructor(
       private _AttendanceService: AttendanceService,
       private toastr: ToastrService,
@@ -31,7 +34,10 @@ export class ShowAttendanceDetailsComponent {
     this._AttendanceService.getAttendanceById(accountId).subscribe({
       next: (response) => {
         if (response && response.data) {
-          console.log(response)
+          console.log(response.data)
+          this.attendanceData = response.data.attendance;  
+          this.attendancesData = response.data.attendance_data;
+
         }
       },
       error: (err: HttpErrorResponse) => {

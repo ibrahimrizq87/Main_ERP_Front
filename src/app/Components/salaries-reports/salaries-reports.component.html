@@ -13,20 +13,29 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
-                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
-                        <option value="">{{ 'ALL_EMPLOYEES' | translate }}</option>
-                        <option *ngFor="let employee of employees" [value]="employee.id">
-                            {{ employee?.account?.name }}
-                        </option>
+                    <label for="searchOption" class="form-label">{{ 'SEARCH_BY' | translate }}</label>
+                    <select id="searchOption" class="form-select" [(ngModel)]="searchOption" (change)="onSearchOptionChange()">
+                        <option value="month">{{ 'BY_MONTH' | translate }}</option>
+                        <option value="employee">{{ 'BY_EMPLOYEE' | translate }}</option>
                     </select>
                 </div>
-                <div class="col-md-6 mb-3">
+                
+                <div class="col-md-6 mb-3" *ngIf="searchOption === 'month'">
                     <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
                     <input type="month" id="monthSelect" class="form-control" 
                            [(ngModel)]="selectedMonth" 
                            (change)="onMonthChange()"
                            [max]="getCurrentMonth()">
+                </div>
+                
+                <div class="col-md-6 mb-3" *ngIf="searchOption === 'employee'">
+                    <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
+                        <option value="">{{ 'SELECT_EMPLOYEE' | translate }}</option>
+                        <option *ngFor="let employee of employees" [value]="employee.id">
+                            {{ employee?.account?.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -42,8 +51,12 @@
         <div class="card-body">
             <h5 class="card-title mb-4">
                 {{ 'SALARIES_REPORT_FOR' | translate }} 
-                {{ selectedEmployeeId ? getSelectedEmployeeName() : ('ALL_EMPLOYEES' | translate) }} - 
-                {{ selectedMonth | date: 'MMMM yyyy' }}
+                <span *ngIf="searchOption === 'employee'">
+                    {{ getSelectedEmployeeName() }}
+                </span>
+                <span *ngIf="searchOption === 'month'">
+                    {{ selectedMonth | date: 'MMMM yyyy' }}
+                </span>
             </h5>
             
             <div class="table-responsive">
@@ -148,7 +161,7 @@
         </div>
     </div>
 
-    <div *ngIf="!isLoading && !salariesData && (selectedEmployeeId || selectedMonth)" class="alert alert-info">
+    <div *ngIf="!isLoading && !salariesData && ((searchOption === 'month' && selectedMonth) || (searchOption === 'employee' && selectedEmployeeId))" class="alert alert-info">
         {{ 'NO_SALARIES_DATA_FOUND' | translate }}
     </div>
 </div>
