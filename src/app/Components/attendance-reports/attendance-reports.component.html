@@ -86,33 +86,33 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record)">
+            <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record.attendance)">
 
 
                 <ng-container *ngIf="type == 'day'; else employeeTable">
 
-                    <td>{{ record.date | date: 'mediumDate' }}</td>
-                    <td>{{ record.weekday }}</td>
+                    <td>{{ record.employee.name }}</td>
+                    <td>{{ record.attendance.weekday }}</td>
                     <td>
                         <span>
                             {{ record?.attendance.attendance ? record.attendance.attendance.status : ('absence' | translate) }}
                         </span>
                     </td>
                     <td>
-                        <span [ngClass]="getStartStatusClass(record?.attendance?.start_status)">
-                            {{ record?.attendance.attendance ? record.attendance.attendance.check_in + ' ' + record.attendance.start_status : '00:00:00' }}
+                        <span [ngClass]="getStartStatusClass(record.attendance.attendance?.start_status)">
+                            {{ record?.attendance.attendance ? record.attendance.attendance.check_in + ' ' + record.attendance.attendance.start_status : '00:00:00' }}
                         </span>
                     </td>
                     <td>
-                        <span [ngClass]="getEndStatusClass(record?.attendance?.end_status)">
-                            {{ record?.attendance.attendance ? record.attendance.attendance.check_out + ' ' + record.attendance.end_status : '00:00:00' }}
+                        <span [ngClass]="getEndStatusClass(record?.attendance.attendance?.end_status)">
+                            {{ record?.attendance.attendance ? record.attendance.attendance.check_out + ' ' + record.attendance.attendance.end_status : '00:00:00' }}
                         </span>
                     </td>
                     <td>{{ record?.attendance.vacation?.reason || 'N/A' }}</td>
                     <td>{{ record?.attendance.vacationRequest || 'N/A' }}</td>
                     <td>
-                        <button (click)="approveAttendance(record.attendance, true)" *ngIf="!record.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record.attendance)">Approve</button>
-                        <button (click)="approveAttendance(record.attendance, false)" *ngIf="record.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record.attendance)">Reject</button>
+                        <button (click)="approveAttendance(record.attendance, true)" *ngIf="!record.attendance.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record.attendance)">Approve</button>
+                        <button (click)="approveAttendance(record.attendance, false)" *ngIf="record.attendance.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record.attendance)">Reject</button>
                     
                     <a *ngIf="record?.attendance.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>

@@ -1,0 +1,53 @@
+<div class="attendance-card" *ngIf="attendanceData?.attendance_data">
+  <h2 class="title">بيانات الحضور</h2>
+
+  <div class="row">
+    <span class="label">👤 اسم الموظف:</span>
+    <span class="value">{{ attendanceData.employee?.name || 'غير متوفر' }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">📅 التاريخ:</span>
+    <span class="value">{{ attendanceData.attendance_data.date }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">📆 اليوم:</span>
+    <span class="value">{{ attendanceData.attendance_data.weekday }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">🟡 الحالة:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.status }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">⏰ وقت الدخول:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.check_in }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">⏳ وقت الخروج:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.check_out || 'غير متوفر' }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">🚦 بداية الحالة:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.start_status }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">🏁 نهاية الحالة:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.end_status }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">✔️ موافقة المدير:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.approved_by_manager ? 'نعم' : 'لا' }}</span>
+  </div>
+
+  <div class="row">
+    <span class="label">👨‍💼 المدير:</span>
+    <span class="value">{{ attendanceData.attendance_data.attendance.manager || 'غير متوفر' }}</span>
+  </div>
+</div>
