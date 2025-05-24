@@ -6,7 +6,7 @@
       <div class="card-body">
         <div class="row mb-3">
           <div class="col-md-6">
-            <strong>Date:</strong> {{ attendanceData.date }}
+            <strong>Date:</strong> {{ attendancesData.date }}
           </div>
           <div class="col-md-6">
             <strong>Status:</strong> 
@@ -51,10 +51,10 @@
   
         <div class="row mb-3">
           <div class="col-md-6">
-            <strong>Employee Name:</strong> {{ attendanceData.employee?.name || 'Unknown' }}
+            <strong>Employee Name:</strong> {{ employee.name || 'Unknown' }}
           </div>
           <div class="col-md-6">
-            <strong>Employee ID:</strong> {{ attendanceData.employee?.id || 'N/A' }}
+            <strong>Employee ID:</strong> {{ employee.id || 'N/A' }}
           </div>
         </div>
         <div class="row mb-3">

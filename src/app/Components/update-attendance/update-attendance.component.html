@@ -1,0 +1,133 @@
+<div class="mt-3 mb-3">
+    <h5>{{ 'MANAGE_ATTENDANCE' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'ATTENDANCE' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_ATTENDANCE' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+    <form [formGroup]="attendanceForm" (ngSubmit)="handleForm()">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3">
+                            <h5 class="large-text">{{ 'UPDATE_ATTENDANCE' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div class="row">
+                                <!-- Check In Time -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="check_in" class="form-label large-text">Check In Time</label>
+                                    <input id="check_in" formControlName="check_in" type="time" step="1" class="form-control"
+                                           placeholder="HH:MM:SS"
+                                           [class.is-invalid]="attendanceForm.get('check_in')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('check_in')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('check_in')?.hasError('required')">
+                                            Check in time is required
+                                        </p>
+                                        <p *ngIf="attendanceForm.get('check_in')?.hasError('date_format')">
+                                            Please enter time in HH:MM:SS format
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Check Out Time -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="check_out" class="form-label large-text">Check Out Time</label>
+                                    <input id="check_out" formControlName="check_out" type="time" step="1" class="form-control"
+                                           placeholder="HH:MM:SS"
+                                           [class.is-invalid]="attendanceForm.get('check_out')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('check_out')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('check_out')?.hasError('date_format')">
+                                            Please enter time in HH:MM:SS format
+                                        </p>
+                                        <p *ngIf="attendanceForm.get('check_out')?.hasError('after_or_equal')">
+                                            Check out time must be after or equal to check in time
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="status" class="form-label large-text">Status</label>
+                                    <select id="status" formControlName="status" class="form-select"
+                                            [class.is-invalid]="attendanceForm.get('status')?.invalid && isSubmited">
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option value="not_paid_vication">Not Paid Vacation</option>
+                                        <option value="paid_vication">Paid Vacation</option>
+                                        <option value="attendant">Attendant</option>
+                                        <option value="absent">Absent</option>
+                                    </select>
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('status')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('status')?.hasError('required')">
+                                            Status is required
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Start Status -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="start_status" class="form-label large-text">Start Status</label>
+                                    <select id="start_status" formControlName="start_status" class="form-select"
+                                            [class.is-invalid]="attendanceForm.get('start_status')?.invalid && isSubmited">
+                                        <option value="" disabled selected>Select Start Status</option>
+                                        <option value="on_time">On Time</option>
+                                        <option value="late">Late</option>
+                                        <option value="very_late">Very Late</option>
+                                    </select>
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('start_status')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('start_status')?.hasError('required')">
+                                            Start status is required
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- End Status -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="end_status" class="form-label large-text">End Status</label>
+                                    <select id="end_status" formControlName="end_status" class="form-select"
+                                            [class.is-invalid]="attendanceForm.get('end_status')?.invalid && isSubmited">
+                                        <option value="" disabled selected>Select End Status</option>
+                                        <option value="left_early">Left Early</option>
+                                        <option value="no_checkout">No Checkout</option>
+                                        <option value="late_checkout">Late Checkout</option>
+                                        <option value="on_time">On Time</option>
+                                    </select>
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('end_status')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('end_status')?.hasError('required')">
+                                            End status is required
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Working Hours -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="working_hours" class="form-label large-text">Working Hours</label>
+                                    <input id="working_hours" formControlName="working_hours" type="number" min="0" class="form-control"
+                                           placeholder="Enter working hours"
+                                           [class.is-invalid]="attendanceForm.get('working_hours')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="attendanceForm.get('working_hours')?.invalid && isSubmited">
+                                        <p *ngIf="attendanceForm.get('working_hours')?.hasError('required')">
+                                            Working hours are required
+                                        </p>
+                                        <p *ngIf="attendanceForm.get('working_hours')?.hasError('min')">
+                                            Working hours must be 0 or more
+                                        </p>
+                                        <p *ngIf="attendanceForm.get('working_hours')?.hasError('integer')">
+                                            Working hours must be an integer
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+                        <button type="submit" class="btn btn-primary px-4 large-text">
+                            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
