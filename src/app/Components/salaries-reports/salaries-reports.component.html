@@ -1,0 +1,233 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h5>{{ 'MANAGE_SALARIES_REPORTS' | translate }}</h5>
+            <span class="text-muted">
+                {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
+                {{ 'SALARIES_REPORTS' | translate }}
+            </span>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange($event)">
+                        <option value="all">{{ 'ALL_EMPLOYEES' | translate }}</option>
+                 
+                        <option *ngFor="let employee of employees" [value]="employee.id">
+                            {{ employee?.account?.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
+                    <input type="month" id="monthSelect" class="form-control" 
+                           [(ngModel)]="selectedMonth" 
+                           (change)="onMonthChange()"
+                           [max]="getCurrentMonth()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div *ngIf="salariesData && selectedEmployeeId != 'all' " class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-4">
+                {{ 'SALARIES_REPORT_FOR' | translate }} 
+                {{ selectedEmployeeId ? getSelectedEmployeeName() : ('ALL_EMPLOYEES' | translate) }} - 
+                {{ selectedMonth | date: 'MMMM yyyy' }}
+            </h5>
+            
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2" class="text-center">{{ 'SALARY_SUMMARY' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="50%">{{ 'BASE_SALARY' | translate }}</td>
+                            <td class="text-end">{{ salariesData.base_salary | currency }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'TOTAL_SALARY' | translate }}</td>
+                            <td class="text-end text-success">{{ salariesData.total_salary | currency }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'BONUS' | translate }}</td>
+                            <td class="text-end" [ngClass]="{'text-danger': salariesData.bonus < 0, 'text-success': salariesData.bonus >= 0}">
+                                {{ salariesData.bonus | currency }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2" class="text-center">{{ 'WORK_HOURS_SUMMARY' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="50%">{{ 'TOTAL_HOURS_FOR_BONUS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.total_hours_for_bonus }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'FUTURE_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.future_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'PUBLIC_VACATION_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.public_vacation_days }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2" class="text-center">{{ 'ATTENDANCE_DETAILS' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="50%">{{ 'ABSENT_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.absent_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'LATE_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.lat_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'VERY_LATE_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.very_lat_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'LEAVE_EARLY_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.leave_early_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'NO_CHECKOUT_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.no_checkout_days }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'LATE_CHECKOUT_DAYS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.lat_checkout_days }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="2" class="text-center">{{ 'VACATION_DETAILS' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="50%">{{ 'PAID_VACATIONS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.paid_vecations }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ 'NOT_PAID_VACATIONS' | translate }}</td>
+                            <td class="text-end">{{ salariesData.not_paid_vecations }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+<div *ngIf="salariesData && selectedEmployeeId === 'all'" class="salary-container">
+
+    <button (click)="saveAll()" class="btn btn-success m-3" >save all</button>
+  <div *ngFor="let item of salariesData" class="salary-card">
+
+    <div class="summary-row">
+      <div class="info-block">
+        <div><strong>{{ 'employee_name' | translate }}:</strong> {{ item.employee.name }}</div>
+        <div><strong>{{ 'base_salary' | translate }}:</strong> {{ item.salary.base_salary }} </div>
+        <div><strong>{{ 'total_salary' | translate }}:</strong> {{ item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)  || 0 }}</div>
+      </div>
+        <div><strong>{{ 'bonus' | translate }}: </strong> {{ item.bonus || 0 }} </div>
+        <div><strong>{{ 'deduction' | translate }}: </strong> {{ item.deduction || 0 }} </div>
+
+      <div>
+
+      </div>
+      <button class="btn btn-outline-success" (click)="showDetails(item)">
+        show details
+      </button>
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <button (click)="save(item)" class="btn btn-success" [disabled]="item.salary.is_salary || item.salary.has_future_days">
+    save
+  </button>
+
+  <button (click)="item.expanded = !item.expanded" class="toggle-btn">
+    {{ item.expanded ? '▲' : '▼' }}
+  </button>
+</div>
+
+    </div>
+
+    <!-- Expandable Details -->
+    <div *ngIf="item.expanded" class="details-section">
+
+      <div class="detail-row">
+        <div>{{ 'absent_days' | translate }}: {{ item.salary.absent_days }}</div>
+        <div>{{ 'late_days' | translate }}: {{ item.salary.lat_days }}</div>
+        <div>{{ 'very_late_days' | translate }}: {{ item.salary.very_lat_days }}</div>
+        <div>{{ 'no_checkout_days' | translate }}: {{ item.salary.no_checkout_days }}</div>
+        <div>{{ 'leave_early_days' | translate }}: {{ item.salary.leave_early_days }}</div>
+        <div>{{ 'paid_vacations' | translate }}: {{ item.salary.paid_vecations }}</div>
+        <div>{{ 'unpaid_vacations' | translate }}: {{ item.salary.not_paid_vecations }}</div>
+        <div>{{ 'public_vacation_days' | translate }}: {{ item.salary.public_vacation_days }}</div>
+        <div>{{ 'future_days' | translate }}: {{ item.salary.future_days }}</div>
+        <div>{{ 'total_hours_for_bonus' | translate }}: {{ item.salary.total_hours_for_bonus }}</div>
+        <div>{{ 'deduction' | translate }}: {{ item.salary.deduction }}</div>
+
+
+        
+      </div>
+
+      <div class="form-section">
+        <div class="input-group">
+          <label>{{ 'bonus' | translate }}</label>
+          <input type="number" [(ngModel)]="item.bonus" />
+        </div>
+        <div class="input-group">
+          <label>{{ 'deduction' | translate }}</label>
+          <input type="number" [(ngModel)]="item.deduction" />
+        </div>
+        <div class="input-group">
+          <label>{{ 'reason' | translate }}</label>
+          <input type="text" [(ngModel)]="item.reason" />
+        </div>
+        <!-- <button class="action-btn" (click)="applyAction(item)">
+          {{ 'action' | translate }}
+        </button> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+    <div *ngIf="!isLoading && !salariesData && (selectedEmployeeId || selectedMonth)" class="alert alert-info">
+        {{ 'NO_SALARIES_DATA_FOUND' | translate }}
+    </div>
+</div>
