@@ -60,3 +60,21 @@
     padding: 5px;
 }
 
+
+
+
+.text-success {
+    font-weight: bold;
+    color: green !important;
+}
+.text-warning {
+    font-weight: bold;
+    color: orange !important;
+}
+.text-danger {
+    font-weight: bold;
+    color: red !important;
+}
+.text-muted {
+    color: gray !important;
+}
