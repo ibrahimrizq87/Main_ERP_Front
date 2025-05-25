@@ -156,6 +156,7 @@ import { ShowVecationRequestsComponent } from './Components/show-vecation-reques
 import { AttendanceReportsComponent } from './Components/attendance-reports/attendance-reports.component';
 import { ShowAttendanceDetailsComponent } from './Components/show-attendance-details/show-attendance-details.component';
 import { SalariesReportsComponent } from './Components/salaries-reports/salaries-reports.component';
+import { UpdateAttendanceComponent } from './Components/update-attendance/update-attendance.component';
 
 
 export const routes: Routes = [
@@ -377,6 +378,7 @@ export const routes: Routes = [
 
             {path:"attendance-reports",component:AttendanceReportsComponent},
             {path:"show-attendance/:id",component:ShowAttendanceDetailsComponent},
+            {path:"update-attendance/:id",component:UpdateAttendanceComponent},
 
             {path:"salaries-reports",component:SalariesReportsComponent},
 

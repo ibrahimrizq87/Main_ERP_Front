@@ -86,6 +86,8 @@
             </tr>
         </thead>
         <tbody>
+                                  <ng-container *ngIf="attendanceData">
+
             <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record.attendance)">
 
 
@@ -117,13 +119,17 @@
                     <a *ngIf="record?.attendance.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>
                     </a>
+                    <a *ngIf="record?.attendance.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-attendance',record?.attendance.attendance?.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.update' | translate }}"></i>
+                    </a>
 
                     </td>
                 </ng-container>
 
                 <ng-template #employeeTable>
 
-                <ng-container *ngIf="record?.future_data; else presentRecord">
+
+             <ng-container *ngIf="record?.future_data; else presentRecord">
                     <td>{{ record.date | date: 'mediumDate' }}</td>
                     <td>----</td>
                     <td>----</td>
@@ -134,7 +140,8 @@
                     <td>----</td>
                 </ng-container>
 
-                <ng-template #presentRecord>
+
+                    <ng-template #presentRecord >
                     <td>{{ record.date | date: 'mediumDate' }}</td>
                     <td>{{ record.weekday }}</td>
                     <td>
@@ -154,19 +161,25 @@
                     </td>
                     <td>{{ record?.vacation?.reason || 'N/A' }}</td>
                     <td>{{ record?.vacationRequest || 'N/A' }}</td>
-                    <td>
+                    <td class="d-flex justify-content-between">
                         <button (click)="approveAttendance(record, true)" *ngIf="!record.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record)">Approve</button>
                         <button (click)="approveAttendance(record, false)" *ngIf="record.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record)">Reject</button>
                     
                     <a *ngIf="record?.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>
                     </a>
+                     
+                    <a *ngIf="record?.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-attendance',record?.attendance?.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.update' | translate }}"></i>
+                    </a>
 
                     </td>
                 </ng-template>
-                                </ng-template>
+
+                </ng-template>
 
             </tr>
+            </ng-container>
         </tbody>
     </table>
 </div>

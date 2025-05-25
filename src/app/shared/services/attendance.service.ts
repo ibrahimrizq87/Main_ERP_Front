@@ -52,6 +52,10 @@ export class AttendanceService {
   getAttendanceById(id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/attendances/${id}`,{ headers:this.getHeadersWithToken() });
   }
+  updateAttendance(id: string, data: FormData): Observable<any> {
+    data.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/attendances/${id}`, data, { headers: this.getHeadersWithToken() });
+  }
 
   
 }

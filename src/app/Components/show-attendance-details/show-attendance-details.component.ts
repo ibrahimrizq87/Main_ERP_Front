@@ -16,6 +16,7 @@ export class ShowAttendanceDetailsComponent {
 
     attendanceData : any = null;
     attendancesData : any = null;
+  employee: any;
     
     constructor(
       private _AttendanceService: AttendanceService,
@@ -36,8 +37,9 @@ export class ShowAttendanceDetailsComponent {
       next: (response) => {
         if (response && response.data) {
           console.log(response.data)
-          this.attendanceData = response.data.attendance;  
+          this.attendanceData = response.data.attendance_data.attendance;  
           this.attendancesData = response.data.attendance_data;
+          this.employee= response.data.employee;
 
         }
       },
