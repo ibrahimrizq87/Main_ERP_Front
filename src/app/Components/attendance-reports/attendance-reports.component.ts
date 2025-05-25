@@ -103,11 +103,11 @@ getEndStatusClass(status: string): string {
 }
 
 getRowClass(record: any): string {
-  if (record.future_data) return 'table-secondary'; // gray
-  if (record.vacation || record.vacationRequest || record.is_vecation_day) return 'table-info';         // blue
-  if (!record.attendance) return 'table-danger';    // red
-  if ((record.attendance.status == 'attendant' && record.attendance.start_status == 'on_time' &&record.attendance.end_status == 'on_time' ) || record.attendance?.approved_by_manager) return 'table-success'; // green
-  if (record.attendance.status === 'absent' || record.attendance.start_status != 'on_time' || record.attendance.end_status != 'on_time' ) return 'table-warning';  // yellow
+  if (record?.future_data) return 'table-secondary'; // gray
+  if (record?.vacation || record?.vacationRequest || record?.is_vecation_day) return 'table-info';         // blue
+  if (!record?.attendance) return 'table-danger';    // red
+  if ((record?.attendance.status == 'attendant' && record?.attendance.start_status == 'on_time' &&record?.attendance.end_status == 'on_time' ) || record?.attendance?.approved_by_manager) return 'table-success'; // green
+  if (record?.attendance.status === 'absent' || record?.attendance.start_status != 'on_time' || record?.attendance.end_status != 'on_time' ) return 'table-warning';  // yellow
   return '';
 }
 

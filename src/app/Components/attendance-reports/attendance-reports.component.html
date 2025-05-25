@@ -123,7 +123,7 @@
 
                 <ng-template #employeeTable>
 
-                <ng-container *ngIf="record.future_data; else presentRecord">
+                <ng-container *ngIf="record?.future_data; else presentRecord">
                     <td>{{ record.date | date: 'mediumDate' }}</td>
                     <td>----</td>
                     <td>----</td>

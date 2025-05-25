@@ -46,9 +46,16 @@ export class SalaryService {
     }
     return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
   }
+  getSalaryByMonth(month:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-calculated?month=${month}`, { headers: this.getHeadersWithToken() });
+  }
 
 
     saveSalary(salaryData:FormData): Observable<any> {
       return this._HttpClient.post(`${this.baseURL}/general/salaries`, salaryData ,{ headers:this.getHeadersWithToken() });
   }
+  getSalaryByEmployee(employee_id: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-calculated?employee_id=${employee_id}`, { headers: this.getHeadersWithToken() });
+  }
+
 }

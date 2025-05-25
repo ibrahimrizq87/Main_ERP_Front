@@ -1,53 +1,101 @@
-<div class="attendance-card" *ngIf="attendanceData?.attendance_data">
-  <h2 class="title">بيانات الحضور</h2>
-
-  <div class="row">
-    <span class="label">👤 اسم الموظف:</span>
-    <span class="value">{{ attendanceData.employee?.name || 'غير متوفر' }}</span>
+<div class="container mt-5" *ngIf="attendanceData">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Attendance Details (ID: {{ attendanceData.id }})</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Date:</strong> {{ attendanceData.date }}
+          </div>
+          <div class="col-md-6">
+            <strong>Status:</strong> 
+            <span class="badge" [ngClass]="{
+              'bg-success': attendanceData.status === 'present',
+              'bg-danger': attendanceData.status === 'absent',
+              'bg-warning text-dark': attendanceData.status !== 'present' && attendanceData.status !== 'absent'
+            }">{{ attendanceData.status }}</span>
+          </div>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Check In:</strong> {{ attendanceData.check_in || 'N/A' }}
+          </div>
+          <div class="col-md-6">
+            <strong>Check Out:</strong> {{ attendanceData.check_out || 'N/A' }}
+          </div>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Start Status:</strong> {{ attendanceData.start_status || 'N/A' }}
+          </div>
+          <div class="col-md-6">
+            <strong>End Status:</strong> {{ attendanceData.end_status || 'N/A' }}
+          </div>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Working Hours:</strong> {{ attendanceData.working_hours }}
+          </div>
+          <div class="col-md-6">
+            <strong>Approved by Manager:</strong>
+            <span [ngClass]="{
+              'text-success': attendanceData.approved_by_manager,
+              'text-danger': !attendanceData.approved_by_manager
+            }">{{ attendanceData.approved_by_manager ? 'Yes' : 'No' }}</span>
+          </div>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Employee Name:</strong> {{ attendanceData.employee?.name || 'Unknown' }}
+          </div>
+          <div class="col-md-6">
+            <strong>Employee ID:</strong> {{ attendanceData.employee?.id || 'N/A' }}
+          </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Future Data:</strong> {{ attendancesData.future_data }}
+            </div>
+            <div class="col-md-6">
+              <strong>Is Vecation Day:</strong> {{ attendancesData.is_vecation_day  }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Vecation:</strong> {{ attendancesData.vacation||"N/A"  }}
+            </div>
+            <div class="col-md-6">
+              <strong>Vacation Request:</strong> {{ attendancesData.vacationRequest ||"N/A" }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Weekday:</strong> {{ attendancesData.weekday  }}
+            </div>
+            <div class="col-md-6">
+              <strong>Approved By:</strong> {{ attendanceData?.approved_by  ||" N/A" }}
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Created At:</strong> {{ attendanceData.created_at }}
+          </div>
+          <div class="col-md-6">
+            <strong>Updated At:</strong> {{ attendanceData.updated_at }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="row">
-    <span class="label">📅 التاريخ:</span>
-    <span class="value">{{ attendanceData.attendance_data.date }}</span>
+  
+  <!-- Loading message or fallback -->
+  <div class="text-center mt-5" *ngIf="!attendanceData">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-3">Loading attendance details...</p>
   </div>
-
-  <div class="row">
-    <span class="label">📆 اليوم:</span>
-    <span class="value">{{ attendanceData.attendance_data.weekday }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">🟡 الحالة:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.status }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">⏰ وقت الدخول:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.check_in }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">⏳ وقت الخروج:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.check_out || 'غير متوفر' }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">🚦 بداية الحالة:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.start_status }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">🏁 نهاية الحالة:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.end_status }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">✔️ موافقة المدير:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.approved_by_manager ? 'نعم' : 'لا' }}</span>
-  </div>
-
-  <div class="row">
-    <span class="label">👨‍💼 المدير:</span>
-    <span class="value">{{ attendanceData.attendance_data.attendance.manager || 'غير متوفر' }}</span>
-  </div>
-</div>
+  

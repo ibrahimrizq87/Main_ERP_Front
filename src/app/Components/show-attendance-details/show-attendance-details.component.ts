@@ -14,7 +14,9 @@ import { CommonModule } from '@angular/common';
 })
 export class ShowAttendanceDetailsComponent {
 
-
+    attendanceData : any = null;
+    attendancesData : any = null;
+    
     constructor(
       private _AttendanceService: AttendanceService,
       private toastr: ToastrService,
@@ -22,7 +24,6 @@ export class ShowAttendanceDetailsComponent {
       
     ) {}
 
-    attendanceData:any;
 
   ngOnInit(): void {
     const accountId = this.route.snapshot.paramMap.get('id'); 
@@ -34,8 +35,10 @@ export class ShowAttendanceDetailsComponent {
     this._AttendanceService.getAttendanceById(accountId).subscribe({
       next: (response) => {
         if (response && response.data) {
-          this.attendanceData = response.data;
-          console.log(response)
+          console.log(response.data)
+          this.attendanceData = response.data.attendance;  
+          this.attendancesData = response.data.attendance_data;
+
         }
       },
       error: (err: HttpErrorResponse) => {
