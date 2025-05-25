@@ -51,11 +51,28 @@ export class SalaryService {
   }
 
 
-    saveSalary(salaryData:FormData): Observable<any> {
-      return this._HttpClient.post(`${this.baseURL}/general/salaries`, salaryData ,{ headers:this.getHeadersWithToken() });
+  saveSalary(salaryData:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/salaries`, salaryData ,{ headers:this.getHeadersWithToken() });
   }
+
+
   getSalaryByEmployee(employee_id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-calculated?employee_id=${employee_id}`, { headers: this.getHeadersWithToken() });
   }
+
+
+
+    
+  getSavedSalaries(month:string , status:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-to-be-paid/${status}?month=${month}`, { headers: this.getHeadersWithToken() });
+  }
+
+  paySalaty(salaryData:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/employee/salaries/pay-salary`, salaryData ,{ headers:this.getHeadersWithToken() });
+  }
+
+  
+
+  
 
 }

@@ -86,14 +86,13 @@
             </tr>
         </thead>
         <tbody>
-                                  <ng-container *ngIf="attendanceData">
 
-            <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record.attendance)">
+            <!-- <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record.attendance)"> -->
 
-
+            <tr *ngFor="let record of attendanceData" [ngClass]="type === 'day' ? getRowClass(record.attendance) : getRowClass(record)">
                 <ng-container *ngIf="type == 'day'; else employeeTable">
 
-                    <td>{{ record.employee.name }}</td>
+                    <td>{{ record.employee?.name }}</td>
                     <td>{{ record.attendance.weekday }}</td>
                     <td>
                         <span>
@@ -179,7 +178,6 @@
                 </ng-template>
 
             </tr>
-            </ng-container>
         </tbody>
     </table>
 </div>

@@ -5,6 +5,10 @@ import { SalaryService } from '../../shared/services/salary.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Modal } from 'bootstrap';
+import { CurrencyService } from '../../shared/services/currency.service';
+import { Router } from '@angular/router';
+import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-salaries-reports',
@@ -19,18 +23,33 @@ export class SalariesReportsComponent implements OnInit {
   selectedMonth: string = this.getCurrentMonth();
   salariesData: any = null;
   isLoading: boolean = false;
+  actionType = 'not_paid';
 
+
+  savedSalariesData:any;
   constructor(
     private _SalaryService: SalaryService,
     private toastr: ToastrService,
-    private _EmployeeService: EmployeeService
+    private _Router: Router,
+    private _EmployeeService: EmployeeService,
+    private _CurrencyService: CurrencyService,
+    private _AccountService : AccountService
   ) {}
 
   ngOnInit(): void {
     this.loadEmployees();
     this.loadSalariesData();
+    this.loadAccounts();
+    this.loadDefaultCurrency();
   }
 
+  changeStatus(type:string){
+    this.actionType = type;
+    if(type == 'paid' || type ==  'paid_historey'){
+      this.selectedEmployeeId = 'all';
+    }
+    this.loadSalariesData();
+  }
   getCurrentMonth(): string {
     const now = new Date();
     const year = now.getFullYear();
@@ -66,35 +85,67 @@ export class SalariesReportsComponent implements OnInit {
 
 
 
+  paySalary(salary:any){
+ const formData = new FormData();
+
+
+ if(!this.selectedAccount){
+  alert('select account first');
+ }
+ formData.append('account_id', this.selectedAccount.id);
+ if(this.needCurrencyPrice){
+   formData.append('currency_price', this.currnceyPrice.toString());
+ }
+let completeData = true;
+ if(salary.need_currency_value && ! salary.currnceyPrice){
+    alert('make sure to provide all data');
+ completeData =false;
+  }
+
+              //  'account_id' => 'required|exists:accounts,id',
+            //     'currency_price' => 'nullable|numeric|min:0',
+                
+            //     'salaries' => 'required|array',
+            //     'salaries.*.salary_id' => 'required|exists:salaries,id',
+            //     'salaries.*.currency_price' =>  'nullable|numeric|min:0',
+   formData.append('salaries[0][salary_id]', salary.id);
+if(salary.need_currency_value){
+   formData.append('salaries[0][currency_price]', salary.currnceyPrice);
+
+}
+
+
+if(completeData){
+this._SalaryService.paySalaty(formData)
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.loadSalariesData();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to load salary data');
+          this.isLoading = false;
+        }
+      });
+}
+
+
+  }
+
+  onSearchChange() {
+
+
+ 
+
+  }
+
   save(item:any){
-
-    
-
-
-            //  'salaries' => 'required|array',
-            //             'salaries.*.employee_id' => 'required|exists:employees,id',
-            //             'salaries.*.base_salary' => 'required|numeric|min:0',
-            //             'salaries.*.net_salary' => 'required|numeric|min:0',
-            //             'salaries.*.deduction' => 'nullable|numeric|min:0',
-            //             'salaries.*.additional_deduction' => 'nullable|numeric|min:0',
-            //             'salaries.*.bonus' => 'nullable|numeric|min:0',
-            //             'salaries.*.additional_bonus' => 'nullable|numeric|min:0',
-            //             'salaries.*.note' => 'nullable|string|max:255',
-            //             'salaries.*.date' => 'required|date',
-
-
- const selectedMonth = this.selectedMonth;
-const firstDay = new Date(`${selectedMonth}-01`);
-const formattedFirstDay = firstDay.toISOString().split('T')[0];
-
-// console.log(formattedFirstDay);
+  const selectedMonth = this.selectedMonth;
+  const firstDay = new Date(`${selectedMonth}-01`);
+  const formattedFirstDay = firstDay.toISOString().split('T')[0];
  const formData = new FormData();
  formData.append('salaries[0][date]', formattedFirstDay);
-
-             //             'salaries.*.employee_id' => 'required|exists:employees,id',
-            //             'salaries.*.base_salary' => 'required|numeric|min:0',
-            //             'salaries.*.net_salary' => 'required|numeric|min:0',
-
 const total_salary = item.salary.base_salary + (item.bonus | 0) + (item.salary.bonus | 0) - (item.salary.deduction | 0) - (item.deduction |0);
  formData.append('salaries[0][employee_id]', item.employee.id);
  formData.append('salaries[0][base_salary]', item.salary.base_salary);
@@ -135,8 +186,6 @@ const total_salary = item.salary.base_salary + (item.bonus | 0) + (item.salary.b
   }
   loadSalariesData(): void {
 
-
-
     if (!this.selectedMonth) {
       this.toastr.warning('Please select a month');
       return;
@@ -146,8 +195,35 @@ const total_salary = item.salary.base_salary + (item.bonus | 0) + (item.salary.b
     this.salariesData = null;
 
 
-    if(this.selectedEmployeeId != 'all'){
-  this._SalaryService.getSalariesReports(this.selectedMonth, this.selectedEmployeeId)
+
+    if(this.actionType == 'paid' || this.actionType ==  'paid_historey'){
+
+let status = 'paid';
+      if(this.actionType == 'paid'){
+ status = 'not_paid';
+    }
+
+
+this._SalaryService.getSavedSalaries(this.selectedMonth ,status)
+      .subscribe({
+        next: (response) => {
+          this.savedSalariesData = response.data || null;
+          console.log('saved Salaries data:', response);
+          this.isLoading = false;
+          
+          if (!this.savedSalariesData) {
+            this.toastr.info('No salary data found for the selected criteria');
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to load salary data');
+          this.isLoading = false;
+        }
+      });
+    }else{
+ if(this.selectedEmployeeId != 'all'){
+    this._SalaryService.getSalariesReports(this.selectedMonth, this.selectedEmployeeId)
       .subscribe({
         next: (response) => {
           this.salariesData = response.data || null;
@@ -186,6 +262,8 @@ const total_salary = item.salary.base_salary + (item.bonus | 0) + (item.salary.b
 
 
     }
+    }
+   
     
   
   }
@@ -266,6 +344,82 @@ if(counter > 0){
     const employee = this.employees.find(e => e.id === this.selectedEmployeeId);
     return employee?.account?.name || '';
   }
+
+
+    loadDefaultCurrency() {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+        }
+        console.log(err);
+      }
+    });
+  }
+
+
+filteredAccounts:any;
+currency:any;
+needCurrencyPrice =false;
+currnceyPrice = 1;
+selectAccount(account:any){
+  if(account.currency.id != this.currency.id){
+    this.needCurrencyPrice =true;
+  }else{
+    this.needCurrencyPrice =false;
+  }
+
+  this.selectedAccount = account;
+
+  this.closeModal('accountModal');
+}
+
+
+
+
+
+
+
+loadAccounts(){
+     this._AccountService.getChildrenByParentIds([111 ,112 ,113]).subscribe({
+      next: (response) => {
+        if (response) {
+          this.filteredAccounts = response.data;
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+         
+        }
+        console.log(err);
+      }
+    });
+}
+    searchQuery: string = '';
+ closeModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+selectedAccount:any;
+
+    openModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
 }
 
 
