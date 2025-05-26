@@ -62,11 +62,11 @@
                     </select>
                 </div>
 
-                   <div *ngIf="actionType != 'not_paid'" class="form-group col-md-3">
-                  <label class="form-label">{{ 'CLIENT' | translate }}</label>
+                   <div *ngIf="actionType == 'paid'" class="form-group col-md-3">
+                  <label class="form-label">{{ 'ACCOUNT' | translate }}</label>
                   <button type="button" class="btn btn-outline-primary w-100"
                     (click)="openModal('accountModal')">
-                    {{ selectedAccount ? selectedAccount.name : ('CLIENT' | translate) }}
+                    {{ selectedAccount ? selectedAccount.name : ('ACCOUNT' | translate) }}
                   </button>
                 </div>
 
@@ -240,7 +240,7 @@
                         <label class="form-label">{{data.currency}} price =></label>
                     </div>
 
-                        <div class="col-md-2" *ngIf="data.need_currency_value">
+                        <div class="col-md-2" *ngIf="data.need_currency_value && data.status == 'not_paid'">
                         <!-- <label class="form-label">{{ 'CURRENCY_VALUE' | translate }}</label> -->
                         <input  type="number" class="form-control" [(ngModel)]="data.currnceyPrice" placeholder="{{data.currency}} {{ 'CURRENCY_VALUE' | translate }}"/>
                     </div>
@@ -262,9 +262,13 @@
                     <div class="info-block">
                         <div><strong>{{ 'employee_name' | translate }}:</strong> {{ item.employee.name }}</div>
                         <div><strong>{{ 'base_salary' | translate }}:</strong> {{ item.salary.base_salary }} </div>
-                        <div><strong>{{ 'total_salary' | translate }}:</strong> {{ item.salary.base_salary + (item.bonus
+                        <!-- <div><strong>{{ 'total_salary' | translate }}:</strong> {{ item.salary.base_salary + (item.bonus
                             || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0) || 0
-                            }}</div>
+                            }}</div> -->
+                            <div>
+                        <strong>{{ 'total_salary' | translate }}:</strong>
+                        {{ floor((item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)) || 0) }}
+                        </div>
                     </div>
                     <div><strong>{{ 'bonus' | translate }}: </strong> {{ item.bonus || 0 }} </div>
                     <div><strong>{{ 'deduction' | translate }}: </strong> {{ item.deduction || 0 }} </div>
@@ -303,6 +307,7 @@
                         <div>{{ 'future_days' | translate }}: {{ item.salary.future_days }}</div>
                         <div>{{ 'total_hours_for_bonus' | translate }}: {{ item.salary.total_hours_for_bonus }}</div>
                         <div>{{ 'deduction' | translate }}: {{ item.salary.deduction }}</div>
+                        <div>{{ 'bonus' | translate }}: {{ item.salary.bonus }}</div>
 
 
 

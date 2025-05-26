@@ -84,6 +84,11 @@ export class SalariesReportsComponent implements OnInit {
   }
 
 
+floor(value: number): number {
+  return Math.floor(value);
+}
+
+
 
   paySalary(salary:any){
  const formData = new FormData();
@@ -94,7 +99,7 @@ export class SalariesReportsComponent implements OnInit {
  }
  formData.append('account_id', this.selectedAccount.id);
  if(this.needCurrencyPrice){
-   formData.append('currency_price', this.currnceyPrice.toString());
+   formData.append('currency_price_value', this.currnceyPrice.toString());
  }
 let completeData = true;
  if(salary.need_currency_value && ! salary.currnceyPrice){
@@ -110,9 +115,12 @@ let completeData = true;
             //     'salaries.*.currency_price' =>  'nullable|numeric|min:0',
    formData.append('salaries[0][salary_id]', salary.id);
 if(salary.need_currency_value){
-   formData.append('salaries[0][currency_price]', salary.currnceyPrice);
-
+   formData.append('salaries[0][currency_price_value]', salary.currnceyPrice);
+console.log(salary.currnceyPrice)
 }
+
+
+
 
 
 if(completeData){
