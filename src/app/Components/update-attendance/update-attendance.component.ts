@@ -57,7 +57,7 @@ export class UpdateAttendanceComponent implements OnInit {
             status: attendanceData.attendance_data.attendance.status,
             start_status: attendanceData.attendance_data.attendance.start_status,
             end_status: attendanceData.attendance_data.attendance.end_status,
-            working_hours: attendanceData.working_hours
+            working_hours: attendanceData.attendance_data.attendance.working_hours
           });
         }
       },

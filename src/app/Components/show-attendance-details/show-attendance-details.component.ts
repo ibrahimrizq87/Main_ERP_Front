@@ -25,6 +25,7 @@ export class ShowAttendanceDetailsComponent {
       
     ) {}
 
+
   ngOnInit(): void {
     const accountId = this.route.snapshot.paramMap.get('id'); 
     if (accountId) {

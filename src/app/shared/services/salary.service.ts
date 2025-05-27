@@ -36,21 +36,43 @@ export class SalaryService {
     });
   }
 
-  // getSalariesReports(month?: string, employee_id?: string): Observable<any> {
-  //   let url = `${this.baseURL}/employee/salaries/get-salaries-calculated?`;
-  //   if (month) {
-  //     url += `month=${month}`;
-  //   }
-  //   if (employee_id) {
-  //     url += `&employee_id=${employee_id}`;
-  //   }
-  //   return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
-  // }
+  getSalariesReports(month?: string, employee_id?: string): Observable<any> {
+    let url = `${this.baseURL}/employee/salaries/get-salaries-calculated?`;
+    if (month) {
+      url += `month=${month}`;
+    }
+    if (employee_id) {
+      url += `&employee_id=${employee_id}`;
+    }
+    return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
+  }
   getSalaryByMonth(month:string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-calculated?month=${month}`, { headers: this.getHeadersWithToken() });
   }
+
+
+  saveSalary(salaryData:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/salaries`, salaryData ,{ headers:this.getHeadersWithToken() });
+  }
+
+
   getSalaryByEmployee(employee_id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-calculated?employee_id=${employee_id}`, { headers: this.getHeadersWithToken() });
   }
+
+
+
+    
+  getSavedSalaries(month:string , status:string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/salaries/get-salaries-to-be-paid/${status}?month=${month}`, { headers: this.getHeadersWithToken() });
+  }
+
+  paySalaty(salaryData:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/employee/salaries/pay-salary`, salaryData ,{ headers:this.getHeadersWithToken() });
+  }
+
+  
+
+  
 
 }

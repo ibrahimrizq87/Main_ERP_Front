@@ -1,4 +1,22 @@
 {
+
+
+
+  "employee_name": "اسم الموظف",
+  "base_salary": "الراتب الأساسي",
+  "bonus": "البونص",
+  "total_hours_for_bonus": "إجمالي الساعات للبونص",
+  "future_days": "الأيام المستقبلية",
+  "absent_days": "أيام الغياب",
+  "late_days": "أيام الوصول المتأخر",
+  "leave_early_days": "أيام الخروج المبكر",
+  "no_checkout_days": "أيام بدون تسجيل خروج",
+  "very_late_days": "أيام الوصول المتأخر جداً",
+  "paid_vacations": "الإجازات المدفوعة",
+  "unpaid_vacations": "الإجازات الغير مدفوعة",
+  "public_vacation_days": "الإجازات الرسمية",
+  "total_salary": "الراتب الإجمالي",
+  "currency": "جنيه",
   "EMPLOYEE": "موظف",
   "RETURN_PURCHASES_INVOICE": "فاتورة مرتجع المشتريات",
   "Reports": "تقارير",

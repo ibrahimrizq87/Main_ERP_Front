@@ -3,39 +3,84 @@
         <div>
             <h5>{{ 'MANAGE_SALARIES_REPORTS' | translate }}</h5>
             <span class="text-muted">
-                {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
+                {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
                 {{ 'SALARIES_REPORTS' | translate }}
             </span>
         </div>
     </div>
 
+
+
+
+
+    <div class="container">
+        <header
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <a (click)="changeStatus('not_paid')" class="nav-link px-2"
+                        [ngClass]="{'active-tab': actionType === 'not_paid', 'inactive-tab': actionType !== 'not_paid'}">
+                        {{ 'TO_BE_SAVE' | translate }}
+                    </a>
+                </li>
+                <li>
+                    <a (click)="changeStatus('paid')" class="nav-link px-2"
+                        [ngClass]="{'active-tab': actionType === 'paid', 'inactive-tab': actionType !== 'paid'}">
+                        {{ 'TO_BE_PAID' | translate }}
+                    </a>
+                </li>
+
+                         <li>
+                    <a (click)="changeStatus('paid_historey')" class="nav-link px-2"
+                        [ngClass]="{'active-tab': actionType === 'paid_historey', 'inactive-tab': actionType !== 'paid_historey'}">
+                        {{ 'PAID_SALARIES' | translate }}
+                    </a>
+                </li>
+
+
+            </ul>
+
+
+        </header>
+    </div>
+
+
+
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="searchOption" class="form-label">{{ 'SEARCH_BY' | translate }}</label>
-                    <select id="searchOption" class="form-select" [(ngModel)]="searchOption" (change)="onSearchOptionChange()">
-                        <option value="month">{{ 'BY_MONTH' | translate }}</option>
-                        <option value="employee">{{ 'BY_EMPLOYEE' | translate }}</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-6 mb-3" *ngIf="searchOption === 'month'">
-                    <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
-                    <input type="month" id="monthSelect" class="form-control" 
-                           [(ngModel)]="selectedMonth" 
-                           (change)="onMonthChange()"
-                           [max]="getCurrentMonth()">
-                </div>
-                
-                <div class="col-md-6 mb-3" *ngIf="searchOption === 'employee'">
+                <div *ngIf="actionType == 'not_paid' " class="col-md-6 mb-3">
                     <label for="employeeSelect" class="form-label">{{ 'SELECT_EMPLOYEE' | translate }}</label>
-                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
-                        <option value="">{{ 'SELECT_EMPLOYEE' | translate }}</option>
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId"
+                        (change)="onEmployeeChange($event)">
+                        <option value="all">{{ 'ALL_EMPLOYEES' | translate }}</option>
+
                         <option *ngFor="let employee of employees" [value]="employee.id">
                             {{ employee?.account?.name }}
                         </option>
                     </select>
+                </div>
+
+                   <div *ngIf="actionType == 'paid'" class="form-group col-md-3">
+                  <label class="form-label">{{ 'ACCOUNT' | translate }}</label>
+                  <button type="button" class="btn btn-outline-primary w-100"
+                    (click)="openModal('accountModal')">
+                    {{ selectedAccount ? selectedAccount.name : ('ACCOUNT' | translate) }}
+                  </button>
+                </div>
+
+                  <div *ngIf="actionType != 'not_paid' && needCurrencyPrice" class="form-group col-md-3">
+                  <label class="form-label">{{ 'CURRENCY_VALUE' | translate }}</label>
+                      <input  type="number" class="form-control" [(ngModel)]="currnceyPrice"/>
+                 
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+                    <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
+                    <input type="month" id="monthSelect" class="form-control" [(ngModel)]="selectedMonth"
+                        (change)="onMonthChange()" [max]="getCurrentMonth()">
                 </div>
             </div>
         </div>
@@ -47,18 +92,18 @@
         </div>
     </div>
 
-    <div *ngIf="salariesData" class="card">
+
+
+
+
+    <div *ngIf="salariesData && selectedEmployeeId != 'all' " class="card">
         <div class="card-body">
             <h5 class="card-title mb-4">
-                {{ 'SALARIES_REPORT_FOR' | translate }} 
-                <span *ngIf="searchOption === 'employee'">
-                    {{ getSelectedEmployeeName() }}
-                </span>
-                <span *ngIf="searchOption === 'month'">
-                    {{ selectedMonth | date: 'MMMM yyyy' }}
-                </span>
+                {{ 'SALARIES_REPORT_FOR' | translate }}
+                {{ selectedEmployeeId ? getSelectedEmployeeName() : ('ALL_EMPLOYEES' | translate) }} -
+                {{ selectedMonth | date: 'MMMM yyyy' }}
             </h5>
-            
+
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead class="table-dark">
@@ -77,7 +122,8 @@
                         </tr>
                         <tr>
                             <td>{{ 'BONUS' | translate }}</td>
-                            <td class="text-end" [ngClass]="{'text-danger': salariesData.bonus < 0, 'text-success': salariesData.bonus >= 0}">
+                            <td class="text-end"
+                                [ngClass]="{'text-danger': salariesData.bonus < 0, 'text-success': salariesData.bonus >= 0}">
                                 {{ salariesData.bonus | currency }}
                             </td>
                         </tr>
@@ -161,7 +207,184 @@
         </div>
     </div>
 
-    <div *ngIf="!isLoading && !salariesData && ((searchOption === 'month' && selectedMonth) || (searchOption === 'employee' && selectedEmployeeId))" class="alert alert-info">
-        {{ 'NO_SALARIES_DATA_FOUND' | translate }}
+
+
+    <ng-container *ngIf="actionType == 'paid' || actionType == 'paid_historey'; else presentRecord">
+        <div class="card mt-3">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Salary Details</h5>
+            </div>
+            <div *ngFor="let data of savedSalariesData" class="card-body rounded shadow border m-2">
+                <div class="row mb-2">
+                    <div class="col-md-3"><strong>Employee Name:</strong></div>
+                    <div class="col-md-3">{{ data.employee.name }}</div>
+                     <div class="col-md-3"><strong>Base Salary:</strong></div>
+                    <div class="col-md-3">{{ data.base_salary }}</div>
+                     <div class="col-md-3"><strong>Bonus:</strong></div>
+                    <div class="col-md-3">{{ data.bonus }}</div>
+                    <div class="col-md-3"><strong>Additional Bonus:</strong></div>
+                    <div class="col-md-3">{{ data.additional_bonus }}</div>
+                     <div class="col-md-3"><strong>Deduction:</strong></div>
+                    <div class="col-md-3">{{ data.deduction }}</div>
+                     <div class="col-md-3"><strong>Additional Deduction:</strong></div>
+                    <div class="col-md-3">{{ data.additional_deduction }}</div>
+                     <div class="col-md-3"><strong>Net Salary:</strong></div>
+                    <div class="col-md-3 text-success fw-bold">{{ data.net_salary }}</div>
+
+                    <div class="col-md-2">
+                        <button (click)="paySalary(data)" *ngIf="data.status == 'not_paid'" class="btn btn-success"> pay </button>
+                        <div *ngIf="data.status == 'paid'" class="col-md-3 text-success fw-bold"> paid </div>
+                    </div>
+
+                    <div class="col-md-2" *ngIf="data.need_currency_value">
+                        <label class="form-label">{{data.currency}} price =></label>
+                    </div>
+
+                        <div class="col-md-2" *ngIf="data.need_currency_value && data.status == 'not_paid'">
+                        <!-- <label class="form-label">{{ 'CURRENCY_VALUE' | translate }}</label> -->
+                        <input  type="number" class="form-control" [(ngModel)]="data.currnceyPrice" placeholder="{{data.currency}} {{ 'CURRENCY_VALUE' | translate }}"/>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+
+    <ng-template #presentRecord>
+        <div *ngIf="salariesData && selectedEmployeeId === 'all'" class="salary-container">
+
+            <button (click)="saveAll()" class="btn btn-success m-3">save all</button>
+            <div *ngFor="let item of salariesData" class="salary-card">
+
+                <div class="summary-row">
+                    <div class="info-block">
+                        <div><strong>{{ 'employee_name' | translate }}:</strong> {{ item.employee.name }}</div>
+                        <div><strong>{{ 'base_salary' | translate }}:</strong> {{ item.salary.base_salary }} </div>
+                        <!-- <div><strong>{{ 'total_salary' | translate }}:</strong> {{ item.salary.base_salary + (item.bonus
+                            || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0) || 0
+                            }}</div> -->
+                            <div>
+                        <strong>{{ 'total_salary' | translate }}:</strong>
+                        {{ floor((item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)) || 0) }}
+                        </div>
+                    </div>
+                    <div><strong>{{ 'bonus' | translate }}: </strong> {{ item.bonus || 0 }} </div>
+                    <div><strong>{{ 'deduction' | translate }}: </strong> {{ item.deduction || 0 }} </div>
+
+                    <div>
+
+                    </div>
+                    <button class="btn btn-outline-success" (click)="showDetails(item)">
+                        show details
+                    </button>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <button (click)="save(item)" class="btn btn-success"
+                            [disabled]="item.salary.is_salary || item.salary.has_future_days">
+                            save
+                        </button>
+
+                        <button (click)="item.expanded = !item.expanded" class="toggle-btn">
+                            {{ item.expanded ? '▲' : '▼' }}
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Expandable Details -->
+                <div *ngIf="item.expanded" class="details-section">
+
+                    <div class="detail-row">
+                        <div>{{ 'absent_days' | translate }}: {{ item.salary.absent_days }}</div>
+                        <div>{{ 'late_days' | translate }}: {{ item.salary.lat_days }}</div>
+                        <div>{{ 'very_late_days' | translate }}: {{ item.salary.very_lat_days }}</div>
+                        <div>{{ 'no_checkout_days' | translate }}: {{ item.salary.no_checkout_days }}</div>
+                        <div>{{ 'leave_early_days' | translate }}: {{ item.salary.leave_early_days }}</div>
+                        <div>{{ 'paid_vacations' | translate }}: {{ item.salary.paid_vecations }}</div>
+                        <div>{{ 'unpaid_vacations' | translate }}: {{ item.salary.not_paid_vecations }}</div>
+                        <div>{{ 'public_vacation_days' | translate }}: {{ item.salary.public_vacation_days }}</div>
+                        <div>{{ 'future_days' | translate }}: {{ item.salary.future_days }}</div>
+                        <div>{{ 'total_hours_for_bonus' | translate }}: {{ item.salary.total_hours_for_bonus }}</div>
+                        <div>{{ 'deduction' | translate }}: {{ item.salary.deduction }}</div>
+                        <div>{{ 'bonus' | translate }}: {{ item.salary.bonus }}</div>
+
+
+
+                    </div>
+
+                    <div class="form-section">
+                        <div class="input-group">
+                            <label>{{ 'bonus' | translate }}</label>
+                            <input type="number" [(ngModel)]="item.bonus" />
+                        </div>
+                        <div class="input-group">
+                            <label>{{ 'deduction' | translate }}</label>
+                            <input type="number" [(ngModel)]="item.deduction" />
+                        </div>
+                        <div class="input-group">
+                            <label>{{ 'reason' | translate }}</label>
+                            <input type="text" [(ngModel)]="item.reason" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isLoading && !salariesData && (selectedEmployeeId || selectedMonth)" class="alert alert-info">
+            {{ 'NO_SALARIES_DATA_FOUND' | translate }}
+        </div>
+
+    </ng-template>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('accountModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ i + 1 }}</td>
+              <td>{{ account.name }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

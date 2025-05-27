@@ -1,4 +1,27 @@
 {
+
+
+  
+  "employee_name": "Employee Name",
+  "base_salary": "Base Salary",
+  "bonus": "Bonus",
+  "total_hours_for_bonus": "Total Hours for Bonus",
+  "future_days": "Future Days",
+  "absent_days": "Absent Days",
+  "late_days": "Late Days",
+  "leave_early_days": "Leave Early Days",
+  "no_checkout_days": "No Checkout Days",
+  "very_late_days": "Very Late Days",
+  "paid_vacations": "Paid Vacations",
+  "unpaid_vacations": "Unpaid Vacations",
+  "public_vacation_days": "Public Vacation Days",
+  "total_salary": "Total Salary",
+  "currency": "EGP"
+,
+
+
+
+
   "EMPLOYEE": "employee",
   "RETURN_PURCHASES_INVOICE": "Return Purchases Invoice",
   "Reports": "Reports",
