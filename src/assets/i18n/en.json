@@ -1049,5 +1049,11 @@
   "VACATION_DETAILS": "Vacation Details",
   "PAID_VACATIONS": "Paid Vacations",
   "NOT_PAID_VACATIONS": "Unpaid Vacations",
-  "NO_SALARIES_DATA_FOUND": "No salaries data found"
+  "NO_SALARIES_DATA_FOUND": "No salaries data found",
+  "STOCKTAKINGS": "Stocktakings",
+  "MANAGE_STOCKTAKINGS":" Manage Stocktakings",
+  "STOCKTAKING":"Stocktaking",
+  "ADD_STOCKTAKING": "Add Stocktaking",
+  "STOCKTAKING_LIST": "Stocktaking List",
+  "STOCKTAKING_DETAILS": "Stocktaking Details"
 }

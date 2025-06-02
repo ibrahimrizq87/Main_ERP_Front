@@ -7,13 +7,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Modal } from 'bootstrap';
 import { CurrencyService } from '../../shared/services/currency.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-salaries-reports',
   standalone: true,
-  imports: [TranslateModule, CommonModule, FormsModule],
+  imports: [TranslateModule, CommonModule, FormsModule,RouterModule],
   templateUrl: './salaries-reports.component.html',
   styleUrl: './salaries-reports.component.css'
 })

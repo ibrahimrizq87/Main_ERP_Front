@@ -157,6 +157,12 @@ import { AttendanceReportsComponent } from './Components/attendance-reports/atte
 import { ShowAttendanceDetailsComponent } from './Components/show-attendance-details/show-attendance-details.component';
 import { SalariesReportsComponent } from './Components/salaries-reports/salaries-reports.component';
 import { UpdateAttendanceComponent } from './Components/update-attendance/update-attendance.component';
+import { ShowSalaryComponent } from './Components/show-salary/show-salary.component';
+import { UpdateSalaryComponent } from './Components/update-salary/update-salary.component';
+import { StocktakingsComponent } from './Components/stocktakings/stocktakings.component';
+import { AddStocktakingsComponent } from './Components/add-stocktakings/add-stocktakings.component';
+import { UpdateStocktakingsComponent } from './Components/update-stocktakings/update-stocktakings.component';
+import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-stocktakings.component';
 
 
 export const routes: Routes = [
@@ -381,6 +387,14 @@ export const routes: Routes = [
             {path:"update-attendance/:id",component:UpdateAttendanceComponent},
 
             {path:"salaries-reports",component:SalariesReportsComponent},
+            {path:"show-salary/:id",component:ShowSalaryComponent},
+            {path:"update-salary/:id",component:UpdateSalaryComponent},
+
+            { path: "stocktakings", component: StocktakingsComponent },
+            { path: "addStocktakings", component: AddStocktakingsComponent },
+            { path: "updateStocktakings/:id", component: UpdateStocktakingsComponent },
+            { path: "showStocktakings/:id", component: ViewStocktakingsComponent },
+
 
         ], canActivate: [RoleGuard],
         data: { roles: ['admin','worker'] }

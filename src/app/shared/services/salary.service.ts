@@ -71,7 +71,19 @@ export class SalaryService {
     return this._HttpClient.post(`${this.baseURL}/employee/salaries/pay-salary`, salaryData ,{ headers:this.getHeadersWithToken() });
   }
 
-  
+  // Route::controller(SalaryController::class)->prefix('salaries')->group(function () {
+  //   Route::get('/get-salaries-calculated',  'calculateSalary');  
+  //   Route::get('/get-salaries-to-be-paid/{status}',  'getSavedSalaries');  
+  //   Route::post('/pay-salary',  'paySalaries');  
+  //   Route::put('/{id}', [SalaryController::class, 'update']);
+  //   Route::get('/{id}', [SalaryController::class, 'show']);
+  updateSalary(id: string, salaryData: FormData): Observable<any> {
+    salaryData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/employee/salaries/${id}`, salaryData, { headers: this.getHeadersWithToken() });
+  }
+  getSalaryById(id: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/employee/salaries/${id}`, { headers: this.getHeadersWithToken() });
+  }
 
   
 

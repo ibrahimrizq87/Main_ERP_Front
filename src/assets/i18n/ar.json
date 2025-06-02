@@ -1041,5 +1041,13 @@
   "VACATION_DETAILS": "تفاصيل الإجازات",
   "PAID_VACATIONS": "إجازات مدفوعة",
   "NOT_PAID_VACATIONS": "إجازات غير مدفوعة",
-  "NO_SALARIES_DATA_FOUND": "لم يتم العثور على بيانات الرواتب"
+  "NO_SALARIES_DATA_FOUND": "لم يتم العثور على بيانات الرواتب",
+  "STOCKTAKINGS": "جرد المخزون",
+  "MANAGE_STOCKTAKINGS": "إدارة جرد المخزون",
+  "STOCKTAKING": "جرد المخزون",
+  "ADD_STOCKTAKING": "إضافة جرد مخزون",
+  "STOCKTAKING_LIST": "قائمة جرد المخزون",
+  "STOCKTAKING_DETAILS": "تفاصيل جرد المخزون"
+  
+
 }

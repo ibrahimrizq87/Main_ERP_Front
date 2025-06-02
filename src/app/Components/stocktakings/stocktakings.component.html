@@ -1,0 +1,52 @@
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'STOCKTAKINGS' | translate }}</h5>
+        <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{'STOCKTAKINGS' | translate}} </span>
+
+    </div>
+    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addStocktakings">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'STOCKTAKING_LIST' | translate }}</span>
+            <input class="form-control search w-25" 
+            type="search" 
+            placeholder="search" 
+            aria-label="Search"
+            [(ngModel)]="searchQuery" 
+            (ngModelChange)="filterStocktakings()">
+          
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'stocktaking_NAME_AR' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'stocktaking_NAME_EN' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'stocktaking_TYPE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let stocktaking of filteredStocktakings; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ stocktaking.name_langs.ar }}</td>
+                <td>{{ stocktaking.name_langs.en }}</td>
+                <td>{{ stocktaking.type         }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateStocktakings', stocktaking.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_STOCKTAKINGS' | translate }}"></i>
+                    </a>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteStocktaking(stocktaking.id)" title="{{ 'DELETE_STOCKTAKINGS' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
