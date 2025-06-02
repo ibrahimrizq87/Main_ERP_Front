@@ -1055,5 +1055,7 @@
   "STOCKTAKING":"Stocktaking",
   "ADD_STOCKTAKING": "Add Stocktaking",
   "STOCKTAKING_LIST": "Stocktaking List",
-  "STOCKTAKING_DETAILS": "Stocktaking Details"
+  "STOCKTAKING_DETAILS": "Stocktaking Details",
+   "CONFIRM_STOCKTAKING":"Confirm Stocktaking",
+  "STOCKTAKING_ITEMS": "Stocktaking Items"
 }

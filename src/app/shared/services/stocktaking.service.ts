@@ -42,7 +42,7 @@ viewStocktakingsById(id:any): Observable<any>{
 }
 
 deleteStocktakings(stocktakingsId: number): Observable<any> {
- return this._HttpClient.delete(`${this.baseURL}/general/general/store-stocktakings/delete/${stocktakingsId}`, { headers:this.getHeadersWithToken() });
+ return this._HttpClient.delete(`${this.baseURL}/general/store-stocktakings/delete/${stocktakingsId}`, { headers:this.getHeadersWithToken() });
 }
 
 getBranchesByStore(storeId: string): Observable<any> {

@@ -27,22 +27,23 @@
     <table class="table mt-3">
         <thead>
             <tr>
+  
                 <th class="bg-light" scope="col">#</th>
-                <th class="bg-light" scope="col">{{ 'stocktaking_NAME_AR' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'stocktaking_NAME_EN' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'stocktaking_TYPE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'approved_by' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let stocktaking of filteredStocktakings; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ stocktaking.name_langs.ar }}</td>
-                <td>{{ stocktaking.name_langs.en }}</td>
-                <td>{{ stocktaking.type         }}</td>
+                <td>{{ stocktaking.store.name}}</td>
+                <td>{{ stocktaking.date }}</td>
+                <td>{{ stocktaking.approved_by || "N/A"}}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateStocktakings', stocktaking.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_STOCKTAKINGS' | translate }}"></i>
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showStocktakings', stocktaking.id]">
+                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'SHOW_STOCKTAKINGS' | translate }}"></i>
                     </a>
                     <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteStocktaking(stocktaking.id)" title="{{ 'DELETE_STOCKTAKINGS' | translate }}"></i>
                 </td>
