@@ -1,0 +1,69 @@
+<div class="container my-5">
+    <div *ngIf="stocktakingData" class="card shadow-lg border-0 rounded-4">
+      <div class="card-header rounded-top">
+        <h4 class="mb-0">Stocktaking Details</h4>
+      </div>
+  
+      <div class="card-body">
+     
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p><strong>Date:</strong> {{ stocktakingData.date }}</p>
+            <p><strong>Note:</strong> {{ stocktakingData.note }}</p>
+          </div>
+          <div class="col-md-6">
+            <p>
+              <strong>Store:</strong> {{ stocktakingData.store?.name }}
+            </p>
+            <p>
+              <strong>Approved:</strong>
+              <span [ngClass]="stocktakingData.approved ? 'text-success' : 'text-danger'">
+                {{ stocktakingData.approved ? 'Yes' : 'No' }}
+              </span>
+            </p>
+          </div>
+        </div>
+  
+       
+        <div *ngIf="stocktakingData.approved_by || stocktakingData.approved_user" class="mb-4">
+          <p><strong>Approved By:</strong> {{ stocktakingData.approved_by || stocktakingData.approved_user }}</p>
+        </div>
+  
+       
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Product Branch ID</th>
+                <th>Quantity</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of stocktakingData.items; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.product_branch?.id }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'bg-danger': item.type === 'less',
+                    'bg-success': item.type === 'more'
+                  }">
+                    {{ item.type | titlecase }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!stocktakingData" class="text-center mt-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+  

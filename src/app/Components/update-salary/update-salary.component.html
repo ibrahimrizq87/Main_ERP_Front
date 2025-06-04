@@ -1,0 +1,144 @@
+<div class="mt-3 mb-3">
+    <h5>{{ 'MANAGE_SALARY' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'SALARY' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_SALARY' | translate }}</span>
+</div>
+<div class="mt-4 mb-4">
+    <form [formGroup]="salaryForm" (ngSubmit)="handleForm()">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3">
+                            <h5 class="large-text">{{ 'UPDATE_SALARY' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div class="row">
+                              
+                                <!-- Base Salary -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="base_salary" class="form-label large-text">Base Salary</label>
+                                    <input id="base_salary" formControlName="base_salary" type="number" min="0" class="form-control"
+                                           placeholder="Enter base salary"
+                                           [class.is-invalid]="salaryForm.get('base_salary')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('base_salary')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('base_salary')?.hasError('required')">
+                                            Base salary is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('base_salary')?.hasError('min')">
+                                            Base salary must be 0 or more
+                                        </p>
+                                     
+                                    </div>
+                                </div>
+                                <!-- Net Salary -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="net_salary" class="form-label large-text">Net Salary</label>
+                                    <input id="net_salary" formControlName="net_salary" type="number" min="0" class="form-control"
+                                           placeholder="Enter net salary"
+                                           [class.is-invalid]="salaryForm.get('net_salary')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('net_salary')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('net_salary')?.hasError('required')">
+                                            Net salary is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('net_salary')?.hasError('min')">
+                                            Net salary must be 0 or more
+                                        </p>
+                                        
+                                
+                                    </div>
+                                </div>
+                                <!-- Deduction -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="deduction" class="form-label large-text">Deduction</label>
+                                    <input id="deduction" formControlName="deduction" type="number" min="0" class="form-control"
+                                           placeholder="Enter deduction"
+                                           [class.is-invalid]="salaryForm.get('deduction')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('deduction')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('deduction')?.hasError('required')">
+                                            Deduction is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('deduction')?.hasError('min')">
+                                            Deduction must be 0 or more
+                                        </p>
+                                     
+                                    </div>
+                                </div>
+                                <!-- Additional Deduction -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="additional_deduction" class="form-label large-text">Additional Deduction</label>
+                                    <input id="additional_deduction" formControlName="additional_deduction" type="number" min="0" class="form-control"
+                                           placeholder="Enter additional deduction"
+                                           [class.is-invalid]="salaryForm.get('additional_deduction')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('additional_deduction')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('additional_deduction')?.hasError('required')">
+                                            Additional deduction is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('additional_deduction')?.hasError('min')">
+                                            Additional deduction must be 0 or more
+                                        </p>
+                                      
+                                    </div>
+                                </div>
+                                <!-- Bonus -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="bonus" class="form-label large-text">Bonus</label>
+                                    <input id="bonus" formControlName="bonus" type="number" min="0" class="form-control"
+                                           placeholder="Enter bonus"
+                                           [class.is-invalid]="salaryForm.get('bonus')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('bonus')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('bonus')?.hasError('required')">
+                                            Bonus is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('bonus')?.hasError('min')">
+                                            Bonus must be 0 or more
+                                        </p>
+                                       
+                                    </div>
+                                </div>
+                                <!-- Additional Bonus -->
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="additional_bonus" class="form-label large-text">Additional Bonus</label>
+                                    <input id="additional_bonus" formControlName="additional_bonus" type="number" min="0" class="form-control"
+                                           placeholder="Enter additional_bonus"
+                                           [class.is-invalid]="salaryForm.get('additional_bonus')?.invalid && isSubmited" />
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('additional_bonus')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('additional_bonus')?.hasError('required')">
+                                            Additional Bonus is required
+                                        </p>
+                                        <p *ngIf="salaryForm.get('additional_bonus')?.hasError('min')">
+                                            Additional Bonus must be 0 or more
+                                        </p>
+                                      
+                                    </div>
+                                </div>
+
+                                <!-- Note -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="note" class="form-label large-text">Note</label>
+                                    <textarea id="note" formControlName="note" class="form-control"
+                                              placeholder="Enter any additional notes"
+                                              [class.is-invalid]="salaryForm.get('note')?.invalid && isSubmited"></textarea>
+                                    <div class="invalid-feedback" *ngIf="salaryForm.get('note')?.invalid && isSubmited">
+                                        <p *ngIf="salaryForm.get('note')?.hasError('maxlength')">
+                                            Note cannot exceed 255 characters
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+                        <button type="submit" class="btn btn-primary px-4 large-text">
+                            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

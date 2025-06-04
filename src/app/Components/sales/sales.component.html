@@ -74,45 +74,40 @@
         <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'TOTAL_PAID' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
-        <th class="bg-light" scope="col">{{ 'CLIENT_STATUS' | translate }}</th>
+        <!-- <th class="bg-light" scope="col">{{ 'CLIENT_STATUS' | translate }}</th> -->
         <th class="bg-light" scope="col">{{ 'PRICE_OVERRIDE' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'NEED_ADMIN_APPROVE' | translate }}</th>
+          <!-- <th class="bg-light" scope="col">{{ 'NEED_ADMIN_APPROVE' | translate }}</th> -->
 
         <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let sale of sales; let i = index">
+      <tr *ngFor="let sale of sales; let i = index"
+      
+        [ngClass]="{
+      'table-danger': sale.is_client_susbended,
+      'table-warning': !sale.is_client_susbended && (sale.price_override || (sale.client_payment_type == 'cash' && sale.total != sale.total_paid)),
+      'table-default': !sale.is_client_susbended && !(sale.price_override || (sale.client_payment_type == 'cash' && sale.total != sale.total_paid))
+    }"
+    
+    >
         <th scope="row">{{ i + 1 }}</th>
         <td>{{ sale.client }}</td>
         <td>{{ sale.date || 'N/A' }}</td>
         <td>{{ sale.total }}</td>
         <td>{{ sale.total_paid }}</td>
         <td>{{ sale.payment_type }}</td>
-        <td>{{ sale.is_client_susbended ? 'Susbended': 'Active' }}</td>
+        <!-- <td>{{ sale.is_client_susbended ? 'Susbended': 'Active' }}</td> -->
         <td>{{ sale.price_override ? 'overrided': 'none' }}</td>
-        <td>{{ sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid) ? 'admin': 'clear' }}</td>
-
-        <!-- <td>
-          <img [src]="product.image" alt="{{ product.name_ar }}" width="50" height="50" />
-        </td> -->
-        <!-- <td>
-          <img 
-            [src]="product.image ? product.image : 'images/image.jpg'" 
-            alt="{{ product.name_ar || 'Default Product' }}" 
-            width="50" 
-            height="50" 
-          />
-        </td> -->
-        <!-- <td>{{ product.amount }}</td> -->
+        <!-- <td>{{ sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid) ? 'admin': 'clear' }}</td> -->
         <td>
           <div class="d-flex justify-content-around align-items-center">
 
 
-            <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
+            <a *ngIf="(status == 'waiting' || status == 'rejected')   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
               approve
             </a>
-            <a  *ngIf="status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
+            <a  *ngIf="status == 'waiting'   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
               reject
             </a>
             <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',sale.id)">
@@ -125,10 +120,6 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showSale', sale.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
-            <!-- <i class="fa-regular fa-clock btn1 bg-warning rounded" title="{{ 'CHANGE_STATUS' | translate }}"
-            
-            (click)="changeStatus(sale.id)"
-            ></i> -->
             <a  *ngIf="status != 'approved'" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
             </a>
