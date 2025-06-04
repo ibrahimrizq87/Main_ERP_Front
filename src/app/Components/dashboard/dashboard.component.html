@@ -7,7 +7,7 @@
         <ul class="nav flex-column">
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['Users', 'Roles' , 'Permissions'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('HRM')" style="cursor: pointer;">
               <i class="fa-solid fa-user me-2"></i>
               <span>{{ 'HRM_SYSTEM' | translate }}</span>
@@ -16,13 +16,13 @@
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('HRM')">
               <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="users">
+                <a *ngIf="_PermissionService.hasModule('Users')" class="nav-link" routerLinkActive="active" routerLink="users">
                   <i class="fa-solid fa-user me-2"></i> {{ 'USERS' | translate }}
                 </a>
-                <a class="nav-link" routerLinkActive="active" routerLink="roles">
+                <a *ngIf="_PermissionService.hasModule('Roles')" class="nav-link" routerLinkActive="active" routerLink="roles">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'ROLES' | translate }}
                 </a>
-                <a class="nav-link" routerLinkActive="active" routerLink="rolesAndPermissions">
+                <a *ngIf="_PermissionService.hasModule('Permissions')" class="nav-link" routerLinkActive="active" routerLink="rolesAndPermissions">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{"PERMISSIONS" | translate}}
                 </a>
               </li>
@@ -34,7 +34,7 @@
 
 
 
-            <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['attendances', 'salaries' , 'vacations' ,  'vacation_requests'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('HR_SYS')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'HR_SYSTEM' | translate }}</span>
@@ -44,14 +44,14 @@
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('HR_SYS')">
              
              
-                <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+                <li *ngIf="_PermissionService.hasModule('vacations')" class="nav-item nested">
+                <a  class="nav-link" routerLinkActive="active" routerLink="vecations">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'VECATIONS' | translate }}
                 </a>
               </li>
 
 
-               <li class="nav-item nested">
+               <li *ngIf="_PermissionService.hasModule('vacation_requests')"  class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="vecationRequests">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'VECATION_REQUESTS' | translate }}
                 </a>
@@ -59,7 +59,7 @@
 
 
 
-               <li class="nav-item nested">
+               <li *ngIf="_PermissionService.hasModule('attendances')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="attendance-reports">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'ATTENDANCE_REPORTS' | translate }}
                 </a>
@@ -67,8 +67,8 @@
 
 
 
-             <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="vecations">
+             <li  *ngIf="_PermissionService.hasModule('salaries')" class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="salaries-reports">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'SALARY_REPORTS' | translate }}
                 </a>
               </li>

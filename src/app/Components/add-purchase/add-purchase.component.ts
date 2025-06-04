@@ -231,7 +231,7 @@ export class AddPurchaseComponent implements OnInit {
     this._ProductsService.getProductsForOperations().subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          this.Products = response.data.products;
           console.log('products', response);
           this.filteredProducts = this.Products;
         }

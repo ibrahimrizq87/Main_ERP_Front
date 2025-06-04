@@ -37,4 +37,25 @@ export class AttendanceService {
   getEmployeesAttendance(month: string, employee_id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/attendances/get-employees-attendance?month=${month}&employee_id=${employee_id}`, { headers:this.getHeadersWithToken() });
   }
+
+    getAttendanceByDate(date: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/attendances/get-employees-attendance?day_date=${date}`, { headers:this.getHeadersWithToken() });
+  }
+
+  updateAttendanceApproval(data: FormData): Observable<any> {
+    data.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/attendances/update-approval`,data,{ headers:this.getHeadersWithToken() });
+  }
+
+
+
+  getAttendanceById(id: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/attendances/${id}`,{ headers:this.getHeadersWithToken() });
+  }
+  updateAttendance(id: string, data: FormData): Observable<any> {
+    data.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/attendances/${id}`, data, { headers: this.getHeadersWithToken() });
+  }
+
+  
 }
