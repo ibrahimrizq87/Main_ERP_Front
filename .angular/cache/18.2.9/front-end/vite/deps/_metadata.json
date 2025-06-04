@@ -1,8 +1,8 @@
 {
-  "hash": "48d19aec",
-  "configHash": "c126a184",
+  "hash": "c5a8ff8d",
+  "configHash": "c6e0af76",
   "lockfileHash": "b71da9d4",
-  "browserHash": "b1cf49ec",
+  "browserHash": "16ec1636",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
@@ -90,9 +90,6 @@
     }
   },
   "chunks": {
-    "chunk-F6W7AY7B": {
-      "file": "chunk-F6W7AY7B.js"
-    },
     "chunk-MBECT23L": {
       "file": "chunk-MBECT23L.js"
     },
@@ -101,6 +98,9 @@
     },
     "chunk-2NKZCGRX": {
       "file": "chunk-2NKZCGRX.js"
+    },
+    "chunk-F6W7AY7B": {
+      "file": "chunk-F6W7AY7B.js"
     },
     "chunk-XWXWVG7P": {
       "file": "chunk-XWXWVG7P.js"

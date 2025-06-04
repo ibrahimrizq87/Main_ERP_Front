@@ -1,62 +1,128 @@
 <div class="mt-3 mb-3">
-    <h5 class="large-text">{{ 'ADD_CATEGORY' | translate }}</h5>
-    <span class="text-muted large-text">
-      {{ 'DASHBOARD' | translate }} 
-      <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
-      {{ 'STORES' | translate }} 
-      <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
-      {{ 'CREATE_CATEGORY' | translate }}
-    </span>
-  </div>
-  
-  <div class="mt-4 mb-4">
-    <form [formGroup]="categoryForm" (ngSubmit)="handleForm()" enctype="multipart/form-data">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card shadow em-card rounded-lg">
-              <div class="card-header bg-white text-black rounded-top pt-3">
-                <h5 class="large-text">{{ 'ADD_CATEGORY' | translate }}</h5>
-              </div>
-              <div class="card-body pb-5">
-                <div class="row">
+  <h5 class="large-text">{{ 'UPDATE_CATEGORY' | translate }}</h5>
+  <span class="text-muted large-text">
+    {{ 'DASHBOARD' | translate }}
+    <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+    {{ 'STORES' | translate }}
+    <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+    {{ 'UPDATE_CATEGORY' | translate }}
+  </span>
+</div>
 
-                    <div class="form-group col-md-6">
-                    <label for="name" class="form-label large-text">{{ 'CATEGORY_NAME' | translate }}</label>
-                    <input id="name" formControlName="name" type="text" class="form-control" required />
-                    <div class="alert alert-danger" *ngIf="categoryForm.get('name')?.errors && categoryForm.get('name')?.touched">
-                      <p *ngIf="categoryForm.get('name')?.getError('required')">{{ 'CATEGORY_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}</p>
-                      <p *ngIf="categoryForm.get('name')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
-                    </div>
-                  </div>
-  
+<div class="mt-4 mb-4">
+  <form [formGroup]="categoryForm" (ngSubmit)="handleForm()" enctype="multipart/form-data">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'ADD_CATEGORY' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
 
-                  <div class="form-group col-md-3">
-                    <input type="file" class="custom-file-input" id="image" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-                    <label for="image" class="btn btn-image">
-                      <i class="fa-solid fa-file-arrow-up"></i> {{ 'CHOOSE_FILE' | translate }}
-                    </label>
-                    <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
+                <div class="form-group col-md-6">
+                  <label for="name" class="form-label large-text">{{ 'CATEGORY_NAME' | translate }}</label>
+                  <input id="name" formControlName="name" type="text" class="form-control" required />
+                  <div class="alert alert-danger"
+                    *ngIf="categoryForm.get('name')?.errors && categoryForm.get('name')?.touched">
+                    <p *ngIf="categoryForm.get('name')?.getError('required')">{{ 'CATEGORY_NAME' | translate }} {{
+                      'IS_REQUIRED' | translate }}</p>
+                    <p *ngIf="categoryForm.get('name')?.getError('maxLength')">{{ 'MAX_LENGTH_255' | translate }}</p>
                   </div>
-  
-
-                  <div class="form-group col-md-3" *ngIf="categoryImage">
-                    <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
-                  </div>
-  
                 </div>
+
+
+                <div class="form-group col-md-3">
+                  <input type="file" class="custom-file-input" id="image" (change)="onFileSelected($event)"
+                    accept="image/*" style="display: none;">
+                  <label for="image" class="btn btn-image">
+                    <i class="fa-solid fa-file-arrow-up"></i> {{ 'CHOOSE_FILE' | translate }}
+                  </label>
+                  <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
+                </div>
+                <div class="form-group col-md-3" *ngIf="categoryImage">
+                  <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
+                </div>
+                <div class="border rounded p-3 mt-3">
+                  <h5>{{ 'COMMESSIONS' | translate }}</h5>
+                  <div formArrayName="commissions">
+                    <div *ngFor="let commission of commissions.controls; let i = index" [formGroupName]="i" class="row">
+                      <!-- from: new FormControl('', [Validators.required, Validators.min(0)]),
+                          to: new FormControl('', [Validators.required, Validators.min(0)]),
+                          precentage: new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]),
+                           -->
+                      <div class="col-md-3">
+                        <input formControlName="from" type="number" class="form-control"
+                          placeholder="{{ 'FROM' | translate }}"
+                          [class.is-invalid]="isSubmitted && commission.get('from')?.invalid">
+
+                        <div class="invalid-feedback" *ngIf="isSubmitted && commission.get('from')?.invalid">
+                          <p *ngIf="commission.get('from')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="commission.get('from')?.hasError('min')">
+                            {{ 'MIN_VALUE_0' | translate }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <input formControlName="to" type="number" class="form-control"
+                          placeholder="{{ 'TO' | translate }}"
+                          [class.is-invalid]="isSubmitted && commission.get('to')?.invalid">
+
+                        <div class="invalid-feedback" *ngIf="isSubmitted && commission.get('to')?.invalid">
+                          <p *ngIf="commission.get('to')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="commission.get('to')?.hasError('min')">
+                            {{ 'MIN_VALUE_0' | translate }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <input formControlName="precentage" type="number" class="form-control"
+                          placeholder="{{ 'PRECENTAGE' | translate }}"
+                          [class.is-invalid]="isSubmitted && commission.get('precentage')?.invalid">
+
+                        <div class="invalid-feedback" *ngIf="isSubmitted && commission.get('precentage')?.invalid">
+                          <p *ngIf="commission.get('precentage')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="commission.get('precentage')?.hasError('min')">
+                            {{ 'MIN_VALUE_0' | translate }}
+                          </p>
+                          <p *ngIf="commission.get('precentage')?.hasError('max')">
+                            {{ 'MAX_VALUE_100' | translate }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="col-md-1">
+                        <button type="button" class="btn btn-danger" (click)="removeCommissions(i)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-success mt-2" (click)="addCommissions()">+ {{
+                      'ADD_COMMISSION' | translate }}</button>
+                  </div>
+                </div>
+
+
+
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
-            <button [disabled]="categoryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
-              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
-            </button>
-            <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-          </div>
+        <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+          <button [disabled]="categoryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
         </div>
       </div>
-    </form>
-  </div>
-  
+    </div>
+  </form>
+</div>
