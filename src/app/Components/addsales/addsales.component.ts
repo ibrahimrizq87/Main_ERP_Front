@@ -167,7 +167,7 @@ totalProducts = 0;
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
-          this.vendors = response.data;
+          this.vendors = response.data.clients;
         }
       },
       error: (err) => {

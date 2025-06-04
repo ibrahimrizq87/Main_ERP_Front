@@ -151,8 +151,6 @@ export class UpdateProductComponent implements OnInit {
         }));
       } else {
         this.toastr.error('هذا المحدد تم اختياره من قبل');
-        // alert('لقد تم اختيار هذا المحمدد من قبل')
-
       }
       this.productForm.patchValue({ determinant_id: null });
 
@@ -164,7 +162,7 @@ export class UpdateProductComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.colors.at(index).patchValue({ image: file }); // Storing Base64
+        this.colors.at(index).patchValue({ image: file }); 
       };
       reader.readAsDataURL(file);
     }
@@ -185,11 +183,11 @@ export class UpdateProductComponent implements OnInit {
     this.productForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
       product_name_en: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
-      // default_price :[null,[Validators.required]],
       product_category_id: [null, [Validators.required]],
       need_serial: this.fb.control(false),
+      need_customer_details :this.fb.control(false), 
       product_description: [null],
-      image: this.fb.control(null, [this.validateImage.bind(this)]), // Removed required validator
+      image: this.fb.control(null, [this.validateImage.bind(this)]), 
       unit_id: this.fb.control(null, [Validators.required]),
       prices: this.fb.array([]),
       colors: this.fb.array([]),
@@ -252,18 +250,9 @@ export class UpdateProductComponent implements OnInit {
         }));
       })
 
-      // this.fb.array(
-      //             price.prices.map(price => this.createRangeGroup(price)) // Populate ranges
-      //         ),
-
-      // const ranges = priceControl.get('ranges') as FormArray;
-
-
-
 
     } else {
       this.prices.push(this.fb.group({
-        // price: [null],
         price_category_id: [priceCategory.id],
         price_category_name: [priceCategory.name],
         ranges: this.fb.array([])
@@ -366,11 +355,11 @@ export class UpdateProductComponent implements OnInit {
           this.productForm.patchValue({
             name_ar: categoryData.name_lang.ar,
             product_name_en: categoryData.name_lang.en,
-            // default_price :categoryData.default_price,
             product_category_id: categoryData.productCategory.id,
             unit_id: categoryData.product_unit.id,
             need_serial: categoryData.need_serial_number,
             product_description: categoryData.description,
+            need_customer_details: categoryData.need_customer_details,
 
 
           });
@@ -388,7 +377,6 @@ export class UpdateProductComponent implements OnInit {
           this.currentProductImage = categoryData.cover_image;
           this.selectedUnit = categoryData.product_unit.id;
           this.selectedProductCategory = categoryData.productCategory.id;
-          // this.loadPriceCategories();
           this.productPrices = categoryData.prices;
           this.stock = categoryData.stock;
 
@@ -464,9 +452,6 @@ export class UpdateProductComponent implements OnInit {
     if (range.get('range_from')?.value < range.get('range_to')?.value) {
       this.pricesAreValid = true;
     }
-    // console.log(priceControl.get('price_category_id')?.value);
-
-
   }
 
   removeRange(index: number, rangeIndex: number) {
@@ -478,40 +463,7 @@ export class UpdateProductComponent implements OnInit {
     }
   }
 
-  // loadPriceCategories(): void {
-  //   this._PriceService.viewAllCategory().subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         this.priceCategories = response.data;
-  //         console.log(this.priceCategories);
-  //         console.log(this.productPrices);
-
-  //         this.priceCategories.forEach((category)=>{
-  //           let currentPrice =null;
-
-  //           this.productPrices.forEach((price)=>{
-  //             if(price.id == category.id){
-  //               currentPrice = price ;
-  //             }
-
-  //           });
-
-  //           this.addPrice(category ,currentPrice );
-
-
-  //         });
-
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
-
   handleForm() {
-    // alert(this.productForm.get('need_serial')?.value);
-
     this.isSubmited = true;
     if (this.productForm.valid) {
       this.isLoading = true;
@@ -531,14 +483,13 @@ export class UpdateProductComponent implements OnInit {
         formData.append('need_serial_number', '1');
       }
 
-      // formData.append('default_price', this.productForm.get('default_price')?.value);
-      if (this.productForm.get('image')?.value) {
-        formData.append('cover_image', this.productForm.get('image')?.value);
-
+      if (this.productForm.get('need_customer_details')?.value) {
+        formData.append('need_customer_details', '1');
       }
 
-
-
+      if (this.productForm.get('image')?.value) {
+        formData.append('cover_image', this.productForm.get('image')?.value);
+      }
 
       let counter = 0;
 
@@ -547,46 +498,6 @@ export class UpdateProductComponent implements OnInit {
       this.determinants.controls.forEach((determinant, index) => {
         formData.append(`determinants[${index}][determinant_id]`, determinant.get('determinant_id')?.value);
       });
-
-
-
-      // this.prices.controls.forEach((priceControl) => {
-      //   const ranges = priceControl.get('ranges') as FormArray;
-      //     // if(ranges.length>0){
-
-      //       ranges.controls.forEach((rangeControl) => {
-      //         if(!rangeControl.get('price')?.value){
-      //             alert('prices are invalid')
-      //             return;
-
-      //         }
-      //       formData.append(`prices[${counter}][price]`, rangeControl.get('price')?.value);
-      //       formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
-      //       formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
-      //       formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
-      //       counter++;
-      //       });
-
-
-
-
-
-
-      // });
-
-
-      // this.prices.controls.forEach((priceControl, index) => {
-      //   if(priceControl.get('price')?.value){
-
-      //     if(priceControl.get('id')?.value){
-      //       formData.append(`prices[${index}][id]`, priceControl.get('id')?.value);
-
-      //     }
-
-      //     formData.append(`prices[${index}][price]`, priceControl.get('price')?.value);
-      //     formData.append(`prices[${index}][price_category_id]`, priceControl.get('price_category_id')?.value);
-      //   }
-      // });
 
       this.colors.controls.forEach((priceControl, index) => {
         if (priceControl.get('id')?.value) {
@@ -650,8 +561,6 @@ interface ProductPrice {
   price: number;
   priceCategory: PriceCategory;
 }
-// quantity_from: [price.quantity_from], // Minimum quantity
-//         quantity_to: [price.quantity_to], 
 
 interface ProductImage {
   id: number;

@@ -1,6 +1,8 @@
 <div class="mt-3 mb-3">
   <h5>{{ 'MANAGE_PRODUCTS' | translate }}</h5>
-  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PRODUCTS' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_PRODUCT' | translate }}</span>
+  <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{
+    'PRODUCTS' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'UPDATE_PRODUCT' |
+    translate }}</span>
 </div>
 <div class="mt-4 mb-4">
   <form [formGroup]="productForm" (ngSubmit)="handleForm()">
@@ -13,13 +15,13 @@
             </div>
             <div class="card-body pb-5">
               <div class="row">
-               
+
                 <div class="col-md-6 mb-3">
                   <label for="name_ar" class="form-label large-text">{{ 'PRODUCT_ARABIC_NAME' | translate }}</label>
-                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control" 
-                         placeholder="{{ 'PRODUCT_ARABIC_NAME' | translate }}" 
-                         [class.is-invalid]="productForm.get('name_ar')?.invalid && isSubmited" />
-                
+                  <input id="name_ar" formControlName="name_ar" type="text" class="form-control"
+                    placeholder="{{ 'PRODUCT_ARABIC_NAME' | translate }}"
+                    [class.is-invalid]="productForm.get('name_ar')?.invalid && isSubmited" />
+
                   <div class="invalid-feedback" *ngIf="productForm.get('name_ar')?.invalid && isSubmited">
                     <p *ngIf="productForm.get('name_ar')?.hasError('required')">
                       {{ 'PRODUCT_ARABIC_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
@@ -29,18 +31,18 @@
                     </p>
                   </div>
                 </div>
-                
-         
+
+
 
                 <div class="col-md-6 mb-3">
                   <label for="product_name_en" class="form-label large-text">
                     {{ 'PRODUCT_ENGLISH_NAME' | translate }}
                   </label>
-                  
-                  <input id="product_name_en" formControlName="product_name_en" type="text" class="form-control" 
-                         placeholder="{{ 'PRODUCT_ENGLISH_NAME' | translate }}" 
-                         [class.is-invalid]="productForm.get('product_name_en')?.invalid && isSubmited" />
-                
+
+                  <input id="product_name_en" formControlName="product_name_en" type="text" class="form-control"
+                    placeholder="{{ 'PRODUCT_ENGLISH_NAME' | translate }}"
+                    [class.is-invalid]="productForm.get('product_name_en')?.invalid && isSubmited" />
+
                   <div class="invalid-feedback" *ngIf="productForm.get('product_name_en')?.invalid && isSubmited">
                     <p *ngIf="productForm.get('product_name_en')?.hasError('required')">
                       {{ 'PRODUCT_ENGLISH_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
@@ -50,74 +52,47 @@
                     </p>
                   </div>
                 </div>
-                
-                
+
+
                 <div class="form-group col-md-6">
                   <label class="form-label large-text">{{ 'SELECT_UNIT' | translate }}</label>
                   <select class="form-control" formControlName="unit_id" (change)="onUnitChange($event)"
-                  [class.is-invalid]="!selectedUnit && isSubmited"
-                  >
+                    [class.is-invalid]="!selectedUnit && isSubmited">
                     <option>{{ 'SELECT_UNIT' | translate }}</option>
                     <option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</option>
-                    
+
                   </select>
                   <div class="invalid-feedback" *ngIf="!selectedUnit && isSubmited">
-                    <p >
+                    <p>
                       {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </p>
-                    
+
                   </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label class="form-label large-text">{{ 'SELECT_PRODUCT_CATEGORY' | translate }}</label>
-                  <select class="form-control" formControlName="product_category_id" (change)="onProductCategoryChange($event)"
-                  [class.is-invalid]="!selectedProductCategory && isSubmited"
-                  >
+                  <select class="form-control" formControlName="product_category_id"
+                    (change)="onProductCategoryChange($event)"
+                    [class.is-invalid]="!selectedProductCategory && isSubmited">
                     <option>{{ 'SELECT_PRODUCT_CATEGORY' | translate }}</option>
                     <option *ngFor="let unit of productCategories" [value]="unit.id">{{unit.name}}</option>
-                    
+
                   </select>
                   <div class="invalid-feedback" *ngIf="!selectedProductCategory && isSubmited">
-                    <p >
+                    <p>
                       {{ 'SELECT_UNIT' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </p>
-                    
+
                   </div>
                 </div>
-
-                <!-- <div class="col-md-6 mb-3">
-                  <label for="default_price" class="form-label large-text">
-                    {{ 'DEFULT_PRICE' | translate }}
-                  </label>
-                  
-                  <input id="default_price" formControlName="default_price" type="number" class="form-control" 
-                         placeholder="{{ 'DEFULT_PRICE' | translate }}" 
-                         [class.is-invalid]="productForm.get('default_price')?.invalid && isSubmited" />
-                
-                  <div class="invalid-feedback" *ngIf="productForm.get('default_price')?.invalid && isSubmited">
-                    <p>
-                      {{ 'DEFULT_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
-                    </p>
-                    
-                  </div>
-                </div> -->
-
 
                 <div class="col-md-4">
                   <label for="coverImage" class="form-label large-text">
                     {{ 'UPLOAD_IMAGE_Optianal_IF_Needed' | translate }}
                   </label>
-                
-                  <input type="file" id="coverImage" class="form-control" 
-                         (change)="onFileCoverImageSelect($event)" 
-                         accept="image/*" />
-                         <!-- [class.is-invalid]="productForm.get('image')?.invalid && isSubmited"  -->
-                
-                  <!-- <div class="invalid-feedback" *ngIf="productForm.get('image')?.invalid && isSubmited">
-                    <p>
-                      {{ 'IMAGE_IS_REQUIRED' | translate }}
-                    </p>
-                  </div> -->
+
+                  <input type="file" id="coverImage" class="form-control" (change)="onFileCoverImageSelect($event)"
+                    accept="image/*" />
                 </div>
 
                 <div class="col-md-2">
@@ -125,20 +100,17 @@
                     {{ 'Current_image' | translate }}
                   </label>
 
-<img [src]="currentProductImage" alt=""  width="50" 
-height="50"  >
+                  <img [src]="currentProductImage" alt="" width="50" height="50">
                 </div>
-                
+
 
                 <div class="col-md-6 ">
                   <label for="product_description" class="form-label large-text">
                     {{ 'product_description' | translate }}
                   </label>
-                  <textarea id="product_description" formControlName="product_description" class="form-control" placeholder="{{ 'ENTER_NOTE' | translate }}" rows="3"></textarea>
+                  <textarea id="product_description" formControlName="product_description" class="form-control"
+                    placeholder="{{ 'ENTER_NOTE' | translate }}" rows="3"></textarea>
 
-                  <!-- <textarea  id="product_description" class="form-control" 
-                        ></textarea> -->
-                 
                 </div>
 
 
@@ -147,95 +119,45 @@ height="50"  >
 
 
                 <div *ngIf="stock == 0" class="col-md-6 ">
-
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="need_serial" formControlName="need_serial">
                     <label class="custom-control-label" for="need_serial">Dose this product need serial</label>
                   </div>
-  
-  
-                  
                 </div>
 
+               
+                <div class="col-md-6 ">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="need_customer_details" formControlName="need_customer_details">
+                    <label class="custom-control-label" for="need_customer_details">need Customer details on sales</label>
+                  </div>
+                </div>
+
+
                 <div class="form-group text-center">
-                  <!-- <div formArrayName="prices">
-                    <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
 
-                      <div class="card-header"> الاسعار </div>
-
-
-                      <div *ngFor="let price of prices.controls; let i = index"  [formGroupName]="i" class="col-sm-6 mt-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">{{price.get('price_category_name')?.value}}</h5>
-
-                          <button type="button" class="btn btn-success mt-2" (click)="addPriceRange(i)">+</button>
-
-                          <div formArrayName="ranges" class="mt-2" *ngIf="getRanges(i)">
-                            <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row align-items-center g-2 mt-2">
-                              
-                              <div class="col-md-4">
-                                <input type="number" class="form-control" formControlName="price" placeholder="Enter Range Price" />
-                              </div>
-
-                              <div class="col-md-2">
-                                <label for="">from: {{range.get('range_from')?.value}}</label>
-                              </div>
-                        
-                              <div class="col-md-4">
-                                <input type="number" class="form-control" formControlName="range_to" placeholder="Enter range_to Price"
-                                (input)="onPriceRangeChange(i,j, $event)" 
-                                [class.is-invalid]="range.get('range_from')?.value > range.get('range_to')?.value" 
-
-                                />
-
-                                <div class="invalid-feedback" *ngIf="range.get('range_from')?.value > range.get('range_to')?.value">
-                                  <p>
-                                    {{ 'TONUMBER_MUST_BE_BIGGER' | translate }}
-                                  </p>
-                                </div>
-                              </div>
-                        
-                              <div class="col-md-2">
-                                <button type="button" class="btn btn-danger w-100" (click)="removeRange(i, j)">
-                                  <i class="fa fa-trash"></i>
-                                </button>
-                              </div>
-                        
-                            </div>
-                          </div>
-                        </div>
-
-
-                        </div>
-
-
-
-                      </div>
-  
-                    </div>
-                  </div> -->
-
-                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
+                  <div class=" text-black bg-secoundry border rounded  row pb-2 m-3">
 
                     <div class="card-header"> صور المنتج </div>
 
-                    <div  class="container row m-2 d-flex justify-content-center flex-wrap gap-3 m-2"  >
+                    <div class="container row m-2 d-flex justify-content-center flex-wrap gap-3 m-2">
                       <div *ngFor="let image of productImages" class="card m-2" style="width: 18rem;">
-                        <img class="card-img-top" [src]="image.image" alt="Card image cap" style="width: 100%; height: 200px; object-fit: cover;">
+                        <img class="card-img-top" [src]="image.image" alt="Card image cap"
+                          style="width: 100%; height: 200px; object-fit: cover;">
                         <div class="card-body">
-                         <a  (click)="deleteImage(image.id)" class="btn btn-danger">delete</a>
+                          <a (click)="deleteImage(image.id)" class="btn btn-danger">delete</a>
                         </div>
                       </div>
-                   
-                      
+
+
                     </div>
-                 
-                    
-                    
+
+
+
                     <div class="file-upload-container text-center">
                       <label for="gallery" class="file-upload-label">
-                        <input type="file" id="gallery" class="file-upload-input" accept="image/*" multiple (change)="onFileSelect($event)">
+                        <input type="file" id="gallery" class="file-upload-input" accept="image/*" multiple
+                          (change)="onFileSelect($event)">
                         <i class="fa-solid fa-cloud-upload-alt"></i>
                         <span>{{ 'CHOOSE_FILE' | translate }}</span>
                       </label>
@@ -245,143 +167,97 @@ height="50"  >
                         </div>
                       </div>
 
-                     
+
                     </div>
-                    
-                    <div class="text-danger" *ngIf="selectedFiles.length == 0 && isSubmited" >
+
+                    <div class="text-danger" *ngIf="selectedFiles.length == 0 && isSubmited">
                       <p>
-                        صور المنتج  {{ 'IS_REQUIRED' | translate }}
+                        صور المنتج {{ 'IS_REQUIRED' | translate }}
                       </p>
-                      
+
                     </div>
                   </div>
-
-                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
-
+                  <div class=" text-black bg-secoundry border rounded  row pb-2 m-3">
                     <div class="card-header"> الوان المنتج </div>
                     <div formArrayName="colors">
-
-                      <div  class="container row m-2 d-flex justify-content-center flex-wrap gap-3 m-2"  >
+                      <div class="container row m-2 d-flex justify-content-center flex-wrap gap-3 m-2">
                         <div *ngFor="let color of productColors" class="card m-2" style="width: 18rem;">
-                          <img class="card-img-top"
-                           [src]="color.image ? color.image : 'images/image.jpg'" 
+                          <img class="card-img-top" [src]="color.image ? color.image : 'images/image.jpg'"
                             alt="Card image cap" style="width: 100%; height: 200px; object-fit: cover;">
                           <div class="card-body">
-                              <h5 class="card-title">{{color.color.color}}</h5>
-                           <a  (click)="deleteColor(color.id)" class="btn btn-danger">delete</a>
-                           <a  (click)="updateColor(color)" class="btn btn-warning ms-2">update</a>
-
+                            <h5 class="card-title">{{color.color.color}}</h5>
+                            <a (click)="deleteColor(color.id)" class="btn btn-danger">delete</a>
+                            <a (click)="updateColor(color)" class="btn btn-warning ms-2">update</a>
                           </div>
                         </div>
-                     
-                        
                       </div>
-
-
-                      <div *ngFor="let color of colors.controls; let i = index" [formGroupName]="i" class="row align-items-center g-2 mb-2 mt-2">
-    
-                      
+                      <div *ngFor="let color of colors.controls; let i = index" [formGroupName]="i"
+                        class="row align-items-center g-2 mb-2 mt-2">
                         <div class="col-md-6">
-                      
                           <label class="form-label large-text">{{ 'COLOR_NAME' | translate }}</label>
                           <select class="form-control" formControlName="color_id"
-                          [class.is-invalid]="color.get('color_id')?.invalid && isSubmited"
-                          >
+                            [class.is-invalid]="color.get('color_id')?.invalid && isSubmited">
                             <option *ngFor="let color of mainColors" [value]="color.id">{{color.color}}</option>
-                            
                           </select>
                           <div class="invalid-feedback" *ngIf="color.get('color_id')?.invalid && isSubmited">
-                            <p >
+                            <p>
                               {{ 'COLOR_NAME' | translate }} {{ 'IS_REQUIRED' | translate }}
                             </p>
-                            
                           </div>
                         </div>
-
-                    
-                        <!-- Image Upload -->
                         <div class="col-md-5">
-                          <input type="file" class="form-control" (change)="onFileColorSelect($event, i)" accept="image/*" />
+                          <input type="file" class="form-control" (change)="onFileColorSelect($event, i)"
+                            accept="image/*" />
                           <div *ngIf="color.get('image')?.invalid && color.get('image')?.touched" class="text-danger">
                             {{ 'IMAGE_IS_REQUIRED' | translate }}
                           </div>
-
-
                         </div>
-                    
-                        <!-- Remove Button -->
                         <div class="col-md-1">
                           <button type="button" class="btn btn-danger w-100" (click)="removeColor(i)">
                             <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
                           </button>
                         </div>
-                    
                       </div>
-                    <button type="button" class="btn btn-success mt-2" (click)="addColor(null)">+ {{ 'ADD_COLOR' | translate }}</button>
-
+                      <button type="button" class="btn btn-success mt-2" (click)="addColor(null)">+ {{ 'ADD_COLOR' |
+                        translate }}</button>
                     </div>
-
                   </div>
-
-
-                  <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
-
+                  <div class=" text-black bg-secoundry border rounded  row pb-2 m-3">
                     <div class="card-header"> محددات المنتج </div>
-                     
-                    
-                    
-                      <div class="col-md-12 text-black bg-secoundry border rounded pb-2 m-3" *ngIf="determinants.controls.length>0">
-                        <!-- <div class="card-header"> {{ 'DETERMINANT_VALUES' | translate }} </div> -->
-                        <div class="row ">
-                          <div *ngFor="let determinant of determinants.controls; let i = index" class="col-md-3 row p-1 m-2 rounded .bg-light border">
-                            <div class="col-md-10">
-                              {{ determinant.get('determinant_name')?.value }}
-                            </div>
-                            <div class="col-md-2">
-                              <a class="btn-close" aria-label="Close" (click)="removeDeterminant(i)"></a>
-                            </div>
-                            </div>
+                    <div class="col-md-12 text-black bg-secoundry border rounded pb-2 m-3"
+                      *ngIf="determinants.controls.length>0">
+                      <div class="row ">
+                        <div *ngFor="let determinant of determinants.controls; let i = index"
+                          class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                          <div class="col-md-10">
+                            {{ determinant.get('determinant_name')?.value }}
+                          </div>
+                          <div class="col-md-2">
+                            <a class="btn-close" aria-label="Close" (click)="removeDeterminant(i)"></a>
+                          </div>
                         </div>
                       </div>
-                      
-                    
-                    
-
-                        <div class="col-md-6 row">
-                          <label class="form-label large-text">{{ 'SELETECT_DETERMINAT' | translate }}</label>
-
-
-                          <div class="form-group col-md-6 ">
-
-                          <select class="form-control" formControlName="determinant_id">
-                            <option *ngFor="let determinant of MainDeterminants" [value]="determinant.id">{{determinant.name}}</option>
-                          </select>
-                        </div>
-
-
-                        <div class="form-group col-md-6 ">
-                          <a class="btn btn-outline-success" (click)="addDeterminant()"> add</a>                
-                        </div>
-
-
-                        </div>
-
-
-
-                    
-
+                    </div>
+                    <div class="col-md-6 row">
+                      <label class="form-label large-text">{{ 'SELETECT_DETERMINAT' | translate }}</label>
+                      <div class="form-group col-md-6 ">
+                        <select class="form-control" formControlName="determinant_id">
+                          <option *ngFor="let determinant of MainDeterminants" [value]="determinant.id">
+                            {{determinant.name}}</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-6 ">
+                        <a class="btn btn-outline-success" (click)="addDeterminant()"> add</a>
+                      </div>
+                    </div>
                   </div>
-
-
-
-
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
-          <button  type="submit" class="btn btn-primary px-4 large-text">
+          <button type="submit" class="btn btn-primary px-4 large-text">
             <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
           </button>
           <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>

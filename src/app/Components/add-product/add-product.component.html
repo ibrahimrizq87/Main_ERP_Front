@@ -114,84 +114,27 @@
                     {{ 'product_description' | translate }}
                   </label>
                   <textarea id="product_description" formControlName="product_description" class="form-control" placeholder="{{ 'ENTER_NOTE' | translate }}" rows="3"></textarea>
-
-        
-                 
                 </div>
 
 
                 <div class="col-md-6 ">
-
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="need_serial" formControlName="need_serial">
                     <label class="custom-control-label" for="need_serial">Dose this product need serial</label>
                   </div>
-  
-  
-  
-                  
                 </div>
+
+
+                <div class="col-md-6 ">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="need_customer_details" formControlName="need_customer_details">
+                    <label class="custom-control-label" for="need_customer_details">need Customer details on sales</label>
+                  </div>
+                </div>
+
+
                 <div class="form-group text-center">
-                  <!-- <div formArrayName="prices">
-                    <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
-
-                      <div class="card-header"> الاسعار </div>
-
-
-                      <div *ngFor="let price of prices.controls; let i = index"  [formGroupName]="i" class="col-sm-6 mt-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">{{price.get('price_category_name')?.value}}</h5>
-
-                          <button type="button" class="btn btn-success mt-2" (click)="addPriceRange(i)">+</button>
-
-                
-                          <div formArrayName="ranges" class="mt-2">
-                            <div *ngFor="let range of getRanges(i).controls; let j = index" [formGroupName]="j" class="row align-items-center g-2 mt-2">
-                              
-                              <div class="col-md-4">
-                                <input type="number" class="form-control" formControlName="price" placeholder="Enter Range Price" />
-                              </div>
-
-                              <div class="col-md-2">
-                                <label for="">from: {{range.get('range_from')?.value}}</label>
-                              </div>
-                        
-                              <div class="col-md-4">
-                                <input type="number" class="form-control" formControlName="range_to" placeholder="Enter range_to Price"
-                                (input)="onPriceRangeChange(i,j, $event)" 
-                                [class.is-invalid]="range.get('range_from')?.value > range.get('range_to')?.value" 
-
-                                />
-
-                                <div class="invalid-feedback" *ngIf="range.get('range_from')?.value > range.get('range_to')?.value">
-                                  <p>
-                                    {{ 'TONUMBER_MUST_BE_BIGGER' | translate }}
-                                  </p>
-                                </div>
-                              </div>
-                        
-                              <div class="col-md-2">
-                                <button type="button" class="btn btn-danger w-100" (click)="removeRange(i, j)">
-                                  <i class="fa fa-trash"></i>
-                                </button>
-                              </div>
-                        
-                            </div>
-                          </div>
-                        </div>
-
-
-                        </div>
-
-
-
-                      </div>
-  
-                    </div>
-                  </div> -->
-
-
+                 
                   <div  class=" text-black bg-secoundry border rounded  row pb-2 m-3" >
 
                     <div class="card-header"> صور المنتج </div>
@@ -271,7 +214,6 @@
                     
                     
                       <div class="col-md-12 text-black bg-secoundry border rounded pb-2 m-3" *ngIf="determinants.controls.length>0">
-                        <!-- <div class="card-header"> {{ 'DETERMINANT_VALUES' | translate }} </div> -->
                         <div class="row ">
                           <div *ngFor="let determinant of determinants.controls; let i = index" class="col-md-3 row p-1 m-2 rounded .bg-light border">
                             <div class="col-md-10">
@@ -305,18 +247,6 @@
 
 
                         </div>
-
-
-                     
-
-                      
-                        <!-- <div class="col-md-1">
-                          <button type="button" class="btn btn-danger w-100" (click)="removeColor(i)">
-                            <i class="fa fa-trash"></i> {{ 'REMOVE' | translate }}
-                          </button>
-                        </div> -->
-                    
-
                   </div>
 
 
