@@ -16,10 +16,12 @@ import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
 import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatPaginatorModule ,PageEvent } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-addsales',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule ,MatPaginatorModule],
   templateUrl: './addsales.component.html',
   styleUrl: './addsales.component.css'
 })
@@ -114,6 +116,15 @@ export class AddsalesComponent implements OnInit {
     const currencyPriceValue = this.saleForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
     this.onPrice();
+  }
+
+ currentPage = 1; 
+itemsPerPage = 20; 
+totalProducts = 0; 
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex+1; 
+    this.itemsPerPage = event.pageSize; 
+    this.loadProducts(this.selectedStore);
   }
 
 
@@ -233,7 +244,7 @@ export class AddsalesComponent implements OnInit {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          this.Products = response.data.products;
 
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;

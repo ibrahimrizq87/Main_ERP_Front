@@ -403,8 +403,8 @@
         <table class="table table-striped table-hover table-bordered rounded">
           <thead class="table-dark">
             <tr>
-              <!-- <th>#</th> -->
-              <th>Product ID</th>
+              <th>Barcode</th>
+              <th>code</th>
               <th>Product Name</th>
               <th>Stock</th>
               <th>Color</th>
@@ -417,16 +417,16 @@
 
             <!-- Branches -->
             <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
-              <td>{{ branch.product_branch.code }}</td>
-              <td>{{ branch.product_branch.product.name }}</td>
-              <td>{{ branch.product_branch.stock }}</td>
-              <td *ngIf="branch.product_branch.product_color">{{ branch.product_branch.product_color.color.color}}</td>
-              <td *ngIf="!branch.product_branch.product_color"> -- </td>
+              <td><strong>{{ branch.product.barcode }}</strong></td>
+              <td>{{ branch.branch.code }}</td>
+              <td>{{ branch.product.name }}</td>
+              <td>{{ branch.stock }}</td>
+              <td>{{ branch.branch.product_color ? branch.branch.color.color : " -- "}}</td>
 
               <td>
-                <span *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
+                <span *ngFor="let determinant of branch.branch.determinants; let i = index">
                   <span class="badge bg-info text-dark me-1">
-                    {{ determinant.determinantValue.determinant.name }}: {{ determinant.determinantValue.value }}
+                    {{ determinant.determinant }}: {{ determinant.value }}
                   </span>
                 </span>
               </td>
@@ -437,6 +437,16 @@
       </div>
     </div>
   </div>
+
+   <div class="d-flex justify-content-center my-4">
+            <mat-paginator [length]="totalProducts"
+              [pageSize]="itemsPerPage"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page"
+              (page)="onPageChange($event)">
+              </mat-paginator>
+         
+        </div> 
 </div>
 
 
