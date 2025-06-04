@@ -18,6 +18,8 @@ import { ProductBranchStoresService } from '../../shared/services/product-branch
 import { ToastrService } from 'ngx-toastr';
 import { MatPaginatorModule ,PageEvent } from '@angular/material/paginator';
 
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @Component({
   selector: 'app-addsales',
   standalone: true,
@@ -245,6 +247,7 @@ totalProducts = 0;
       next: (response) => {
         if (response) {
           this.Products = response.data.products;
+          this.totalProducts = response.data.meta.total;
 
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;

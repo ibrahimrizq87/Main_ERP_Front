@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {  TranslateService } from '@ngx-translate/core';
 import { PermissionService } from './shared/services/permission.service';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { CommonModule } from '@angular/common';  // add this import
 
 @Component({
   selector: 'app-root',

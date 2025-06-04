@@ -1,12 +1,13 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HttpClientModule, HttpClient, provideHttpClient } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ToastrModule } from 'ngx-toastr'; 
-
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app.routes';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -18,8 +19,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
+     provideAnimations(),
+      provideAnimationsAsync('noop'),
     importProvidersFrom(
-      BrowserModule,
+      // BrowserModule,
+     
       HttpClientModule,
       ToastrModule.forRoot(), 
       TranslateModule.forRoot({
