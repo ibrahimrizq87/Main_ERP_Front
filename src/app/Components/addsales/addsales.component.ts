@@ -381,7 +381,7 @@ totalProducts = 0;
         item.patchValue({ price: price.price });
       }
     })
-    if (item.get('product')?.value?.product_branch.product.need_serial_number) {
+    if (item.get('product')?.value?.need_serial_number) {
       if (typeof amount === 'number' && amount >= 0) {
         item.patchValue({ neededSerialNumbers: amount - serialNumbers })
 
@@ -485,6 +485,34 @@ totalProducts = 0;
       this.toastr.error('يجب ادخال سعر الصرف');
       return;
     }
+
+
+
+      //    amount: [null, Validators.required],
+      // overridePrice: [false],
+      // price: ['', Validators.required],
+      // priceRanges: [[]],
+      // product_id: ['', Validators.required],
+
+
+
+      
+      if (this.items && this.items.controls) {
+        this.items.controls.forEach((itemControl, index) => {
+          const itemValue = itemControl.value;
+
+
+          console.log('value:', itemValue);
+         
+
+
+
+
+
+          
+        });
+      }
+
 
     if (this.saleForm.valid) {
       this.isLoading = true;
@@ -601,7 +629,7 @@ totalProducts = 0;
 
         });
       }
-    } else {
+    }  else {
       Object.keys(this.saleForm.controls).forEach((key) => {
         const control = this.saleForm.get(key);
         if (control && control.invalid) {
@@ -803,15 +831,14 @@ totalProducts = 0;
     const itemsArray = this.saleForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
 
-    itemGroup.patchValue({ product: productBranchStore });
+    itemGroup.patchValue({ product: productBranchStore.product });
     console.log('productBranchStore', productBranchStore);
-    itemGroup.patchValue({ product_id: productBranchStore.product_branch.id });
-    itemGroup.patchValue({ color: productBranchStore.product_branch.product_color });
+    itemGroup.patchValue({ product_id: productBranchStore.branch.id });
+    itemGroup.patchValue({ color: productBranchStore.branch.color });
 
 
-    productBranchStore.product_branch.prices.forEach((price: any) => {
+    productBranchStore.prices.forEach((price: any) => {
 
-      // if(){}
       if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
@@ -822,14 +849,16 @@ totalProducts = 0;
           }
         })
       }
+
+
     });
 
 
     if (!itemGroup.get('price')?.value) {
-      itemGroup.patchValue({ price: productBranchStore.product_branch.default_price });
+      itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    this.getSerialNumbers(productBranchStore.product_branch.product.id, this.selectedStore, this.productIndex);
+    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
   productIndex: number = -1;

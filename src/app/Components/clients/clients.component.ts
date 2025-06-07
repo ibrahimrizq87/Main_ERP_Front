@@ -30,7 +30,7 @@ export class ClientsComponent {
       next: (response) => {
         if (response) {
           console.log(response);
-          this.clients = response.data;
+          this.clients = response.data.clients;
         }
       },
       error: (err) => {

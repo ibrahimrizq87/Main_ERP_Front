@@ -97,7 +97,7 @@
                         <div class="col-md-3">
                           <label class="form-label">{{ 'PRODUCT' | translate }}</label>
                           <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
-                            {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name :
+                            {{ item.get('product')?.value ? item.get('product')?.value.name :
                             ('PRODUCT' | translate) }}
                           </button>
                           <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
