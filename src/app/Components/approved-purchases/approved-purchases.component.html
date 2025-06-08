@@ -27,7 +27,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let purchase of purchases; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
+        <th scope="row">{{purchase.id}}</th>
         <td>{{ purchase.type }}</td>
         <td>{{ purchase.invoice_date || 'N/A' }}</td>
         <td>{{ purchase.tax_type }}</td>

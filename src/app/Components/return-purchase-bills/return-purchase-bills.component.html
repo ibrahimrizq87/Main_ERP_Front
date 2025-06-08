@@ -78,7 +78,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let purchase of filteredPurchases; let i = index">
-          <th scope="row">{{ i + 1 }}</th>
+          <th scope="row">{{ purchase.id }}</th>
           <td>{{ purchase.vendor.name }}</td>
           <td>{{ purchase.date || 'N/A' }}</td>
           <td>{{ purchase.total }}</td>

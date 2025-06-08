@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let role of filteredRoles; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ role.id }}</th>
                 <td>{{ role.name }}</td>
                 <td>{{ role.guard_name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">

@@ -1057,5 +1057,15 @@
   "STOCKTAKING_LIST": "Stocktaking List",
   "STOCKTAKING_DETAILS": "Stocktaking Details",
    "CONFIRM_STOCKTAKING":"Confirm Stocktaking",
-  "STOCKTAKING_ITEMS": "Stocktaking Items"
+  "STOCKTAKING_ITEMS": "Stocktaking Items",
+  "ITEMS_PER_PAGE":"Items per page",
+ 
+  "SHOWING": "Showing",
+  "OF": "of",
+  "ENTRIES":"Entries", 
+  "SHOWING_ENTRIES":"Showing Entries",
+  "TOTAL_ITEMS": "Total Items",
+  "TOTAL_ITEMS_PER_PAGE": "Total Items per Page",
+  "PREVIOUS": "Pervious",
+  "NEXT": "Next"
 }

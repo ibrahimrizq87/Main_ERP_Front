@@ -86,7 +86,7 @@
       </thead>
       <tbody>
           <tr *ngFor="let check of checks; let i = index">
-              <th scope="row">{{ i + 1 }}</th>
+              <th scope="row">{{check.id}}</th>
               <td>{{ check.check_number }}</td>
               <td>{{ check.type }}</td>
               <td>{{ check.amount }}</td>

@@ -196,7 +196,7 @@
             <tbody>
               <tr *ngFor="let account of accounts; let i = index" (click)="selectAccount(account)"
                 style="cursor: pointer;">
-                <td>{{ i + 1 }}</td>
+                <td>{{account.id}}</td>
                 <td>{{ account.name }}</td>
               </tr>
             </tbody>

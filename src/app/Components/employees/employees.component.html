@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let employee of filteredEmployee; let i = index">
-              <td class="align-middle">{{ i + 1 }}</td>
+              <td class="align-middle">{{ employee.id }}</td>
               <td class="align-middle">{{ employee.account.name }}</td>
               <td class="align-middle">{{ employee.account_category.name }}</td>
               <td class="align-middle">

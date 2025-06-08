@@ -79,7 +79,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let entry of DocumentEntry; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ entry.id }}</th>
                 <td>{{ entry.date }}</td>
                 <td>{{ entry.delegate ? entry.delegate.name : '--' }}</td>
                 <td>{{ entry.amount }}</td>
