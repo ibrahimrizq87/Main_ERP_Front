@@ -46,12 +46,6 @@
                            (change)="onDayChange()"
                            [max]="getTodayDate()">
                 </div>
-<!-- 
-                  <div class="col-md-2 mb-3" *ngIf="type == 'day'">
-                    <label for="dayDate" class="form-label">{{ 'SELECT_DAY' | translate }}</label>
-                    <br>
-                   <button class="btn btn-warning" (click)="search()"> search</button>
-                </div> -->
             </div>
         </div>
     </div>
@@ -86,12 +80,8 @@
             </tr>
         </thead>
         <tbody>
-
-            <!-- <tr *ngFor="let record of attendanceData" [ngClass]="getRowClass(record.attendance)"> -->
-
             <tr *ngFor="let record of attendanceData" [ngClass]="type === 'day' ? getRowClass(record.attendance) : getRowClass(record)">
                 <ng-container *ngIf="type == 'day'; else employeeTable">
-
                     <td>{{ record.employee?.name }}</td>
                     <td>{{ record.attendance.weekday }}</td>
                     <td>
@@ -164,11 +154,11 @@
                         <button (click)="approveAttendance(record, true)" *ngIf="!record.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record)">Approve</button>
                         <button (click)="approveAttendance(record, false)" *ngIf="record.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record)">Reject</button>
                     
-                    <a *ngIf="record?.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance?.id]">
+                    <a *ngIf="record?.attendance && _PermissionService.hasPermission('attendances' , 'details_attendances')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>
                     </a>
                      
-                    <a *ngIf="record?.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-attendance',record?.attendance?.id]">
+                    <a *ngIf="record?.attendance && _PermissionService.hasPermission('attendances' , 'edit_attendances')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-attendance',record?.attendance?.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.update' | translate }}"></i>
                     </a>
 

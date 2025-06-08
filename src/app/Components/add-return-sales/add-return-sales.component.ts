@@ -150,11 +150,11 @@ export class AddReturnSalesComponent implements OnInit {
   }
 
   loadSuppliers(): void {
-    this._ClientService.getAllClients().subscribe({
+    this._ClientService.getClientsForSales().subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
-          this.vendors = response.data;
+          this.vendors = response.data.clients;
         }
       },
       error: (err) => {
@@ -233,7 +233,7 @@ export class AddReturnSalesComponent implements OnInit {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          this.Products = response.data.products;
 
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;
@@ -367,7 +367,7 @@ export class AddReturnSalesComponent implements OnInit {
         item.patchValue({ price: price.price });
       }
     })
-    if (item.get('product')?.value?.product_branch.product.need_serial_number) {
+    if (item.get('product')?.value?.need_serial_number) {
       if (typeof amount === 'number' && amount >= 0) {
         item.patchValue({ neededSerialNumbers: amount - serialNumbers })
 
@@ -689,11 +689,17 @@ export class AddReturnSalesComponent implements OnInit {
       this.selecteddelegateAccount = account;
       this.saleForm.patchValue({ 'delegate_id': account.id })
 
-    } else if (this.selectedPopUP == 'vendor') {
+    }  else if (this.selectedPopUP == 'vendor') {
+
+
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
 
+      if(this.selectedClient.delegate){
+        this.selecteddelegateAccount= this.selectedClient.delegate;
+        this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
+      }
 
       this.needCurrecyPrice = false;
       this.forignCurrencyName = '';
@@ -716,6 +722,7 @@ export class AddReturnSalesComponent implements OnInit {
 
 
     }
+
 
 
     this.cdr.detectChanges();
@@ -758,14 +765,15 @@ export class AddReturnSalesComponent implements OnInit {
     const itemsArray = this.saleForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
 
-    itemGroup.patchValue({ product: productBranchStore });
+    itemGroup.patchValue({ product: productBranchStore.product });
     console.log('productBranchStore', productBranchStore);
-    itemGroup.patchValue({ product_id: productBranchStore.product_branch.id });
-    itemGroup.patchValue({ color: productBranchStore.product_branch.product_color });
+    itemGroup.patchValue({ product_id: productBranchStore.branch.id });
+    itemGroup.patchValue({ color: productBranchStore.branch.color });
 
 
-    productBranchStore.product_branch.prices.forEach((price: any) => {
-      if (price.id == this.selectedClient.price_category.id) {
+    productBranchStore.prices.forEach((price: any) => {
+
+      if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
         price.prices.forEach((price: any) => {
@@ -775,16 +783,21 @@ export class AddReturnSalesComponent implements OnInit {
           }
         })
       }
+
+
     });
 
 
     if (!itemGroup.get('price')?.value) {
-      itemGroup.patchValue({ price: productBranchStore.product_branch.default_price });
+      itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    this.getSerialNumbers(productBranchStore.product_branch.product.id, this.selectedStore, this.productIndex);
+    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
+
+
+
   productIndex: number = -1;
   openProductModal(index: number) {
     this.productIndex = index;

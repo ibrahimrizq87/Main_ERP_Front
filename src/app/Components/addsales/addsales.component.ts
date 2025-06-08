@@ -818,6 +818,8 @@ totalProducts = 0;
           const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
           itemGroup.patchValue({ productSerialNumbers: this.serialNumber });
 
+          console.log('serial numbers', this.serialNumber);
+
         }
       },
       error: (err) => {

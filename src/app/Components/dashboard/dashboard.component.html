@@ -77,33 +77,33 @@
             </ul>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="_PermissionService.hasAnyModule(['cities', 'countries' , 'currencies' ,  'price-categories'])">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Groups')" style="cursor: pointer;">
               <i class="fa-solid fa-layer-group me-2"></i>
               <span>{{ 'GROUPS_SYSTEM' | translate }}</span>
               <i [ngClass]="isDropdownOpen('Groups') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
             </a>
           
-            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Groups')">
-              <li class="nav-item nested">
+            <ul  class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Groups')">
+              <li *ngIf="_PermissionService.hasModule('cities')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="city">
                   <i class="fa-solid fa-layer-group me-2"></i> {{ 'CITY' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('countries')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="countries">
                 <i class="fa-solid fa-layer-group me-2"></i>{{ 'COUNTRYS' | translate }}  
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('currencies')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="currency">
                <i class="fa-solid fa-layer-group me-2"></i> {{ 'CURRENCY' | translate }}       
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('price-categories')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="priceCategory">
                   <i class="fa-solid fa-layer-group me-2"></i> {{ 'PRICE_CATEGORY' | translate }}
                 </a>
@@ -113,7 +113,7 @@
 
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['accounts' , 'currency_price'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('ACCOUNTING')" style="cursor: pointer;">
               <i class="fa-solid fa-user-group me-2"></i>
               <span>{{ 'accounting.ACCOUNTING' | translate }}</span>
@@ -121,13 +121,14 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('ACCOUNTING')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('accounts')" class="nav-item nested">
                 <a class="nav-link" routerLink="accounts" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{ 'ACCOUNTS' | translate }}
                 </a>
               </li>
-              
-              <li class="nav-item nested" *ngFor="let accountNav of accountNavs">
+              <ng-container  *ngIf="_PermissionService.hasModule('accounts')" >
+  
+              <li  class="nav-item nested" *ngFor="let accountNav of accountNavs">
                 <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown(accountNav.id.toString())" style="cursor: pointer;">
                   <span><i class="fa-solid fa-box me-2"></i> {{ accountNav.title }}</span>
                   <i [ngClass]="isDropdownOpen(accountNav.id.toString()) ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
@@ -146,9 +147,12 @@
                 </ul>
               </li>
 
+              </ng-container>
+            
 
 
-              <li class="nav-item nested">
+
+              <li *ngIf="_PermissionService.hasModule('currency_price')" class="nav-item nested">
                 <a class="nav-link" routerLink="currency-price-tracking" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{ 'CURRENCY_PRICE_TRACKING' | translate }}
                 </a>
@@ -163,7 +167,7 @@
 
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['clients' , 'vendors' , 'account_categories' , 'delegates' , 'employees'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('debitors')" style="cursor: pointer;">
               <i class="fa-solid fa-user-group me-2"></i>
               <span>{{ 'MAIN_ACCOUNTS' | translate }}</span>
@@ -171,30 +175,32 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('debitors')">
-              <li class="nav-item nested">
+
+
+              <li *ngIf="_PermissionService.hasModule('clients')" class="nav-item nested">
                 <a class="nav-link" routerLink="clients" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{ 'accountCategories.CLIENTS' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('delegates')" class="nav-item nested">
                 <a class="nav-link" routerLink="delegates" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{'accountCategories.DELEGATES' | translate}}
                 </a>
               </li>
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('employees')" class="nav-item nested">
                 <a class="nav-link" routerLink="employees" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{'accountCategories.EMPLOYEES' | translate}}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('vendors')" class="nav-item nested">
                 <a class="nav-link" routerLink="vendors" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{'accountCategories.VENDORS' | translate}}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('account_categories')" class="nav-item nested">
                 <a class="nav-link" routerLink="account-categories/client" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i>  {{ 'CATEGORIES' | translate }}
                 </a>
@@ -209,7 +215,7 @@
 
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['colors' , 'determinants' , 'product_units' , 'product_categories' , 'stores' , 'products' , 'product_branches'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Stores')" style="cursor: pointer;">
               <i class="fa-solid fa-warehouse me-2"></i>
               <span>{{ 'STORES_SYSTEM' | translate }}</span>
@@ -219,38 +225,38 @@
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Stores')">
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('colors')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="colors"> 
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'COLORS' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('determinants')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productDeterminants"> 
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'DETERMINANTS' | translate }}
                 </a>
               </li>
               
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('product_units')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productUnit"> 
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'PRODUCT_UNITS' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('product_categories')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productCategories">  
                   <i class="fa-solid fa-warehouse me-2"></i> {{ 'PRODUCT_CATEGORY' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('stores')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="stores">
                   <i class="fa-solid fa-warehouse me-2"></i> {{ 'STORES' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('products')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="products">
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'PRODUCTS' | translate }}
                 </a>
@@ -258,7 +264,7 @@
 
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('product_branches')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productBranch">
                   <i class="fa-solid fa-warehouse me-2"></i>  {{ 'PRODUCT_BRANCHES' | translate }}
                 </a>
@@ -267,7 +273,7 @@
           </li>
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['banks' , 'bank-branches' , 'bank-accounts'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('BANKS')" style="cursor: pointer;">
               <i class="fa-solid fa-money-check-dollar me-2"></i>
               <span>{{ 'BANK_SYSTEM' | translate }}</span>
@@ -275,19 +281,19 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('BANKS')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('banks')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="banks"> 
                   <i class="fa-solid fa-money-check-dollar me-2"></i> {{ 'BANKS' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-branches')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="bankBranch">
                   <i class="fa-solid fa-money-check-dollar me-2"></i> {{ 'BANK_BRANCHES' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-accounts')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="bankAccounts"> 
                   <i class="fa-solid fa-money-check-dollar me-2"></i> {{ 'BANK_ACCOUNTS' | translate }}
                 </a>
@@ -296,7 +302,7 @@
 
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-accounts')" class="nav-item nested">
                     <a class="nav-link"  (click)="accounting('113')" >
                     <i class="fa-solid fa-money-check-dollar me-2"></i>  {{ 'CURRENT_BANK_ACCOUNT' | translate }}
                 </a>
@@ -304,21 +310,21 @@
 
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-accounts')" class="nav-item nested">
                 <a class="nav-link" (click)="accounting('118')">
                   <i class="fa-solid fa-money-check-dollar me-2"></i>{{ 'COLLECTION_BANK_ACCOUNT' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-accounts')" class="nav-item nested">
                 <a class="nav-link" (click)="accounting('211')">
                   <i class="fa-solid fa-money-check-dollar me-2"></i>{{ 'PAYMENT_BANK_ACCOUNT' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('bank-accounts')" class="nav-item nested">
                 <a class="nav-link" (click)="accounting('119')">
                   <i class="fa-solid fa-money-check-dollar me-2"></i>{{ 'SAVINGS_BANK_ACCOUNT' | translate }}
                 </a>
@@ -328,7 +334,7 @@
 
 
 
-        <li class="nav-item">
+        <li *ngIf="_PermissionService.hasAnyModule(['payment-documents' , 'entry-documents' , 'checks'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('DOCUMENTS')" style="cursor: pointer;">
               <i class="fa-solid fa-money-bill-transfer me-2"></i>
               <span>{{ 'payment_document.DOCUMENTS' | translate }}</span>
@@ -336,19 +342,19 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('DOCUMENTS')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('payment-documents')" class="nav-item nested">
                 <a class="nav-link"  routerLinkActive="active" routerLink="document/receipt/waiting">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i> {{ 'payment_document.RECEIPT_DOCUMENT' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('payment-documents')" class="nav-item nested">
                 <a class="nav-link"  routerLinkActive="active" routerLink="document/payment/waiting">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i> {{ 'payment_document.PAYMENT_DOCUMENT' | translate }}
                 </a>
               </li>
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('entry-documents')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="documentEntry/waiting">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i> {{ 'payment_document.INSTALLMENT_DOCUMENT' | translate }}
                 </a>
@@ -357,7 +363,7 @@
 
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('payment-documents')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="document/credit_note/waiting">
                     <i class="fa-solid fa-money-bill-transfer me-2"></i>  {{ 'payment_document.CREDIT_NOTE_DOCUMENT' | translate }}
                 </a>
@@ -365,21 +371,21 @@
 
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('payment-documents')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="document/debit_note/waiting">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i>{{ 'payment_document.DEBIT_NOTE_DOCUMENT' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('checks')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="check_list/waiting">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i>{{ 'payment_document.CHECKS_DOCUMENT' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('checks')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="check-documents/payment_check">
                   <i class="fa-solid fa-money-bill-transfer me-2"></i>{{ 'payment_document.CHECK_DOCUMENTS' | translate }}
                 </a>
@@ -391,7 +397,7 @@
             </ul>
           </li>
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['sale_bills' , 'return_sale_bills'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.SALES' | translate }}</span>
@@ -399,19 +405,22 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('SALES')">
-              <li class="nav-item nested">
+              <li  *ngIf="_PermissionService.hasModule('sale_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="sales/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.SALES_INVOICE' | translate }}
                 </a>
               </li>
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('return_sale_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-sales/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_SALES' | translate }}
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+
+
+
+          <li *ngIf="_PermissionService.hasAnyModule(['purchase_bills' , 'return_purchase_bills'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES_PURCHASES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.PURCHASES' | translate }}</span>
@@ -420,14 +429,14 @@
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('SALES_PURCHASES')">
               
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('purchase_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="purchases/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.PURCHASES_INVOICE' | translate }}
                 </a>
               </li>
 
            
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('return_purchase_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-purchase/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_PURCHASES_INVOICE' | translate }}
                 </a>
@@ -437,7 +446,7 @@
             </ul>
           </li>
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['product_internal_moves'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('PRODUCT_INTERNAL_MOVES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'PRODUCT_INTERNAL_MOVES' | translate }}</span>
@@ -445,29 +454,36 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('PRODUCT_INTERNAL_MOVES')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('product_internal_moves')"  class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="productInternalMoves/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'PRODUCT_INTERNAL_MOVES' | translate }}
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('STOCKTAKINGS')" style="cursor: pointer;">
+
+
+
+
+          <li *ngIf="_PermissionService.hasAnyModule(['store_stocktakings'])"   class="nav-item">
+            <a  class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('STOCKTAKINGS')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'STOCKTAKINGS' | translate }}</span>
               <i [ngClass]="isDropdownOpen('STOCKTAKINGS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('STOCKTAKINGS')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('store_stocktakings')"  class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="stocktakings">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'STOCKTAKINGS' | translate }}
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+
+
+          
+          <li  *ngIf="_PermissionService.hasAnyModule(['company_branches'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('COMPANY_Branches')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'COMPANY_BRANCHES' | translate }}</span>
@@ -475,25 +491,18 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('COMPANY_Branches')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasModule('company_branches')"  class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="companyBranches">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'COMPANY_BRANCHES' | translate }}
                 </a>
               </li>
             </ul>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('VECATIONS')" style="cursor: pointer;">
-              <i class="fa-solid fa-cart-shopping me-2"></i>
-              <span>{{ 'VECATIONS' | translate }}</span>
-              <i [ngClass]="isDropdownOpen('VECATIONS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
-            </a>
           
-            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('VECATIONS')">
-            
-            </ul>
-          </li> -->
-          <li class="nav-item">
+
+
+
+          <li *ngIf="_PermissionService.hasAnyModule(['reports'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
               <span>{{ 'Reports' | translate }}</span>
@@ -501,32 +510,35 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('REPORTS')">
-              <li class="nav-item nested">
+
+
+
+              <li *ngIf="_PermissionService.hasPermission('reports' ,'sales_report')"   class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="sales-reports">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'SalesReports' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasPermission('reports' ,'purchases_report')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="purchases-reports">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'purchases' | translate }}
                 </a>
               </li>
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasPermission('reports' ,'products_report')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="product-moves-reports">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'Product_Moves_Reports' | translate }}
                 </a>
               </li>
 
 
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasPermission('reports' ,'accounts_report')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="account-moves-reports">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'Account_Moves_Reports' | translate }}
                 </a>
               </li>
               
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasPermission('reports' ,'currencies_report')" class="nav-item nested">
                 <a class="nav-link" routerLink="currency-price-tracking" routerLinkActive="active">
                   <i class="fa-solid fa-users me-2"></i> {{ 'CURRENCY_PRICE_TRACKING' | translate }}
                 </a>
@@ -535,7 +547,7 @@
           </li>
 
 
-          <li class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['settings'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SYSTEM_SETTING')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
               <span>{{ 'System_Setting_Nav.SystemSetting' | translate }}</span>
@@ -543,41 +555,18 @@
             </a>
           
             <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('SYSTEM_SETTING')">
-              <li class="nav-item nested">
+              <li *ngIf="_PermissionService.hasPermission('settings' ,'general_settings')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="system-settings">
                   <i class="fa-solid fa-solid fa-gear me-2"></i> {{ 'System_Setting_Nav.SystemSetting' | translate }}
                 </a>
               </li>
             </ul>
+
+            
           </li>
-
-
-          <!-- <li class="nav-item">
-            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('Roles_System')" style="cursor: pointer;">
-              <i class="fa-solid fa-solid fa-gear me-2"></i>
-              <span>Roles System</span>
-              <i [ngClass]="isDropdownOpen('Roles_System') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
-            </a> -->
-          
-            <!-- <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('Roles_System')">
-              <li class="nav-item nested">
-                <a class="nav-link" routerLinkActive="active" routerLink="roles">
-                  <i class="fa-solid fa-solid fa-gear me-2"></i> Roles
-                </a>
-                <a class="nav-link" routerLinkActive="active" routerLink="rolesAndPermissions">
-                  <i class="fa-solid fa-solid fa-gear me-2"></i> Roles and Premessions
-                </a>
-              </li>
-            </ul> -->
-          <!-- </li> -->
-
-
-
-
         </ul>
       </div>
 
-      <!-- Profile Content -->
       <div class="col-md-10 profile-content vh-100">
         <div class="container mycontainer">
           <router-outlet></router-outlet>

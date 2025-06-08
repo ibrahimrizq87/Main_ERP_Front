@@ -1,7 +1,9 @@
 {
 
 
-
+  "TOTAL_PAID": "إجمالي المدفوع",
+  "PRICE_OVERRIDE": "تجاوز السعر",
+  
   "employee_name": "اسم الموظف",
   "base_salary": "الراتب الأساسي",
   "bonus": "البونص",

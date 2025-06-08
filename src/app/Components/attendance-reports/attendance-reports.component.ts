@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-attendance-reports',
@@ -25,7 +26,8 @@ export class AttendanceReportsComponent implements OnInit {
   constructor(
     private _AttendanceService: AttendanceService,
     private toastr: ToastrService,
-    private _EmployeeService: EmployeeService
+    private _EmployeeService: EmployeeService,
+    public _PermissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
