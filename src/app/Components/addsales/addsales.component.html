@@ -97,7 +97,7 @@
                         <div class="col-md-3">
                           <label class="form-label">{{ 'PRODUCT' | translate }}</label>
                           <button type="button" class="btn btn-outline-primary w-100" (click)="openProductModal(i)">
-                            {{ item.get('product')?.value ? item.get('product')?.value.product_branch.product.name :
+                            {{ item.get('product')?.value ? item.get('product')?.value.name :
                             ('PRODUCT' | translate) }}
                           </button>
                           <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
@@ -347,7 +347,7 @@
 
 
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
@@ -361,17 +361,44 @@
 
         <table class="table table-striped">
           <thead>
-            <tr>
-              <th>#</th>
+
+
+            <tr *ngIf="selectedPopUP == 'vendor'">
+              <th>ID</th>
+              <th>{{ 'Image' | translate }}</th>
               <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              <th>{{ 'DELEGATE' | translate }}</th>
+              <th>{{ 'IS_SUSBENDED' | translate }}</th>
+
+            </tr>
+            <tr *ngIf="selectedPopUP != 'vendor'">
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              
             </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="selectedPopUP == 'vendor'" >
             <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
               style="cursor: pointer;">
-              <td>{{ i + 1 }}</td>
-              <td *ngIf="selectedPopUP == 'vendor'">{{ account.account.name }}</td>
-              <td *ngIf="selectedPopUP != 'vendor'">{{ account.name }}</td>
+              <td>{{ account.account.id }}</td>
+              <td>   <img 
+                    [src]="account.image ? account.image : 'images/image.jpg'" 
+                    alt="{{ account.account?.name || 'Default user' }}" 
+                    width="80" 
+                    height="60" 
+                  /></td>
+              <td>{{ account.account.name }}</td>
+              <td>{{ account.delegate.name }}</td>
+              <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
+
+
+            </tr>
+          </tbody>
+            <tbody *ngIf="selectedPopUP != 'vendor'" >
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td >{{ account.name }}</td>
 
             </tr>
           </tbody>

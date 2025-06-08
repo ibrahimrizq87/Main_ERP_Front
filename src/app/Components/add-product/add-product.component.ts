@@ -36,14 +36,10 @@ export class AddProductComponent implements OnInit {
   mainColors:any;
   MainDeterminants:Determinant [] = [];
 
-
-
-
 loadDeterminants(): void {
   this._DeterminantService.getAllDeterminants().subscribe({
     next: (response) => {
       if (response) {
-        // console.log(response)
         this.MainDeterminants = response.data;
       }
     },
@@ -52,9 +48,6 @@ loadDeterminants(): void {
     }
   });
 }
-
-
-
   get colors(): FormArray {
     return this.productForm.get('colors') as FormArray;
   }
@@ -62,11 +55,9 @@ loadDeterminants(): void {
     return this.productForm.get('determinants') as FormArray;
   }
 
-
   removeDeterminant(index: number) {
     this.determinants.removeAt(index);
   }
-
   
   barcode = '';
   generateBarcode() {
@@ -79,19 +70,15 @@ loadDeterminants(): void {
     const id = this.productForm.get('determinant_id')?.value;
 
     if(id){
-let isDublicted = false;
+    let isDublicted = false;
 
-this.determinants.controls.forEach((element) => {
-  if(element.get('determinant_id')?.value ==  id){
-    isDublicted = true;
-  }
-});
-
-
+    this.determinants.controls.forEach((element) => {
+      if(element.get('determinant_id')?.value ==  id){
+        isDublicted = true;
+      }
+    });
       if (!isDublicted){
         const determinant = this.MainDeterminants.find(d => d.id == id);
-
-     
          this.determinants.push(this.fb.group({
            determinant_name: [determinant?.name],
            determinant_id: [determinant?.id],
@@ -100,7 +87,6 @@ this.determinants.controls.forEach((element) => {
       }else{
      
         this.toastr.error('لقد تم اختيار هذا المحمدد من قبل');
-// alert('لقد تم اختيار هذا المحمدد من قبل')
       }
       this.productForm.patchValue({determinant_id : null});
 
@@ -134,7 +120,7 @@ this.determinants.controls.forEach((element) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.colors.at(index).patchValue({ image: file }); // Storing Base64
+        this.colors.at(index).patchValue({ image: file }); 
       };
       reader.readAsDataURL(file);
     }
@@ -155,31 +141,26 @@ this.determinants.controls.forEach((element) => {
     this.productForm = this.fb.group({
       name_ar: this.fb.control(null, [Validators.required, Validators.maxLength(255)]),
       product_name_en: this.fb.control(null, [Validators.required,Validators.maxLength(255)]),
-      // default_price :[null,[Validators.required]],
       product_category_id:[null,[Validators.required]],
       need_serial: this.fb.control(false), 
+      need_customer_details :this.fb.control(false), 
       product_description:[null],
       determinant_id:[null],
-
-      image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]), // Removed required validator
+      image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]),
       unit_id: this.fb.control(null, [Validators.required]),
       prices: this.fb.array([]),
       colors:  this.fb.array([]),
       determinants: this.fb.array([]),
     });
-    // this.addPrice();
-    // this.addDeterminant();
   }
   onProductCategoryChange(event:Event){
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedProductCategory =selectedValue;
-    // console.log(this.selectedUnit);
-  }
+   }
   onUnitChange(event:Event){
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedUnit =selectedValue;
-    // console.log(this.selectedUnit);
-  }
+   }
 
 
   onPriceRangeChange(index: number ,rangeIndex: number, event: any) {
@@ -234,16 +215,7 @@ this.determinants.controls.forEach((element) => {
  getRanges(index: number): FormArray {
   return (this.prices.at(index).get('ranges') as FormArray);
 }
-  // addPriceRange(){
 
-  //   this.prices.ranges.push(this.fb.group({
-  //     price: [null],
-  //     // price_category_id: [priceCategory.id],
-  //     // price_category_name: [priceCategory.name],
-  //     // ranges:  this.fb.array([]),
-  //   }));
-
-  // }
   get prices(): FormArray {
     return this.productForm.get('prices') as FormArray;
   }
@@ -354,7 +326,6 @@ this.determinants.controls.forEach((element) => {
     this._ColorService.viewAllColors().subscribe({
       next: (response) => {
         if (response) {
-          // console.log(response);
           this.mainColors = response.data; 
         }
       },
@@ -366,11 +337,6 @@ this.determinants.controls.forEach((element) => {
 
   handleForm() {
 
-
-    // if(!this.pricesAreValid){
-    //   alert('prices are invalid')
-    //   return;
-    // }
     this.isSubmited =true;
     if (this.productForm.valid) {
 
@@ -382,50 +348,23 @@ this.determinants.controls.forEach((element) => {
       formData.append('name[en]', this.productForm.get('product_name_en')?.value);
       formData.append('product_unit_id', this.productForm.get('unit_id')?.value);
       formData.append('product_category_id', this.productForm.get('product_category_id')?.value);
-
-      // formData.append('default_price', this.productForm.get('default_price')?.value);
       formData.append('cover_image', this.productForm.get('image')?.value);
       formData.append('description', this.productForm.get('product_description')?.value || '');
  
       formData.append('barcode', this.barcode);
-      // formData.append('barcode', this.barcode);
-
 
       if(this.productForm.get('need_serial')?.value ){
         formData.append('need_serial_number', '1');
       } 
 
+    if(this.productForm.get('need_customer_details')?.value ){
+        formData.append('need_customer_details', '1');
+      } 
 
       let counter = 0;
       this.determinants.controls.forEach((determinant ,index) => {
         formData.append(`determinants[${index}][determinant_id]`, determinant.get('determinant_id')?.value);
       });
-      // this.prices.controls.forEach((priceControl) => {
-      //   const ranges = priceControl.get('ranges') as FormArray;
-
-      //   if(ranges.length>0){
-
-      //     ranges.controls.forEach((rangeControl) => {
-      //       if(!rangeControl.get('price')?.value){
-      //           alert('prices are invalid')
-      //           return;
-              
-      //       }
-           
-
-      //       // $table->integer('quantity_from');
-      //       // $table->integer('quantity_to');
-
-      //     formData.append(`prices[${counter }][price]`, rangeControl.get('price')?.value);
-      //     formData.append(`prices[${counter}][quantity_from]`, rangeControl.get('range_from')?.value);
-      //     formData.append(`prices[${counter}][quantity_to]`, rangeControl.get('range_to')?.value);
-      //     formData.append(`prices[${counter}][price_category_id]`, priceControl.get('price_category_id')?.value);
-      //     counter++;
-      //     });
-
-      //   }
-      // });
-
       this.colors.controls.forEach((priceControl, index) => {
         formData.append(`colors[${index}][color_id]`, priceControl.get('color_id')?.value);
         if(priceControl.get('image')?.value){

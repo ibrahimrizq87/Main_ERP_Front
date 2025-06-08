@@ -33,8 +33,9 @@ export class ClientsComponent implements OnInit {
     this._ClientService.getAllClients().subscribe({
       next: (response) => {
         if (response) {
-          this.clients = response.data;
+          this.clients = response.data.clients;
           this.updatePagination();
+          console.log(response);
         }
       },
       error: (err) => {
