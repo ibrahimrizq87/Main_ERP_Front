@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -47,8 +47,30 @@ export class PurchasesService {
     return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/update-status/${id}/${status}` ,{headers: this.getHeadersWithToken()  })
   }
 
-  getPurchaseBillsByStatus(status:string): Observable<any>{
-    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/get-purchase-bill-by-status/${status}`, { headers: this.getHeadersWithToken() })
+  getPurchaseBillsByStatus(status:string,
+      vendorName: string = '',
+      paymentType: string = 'all',
+      startDate: string = '',
+      endDate: string = '',
+      priceFrom: string = '',
+      priceTo: string = '',
+      day: string = '',
+  ): Observable<any>{
+              let params = new HttpParams();
+              if (vendorName !== '') params = params.set('vendor_name', vendorName);
+              if (paymentType !== 'all') params = params.set('payment_type', paymentType);
+              if (priceFrom !== '') params = params.set('total_form', priceFrom);
+              if (priceTo !== '') params = params.set('total_to', priceTo);
+        
+              if (startDate) params = params.set('startDate', startDate);
+              if (endDate) params = params.set('endDate', endDate);
+              if (day) params = params.set('day', day);
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/get-purchase-bill-by-status/${status}`, {
+       headers: this.getHeadersWithToken(),
+      params:params
+    })
   }
 
  
@@ -121,8 +143,31 @@ export class PurchasesService {
   }
 
 
-  getReturnPurchaseBillsByStatus(status:string): Observable<any>{
-    return this._HttpClient.get(`${this.baseURL}/general/return-purchase-bills/get-bill-by-status/${status}`, { headers: this.getHeadersWithToken() })
+  getReturnPurchaseBillsByStatus(status:string,
+     vendorName: string = '',
+      paymentType: string = 'all',
+      startDate: string = '',
+      endDate: string = '',
+      priceFrom: string = '',
+      priceTo: string = '',
+      day: string = '',
+  ): Observable<any>{
+              let params = new HttpParams();
+              if (vendorName !== '') params = params.set('vendor_name', vendorName);
+              if (paymentType !== 'all') params = params.set('payment_type', paymentType);
+              if (priceFrom !== '') params = params.set('total_form', priceFrom);
+              if (priceTo !== '') params = params.set('total_to', priceTo);
+        
+              if (startDate) params = params.set('startDate', startDate);
+              if (endDate) params = params.set('endDate', endDate);
+              if (day) params = params.set('day', day);
+
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/return-purchase-bills/get-bill-by-status/${status}`, { 
+      headers: this.getHeadersWithToken(),
+      params:params
+     })
   }
 
 

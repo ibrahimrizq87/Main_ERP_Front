@@ -2,19 +2,58 @@ import { Component, OnInit } from '@angular/core';
 import { SalesService } from '../../shared/services/sales.service';
 import { ActivatedRoute, Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../shared/services/permission.service';
+import { Modal } from 'bootstrap';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sales',
   standalone: true,
-  imports: [CommonModule,RouterLinkActive,RouterModule,TranslateModule],
+  imports: [CommonModule,RouterLinkActive,RouterModule,TranslateModule ,FormsModule],
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.css'
 })
 export class SalesComponent implements OnInit {
+
+
+
+  searchDateType ='day';
+
+  filters = {
+    clientName:'',
+    delegateName:'',
+    paymentType: 'all',
+    startDate: '',
+    endDate: '',
+    priceFrom: '',
+    priceTo: '',
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+    onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.priceFrom = '';
+    this.filters.priceTo = '';
+    this.filters.paymentType = 'all';
+    this.filters.clientName ='';
+    this.filters.delegateName ='';
+  }
   sales: any[] = []; 
 
   constructor(private _SalesService: SalesService, private router: Router,
@@ -55,19 +94,6 @@ export class SalesComponent implements OnInit {
       }
     });
   }
-  loadSales(status:string): void {
-    this._SalesService.getAllSaleBillsByStatus(status).subscribe({
-      next: (response) => {
-        if (response) {
-          console.log(response);
-          this.sales = response.data.bills; 
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
 
   changeStatus(status:string){
     this.status = status;
@@ -88,9 +114,60 @@ export class SalesComponent implements OnInit {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف المبيعات');
           console.error(err);
-          // alert('An error occurred while deleting the sale.');
         }
       });
     }
   }
+
+
+
+
+    loadSales(status:string): void {
+    const clientName = this.filters.clientName || '';
+    const delegateName = this.filters.delegateName || '';
+    const paymentType = this.filters.paymentType || 'all';
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const priceFrom = this.filters.priceFrom || '';
+    const priceTo = this.filters.priceTo || '';
+    const day = this.filters.day || '';
+
+  
+    this._SalesService.getAllSaleBillsByStatus(
+      status,
+      clientName,
+      delegateName,
+      paymentType,
+      startDate,
+      endDate,
+      priceFrom,
+      priceTo,
+      day,
+
+    ).subscribe({
+      next: (response) => {
+        this.sales = response.data.bills || [];
+      },
+      error: (error) => {
+        console.error('Error fetching sales report:', error);
+      }
+    });
+  }
+}
+
+interface Account {
+  id: string;
+  name: string;
+}
+
+
+
+interface Currency {
+  id: string;
+  name: string;
+}
+
+interface SerialNumber {
+  serialNumber: string;
+
 }

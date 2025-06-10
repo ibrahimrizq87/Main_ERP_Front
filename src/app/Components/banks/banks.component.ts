@@ -41,7 +41,7 @@ export class BanksComponent implements OnInit {
   }
   filterBanks(): void {
     if (this.searchQuery.trim() === '') {
-      this.filteredBanks = this.banks;  // Show all banks if search query is empty
+      this.filteredBanks = this.banks;  
     } else {
       this.filteredBanks = this.banks.filter(bank =>
         bank.aribic_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||

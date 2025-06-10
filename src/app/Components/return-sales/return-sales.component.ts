@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-return-sales',
@@ -20,12 +21,56 @@ export class ReturnSalesComponent {
   searchTerm: string = '';
   status = 'waiting';
 
+
+  searchDateType ='day';
+
+  filters = {
+    clientName:'',
+    delegateName:'',
+    paymentType: 'all',
+    startDate: '',
+    endDate: '',
+    priceFrom: '',
+    priceTo: '',
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+    onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.priceFrom = '';
+    this.filters.priceTo = '';
+    this.filters.paymentType = 'all';
+    this.filters.clientName ='';
+    this.filters.delegateName ='';
+  }
+
+
+
   constructor(private _SalesService: SalesService, private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public _PermissionService: PermissionService
+    
   ) { }
 
   ManageChangeStatus(status: string, id: string) {
+
+
+
     this._SalesService.UpdateReturnSaleBillStatus(id, status).subscribe({
       next: (response) => {
         if (response) {
@@ -57,11 +102,34 @@ export class ReturnSalesComponent {
   }
 
   loadSales(status: string): void {
-    this._SalesService.getReturnSaleBillsByStatus(status).subscribe({
+
+
+        const clientName = this.filters.clientName || '';
+    const delegateName = this.filters.delegateName || '';
+    const paymentType = this.filters.paymentType || 'all';
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const priceFrom = this.filters.priceFrom || '';
+    const priceTo = this.filters.priceTo || '';
+    const day = this.filters.day || '';
+
+
+
+    this._SalesService.getReturnSaleBillsByStatus(status,
+            clientName,
+      delegateName,
+      paymentType,
+      startDate,
+      endDate,
+      priceFrom,
+      priceTo,
+      day,
+
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response.data);
-          this.sales = response.data;
+          this.sales = response.data.bills;
           this.filteredSales = this.sales;
         }
       },

@@ -4,7 +4,7 @@
     <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i>
       {{ 'PRODUCT_INTERNAL_MOVES' | translate }}</span>
   </div>
-  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductInternalMoves">
+  <a *ngIf="_PermissionService.hasPermission('product_internal_moves' , 'add_product_internal_moves')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductInternalMoves">
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
@@ -39,6 +39,65 @@
 </div>
 
 
+<div class="container-fluid bg-white rounded shadow-sm p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'START_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.startDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'END_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.endDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'day'">
+      <label class="form-label mb-1">{{ 'DAY' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.day">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-1">{{ 'DATE_RANGE_TYPE' | translate }}</label>
+      <select class="form-select" 
+              [(ngModel)]="searchDateType" 
+              (change)="onSearchTypeChange()">
+        <option value="day">{{ 'DAY' | translate }}</option>
+        <option value="from_to_date">{{ 'FROM_TO_DATE' | translate }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid bg-white rounded shadow-sm p-3">
+  <div class="row g-2">
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'FROM_STORE' | translate }}</label>
+      <input type="text" class="form-control" 
+             [(ngModel)]="filters.fromStore">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'TO_STORE' | translate }}</label>
+      <input type="text" class="form-control" 
+             [(ngModel)]="filters.toStore">
+    </div>
+
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-primary w-100 py-2" 
+              (click)="loadProductMoves(status)">
+        <i class="fa-solid fa-search me-1"></i>
+        {{ 'Search' | translate }}
+      </button>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-outline-secondary w-100 py-2" 
+              (click)="clearSerachFields()">
+        <i class="fa-solid fa-eraser me-1"></i>
+        {{ 'Clear' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
 
 
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
@@ -69,29 +128,29 @@
         <td>{{ productMove?.to_store?.name ||"N/A"}}</td>
         <td>
           <div class="d-flex justify-content-around align-items-center">
-            <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info"
+            <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-info"
               (click)="ManageChangeStatus('approved' ,productMove.id)">
               approve
             </a>
-            <a *ngIf="status == 'approved' || status == 'waiting'" class="btn btn-danger"
+            <a *ngIf="(status == 'approved' || status == 'waiting') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-danger"
               (click)="ManageChangeStatus('rejected',productMove.id)">
               reject
             </a>
-            <a *ngIf="status == 'rejected'" class="btn btn-success"
+            <a *ngIf="status == 'rejected' && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-success"
               (click)="ManageChangeStatus('waiting',productMove.id)">
               waiting
             </a>
 
-            <a class="nav-link" routerLinkActive="active"
+            <a *ngIf="_PermissionService.hasPermission('product_internal_moves' , 'details_product_internal_moves')" class="nav-link" routerLinkActive="active"
               [routerLink]="['/dashboard/showProductInternalMoves', productMove.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
 
-            <a class="nav-link" routerLinkActive="active"
+            <a *ngIf="status != 'approved' && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')"  class="nav-link" routerLinkActive="active"
               [routerLink]="['/dashboard/updateProductInternalMoves', productMove.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
             </a> 
-            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteProductMove(productMove.id)"
+            <i *ngIf="status != 'approved' && _PermissionService.hasPermission('product_internal_moves' , 'delete_product_internal_moves')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteProductMove(productMove.id)"
               title="{{ 'DELETE' | translate }}"></i>
           </div>
         </td>

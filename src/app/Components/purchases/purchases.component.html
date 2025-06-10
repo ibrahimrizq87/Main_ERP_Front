@@ -3,14 +3,10 @@
     <h5>{{ 'MANAGE_PURCHASES' | translate }}</h5>
     <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PURCHASES' | translate }}</span>
   </div>
-  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPurchase">
+  <a *ngIf="_PermissionService.hasPermission('purchase_bills' , 'add_purchase_bills')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPurchase">
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
-<!-- <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/approvedPurchases']">
-  <i class="btn1 bg-success rounded">{{ 'APPROVED_PURCHASES' | translate }}</i>
-</a> -->
-
 
 
 <div class="container">
@@ -54,6 +50,80 @@
 
 
 
+<div class="container-fluid bg-white rounded shadow-sm p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'START_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.startDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'END_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.endDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'day'">
+      <label class="form-label mb-1">{{ 'DAY' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.day">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-1">{{ 'DATE_RANGE_TYPE' | translate }}</label>
+      <select class="form-select" 
+              [(ngModel)]="searchDateType" 
+              (change)="onSearchTypeChange()">
+        <option value="day">{{ 'DAY' | translate }}</option>
+        <option value="from_to_date">{{ 'FROM_TO_DATE' | translate }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Advanced Filters -->
+<div class="container-fluid bg-white rounded shadow-sm p-3">
+  <div class="row g-2">
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_From' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceFrom">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_To' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceTo">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'VENDOR' | translate }}</label>
+      <input type="text" class="form-control" 
+             [(ngModel)]="filters.vendorName">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'SELECT_PAYMENT_TYPE' | translate }}</label>
+      <select class="form-select" [(ngModel)]="filters.paymentType">
+        <option value="all">{{ 'all' | translate }}</option>
+        <option value="cash">{{ 'cash' | translate }}</option>
+        <option value="credit">{{ 'credit' | translate }}</option>
+      </select>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-primary w-100 py-2" 
+              (click)="loadPurchases(status)">
+        <i class="fa-solid fa-search me-1"></i>
+        {{ 'Search' | translate }}
+      </button>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-outline-secondary w-100 py-2" 
+              (click)="clearSerachFields()">
+        <i class="fa-solid fa-eraser me-1"></i>
+        {{ 'Clear' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -94,13 +164,13 @@
 
 
 
-            <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,purchase.id)">
+            <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,purchase.id)">
               approve
             </a>
-            <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
+            <a  *ngIf="(status == 'approved' || status == 'waiting') && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
               reject
             </a>
-            <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',purchase.id)">
+            <a *ngIf="status == 'rejected' && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')" class="btn btn-success" (click)="ManageChangeStatus('waiting',purchase.id)">
               waiting
             </a>
 
@@ -108,14 +178,14 @@
           
 
 
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
+          <a *ngIf="_PermissionService.hasPermission('purchase_bills' , 'details_purchase_bills')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
             <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
           </a>
 
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updatePurchase', purchase.id]">
+            <a *ngIf=" status != 'approved' &&  _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updatePurchase', purchase.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
             </a>
-            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deletePurchase(purchase.id)"></i>
+            <i *ngIf=" status != 'approved' && _PermissionService.hasPermission('purchase_bills' , 'delete_purchase_bills')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deletePurchase(purchase.id)"></i>
           </div>
         </td>
       </tr>

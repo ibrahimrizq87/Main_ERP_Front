@@ -266,9 +266,6 @@
                     <div class="info-block">
                         <div><strong>{{ 'employee_name' | translate }}:</strong> {{ item.employee.name }}</div>
                         <div><strong>{{ 'base_salary' | translate }}:</strong> {{ item.salary.base_salary }} </div>
-                        <!-- <div><strong>{{ 'total_salary' | translate }}:</strong> {{ item.salary.base_salary + (item.bonus
-                            || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0) || 0
-                            }}</div> -->
                         <div>
                             <strong>{{ 'total_salary' | translate }}:</strong>
                         {{ floor((item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)) || 0) }}
@@ -301,7 +298,6 @@
                     </div>
                 </div>
 
-                <!-- Expandable Details -->
                 <div *ngIf="item.expanded" class="details-section">
 
                     <div class="detail-row">
