@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-sales',
@@ -18,7 +19,8 @@ export class SalesComponent implements OnInit {
 
   constructor(private _SalesService: SalesService, private router: Router,
             private route: ActivatedRoute,
-            private toastr:ToastrService
+            private toastr:ToastrService,
+            public _PermissionService: PermissionService
     
   ) {}
   status ='waiting';
@@ -58,7 +60,7 @@ export class SalesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log(response);
-          this.sales = response.data; 
+          this.sales = response.data.bills; 
         }
       },
       error: (err) => {

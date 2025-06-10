@@ -3,7 +3,7 @@
     <h5 class="large-text">{{ 'MANAGE_SALES' | translate }}</h5>
     <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'SALES' | translate }}</span>
   </div>
-  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addSale">
+  <a *ngIf="_PermissionService.hasPermission('sale_bills' , 'add_sale_bills')"  class="nav-link" routerLinkActive="active" routerLink="/dashboard/addSale">
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
@@ -74,10 +74,7 @@
         <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'TOTAL_PAID' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
-        <!-- <th class="bg-light" scope="col">{{ 'CLIENT_STATUS' | translate }}</th> -->
         <th class="bg-light" scope="col">{{ 'PRICE_OVERRIDE' | translate }}</th>
-          <!-- <th class="bg-light" scope="col">{{ 'NEED_ADMIN_APPROVE' | translate }}</th> -->
-
         <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
       </tr>
     </thead>
@@ -97,38 +94,36 @@
         <td>{{ sale.total }}</td>
         <td>{{ sale.total_paid }}</td>
         <td>{{ sale.payment_type }}</td>
-        <!-- <td>{{ sale.is_client_susbended ? 'Susbended': 'Active' }}</td> -->
         <td>{{ sale.price_override ? 'overrided': 'none' }}</td>
-        <!-- <td>{{ sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid) ? 'admin': 'clear' }}</td> -->
         <td>
           <div class="d-flex justify-content-around align-items-center">
 
-
-
-
-
-            <a *ngIf="(status == 'waiting' || status == 'rejected')   && (sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))" class="btn btn-outline-info" (click)="ManageChangeStatus('approved' ,sale.id)">
+            <a *ngIf="(status == 'waiting' || status == 'rejected')  
+             && (sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))  
+            &&  ((sale.price_override &&  _PermissionService.hasPermission('manager_requests' , 'override_sale_bill_price')) || ((sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid)) &&  _PermissionService.hasPermission('manager_requests' , 'override_sale_bill_susbended_client')) )" class="btn btn-outline-info" (click)="ManageChangeStatus('approved' ,sale.id)">
               override
             </a>
 
-
-            <a *ngIf="(status == 'waiting' || status == 'rejected')   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
+            <a *ngIf="(status == 'waiting' || status == 'rejected')   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))  && _PermissionService.hasPermission('sale_bills' , 'edit_sale_bills')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
               approve
             </a>
-            <a  *ngIf="status == 'waiting'   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
+            <a  *ngIf="status == 'waiting'   
+            && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))  
+            && _PermissionService.hasPermission('sale_bills' , 'edit_sale_bills')"  
+            class="btn btn-danger" (click)="ManageChangeStatus('rejected',sale.id)">
               reject
             </a>
-            <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',sale.id)">
+            <a *ngIf="status == 'rejected'  && _PermissionService.hasPermission('sale_bills' , 'edit_sale_bills')" class="btn btn-success" (click)="ManageChangeStatus('waiting',sale.id)">
               waiting
             </a>
 
 
 
 
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showSale', sale.id]">
+            <a *ngIf="_PermissionService.hasPermission('sale_bills' , 'details_sale_bills')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showSale', sale.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
-            <a  *ngIf="status != 'approved'" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
+            <a  *ngIf="status != 'approved'  && _PermissionService.hasPermission('sale_bills' , 'edit_sale_bills')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
             </a>
             <i  *ngIf="status != 'approved'"
