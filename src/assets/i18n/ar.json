@@ -1058,6 +1058,8 @@
   "TOTAL_ITEMS": "إجمالي العناصر",
   "TOTAL_ITEMS_PER_PAGE": "إجمالي العناصر لكل صفحة",
   "PREVIOUS": "السابق",
-  "NEXT": "التالي"
+  "NEXT": "التالي",
+  "ALL_TYPES":"جميع الأنواع",
+  "DELEGATE_CAR":" سيارة المندوب"
 
 }

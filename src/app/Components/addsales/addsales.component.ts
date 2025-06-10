@@ -16,14 +16,14 @@ import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
 import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
 import { ToastrService } from 'ngx-toastr';
-import { MatPaginatorModule ,PageEvent } from '@angular/material/paginator';
+
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-addsales',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule ,MatPaginatorModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule ],
   templateUrl: './addsales.component.html',
   styleUrl: './addsales.component.css'
 })
@@ -57,6 +57,9 @@ export class AddsalesComponent implements OnInit {
   total = 0;
   totalPayed = 0;
   currencyPriceValue: number = 0;
+  currentPage = 1; 
+  itemsPerPage = 10; 
+  totalProducts = 0;
 
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
@@ -120,14 +123,7 @@ export class AddsalesComponent implements OnInit {
     this.onPrice();
   }
 
- currentPage = 1; 
-itemsPerPage = 20; 
-totalProducts = 0; 
-  onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex+1; 
-    this.itemsPerPage = event.pageSize; 
-    this.loadProducts(this.selectedStore);
-  }
+
 
 
   getTodayDate(): string {
@@ -247,8 +243,8 @@ totalProducts = 0;
       next: (response) => {
         if (response) {
           this.Products = response.data.products;
+          console.log(response)
           this.totalProducts = response.data.meta.total;
-
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;
         }
@@ -257,6 +253,41 @@ totalProducts = 0;
         console.error(err);
       },
     });
+  }
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.loadProducts(this.selectedStore);
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+    this.loadProducts(this.selectedStore);
+  }
+
+  getPages(): number[] {
+    const totalPages = Math.ceil(this.totalProducts / this.itemsPerPage);
+    const maxVisiblePages = 5;
+    const pages: number[] = [];
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const half = Math.floor(maxVisiblePages / 2);
+      let start = Math.max(1, this.currentPage - half);
+      const end = Math.min(totalPages, start + maxVisiblePages - 1);
+      
+      if (end - start + 1 < maxVisiblePages) {
+        start = end - maxVisiblePages + 1;
+      }
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
   }
 
   createItem(): FormGroup {
@@ -861,6 +892,44 @@ totalProducts = 0;
     this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
+  // selectProduct(productBranchStore: any) {
+  //   const itemsArray = this.saleForm.get('items') as FormArray;
+  //   const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+  
+  //   itemGroup.patchValue({ 
+  //     product: productBranchStore,
+  //     product_id: productBranchStore.id,
+  //     color: productBranchStore.branch.product_color 
+  //   });
+  
+  //   // Check if product has price categories and the selected client has a price category
+  //   if (this.selectedClient?.price_category && productBranchStore.product?.price_categories) {
+  //     const selectedPriceCategory = productBranchStore.product.price_categories.find(
+  //       (cat: any) => cat.id === this.selectedClient.price_category.id
+  //     );
+  
+  //     if (selectedPriceCategory) {
+  //       itemGroup.patchValue({ priceRanges: selectedPriceCategory.prices });
+        
+  //       // Set default price from price ranges
+  //       const defaultPriceRange = selectedPriceCategory.prices.find(
+  //         (price: any) => price.quantity_from === 0
+  //       );
+        
+  //       if (defaultPriceRange) {
+  //         itemGroup.patchValue({ price: defaultPriceRange.price });
+  //       }
+  //     }
+  //   }
+  
+  //   // Fallback to default price if no price is set yet
+  //   if (!itemGroup.get('price')?.value && productBranchStore.product?.default_price) {
+  //     itemGroup.patchValue({ price: productBranchStore.product.default_price });
+  //   }
+  
+  //   this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
+  //   this.closeProductModel();
+  // }
   productIndex: number = -1;
   openProductModal(index: number) {
     this.productIndex = index;

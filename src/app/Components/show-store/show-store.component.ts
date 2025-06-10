@@ -62,7 +62,7 @@ export class ShowStoreComponent implements OnInit{
       next: (response) => {
         if (response && response.data) {
           // console.log(response)
-          this.productBranchStores = response.data;
+          this.productBranchStores = response.data.products;
           console.log("Product Branch store data",this.productBranchStores);
         }
       },
