@@ -63,7 +63,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let productMove of filteredMoves; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
+        <th scope="row">{{ productMove.id }}</th>
         <td>{{ productMove?.supervisor_name ||'N/A' }}</td>
         <td>{{ productMove?.from_store?.name || 'N/A' }}</td>
         <td>{{ productMove?.to_store?.name ||"N/A"}}</td>

@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let vecation of filteredVecation; let i = index">
-              <td class="align-middle">{{ i + 1 }}</td>
+              <td class="align-middle">{{ vecation.id }}</td>
               <td class="align-middle">{{ vecation.start_date }}</td>
               <td class="align-middle">{{ vecation.end_date}}</td>
               <td class="align-middle">{{ vecation.reason }}</td>

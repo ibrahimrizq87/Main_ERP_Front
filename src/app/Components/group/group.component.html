@@ -36,7 +36,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let group of filteredGroups; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{group.id}}</th>
                 <td>{{ group.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateGroup', group.id]">

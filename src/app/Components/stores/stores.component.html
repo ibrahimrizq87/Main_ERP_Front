@@ -1,3 +1,4 @@
+<!-- src/app/Components/stores/stores.component.html -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
     <h5>{{ 'MANAGE_STORES' | translate }}</h5>
@@ -7,15 +8,101 @@
     <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
-<div class="form-group col-md-12 store-hierarchy-container">
-  <label class="form-label">{{ 'STORE_HIERARCHY' | translate }}</label>
-  <div class="store-hierarchy">
-    <ng-container *ngFor="let store of hierarchicalAccounts">
-      <app-storenode [store]="store" (delete)="deleteStore($event)"></app-storenode>
-    </ng-container>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'STORES_LIST' | translate }}</span>
+      <div class="d-flex align-items-center gap-3">
+        <!-- Items per page selector -->
+        <div class="d-flex align-items-center">
+          <label class="me-2">{{ 'ITEMS_PER_PAGE' | translate }}:</label>
+          <select 
+            [(ngModel)]="itemsPerPage" 
+            (ngModelChange)="onItemsPerPageChange()"
+            class="form-select form-select-sm" 
+            style="width: auto;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <!-- Type filter -->
+        <select class="form-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+          <option value="">{{ 'ALL_TYPES' | translate }}</option>
+          <option value="store">{{ 'STORE' | translate }}</option>
+          <option value="delegate_car">{{ 'DELEGATE_CAR' | translate }}</option>
+        </select>
+        <!-- Search input -->
+        <input
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          class="form-control search"
+          type="search"
+          placeholder="{{ 'SEARCH' | translate }}"
+          aria-label="Search"
+          style="width: 250px;"
+        />
+      </div>
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ADDRESS' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'MANAGER' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PHONE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let store of filteredStores | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+        <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+        <td>{{ store.name }}</td>
+        <td>{{ store.address_description }}</td>
+        <td>{{ store.manager_name }}</td>
+        <td>{{ store.phone }}</td>
+        <td class="d-flex justify-content-center gap-3 align-items-center">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showStore', store.id]">
+            <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'SHOW_STORE' | translate }}"></i>
+          </a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateStore', store.id]">
+            <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'UPDATE_STORE' | translate }}"></i>
+          </a>
+          <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteStore(store.id)" title="{{ 'DELETE_STORE' | translate }}"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Pagination Controls -->
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="text-muted">
+      {{ 'SHOWING' | translate }} 
+      {{ (currentPage - 1) * itemsPerPage + 1 }} 
+      {{ 'TO' | translate }} 
+      {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
+      {{ 'OF' | translate }} 
+      {{ totalItems }} 
+      {{ 'ENTRIES' | translate }}
+    </div>
+    
+    <pagination-controls 
+      (pageChange)="onPageChange($event)"
+      [maxSize]="5"
+      [directionLinks]="true"
+      [autoHide]="true"
+      [responsive]="true"
+      previousLabel="{{ 'PREVIOUS' | translate }}"
+      nextLabel="{{ 'NEXT' | translate }}"
+      screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+      screenReaderPageLabel="{{ 'PAGE' | translate }}"
+      screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+    </pagination-controls>
   </div>
 </div>
-
-
-
-

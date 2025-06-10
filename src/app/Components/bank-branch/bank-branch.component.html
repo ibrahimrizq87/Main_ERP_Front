@@ -30,7 +30,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let bank of filteredBankBranches; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{bank.id}}</th>
                 <td>{{ bank.name }}</td>
                 <td>{{ bank.phone }}</td>
                 <td>{{ bank.fax }}</td>

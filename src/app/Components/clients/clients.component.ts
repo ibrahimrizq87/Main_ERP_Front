@@ -2,35 +2,40 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormSubmittedEvent, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../shared/services/client.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [RouterLinkActive,RouterModule,CommonModule,TranslateModule,FormsModule],
+  imports: [RouterLinkActive, RouterModule, CommonModule, TranslateModule, FormsModule, NgxPaginationModule],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
-export class ClientsComponent {
-
-
-  clients: any[] = []; 
-  filteredCurrencies: any[] = []; 
+export class ClientsComponent implements OnInit {
+  clients: any[] = [];
   searchTerm: string = '';
+  
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalItems: number = 0;
 
-  constructor(private _ClientService: ClientService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _ClientService: ClientService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.loadCurrency(); 
+    this.loadClients(); 
   }
 
-  loadCurrency(): void {
+  loadClients(): void {
     this._ClientService.getAllClients().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response);
           this.clients = response.data.clients;
+          this.updatePagination();
+          console.log(response);
         }
       },
       error: (err) => {
@@ -38,34 +43,57 @@ export class ClientsComponent {
       }
     });
   }
-  // filterCurrencies(): void {
-  //   const term = this.searchTerm.toLowerCase();
-  //   this.filteredCurrencies = this.currencies.filter(currency => 
-  //     currency.currency_name_ar?.toLowerCase().includes(term) ||
-  //     currency.derivative_name_ar?.toLowerCase().includes(term) ||
-  //     currency.abbreviation?.toLowerCase().includes(term) ||
-  //     currency.value?.toString().toLowerCase().includes(term)
-  //   );
-  // }
-  deleteCurrency(currency_id: number): void {
-    if (confirm('Are you sure you want to delete this currency?')) {
-      this._ClientService.deleteClient(currency_id).subscribe({
+
+  filteredClients(): any[] {
+    if (!this.searchTerm) {
+      this.totalItems = this.clients.length;
+      return this.clients;
+    }
+
+    const lowerTerm = this.searchTerm.toLowerCase();
+    return this.clients.filter((client) => {
+      return (
+        (client.name?.toLowerCase() || '').includes(lowerTerm) ||
+        (client.account_category?.toLowerCase() || '').includes(lowerTerm) ||
+        (client.delegate?.toLowerCase() || '').includes(lowerTerm) ||
+        (client.price_category?.toLowerCase() || '').includes(lowerTerm) ||
+        (client.is_suspended?.toString().toLowerCase() || '').includes(lowerTerm)
+      );
+    });
+  }
+
+  updatePagination(): void {
+    this.totalItems = this.filteredClients().length;
+  }
+
+  onSearchChange(): void {
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  deleteClient(clientId: number): void {
+    if (confirm('Are you sure you want to delete this client?')) {
+      this._ClientService.deleteClient(clientId).subscribe({
         next: (response) => {
           if (response) {
             this.toastr.success('تم حذف العميل بنجاح');
-            this.loadCurrency();
+            this.loadClients();
           }
         },
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف العميل');
           console.error(err);
-          // alert('An error occurred while deleting the currency.');
         }
       });
     }
   }
 }
-
-
-
-

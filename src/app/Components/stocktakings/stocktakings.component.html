@@ -37,7 +37,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let stocktaking of filteredStocktakings; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ stocktaking.id  }}</th>
                 <td>{{ stocktaking.store.name}}</td>
                 <td>{{ stocktaking.date }}</td>
                 <td>{{ stocktaking.approved_by || "N/A"}}</td>

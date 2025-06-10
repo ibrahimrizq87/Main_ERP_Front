@@ -84,7 +84,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let entry of accountCategories; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{entry.id}}</th>
                 <td>{{ entry.name }}</td>
 
                 <td class="d-flex justify-content-center gap-3 align-items-center">

@@ -59,7 +59,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let sale of filteredSales; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ sale.id }}</th>
                 <td>{{ sale.delegate.name }}</td>
                 <td>{{ sale.date || 'N/A' }}</td>
                 <td>{{ sale.total }}</td>

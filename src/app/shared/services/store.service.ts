@@ -43,6 +43,14 @@ export class StoreService {
   getAllStores(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ headers:this.getHeadersWithToken() });
   }
+ // src/app/shared/services/store.service.ts
+getAllStoresByType(type?: string, page: number = 1, perPage: number = 10): Observable<any> {
+  let url = `${this.baseURL}/general/stores?page=${page}&per_page=${perPage}`;
+  if (type) {
+    url += `&filter[type]=${type}`;
+  }
+  return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
+}
   deleteStore(storeId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/stores/${storeId}`, { headers:this.getHeadersWithToken() });
   }

@@ -26,7 +26,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let unit of filteredUnits; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ unit.id }}</th>
                 <td>{{ unit.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductUnit', unit.id]">

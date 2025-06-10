@@ -40,7 +40,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let currency of filteredCurrencies; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{currency.id}}</th>
                 <td>{{ currency.name }}</td>
                 <td>{{ currency.derivative_name }}</td>
                 <td>{{ currency.abbreviation }}</td>

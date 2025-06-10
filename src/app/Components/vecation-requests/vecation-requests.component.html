@@ -92,7 +92,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let request of filteredRequests; let i = index">
-                        <td>{{ i + 1 }}</td>
+                        <td>{{ request.id }}</td>
                         <td>{{ request.employee_name || 'N/A' }}</td>
                         <td>{{ request.start_date | date:'mediumDate' }}</td>
                         <td>{{ request.end_date | date:'mediumDate' }}</td>

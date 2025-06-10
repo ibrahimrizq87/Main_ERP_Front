@@ -1051,6 +1051,17 @@
   "STOCKTAKING_LIST": "قائمة جرد المخزون",
   "STOCKTAKING_DETAILS": "تفاصيل جرد المخزون",
   "CONFIRM_STOCKTAKING":" تأكيد جرد المخزون",
-  "STOCKTAKING_ITEMS":"عناصر جرد المخزون"
+  "STOCKTAKING_ITEMS":"عناصر جرد المخزون",
+  "ITEMS_PER_PAGE":"العناصر لكل صفحة",
+  "SHOWING": "عرض",
+  "OF": "من",
+  "ENTRIES": "المدخلات",
+  "SHOWING_ENTRIES": "عرض المدخلات",
+  "TOTAL_ITEMS": "إجمالي العناصر",
+  "TOTAL_ITEMS_PER_PAGE": "إجمالي العناصر لكل صفحة",
+  "PREVIOUS": "السابق",
+  "NEXT": "التالي",
+  "ALL_TYPES":"جميع الأنواع",
+  "DELEGATE_CAR":" سيارة المندوب"
 
 }

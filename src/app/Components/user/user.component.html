@@ -36,7 +36,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let user of filteredUsers; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ user.id }}</th>
                 <td>{{ user.user_name }}</td>
                 <td>{{ user.name }}</td>
                

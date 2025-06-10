@@ -91,7 +91,7 @@
       </thead>
       <tbody>
           <tr *ngFor="let document of documents; let i = index">
-              <th scope="row">{{ i + 1 }}</th>
+              <th scope="row">{{ document.id }}</th>
               <td>{{ document.from_to_account.name }}</td>
               <td>{{ document.from_to_account_company.name }}</td>
              

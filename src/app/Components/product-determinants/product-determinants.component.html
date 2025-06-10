@@ -38,7 +38,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let determinant of filteredDeterminants; let i = index" (click)="openDeterminantModal(determinant)">
-          <th scope="row">{{ i + 1 }}</th>
+          <th scope="row">{{ determinant.id }}</th>
           <td>{{ determinant.name }}</td>
           <td>
             <div class="d-flex flex-wrap justify-content-center gap-2">

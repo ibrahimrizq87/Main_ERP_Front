@@ -14,13 +14,33 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="fw-bold">{{ 'CLEINTS_LIST' | translate }}</span>
-            <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
-            <input 
-                class="form-control search w-25" 
-                type="search" 
-                [(ngModel)]="searchTerm" 
-                placeholder="{{ 'SEARCH' | translate }}"
-                                aria-label="Search">
+            <div class="d-flex align-items-center gap-3">
+                <!-- Items per page selector -->
+                <div class="d-flex align-items-center">
+                    <label class="me-2">{{ 'ITEMS_PER_PAGE' | translate }}:</label>
+                    <select 
+                        [(ngModel)]="itemsPerPage" 
+                        (ngModelChange)="onItemsPerPageChange()"
+                        class="form-select form-select-sm" 
+                        style="width: auto;">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <!-- Search input -->
+                <input
+                    [(ngModel)]="searchTerm"
+                    (ngModelChange)="onSearchChange()"
+                    class="form-control search"
+                    type="search"
+                    placeholder="{{ 'SEARCH' | translate }}"
+                    aria-label="Search"
+                    style="width: 250px;"
+                />
+            </div>
         </div>
     </div>
 
@@ -34,44 +54,58 @@
                 <th class="bg-light" scope="col">{{ 'PRICE_CATEGORY' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'STATUS' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
-
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let currency of clients; let i = index">
-                <th scope="row">{{ currency.id }}</th>
-                <td>{{ currency.name }}</td>
-                <td>{{ currency.account_category? currency.account_category : "---" }}</td>
-                <td>{{ currency.delegate ? currency.delegate : "--" }}</td>
-                <td>{{ currency.price_category? currency.price_category : "--" }}</td>
-                <td>{{ currency.is_suspended ? 'susbended' : "Active" }}</td>
-
-    <!-- $clientsData [] = [           
-            'id'              => $client->id , 
-            'name'            => $client->accont? $client->accont->name[$locale]:null , 
-            'price_category'  => $client->priceCategory? $client->priceCategory->name:null , 
-            'account_category'=> $client->accountCategory? $client->accountCategory->name:null , 
-            'delegate'        => $client->delegate? $client->delegate->accont ? $client->delegate->accont->name[$locale]:null :null , 
-            'image'           => $client->image? asset($client->image):null , 
-            'is_suspended'    => $client->is_suspended, 
-        ]; -->
-                
+            <tr *ngFor="let client of filteredClients() | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+                <td>{{ client.name }}</td>
+                <td>{{ client.account_category ? client.account_category : "---" }}</td>
+                <td>{{ client.delegate ? client.delegate : "--" }}</td>
+                <td>{{ client.price_category ? client.price_category : "--" }}</td>
+                <td>{{ client.is_suspended ? 'Suspended' : "Active" }}</td>
                 <td>
                     <img 
-                      [src]="currency.image ? currency.image : 'images/image.jpg'" 
-                      alt="{{ currency.name || 'Default Product' }}" 
+                      [src]="client.image ? client.image : 'images/image.jpg'" 
+                      alt="{{ client.name || 'Default Client' }}" 
                       width="50" 
                       height="50" 
                     />
-                  </td>
+                </td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-client/', currency.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CURRENCY' | translate }}"></i>
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-client/', client.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CLIENT' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCurrency(currency.id)" title="{{ 'DELETE_CURRENCY' | translate }}"></i>
+                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteClient(client.id)" title="{{ 'DELETE_CLIENT' | translate }}"></i>
                 </td>
             </tr>
         </tbody>
     </table>
+    
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="text-muted">
+            {{ 'SHOWING' | translate }} 
+            {{ (currentPage - 1) * itemsPerPage + 1 }} 
+            {{ 'TO' | translate }} 
+            {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
+            {{ 'OF' | translate }} 
+            {{ totalItems }} 
+            {{ 'ENTRIES' | translate }}
+        </div>
+        
+        <pagination-controls 
+            (pageChange)="onPageChange($event)"
+            [maxSize]="5"
+            [directionLinks]="true"
+            [autoHide]="true"
+            [responsive]="true"
+            previousLabel="{{ 'PREVIOUS' | translate }}"
+            nextLabel="{{ 'NEXT' | translate }}"
+            screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+            screenReaderPageLabel="{{ 'PAGE' | translate }}"
+            screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+        </pagination-controls>
+    </div>
 </div>

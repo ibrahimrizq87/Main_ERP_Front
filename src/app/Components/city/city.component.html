@@ -34,7 +34,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let city of filteredCities; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{city.id}}</th>
                 <td>{{ city.country.name }}</td>
                 <td>{{ city.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
