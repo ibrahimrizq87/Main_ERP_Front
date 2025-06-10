@@ -150,7 +150,7 @@
                           <select id="color_id" (change)="onColorChange($event, i)" class="form-control custom-select"
                             formControlName="color_id" [class.is-invalid]="!item.get('color_id')?.value && isSubmited ">
                             <option *ngFor="let color of item.get('colors')?.value" [value]="color.id">
-                              {{ color.color.color }}
+                              {{ color.color }}
                             </option>
                           </select>
 
@@ -198,14 +198,14 @@
                               *ngFor="let determinant of getDeterminants(item).controls; let i = index"
                               [formGroupName]="i">
                               <label>{{determinant.get('name')?.value}}</label>
-                              <select id="selected_id" (change)="onColorChange($event, i)"
+                              <select id="selected_id" 
                                 class="form-control custom-select" formControlName="selected_id">
                                 <option *ngFor="let value of determinant.get('values')?.value" [value]="value.id">
                                   {{ value.value }}
                                 </option>
                               </select>
 
-
+<!-- (change)="onColorChange($event, i)" -->
 
                             </div>
                           </div>

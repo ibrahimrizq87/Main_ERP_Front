@@ -104,6 +104,14 @@
           <div class="d-flex justify-content-around align-items-center">
 
 
+
+
+
+            <a *ngIf="(status == 'waiting' || status == 'rejected')   && (sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))" class="btn btn-outline-info" (click)="ManageChangeStatus('approved' ,sale.id)">
+              override
+            </a>
+
+
             <a *ngIf="(status == 'waiting' || status == 'rejected')   && !(sale.price_override || sale.is_client_susbended || (sale.client_payment_type =='cash' && sale.total != sale.total_paid))" class="btn btn-info" (click)="ManageChangeStatus('approved' ,sale.id)">
               approve
             </a>

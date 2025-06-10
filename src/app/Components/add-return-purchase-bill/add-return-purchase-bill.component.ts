@@ -182,7 +182,7 @@ export class AddReturnPurchaseBillComponent {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          this.Products = response.data.products;
 
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;
@@ -718,23 +718,22 @@ if(this.selectedCheck){
     const itemsArray = this.purchasesBillForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
 console.log('branch: ',branch);
-    itemGroup.patchValue({ product: branch.product_branch.product });
-    itemGroup.patchValue({ product_id: branch.product_branch.id });
+    itemGroup.patchValue({ product: branch.product });
+    itemGroup.patchValue({ product_id: branch.branch.id });
     
       itemGroup.patchValue({ type: 'branch' });
       itemGroup.patchValue({
         branch_data: {
-          color: branch?.product_branch.product_color,
-          determinants: branch?.product_branch.determinantValues
+          color: branch?.color,
+          determinants: branch?.branch.determinants
         }
       });
 
-console.log('product: ', branch.product_branch.product.id);
-console.log('selectedStore: ', this.selectedStore.id);
-console.log('product: ', branch.product_branch.product.id);
+// console.log('product: ', branch.product_branch.product.id);
+// console.log('selectedStore: ', this.selectedStore.id);
+// console.log('product: ', branch.product_branch.product.id);
 
-      this.getSerialNumbers(branch.product_branch.product.id, this.selectedStore.id, this.productIndex);
-
+    this.getSerialNumbers(branch.product.id, this.selectedStore.id, this.productIndex);
     this.closeProductModel();
   }
   productIndex: number = -1;

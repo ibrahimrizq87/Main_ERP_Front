@@ -4,7 +4,7 @@
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{'BANK_ACCOUNTS' | translate }} </span>
 
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBankAccount">
+    <a *ngIf="_PermissionService.hasPermission('bank-accounts' , 'add_bank-accounts')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBankAccount">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -44,10 +44,10 @@
                 <td>{{ bankAccount.bank_branch.bank.name }}</td>
                 <td>{{ bankAccount.bank_branch.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBankAccount', bankAccount.id]">
+                    <a *ngIf="_PermissionService.hasPermission('bank-accounts' , 'edit_bank-accounts')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBankAccount', bankAccount.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_BANK_ACCOUNT' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBankAccount(bankAccount.id)" title="{{ 'DELETE_BANK_ACCOUNT' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('bank-accounts' , 'delete_bank-accounts')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBankAccount(bankAccount.id)" title="{{ 'DELETE_BANK_ACCOUNT' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

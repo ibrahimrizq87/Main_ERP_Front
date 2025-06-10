@@ -3,7 +3,7 @@
         <h5>{{ 'BANK_BRANCHES' | translate }}</h5> 
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{'BANK_BRANCHES' | translate }} </span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBankBranch">
+    <a *ngIf="_PermissionService.hasPermission('bank-branches' , 'add_bank-branches')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBankBranch">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -36,13 +36,13 @@
                 <td>{{ bank.fax }}</td>
                 <td>{{ bank.bank.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showBankBranch', bank.id]">
+                    <a *ngIf="_PermissionService.hasPermission('bank-branches' , 'details_bank-branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showBankBranch', bank.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BANK_BRANCH' | translate }}"></i>
                     </a>
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBankBranch', bank.id]">
+                    <a *ngIf="_PermissionService.hasPermission('bank-branches' , 'edit_bank-branches')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBankBranch', bank.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_BANK_BRANCH' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBankBranch(bank.id)" title="{{ 'DELETE_BANK_BRANCH' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('bank-branches' , 'delete_bank-branches')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBankBranch(bank.id)" title="{{ 'DELETE_BANK_BRANCH' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

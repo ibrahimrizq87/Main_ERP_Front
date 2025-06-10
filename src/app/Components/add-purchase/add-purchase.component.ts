@@ -157,9 +157,7 @@ export class AddPurchaseComponent implements OnInit {
       },
       error: (err) => {
         if (err.status == 404) {
-          // console.log('here')
           this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
-          // alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
           this._Router.navigate(['/dashboard/currency']);
 
         }
@@ -173,9 +171,7 @@ export class AddPurchaseComponent implements OnInit {
         if (response) {
           console.log("suppliers", response)
           const Suppliers = response.data;
-          Suppliers.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
+         
 
           this.vendors = Suppliers;
         }
@@ -193,11 +189,7 @@ export class AddPurchaseComponent implements OnInit {
         if (response) {
           console.log("CashAccounts", response)
           const cashAccounts = response.data;
-          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
-          this.cashAccounts = cashAccounts;
+           this.cashAccounts = cashAccounts;
         }
       },
       error: (err) => {
@@ -226,8 +218,9 @@ export class AddPurchaseComponent implements OnInit {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedStore = selectedValue;
   }
-  loadProducts() {
 
+
+  loadProducts() {
     this._ProductsService.getProductsForOperations().subscribe({
       next: (response) => {
         if (response) {
@@ -240,8 +233,6 @@ export class AddPurchaseComponent implements OnInit {
         console.error(err);
       },
     });
-
-
   }
 
 
@@ -842,21 +833,18 @@ export class AddPurchaseComponent implements OnInit {
       }
 
 
-      if (product.productDeterminants) {
+      if (product.determinants) {
         const determinantsFromArray = itemGroup.get('determinants') as FormArray;
         determinantsFromArray.clear();
 
-        if (product.productDeterminants.length > 0) {
-          console.log(product.productDeterminants);
-          product.productDeterminants.forEach((determinant: any) => {
+        if (product.determinants.length > 0) {
+          console.log(product.determinants);
+          product.determinants.forEach((determinant: any) => {
             determinantsFromArray.push(this.fb.group({
               selected_id: [null, Validators.required],
-              values: [determinant.determinant.values],
-              name: [determinant.determinant.name],
-
+              values: [determinant.values],
+              name: [determinant.name],
             }));
-
-            console.log('herer')
           });
 
           //  itemGroup.patchValue({determinants: product.productDeterminants});

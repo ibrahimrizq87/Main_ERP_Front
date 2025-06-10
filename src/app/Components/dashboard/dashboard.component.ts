@@ -24,9 +24,7 @@ constructor (private router :Router ,
 
   ngOnInit(): void {
     this.loadSettings();
-    // const test = this._PermissionService.hasPermission('Users' , 'edit_Users');
-    const test2 = this._PermissionService.hasAnyModule(['cscs', 'edit_attendances']);
-    // console.log('data' , {test ,test2});
+
 
   }
 loadSettings(): void {

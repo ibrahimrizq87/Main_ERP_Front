@@ -1,6 +1,8 @@
 {
 
 
+    "TOTAL_PAID": "Total Paid",
+  "PRICE_OVERRIDE": "Price Override",
   
   "employee_name": "Employee Name",
   "base_salary": "Base Salary",
