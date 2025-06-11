@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PurchasesService } from '../../shared/services/purchases.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 
 @Component({
@@ -23,9 +24,47 @@ export class ReturnPurchaseBillsComponent {
   searchTerm: string = '';
   status ='waiting';
 
+
+
+  searchDateType ='day';
+
+  filters = {
+    vendorName:'',
+    paymentType: 'all',
+    startDate: '',
+    endDate: '',
+    priceFrom: '',
+    priceTo: '',
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+    onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.priceFrom = '';
+    this.filters.priceTo = '';
+    this.filters.paymentType = 'all';
+    this.filters.vendorName ='';
+  }
+
+
   constructor(private _PurchasesService: PurchasesService, private router: Router,
         private route: ActivatedRoute,
-        private toastr:ToastrService
+        private toastr:ToastrService,
+        public _PermissionService: PermissionService
   ) {}
 
   ManageChangeStatus(status:string ,id:string){
@@ -64,7 +103,24 @@ export class ReturnPurchaseBillsComponent {
   }
 
   loadPurchases(status:string): void {
-    this._PurchasesService.getReturnPurchaseBillsByStatus(status).subscribe({
+ const vendorName = this.filters.vendorName || '';
+    const paymentType = this.filters.paymentType || 'all';
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const priceFrom = this.filters.priceFrom || '';
+    const priceTo = this.filters.priceTo || '';
+    const day = this.filters.day || '';
+
+
+    this._PurchasesService.getReturnPurchaseBillsByStatus(status,
+        vendorName,
+      paymentType,
+      startDate,
+      endDate,
+      priceFrom,
+      priceTo,
+      day,
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response.data);

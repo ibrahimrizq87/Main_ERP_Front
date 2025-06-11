@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-product-internal-moves',
@@ -19,10 +20,44 @@ export class ProductInternalMovesComponent implements OnInit {
   filteredMoves: any[] = [];
   searchTerm: string = '';
 
+  searchDateType ='day';
+
+  filters = {
+    toStore:'',
+    fromStore:'',
+
+    startDate: '',
+    endDate: '',
+
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+  onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.toStore = '';
+    this.filters.fromStore = '';
+
+  }
+
   status = 'waiting';
   constructor(private _ProductInternalMovesService: ProductInternalMovesService, private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public _PermissionService: PermissionService
 
   ) { }
 
@@ -60,11 +95,26 @@ export class ProductInternalMovesComponent implements OnInit {
   }
 
   loadProductMoves(status: string): void {
-    this._ProductInternalMovesService.getProductMovesByStatus(status).subscribe({
+
+
+    const fromStore = this.filters.fromStore || '';
+    const toStore = this.filters.toStore || 'all';
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const day = this.filters.day || '';
+
+
+    this._ProductInternalMovesService.getProductMovesByStatus(status,
+         fromStore,
+      toStore,
+      startDate,
+      endDate,
+      day,
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response.data);
-          this.productMoves = response.data;
+          this.productMoves = response.data.moves;
           this.filteredMoves = this.productMoves;
         }
       },

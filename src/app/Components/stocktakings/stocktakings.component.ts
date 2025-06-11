@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-stocktakings',
@@ -19,13 +20,58 @@ export class StocktakingsComponent implements OnInit {
   filteredStocktakings: any[] = [];
   searchQuery: string = '';
 
-  constructor(private _StocktakingService: StocktakingService, private router: Router,private toastr:ToastrService) {}
+
+    searchDateType ='day';
+
+  filters = {
+    storeName:'',
+    startDate: '',
+    endDate: '',
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+    onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.storeName = '';
+
+  }
+
+
+
+  constructor(
+    private _StocktakingService: StocktakingService, 
+    private router: Router,
+    private toastr:ToastrService,
+    public _PermissionService: PermissionService
+  ) {}
 
   ngOnInit(): void {
     this.loadStocktakings(); 
   }
 
   loadStocktakings(): void {
+
+    const storeName = this.filters.storeName || '';
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const day = this.filters.day || '';
+
+
+
     this._StocktakingService.viewAllStocktakings().subscribe({
       next: (response) => {
         if (response) {
