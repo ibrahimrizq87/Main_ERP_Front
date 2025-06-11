@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services/user.service';
 import { Router, RouterModule } from '@angular/router';
@@ -18,9 +17,12 @@ export class UserComponent implements OnInit {
   roles: any[] = [];
   users: any[] = []; 
   filteredUsers: any[] = []; 
-  searchQuery: string = '';
-  selectedRoleName: string | null = null;
-
+  
+  // Search properties
+  searchType: string = 'name'; // Default search type
+  searchValue: string = '';
+  selectedRole: string = '';
+  
   // Pagination properties
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -39,25 +41,29 @@ export class UserComponent implements OnInit {
   }
 
   loadUsers(): void {
-    if (this.selectedRoleName) {
-      this._UserService.viewAllUsersByRole(this.selectedRoleName).subscribe({
-        next: (response) => {
-          this.handleUserResponse(response);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-    } else {
-      this._UserService.viewAllUsers().subscribe({
-        next: (response) => {
-          this.handleUserResponse(response);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
+    let params: any = {
+      page: this.currentPage,
+      per_page: this.itemsPerPage
+    };
+
+    if (this.searchType === 'role' && this.selectedRole) {
+      params['filter[role]'] = this.selectedRole;
+    } 
+    else if (this.searchType === 'name' && this.searchValue) {
+      params['filter[name]'] = this.searchValue;
     }
+    else if (this.searchType === 'user_name' && this.searchValue) {
+      params['filter[user_name]'] = this.searchValue;
+    }
+
+    this._UserService.getAllUsers(params).subscribe({
+      next: (response) => {
+        this.handleUserResponse(response);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   private handleUserResponse(response: any): void {
@@ -86,17 +92,15 @@ export class UserComponent implements OnInit {
     }
   }
 
-  onSearch(): void {
-    const query = this.searchQuery.trim().toLowerCase();
-    if (query === '') {
-      this.filteredUsers = [...this.users];
-    } else {
-      this.filteredUsers = this.users.filter(user => 
-        user.name.toLowerCase().includes(query) || 
-        user.user_name.toLowerCase().includes(query)
-      );
-    }
+  onSearchTypeChange(): void {
+    this.searchValue = '';
+    this.selectedRole = '';
     this.currentPage = 1;
+  }
+
+  onSearch(): void {
+    this.currentPage = 1;
+    this.loadUsers();
   }
 
   loadRoles(): void {
@@ -110,11 +114,6 @@ export class UserComponent implements OnInit {
         console.error(err);
       }
     });
-  }
-
-  onRoleChange(): void {
-    this.currentPage = 1;
-    this.loadUsers();
   }
 
   onPageChange(page: number): void {

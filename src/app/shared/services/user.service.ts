@@ -84,6 +84,23 @@ export class UserService {
       catchError(this.handleError)
     );
   }
+  getAllUsers(params?: any): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    let url = `${this.baseURL}/general/users`;
+    if (params) {
+      const queryParams = new URLSearchParams();
+      for (const key in params) {
+        if (params[key]) {
+          queryParams.set(key, params[key]);
+        }
+      }
+      url += `?${queryParams.toString()}`;
+    }
+    
+    return this._HttpClient.get(url, { headers });
+  }
   viewAllUsers(): Observable<any> {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
