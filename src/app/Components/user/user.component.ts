@@ -21,7 +21,7 @@ export class UserComponent implements OnInit {
   // Search properties
   searchType: string = 'name'; // Default search type
   searchValue: string = '';
-  selectedRole: string = '';
+  selectedRole: string = 'admin';
   
   // Pagination properties
   currentPage: number = 1;
@@ -50,7 +50,10 @@ export class UserComponent implements OnInit {
       params['filter[role]'] = this.selectedRole;
     } 
     else if (this.searchType === 'name' && this.searchValue) {
-      params['filter[name]'] = this.searchValue;
+      params['search'] = this.searchValue;
+      // params['filter[name]'] = this.searchValue;
+
+      
     }
     else if (this.searchType === 'user_name' && this.searchValue) {
       params['filter[user_name]'] = this.searchValue;
@@ -59,6 +62,8 @@ export class UserComponent implements OnInit {
     this._UserService.getAllUsers(params).subscribe({
       next: (response) => {
         this.handleUserResponse(response);
+
+        console.log('Users loaded:', this.users);
       },
       error: (err) => {
         console.error(err);

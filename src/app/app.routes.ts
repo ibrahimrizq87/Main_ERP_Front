@@ -163,6 +163,8 @@ import { StocktakingsComponent } from './Components/stocktakings/stocktakings.co
 import { AddStocktakingsComponent } from './Components/add-stocktakings/add-stocktakings.component';
 import { UpdateStocktakingsComponent } from './Components/update-stocktakings/update-stocktakings.component';
 import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-stocktakings.component';
+import { AddCashierComponent } from './Components/Cashir/add-cashier/add-cashier.component';
+import { CashiersComponent } from './Components/Cashir/cashiers/cashiers.component';
 
 
 export const routes: Routes = [
@@ -187,6 +189,14 @@ export const routes: Routes = [
             { path: "add-return-purchase", component: AddReturnPurchaseBillComponent },
             { path: "return-purchase/:status", component: ReturnPurchaseBillsComponent },
             { path: "show-return-purchase/:id", component: ViewReturnPurchaseBillComponent },
+
+
+            // cashiers
+            { path: "add-cashier", component: AddCashierComponent },
+            { path: "cashiers", component: CashiersComponent },
+
+
+
 
             { path: "account-moves-reports", component: AccountMovesReportsComponent },
             { path: "product-moves-reports", component: ProductMovesReportsComponent },
