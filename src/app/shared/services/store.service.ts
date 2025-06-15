@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -40,11 +40,26 @@ export class StoreService {
   addStore(storeData: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/stores`, storeData ,{ headers:this.getHeadersWithToken() });
   }
-  getAllStores(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ headers:this.getHeadersWithToken() });
+  getAllStores(
+      type: string = 'all',
+      name: string = '',
+      page: number = 1,
+      perPage: number = 20
+  ): Observable<any> {
+   let params = new HttpParams();
+              if (type !== 'all') params = params.set('filter[type]', type);
+              if (name !== '') params = params.set('search', name);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 10) params = params.set('per_page', perPage);
+
+    return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ 
+      headers:this.getHeadersWithToken(),
+      params: params
+     });
   }
- // src/app/shared/services/store.service.ts
-getAllStoresByType(type?: string, page: number = 1, perPage: number = 10): Observable<any> {
+
+
+  getAllStoresByType(type?: string, page: number = 1, perPage: number = 10): Observable<any> {
   let url = `${this.baseURL}/general/stores?page=${page}&per_page=${perPage}`;
   if (type) {
     url += `&filter[type]=${type}`;

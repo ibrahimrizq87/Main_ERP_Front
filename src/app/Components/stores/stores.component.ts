@@ -1,5 +1,5 @@
 // src/app/Components/stores/stores.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,OnDestroy } from '@angular/core';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { StoreService } from '../../shared/services/store.service';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
+
+
+import { Subject, debounceTime } from 'rxjs';
+
 
 @Component({
   selector: 'app-stores',
@@ -18,10 +22,16 @@ import { NgxPaginationModule } from 'ngx-pagination';
 export class StoresComponent implements OnInit {
   allStores: any[] = []; // Store all loaded stores
   filteredStores: any[] = []; // Store filtered stores for display
-  searchQuery: string = '';
   selectedType: string = '';
+
+  onSearchChange() {
+    this.searchSubject.next(this.searchQuery);
+  }
+
   
-  // Pagination properties
+  private searchSubject = new Subject<string>();
+  searchQuery: string = '';
+  
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalItems: number = 0;
@@ -31,14 +41,28 @@ export class StoresComponent implements OnInit {
     private _StoreService: StoreService, 
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+      this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadStores(); 
+    });
+  }
 
   ngOnInit(): void {
     this.loadStores();
   }
 
   loadStores(): void {
-    this._StoreService.getAllStoresByType(this.selectedType, this.currentPage, this.itemsPerPage).subscribe({
+
+
+
+
+    this._StoreService.getAllStores(
+      this.selectedType ? this.selectedType : 'all',
+      this.searchQuery,
+      this.currentPage,
+      this.itemsPerPage).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -69,14 +93,15 @@ export class StoresComponent implements OnInit {
     ));
   }
 
-  onTypeChange(): void {
+  onTypeChange(type:string): void {
     this.currentPage = 1;
+    this.selectedType=type;
     this.loadStores();
   }
 
-  onSearchChange(): void {
-    this.filterStores();
-  }
+  // onSearchChange(): void {
+  //   this.filterStores();
+  // }
 
   onPageChange(page: number): void {
     this.currentPage = page;
@@ -104,4 +129,9 @@ export class StoresComponent implements OnInit {
       });
     }
   }
+
+
+
+
+
 }

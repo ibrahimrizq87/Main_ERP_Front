@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormSubmittedEvent, FormsModule } from '@angular/forms';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 @Component({
   selector: 'app-delegates',
   standalone: true,
@@ -21,7 +22,9 @@ export class DelegatesComponent {
   filteredCurrencies: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _DelegateService: DelegateService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _DelegateService: DelegateService, private router: Router,private toastr:ToastrService,
+    public _PermissionService: PermissionService
+  ) {}
 
   ngOnInit(): void {
     this.loadDelegates(); 

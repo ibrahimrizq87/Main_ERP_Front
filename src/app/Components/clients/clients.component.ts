@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../shared/services/client.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-clients',
@@ -23,7 +24,11 @@ export class ClientsComponent implements OnInit {
   itemsPerPage: number = 10;
   totalItems: number = 0;
 
-  constructor(private _ClientService: ClientService, private router: Router, private toastr: ToastrService) {}
+  constructor(
+    private _ClientService: ClientService, 
+    private router: Router, 
+    private toastr: ToastrService,
+    public _PermissionService: PermissionService) {}
 
   ngOnInit(): void {
     this.loadClients(); 

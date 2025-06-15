@@ -6,7 +6,7 @@
             translate }}
         </span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-employee">
+    <a *ngIf="_PermissionService.hasPermission('employees' , 'add_employees')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-employee">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -50,17 +50,17 @@
               </td>
               <td class="align-middle">
                 <div class="d-flex justify-content-center gap-2">
-                    <a class="nav-link" routerLinkActive="active"
+                    <a *ngIf="_PermissionService.hasPermission('employees' , 'details_employees')" class="nav-link" routerLinkActive="active"
                     [routerLink]="['/dashboard/show-employee', employee.id]">
                     <i class="fa-solid fa-eye btn1 bg-primary rounded"
                         title="{{ 'VIEW_EMPLOYEE' | translate }}"></i>
                 </a>
-                <a class="nav-link" routerLinkActive="active"
+                <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')"  class="nav-link" routerLinkActive="active"
                 [routerLink]="['/dashboard/update-employee', employee.id]">
                 <i class="fa-solid fa-pencil btn1 bg-success rounded"
                     title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
             </a>
-            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteEmployee(employee.id)"
+            <i  *ngIf="_PermissionService.hasPermission('employees' , 'delete_employees')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteEmployee(employee.id)"
                 title="{{ 'DELETE_EMPLOYEE' | translate }}"></i>
                 </div>
               </td>

@@ -9,6 +9,7 @@ import { CheckService } from '../../shared/services/check.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 
 
@@ -27,6 +28,7 @@ export class CheckManagementComponent {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
+    public _PermissionService: PermissionService
 
   ) { }
 

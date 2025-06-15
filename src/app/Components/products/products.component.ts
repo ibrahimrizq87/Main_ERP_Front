@@ -7,6 +7,7 @@ import { FormsModule ,FormGroup , ReactiveFormsModule,FormControl ,Validators} f
 import { Modal } from 'bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +34,7 @@ export class ProductsComponent implements OnInit {
      
     });
   constructor(private _ProductsService: ProductsService, private router: Router,
-    private toastr:ToastrService
+    private toastr:ToastrService , public _PermissionService: PermissionService
   ) {}
 
   ngOnInit(): void {

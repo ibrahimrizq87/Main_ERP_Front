@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-price-category',
@@ -18,7 +19,10 @@ export class PriceCategoryComponent {
   filteredCategories: any[] = []; 
   searchQuery: string = ''; 
 
-  constructor(private _PriceService: PriceService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _PriceService: PriceService, private router: Router,private toastr:ToastrService,
+                public _PermissionService: PermissionService
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadPriceCategories(); 

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-employees',
@@ -18,7 +19,10 @@ export class EmployeesComponent {
   filteredEmployee: any[] = []; 
   searchTerm: string = '';
 
-  constructor(private _EmployeeService: EmployeeService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _EmployeeService: EmployeeService, private router: Router,private toastr:ToastrService,
+            public _PermissionService: PermissionService
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadEmployees(); 

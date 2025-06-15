@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './Components/login/login.component';
 import { NotfoundComponent } from './Components/notfound/notfound.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
-import { CustomerComponent } from './Components/customer/customer.component';
+// import { CustomerComponent } from './Components/customer/customer.component';
 import { SupplierComponent } from './Components/supplier/supplier.component';
 import { ShowVendorComponent } from './Components/show-vendor/show-vendor.component';
 import { UpdateVendorComponent } from './Components/update-vendor/update-vendor.component';
 import { CreateCustomerComponent } from './Components/create-customer/create-customer.component';
 import { UpdateCustomerComponent } from './Components/update-customer/update-customer.component';
-import { GroupComponent } from './Components/group/group.component';
+// import { GroupComponent } from './Components/group/group.component';
 import { AddGroupComponent } from './Components/add-group/add-group.component';
 import { ShowCustomerComponent } from './Components/show-customer/show-customer.component';
 import { UpdateGroupComponent } from './Components/update-group/update-group.component';
@@ -165,6 +165,7 @@ import { UpdateStocktakingsComponent } from './Components/update-stocktakings/up
 import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-stocktakings.component';
 import { AddCashierComponent } from './Components/Cashir/add-cashier/add-cashier.component';
 import { CashiersComponent } from './Components/Cashir/cashiers/cashiers.component';
+import { UpdateCashierComponent } from './Components/Cashir/update-cashier/update-cashier.component';
 
 
 export const routes: Routes = [
@@ -194,6 +195,7 @@ export const routes: Routes = [
             // cashiers
             { path: "add-cashier", component: AddCashierComponent },
             { path: "cashiers", component: CashiersComponent },
+            { path: "update-cashiers/:id", component: UpdateCashierComponent },
 
 
 
@@ -286,7 +288,7 @@ export const routes: Routes = [
             { path: "createSupplier", component: CreateSupplierComponent },
             { path: "updateSupplier", component: UpdateSupplierComponent },
             { path: "showSupplier", component: ShowSupplierComponent },
-            { path: "group", component: GroupComponent },
+            // { path: "group", component: GroupComponent },
             { path: "addGroup", component: AddGroupComponent },
             { path: "updateGroup/:id", component: UpdateGroupComponent },
 
@@ -300,7 +302,7 @@ export const routes: Routes = [
             { path: "addCurrency", component: AddCurrencyComponent },
             { path: "updateCurrency/:id", component: UpdateCurrencyComponent },
 
-            { path: "customer", component: CustomerComponent },
+            // { path: "customer", component: CustomerComponent },
             { path: "supplier", component: SupplierComponent },
             { path: "accounting", component: AccountingComponent },
             { path: "accounting/:type", component: AccountingComponent },

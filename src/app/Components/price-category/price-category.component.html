@@ -5,7 +5,7 @@
             {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'PRICE_CATEGORY' | translate }}
         </span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPriceCategory">
+    <a *ngIf="_PermissionService.hasPermission('price-categories' , 'add_price-categories')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addPriceCategory">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -14,7 +14,6 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="fw-bold">{{ 'CATEGORIES_LIST' | translate }}</span>
-            <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
             <input
             class="form-control search w-25"
             type="search"
@@ -39,10 +38,10 @@
                 <th scope="row">{{ category.id }}</th>
                 <td>{{ category.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCategory', category.id]">
+                    <a *ngIf="_PermissionService.hasPermission('price-categories' , 'edit_price-categories')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCategory', category.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CATEGORY' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)" title="{{ 'DELETE_CATEGORY' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('price-categories' , 'delete_price-categories')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)" title="{{ 'DELETE_CATEGORY' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

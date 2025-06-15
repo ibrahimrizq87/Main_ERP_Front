@@ -124,7 +124,7 @@ export class ReturnPurchaseBillsComponent {
       next: (response) => {
         if (response) {
           console.log(response.data);
-          this.purchases = response.data; 
+          this.purchases = response.data.bills; 
           this.filteredPurchases = this.purchases;
         }
       },
@@ -135,7 +135,7 @@ export class ReturnPurchaseBillsComponent {
   }
   filterPurchases(): void {
     if (this.searchTerm.trim() === '') {
-      this.filteredPurchases = this.purchases; // If no search term, show all
+      this.filteredPurchases = this.purchases;
     } else {
       this.filteredPurchases = this.purchases.filter(purchase => 
         purchase.type.toLowerCase().includes(this.searchTerm.toLowerCase()) || 

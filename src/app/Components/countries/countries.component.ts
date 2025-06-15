@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-countries',
@@ -25,7 +26,10 @@ export class CountriesComponent  {
   filteredCountries: any[] = []; // Filtered list to display
   searchQuery: string = ''; 
 
-  constructor(private _CountryService: CountryService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _CountryService: CountryService, private router: Router,private toastr:ToastrService,
+             public _PermissionService: PermissionService
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadCities(); 

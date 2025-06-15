@@ -15,26 +15,31 @@
       <span class="fw-bold">{{ 'STORES_LIST' | translate }}</span>
       <div class="d-flex align-items-center gap-3">
         <!-- Items per page selector -->
-        <div class="d-flex align-items-center">
+        <!-- <div class="d-flex align-items-center">
           <label class="me-2">{{ 'ITEMS_PER_PAGE' | translate }}:</label>
-          <select 
-            [(ngModel)]="itemsPerPage" 
-            (ngModelChange)="onItemsPerPageChange()"
-            class="form-select form-select-sm" 
-            style="width: auto;">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
+       
+        </div> -->
         <!-- Type filter -->
-        <select class="form-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+<div class="form-check form-check-inline">
+  <input class="form-check-input" (change)="onTypeChange('store')" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+  <label class="form-check-label" for="inlineRadio1">{{ 'STORE' | translate }}</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" (change)="onTypeChange('delegate_car')" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+  <label class="form-check-label" for="inlineRadio2">{{ 'DELEGATE_CAR' | translate }}</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input"
+ (change)="onTypeChange('')" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+  <label class="form-check-label" for="inlineRadio2">{{ 'ALL' | translate }}</label>
+</div>
+
+
+        <!-- <select class="form-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
           <option value="">{{ 'ALL_TYPES' | translate }}</option>
           <option value="store">{{ 'STORE' | translate }}</option>
           <option value="delegate_car">{{ 'DELEGATE_CAR' | translate }}</option>
-        </select>
+        </select> -->
         <!-- Search input -->
         <input
           [(ngModel)]="searchQuery"
@@ -91,6 +96,18 @@
       {{ totalItems }} 
       {{ 'ENTRIES' | translate }}
     </div>
+
+       <select 
+            [(ngModel)]="itemsPerPage" 
+            (ngModelChange)="onItemsPerPageChange()"
+            class="form-select form-select-sm" 
+            style="width: auto;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
     
     <pagination-controls 
       (pageChange)="onPageChange($event)"

@@ -5,7 +5,7 @@
         <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{'BANKS' | translate}} </span>
 
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBank">
+    <a *ngIf="_PermissionService.hasPermission('banks' , 'add_banks')"  class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBank">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -20,7 +20,6 @@
             aria-label="Search"
             [(ngModel)]="searchQuery" 
             (ngModelChange)="filterBanks()">
-            <!-- <input class="form-control search w-25" type="search" placeholder="search" aria-label="Search"> -->
         </div>
     </div>
 
@@ -39,12 +38,12 @@
                 <th scope="row">{{bank.id}}</th>
                 <td>{{ bank.name_langs.ar }}</td>
                 <td>{{ bank.name_langs.en }}</td>
-                <td>{{ bank.type         }}</td>
+                <td>{{ bank.type }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBank', bank.id]">
+                    <a *ngIf="_PermissionService.hasPermission('banks' , 'edit_banks')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBank', bank.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_BANK' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBank(bank.id)" title="{{ 'DELETE_BANK' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('banks' , 'delete_banks')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBank(bank.id)" title="{{ 'DELETE_BANK' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

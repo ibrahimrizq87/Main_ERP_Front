@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { DeterminantService } from '../../shared/services/determinants.service';
 import { ToastrService } from 'ngx-toastr';
 import { Modal } from 'bootstrap';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-product-determinants',
@@ -20,7 +21,10 @@ export class ProductDeterminantsComponent {
   searchTerm: string = '';
   selectedDeterminant: any = null;
 
-  constructor(private _DeterminantService: DeterminantService, private router: Router, private toastr: ToastrService) {}
+  constructor(private _DeterminantService: DeterminantService, private router: Router, private toastr: ToastrService,
+            public _PermissionService: PermissionService
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadDeterminants();

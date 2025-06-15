@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,13 +13,15 @@ import { EmployeeService } from '../../../shared/services/employee.service';
 import { CashierService } from '../../../shared/services/cashier.service';
 
 @Component({
-  selector: 'app-add-cashier',
+  selector: 'app-update-cashier',
   standalone: true,
   imports: [FormsModule,CommonModule,ReactiveFormsModule,TranslateModule],
-  templateUrl: './add-cashier.component.html',
-  styleUrl: './add-cashier.component.css'
+  templateUrl: './update-cashier.component.html',
+  styleUrl: './update-cashier.component.css'
 })
-export class AddCashierComponent {
+export class UpdateCashierComponent {
+
+
 isLoading: boolean = false;
 
 selectedAccount: any;
@@ -28,11 +30,37 @@ selectedEmployee: any;
 
 
   ngOnInit(): void {
+    const cashier_id = this.route.snapshot.paramMap.get('id'); 
+    if (cashier_id) {
+      this.fetchCashierData(cashier_id);
+    }
+
+
+
     this.loadAccounts(); 
     this.loadStores(); 
     this.loadEmployees();
 
   }
+
+  fetchCashierData(id:string){
+    this._CashierService.showCashierById(id).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          const cashier = response.data;
+          this.selectedAccount = cashier.account;
+          this.selectedStore = cashier.store;
+          this.selectedEmployee = {name: cashier.user.name, user_id: cashier.user.id};
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('An error occurred while fetching cashier data.');
+      }
+    });
+  
+}
 
   openModal(modalId: string) {
     const modalElement = document.getElementById(modalId);
@@ -50,6 +78,8 @@ selectedEmployee: any;
       private toastr:ToastrService,    
       private _CashierService:CashierService,   
       private _Router: Router, 
+      private route: ActivatedRoute,
+      
 
     ){
     }

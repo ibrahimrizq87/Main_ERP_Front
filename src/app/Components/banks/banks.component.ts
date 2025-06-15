@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-banks',
@@ -19,7 +20,10 @@ export class BanksComponent implements OnInit {
   filteredBanks: any[] = [];
   searchQuery: string = '';
 
-  constructor(private _BankService: BankService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _BankService: BankService, private router: Router,private toastr:ToastrService,
+            public _PermissionService: PermissionService
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadBanks(); 

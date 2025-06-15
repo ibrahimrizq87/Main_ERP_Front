@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-product-category',
@@ -20,7 +21,9 @@ export class ProductCategoryComponent {
   searchTerm: string = '';
 
   constructor(private _ProductCategoriesService: ProductCategoriesService, private router: Router
-    ,private toastr:ToastrService
+    ,private toastr:ToastrService,
+        public _PermissionService: PermissionService
+    
   ) {}
 
   ngOnInit(): void {

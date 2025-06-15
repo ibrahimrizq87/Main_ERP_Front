@@ -1,6 +1,9 @@
 {
-
-
+"CASHIERS_MANGAMENT" : "إدارة نقاط البيع",
+  "CASHIERS": "نقاط البيع",
+  "CASHIER_NAME": "اسم نقطة البيع",
+  "CASHIER_LIST": "قائمة نقاط البيع",
+"EMPLOYEE_SYSTEM": "نظام الموظفين",
   "TOTAL_PAID": "إجمالي المدفوع",
   "PRICE_OVERRIDE": "تجاوز السعر",
   

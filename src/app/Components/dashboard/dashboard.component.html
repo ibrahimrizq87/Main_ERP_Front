@@ -37,7 +37,7 @@
           <li *ngIf="_PermissionService.hasAnyModule(['attendances', 'salaries' , 'vacations' ,  'vacation_requests'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('HR_SYS')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
-              <span>{{ 'HR_SYSTEM' | translate }}</span>
+              <span>{{ 'EMPLOYEE_SYSTEM' | translate }}</span>
               <i [ngClass]="isDropdownOpen('HR_SYS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
             </a>
           
@@ -502,13 +502,13 @@
 
 
             <li *ngIf="_PermissionService.hasAnyModule(['cashiers'])"  class="nav-item">
-            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('REPORTS')" style="cursor: pointer;">
+            <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('CASHIER')" style="cursor: pointer;">
               <i class="fa-solid fa-solid fa-gear me-2"></i>
               <span>{{ 'CASHIERS_MANGAMENT' | translate }}</span>
-              <i [ngClass]="isDropdownOpen('REPORTS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+              <i [ngClass]="isDropdownOpen('CASHIER') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
             </a>
           
-            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('REPORTS')">
+            <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('CASHIER')">
               
               <li *ngIf="_PermissionService.hasModule('cashiers')" class="nav-item nested">
                 <a class="nav-link" routerLink="cashiers" routerLinkActive="active">

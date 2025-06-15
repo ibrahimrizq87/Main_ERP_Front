@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { ProductsService } from '../../shared/services/products.service';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-product-branch',
@@ -32,9 +33,13 @@ export class ProductBranchComponent implements OnInit {
     product_id:new FormControl(null),
   });
   constructor(private _ProductBranchesService: ProductBranchesService,
-     private router: Router,
+    private router: Router,
     private _ProductsService:ProductsService,
-  private toastr:ToastrService) {}
+    private toastr:ToastrService,
+    public _PermissionService: PermissionService
+) {}
+
+
   selectedTemplate: string = '';
   ngOnInit(): void {
     this.loadBranches(); 

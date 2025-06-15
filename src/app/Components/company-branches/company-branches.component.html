@@ -7,7 +7,7 @@
         <span class="text-muted">{{ 'DASHBOARD' | translate }} 
             <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{  'COMPANY_BRANCHES'| translate }}</span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCompanyBranch">
+    <a *ngIf="_PermissionService.hasPermission('company_branches' , 'add_company_branches')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCompanyBranch">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -38,13 +38,13 @@
                 <td>{{ companyBranch.long }}</td>
                 <td>{{companyBranch.radius_km }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showCompanyBranch', companyBranch.id]">
+                    <a *ngIf="_PermissionService.hasPermission('company_branches' , 'details_company_branches')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showCompanyBranch', companyBranch.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'managecompanyBranch.view' | translate }}"></i>    
                     </a>
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCompanyBranch', companyBranch.id]">
+                    <a *ngIf="_PermissionService.hasPermission('company_branches' , 'edit_company_branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCompanyBranch', companyBranch.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'managecompanyBranch.edit' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCompanyBranch(companyBranch.id)" title="{{ 'manageColor.delete' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('company_branches' , 'delete_company_branches')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCompanyBranch(companyBranch.id)" title="{{ 'manageColor.delete' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

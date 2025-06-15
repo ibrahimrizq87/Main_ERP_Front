@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorService } from '../../shared/services/colors.service';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-colors',
@@ -24,7 +25,9 @@ export class ColorsComponent {
   filteredCountries: any[] = []; 
   searchQuery: string = ''; 
 
-  constructor(private _ColorService: ColorService, private router: Router,private toastr:ToastrService) {}
+  constructor(private _ColorService: ColorService, private router: Router,private toastr:ToastrService,
+     public _PermissionService: PermissionService
+  ) {}
 
   ngOnInit(): void {
     this.loadCities(); 

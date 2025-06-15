@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-city',
@@ -21,7 +22,10 @@ export class CityComponent implements OnInit {
   filteredCities: any[] = []; // Filtered list to display
   searchQuery: string = ''; 
 
-  constructor(private _CityService: CityService, private router: Router,private toastr:ToastrService) {}
+  constructor(
+    private _CityService: CityService, 
+    private router: Router,private toastr:ToastrService, 
+    public _PermissionService: PermissionService) {}
 
   ngOnInit(): void {
     this.loadCities(); 

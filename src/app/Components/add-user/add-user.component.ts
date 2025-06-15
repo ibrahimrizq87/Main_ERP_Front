@@ -6,7 +6,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-// import { AccountPopupComponent } from '../Popups/account-popup/account-popup.component';
 import { AccountService } from '../../shared/services/account.service';
 import { Modal } from 'bootstrap';
 
