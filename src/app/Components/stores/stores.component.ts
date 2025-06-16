@@ -22,7 +22,7 @@ import { Subject, debounceTime } from 'rxjs';
 export class StoresComponent implements OnInit {
   allStores: any[] = []; // Store all loaded stores
   filteredStores: any[] = []; // Store filtered stores for display
-  selectedType: string = '';
+  selectedType: string = 'all';
 
   onSearchChange() {
     this.searchSubject.next(this.searchQuery);
@@ -57,9 +57,9 @@ export class StoresComponent implements OnInit {
 
 
 
-
+console.log('Loading stores with type:', this.selectedType, 'and search query:', this.searchQuery);
     this._StoreService.getAllStores(
-      this.selectedType ? this.selectedType : 'all',
+      this.selectedType ,
       this.searchQuery,
       this.currentPage,
       this.itemsPerPage).subscribe({

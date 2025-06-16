@@ -159,11 +159,15 @@ export class AddsalesComponent implements OnInit {
   }
 
   loadSuppliers(): void {
-    this._ClientService.getClientsForSales().subscribe({
+    this._ClientService.getClientsForSales(
+        this.searchQuery
+   
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
           this.vendors = response.data.clients;
+          this.updateAccounts();
         }
       },
       error: (err) => {
@@ -172,16 +176,16 @@ export class AddsalesComponent implements OnInit {
     });
   }
   loadDelegates(): void {
-    this._AccountService.getAccountsByParent('623').subscribe({
+    this._AccountService.getAccountsByParent('623',
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("delegates", response)
-          const delegates = response.data;
-          delegates.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = delegates.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
+          const delegates = response.data.accounts;
+                    this.delegates = delegates;
+                    this.updateAccounts();
 
-          this.delegates = delegates;
         }
       },
       error: (err) => {
@@ -190,15 +194,14 @@ export class AddsalesComponent implements OnInit {
     });
   }
   loadCashAccounts(): void {
-    this._AccountService.getAccountsByParent('111').subscribe({
+    this._AccountService.getAccountsByParent('111'
+      ,this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("CashAccounts", response)
-          const cashAccounts = response.data;
-          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const cashAccounts = response.data.accounts;
+          this.updateAccounts();
           this.cashAccounts = cashAccounts;
         }
       },
@@ -517,33 +520,12 @@ export class AddsalesComponent implements OnInit {
       return;
     }
 
-
-
-      //    amount: [null, Validators.required],
-      // overridePrice: [false],
-      // price: ['', Validators.required],
-      // priceRanges: [[]],
-      // product_id: ['', Validators.required],
-
-
-
-      
       if (this.items && this.items.controls) {
         this.items.controls.forEach((itemControl, index) => {
-          const itemValue = itemControl.value;
-
-
-          console.log('value:', itemValue);
-         
-
-
-
-
-
-          
+        const itemValue = itemControl.value;
+        // console.log('value:', itemValue);          
         });
       }
-
 
     if (this.saleForm.valid) {
       this.isLoading = true;
@@ -605,11 +587,7 @@ export class AddsalesComponent implements OnInit {
               formData.append(`items[${index}][has_overrided_price]`, '0');
 
             }
-
-
-
             const serialNumbers = itemControl.get('serialNumbers')?.value;
-
             if (serialNumbers.length > 0) {
 
               serialNumbers.forEach((item: any, internalIndex: number) => {
@@ -618,11 +596,6 @@ export class AddsalesComponent implements OnInit {
               });
 
             }
-
-
-
-
-
           }
         });
       }
@@ -680,7 +653,6 @@ export class AddsalesComponent implements OnInit {
 
   removeCurrentDelegate() {
     this.selecteddelegateAccount = null;
-    //  this.entryForm.patchValue({'delegate_id':null});
   }
   onCheckSearchChange() {
 
@@ -692,6 +664,7 @@ export class AddsalesComponent implements OnInit {
     this.closeModal('checkModel');
   }
   closeModal(modalId: string) {
+    this.searchQuery ='';
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
       const modal = Modal.getInstance(modalElement);
@@ -701,24 +674,18 @@ export class AddsalesComponent implements OnInit {
 
 
   openModal(modalId: string, type: string) {
-    if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
+    this.searchQuery ='';
 
+    if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
       this.selectedPopUP = type;
-      // this.popUpIndex = index;
-      // const entryItem = this.entryForm.get('entryItems') as FormArray;
       if (type == 'cash') {
         this.filteredAccounts = this.cashAccounts;
       } else if (type == 'delegate') {
         this.filteredAccounts = this.delegates;
       } else if (type == 'vendor') {
         this.filteredAccounts = this.vendors;
-
       }
-
-
     }
-
-    // console.log('hrerererer');
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
       const modal = new Modal(modalElement);
@@ -729,21 +696,12 @@ export class AddsalesComponent implements OnInit {
 
 
   onSearchChange() {
-
-
     if (this.selectedPopUP == 'cash') {
-      this.filteredAccounts = this.cashAccounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-
+      this.loadCashAccounts();
     } else if (this.selectedPopUP == 'delegate') {
-      this.filteredAccounts = this.delegates.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      this.loadDelegates();
     } else if (this.selectedPopUP == 'vendor') {
-      this.filteredAccounts = this.vendors.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      this.loadSuppliers();
     }
 
   }
@@ -790,14 +748,6 @@ export class AddsalesComponent implements OnInit {
         this.selecteddelegateAccount= this.selectedClient.delegate;
         this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
       }
-
-    //   if(this.selectedClient.payment_type == 'cash'){
-    // this.saleForm.patchValue({'showCashAccountsDropdown' : true})
-    //   this.totalPayed = (this.saleForm.get('payed_price')?.value || 0);
-    
-  
-    //   }
-
 
       this.needCurrecyPrice = false;
       this.forignCurrencyName = '';
@@ -894,44 +844,8 @@ export class AddsalesComponent implements OnInit {
     this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
-  // selectProduct(productBranchStore: any) {
-  //   const itemsArray = this.saleForm.get('items') as FormArray;
-  //   const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
   
-  //   itemGroup.patchValue({ 
-  //     product: productBranchStore,
-  //     product_id: productBranchStore.id,
-  //     color: productBranchStore.branch.product_color 
-  //   });
-  
-  //   // Check if product has price categories and the selected client has a price category
-  //   if (this.selectedClient?.price_category && productBranchStore.product?.price_categories) {
-  //     const selectedPriceCategory = productBranchStore.product.price_categories.find(
-  //       (cat: any) => cat.id === this.selectedClient.price_category.id
-  //     );
-  
-  //     if (selectedPriceCategory) {
-  //       itemGroup.patchValue({ priceRanges: selectedPriceCategory.prices });
-        
-  //       // Set default price from price ranges
-  //       const defaultPriceRange = selectedPriceCategory.prices.find(
-  //         (price: any) => price.quantity_from === 0
-  //       );
-        
-  //       if (defaultPriceRange) {
-  //         itemGroup.patchValue({ price: defaultPriceRange.price });
-  //       }
-  //     }
-  //   }
-  
-  //   // Fallback to default price if no price is set yet
-  //   if (!itemGroup.get('price')?.value && productBranchStore.product?.default_price) {
-  //     itemGroup.patchValue({ price: productBranchStore.product.default_price });
-  //   }
-  
-  //   this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
-  //   this.closeProductModel();
-  // }
+
   productIndex: number = -1;
   openProductModal(index: number) {
     this.productIndex = index;
@@ -951,6 +865,21 @@ export class AddsalesComponent implements OnInit {
       const modal = Modal.getInstance(modalElement);
       modal?.hide();
     }
+  }
+
+
+
+  updateAccounts(){
+
+      const type =  this.selectedPopUP;
+      if (type == 'cash') {
+        this.filteredAccounts = this.cashAccounts;
+      } else if (type == 'delegate') {
+        this.filteredAccounts = this.delegates;
+      } else if (type == 'vendor') {
+        this.filteredAccounts = this.vendors;
+      }
+
   }
 
 }

@@ -30,7 +30,7 @@
 </div>
 <div class="form-check form-check-inline">
   <input class="form-check-input"
- (change)="onTypeChange('')" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+ (change)="onTypeChange('all')" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
   <label class="form-check-label" for="inlineRadio2">{{ 'ALL' | translate }}</label>
 </div>
 
@@ -57,7 +57,7 @@
   <table class="table mt-3">
     <thead>
       <tr>
-        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">ID</th>
         <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'ADDRESS' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'MANAGER' | translate }}</th>
@@ -67,7 +67,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let store of filteredStores | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
-        <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+        <th scope="row">{{ store.id}}</th>
         <td>{{ store.name }}</td>
         <td>{{ store.address_description }}</td>
         <td>{{ store.manager_name }}</td>

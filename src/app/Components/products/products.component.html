@@ -34,9 +34,9 @@
         class="form-control search w-25" 
         type="search" 
         placeholder="{{ 'SEARCH' | translate }}"
-                aria-label="Search" 
-        [(ngModel)]="searchTerm" 
-        (input)="searchProducts()"  
+        aria-label="Search" 
+        [(ngModel)]="searchQuery" 
+        (input)="onSearchChange()"  
       >
       </div>
   </div>
@@ -45,8 +45,9 @@
       <thead>
           <tr>
               <th class="bg-light" scope="col">ID</th>
+              <th class="bg-light" scope="col">Barcode</th>
               <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'PRODUCT_UNIT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CATEGORY' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
@@ -55,8 +56,10 @@
       <tbody>
         <tr *ngFor="let product of filteredProducts; let i = index">
           <th scope="row">{{ product.id }}</th>
+          <td>{{ product.barcode }}</td>
+
           <td>{{ product.name }}</td>
-          <td>{{ product.product_unit?.name || 'N/A' }}</td>
+          <td>{{ product.productCategory.name || 'N/A' }}</td>
           <td>{{ product.stock || 'N/A' }}</td>
           <td>
             <img 
@@ -83,6 +86,46 @@
         </tr>
       </tbody>
   </table>
+
+
+    <!-- <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="text-muted">
+      {{ 'SHOWING' | translate }} 
+      {{ (currentPage - 1) * itemsPerPage + 1 }} 
+      {{ 'TO' | translate }} 
+      {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
+      {{ 'OF' | translate }} 
+      {{ totalItems }} 
+      {{ 'ENTRIES' | translate }}
+    </div>
+
+       <select 
+            [(ngModel)]="itemsPerPage" 
+            (ngModelChange)="onItemsPerPageChange()"
+            class="form-select form-select-sm" 
+            style="width: auto;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+    
+    <pagination-controls 
+      (pageChange)="onPageChange($event)"
+      [maxSize]="5"
+      [directionLinks]="true"
+      [autoHide]="true"
+      [responsive]="true"
+      previousLabel="{{ 'PREVIOUS' | translate }}"
+      nextLabel="{{ 'NEXT' | translate }}"
+      screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+      screenReaderPageLabel="{{ 'PAGE' | translate }}"
+      screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+    </pagination-controls>
+  </div> -->
+
+
 </div>
 
 <div class="modal fade" id="ImportForm" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">

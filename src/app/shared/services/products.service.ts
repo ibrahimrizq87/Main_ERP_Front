@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -45,8 +45,27 @@ export class ProductsService {
   addProduct(productData: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/products`, productData ,{ headers:this.getHeadersWithToken() }) ;
   }
-  viewAllProducts(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/products`,{ headers:this.getHeadersWithToken()  });
+  viewAllProducts(
+
+// type: string = 'all',
+      name: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+
+      let params = new HttpParams();
+                  // if (type !== 'all') params = params.set('filter[type]', type);
+                  if (name !== '') params = params.set('search', name);
+                  if (page !== 1) params = params.set('page', page);
+                  if (perPage !== 10) params = params.set('per_page', perPage);
+
+
+                  
+    return this._HttpClient.get(`${this.baseURL}/general/products`,{
+       headers:this.getHeadersWithToken(),
+       params: params
+      });
   }
 
   getSerialNumbers(productId:string , storeId:string): Observable<any> {
@@ -111,8 +130,21 @@ export class ProductsService {
   }
   
 
-  getProductsForOperations(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/products/get-products-for-operations`,{ headers: this.getHeadersWithToken() });
+  getProductsForOperations(
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 10
+  ): Observable<any> {
+      let params = new HttpParams();
+
+      if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+      if (page !== 1) params = params.set('page', page);
+      if (perPage !== 10) params = params.set('per_page', perPage);
+
+    return this._HttpClient.get(`${this.baseURL}/general/products/get-products-for-operations`,{ 
+      headers: this.getHeadersWithToken(),
+      params: params 
+    });
   }
 
 

@@ -8,11 +8,15 @@ import { Modal } from 'bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../shared/services/permission.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [RouterLinkActive, RouterModule,CommonModule,TranslateModule,FormsModule,ReactiveFormsModule],
+  imports: [RouterLinkActive, RouterModule,CommonModule,TranslateModule,FormsModule,ReactiveFormsModule,NgxPaginationModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -20,9 +24,16 @@ export class ProductsComponent implements OnInit {
 
   Products: any[] = []; 
   filteredProducts: any[] = [];  
-  searchTerm: string = ''; 
+  // searchTerm: string = ''; 
   
-  // productImportForm: FormGroup;
+  onSearchChange() {
+    this.searchSubject.next(this.searchQuery);
+  }
+
+  
+  private searchSubject = new Subject<string>();
+  searchQuery: string = '';
+  
   
   isLoading =false;
   isSubmitted=false;
@@ -35,7 +46,13 @@ export class ProductsComponent implements OnInit {
     });
   constructor(private _ProductsService: ProductsService, private router: Router,
     private toastr:ToastrService , public _PermissionService: PermissionService
-  ) {}
+  ) {
+    this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadProducts(); 
+    });
+  }
 
   ngOnInit(): void {
     this.loadProducts(); 
@@ -138,7 +155,12 @@ const name = this.productImportForm.get('file_name')?.value || 'products templat
   
   
   loadProducts(): void {
-    this._ProductsService.viewAllProducts().subscribe({
+    this._ProductsService.viewAllProducts(
+
+      this.searchQuery, // search query
+      1, // page number
+      20 // items per page
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -183,13 +205,13 @@ const name = this.productImportForm.get('file_name')?.value || 'products templat
 
 
 
-  searchProducts(): void {
-    this.filteredProducts = this.Products.filter(product => 
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
-      product.unit?.unit.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      product.product_dimension.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
+  // searchProducts(): void {
+  //   this.filteredProducts = this.Products.filter(product => 
+  //     product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+  //     product.unit?.unit.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+  //     product.product_dimension.toLowerCase().includes(this.searchTerm.toLowerCase())
+  //   );
+  // }
 }
 
 

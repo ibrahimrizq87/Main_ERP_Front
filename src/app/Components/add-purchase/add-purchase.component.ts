@@ -140,12 +140,6 @@ export class AddPurchaseComponent implements OnInit {
   currencyPrice() {
     const currencyPriceValue = this.purchasesBillForm.get('currency_price_value')?.value || 0;
     this.currencyPriceValue = currencyPriceValue;
-    // if ((currencyPriceValue * this.totalPayed) > this.total) {
-    //   this.purchasesBillForm.patchValue({ payed_price: this.total / currencyPriceValue });
-    // }
-    // if(this.currencyPriceValue>0){
-    //   this.totalPayed = (this.purchasesBillForm.get('payed_price')?.value || 0) * this.currencyPriceValue; 
-    // }
   }
   loadDefaultCurrency() {
     this._CurrencyService.getDefultCurrency().subscribe({
@@ -165,15 +159,19 @@ export class AddPurchaseComponent implements OnInit {
       }
     });
   }
+
   loadSuppliers(): void {
-    this._AccountService.getAccountsByParent('621').subscribe({
+    this._AccountService.getAccountsByParent('621'
+      , this.searchQuery
+      , 1
+      , 20
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
-          const Suppliers = response.data;
-         
-
+          const Suppliers = response.data.accounts;
           this.vendors = Suppliers;
+          this.updateAccounts();
         }
       },
       error: (err) => {
@@ -184,12 +182,18 @@ export class AddPurchaseComponent implements OnInit {
 
   loadCashAccounts(): void {
 
-    this._AccountService.getAccountsByParent('111').subscribe({
+    this._AccountService.getAccountsByParent('111'
+       , this.searchQuery
+      , 1
+      , 20
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("CashAccounts", response)
-          const cashAccounts = response.data;
-           this.cashAccounts = cashAccounts;
+          const cashAccounts = response.data.accounts;
+          this.cashAccounts = cashAccounts;
+          this.updateAccounts();
+
         }
       },
       error: (err) => {
@@ -200,7 +204,12 @@ export class AddPurchaseComponent implements OnInit {
   }
 
   loadStores() {
-    this._StoreService.getAllStores().subscribe({
+    this._StoreService.getAllStores(
+      'all', 
+      this.searchQuery, 
+      1, 
+      20 
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -221,7 +230,10 @@ export class AddPurchaseComponent implements OnInit {
 
 
   loadProducts() {
-    this._ProductsService.getProductsForOperations().subscribe({
+    console.log('query ' ,this.ProductsearchQuery)
+    this._ProductsService.getProductsForOperations(
+      this.ProductsearchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           this.Products = response.data.products;
@@ -667,6 +679,7 @@ export class AddPurchaseComponent implements OnInit {
     this.closeModal('checkModel');
   }
   closeModal(modalId: string) {
+    this.searchQuery = '';
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
       const modal = Modal.getInstance(modalElement);
@@ -676,11 +689,10 @@ export class AddPurchaseComponent implements OnInit {
 
 
   openModal(modalId: string, type: string) {
+    this.searchQuery = '';
     if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
 
       this.selectedPopUP = type;
-      // this.popUpIndex = index;
-      // const entryItem = this.entryForm.get('entryItems') as FormArray;
       if (type == 'cash') {
         this.filteredAccounts = this.cashAccounts;
       } else if (type == 'delegate') {
@@ -693,7 +705,6 @@ export class AddPurchaseComponent implements OnInit {
 
     }
 
-    // console.log('hrerererer');
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
       const modal = new Modal(modalElement);
@@ -707,22 +718,31 @@ export class AddPurchaseComponent implements OnInit {
 
 
     if (this.selectedPopUP == 'cash') {
-      this.filteredAccounts = this.cashAccounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-
-    } else if (this.selectedPopUP == 'delegate') {
-      this.filteredAccounts = this.delegates.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      // this.filteredAccounts = this.cashAccounts.filter(account =>
+      //   account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      // );
+this.loadCashAccounts();
     } else if (this.selectedPopUP == 'vendor') {
-      this.filteredAccounts = this.vendors.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      // this.filteredAccounts = this.vendors.filter(account =>
+      //   account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      // );
+
+      this.loadSuppliers();
     }
 
   }
+updateAccounts(){
+   if (this.selectedPopUP == 'cash') {
+    
+      this.filteredAccounts = this.cashAccounts;
 
+    } else if (this.selectedPopUP == 'vendor') {
+      this.filteredAccounts = this.vendors;
+      // console.log('hererererer');
+      // console.log(this.filteredAccounts);
+      // console.log(this.vendors);
+    }
+}
 
 
   selectAccount(account: Account) {
@@ -774,36 +794,21 @@ export class AddPurchaseComponent implements OnInit {
       if (this.selectedCheck) {
         if (this.selectedCheck.currency.id != this.currency.id) {
           this.needCurrecyPrice = true;
-
           this.forignCurrencyName = this.selectedCheck.currency.name;
-
         }
       }
-
-
     }
+
     this.cdr.detectChanges();
     this.closeModal('shiftModal');
   }
 
   filteredProducts: any;
-
   ProductsearchQuery = '';
   selectedProduct: any;
+
   onProductSearchChange() {
-    const query = this.ProductsearchQuery.toLowerCase();
-    this.filteredProducts = this.Products.filter(product => {
-
-      const productMatches = product.product.name.toLowerCase().includes(query) ||
-        product.product.id.toString().includes(query);
-
-
-      const branchMatches = product.branches.some((branch: { code: { toString: () => string | string[]; }; stock: { toString: () => string | string[]; }; }) =>
-        branch.code.toString().includes(query) ||
-        branch.stock.toString().includes(query));
-
-      return productMatches || branchMatches;
-    });
+  this.loadProducts();
   }
   getDeterminants(item: AbstractControl<any, any>): FormArray {
     return item.get('determinants') as FormArray;
