@@ -163,6 +163,7 @@ import { StocktakingsComponent } from './Components/stocktakings/stocktakings.co
 import { AddStocktakingsComponent } from './Components/add-stocktakings/add-stocktakings.component';
 import { UpdateStocktakingsComponent } from './Components/update-stocktakings/update-stocktakings.component';
 import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-stocktakings.component';
+import { CashierComponent } from './Components/cashier/cashier.component';
 
 
 export const routes: Routes = [
@@ -171,6 +172,7 @@ export const routes: Routes = [
     { path: "register", component: RegisterComponent },
     { path: "loginClient", component: LoginClientComponent },
     { path: "showProductClient/:id", component: ShowproductBranchesClientComponent },
+    {path:"cashier",component:CashierComponent},
     {
         path: "dashboard", component: DashboardComponent
         , children: [
