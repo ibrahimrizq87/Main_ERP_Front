@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5>{{ 'CASHIERS' | translate }}</h5>
+        <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{'CASHIERS' | translate}} </span>
+    </div>
+    <a *ngIf="_PermissionService.hasPermission('cashiers' , 'add_cashiers')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-cashier">
+        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    </a>
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">{{ 'CASHIER_LIST' | translate }}</span>
+            <input class="form-control search w-25" 
+            type="search" 
+            placeholder="search" 
+            aria-label="Search"
+            [(ngModel)]="searchQuery" 
+            (ngModelChange)="filterCashiers()">
+        </div>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">{{ 'CASHIER_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACCOUNT' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cashier of Cashiers; let i = index">
+                <th scope="row">{{cashier.id}}</th>
+                <td>{{ cashier.user.name }}</td>
+                <td>{{ cashier.store.name }}</td>
+                <td>{{ cashier.account.name }}</td>
+                <td class="d-flex justify-content-center gap-3 align-items-center">
+                    <a *ngIf="_PermissionService.hasPermission('cashiers' , 'edit_cashiers')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-cashiers', cashier.id]">
+                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CASHIER' | translate }}"></i>
+                    </a>
+                    <i *ngIf="_PermissionService.hasPermission('cashiers' , 'delete_cashiers')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCashier(cashier.id)" title="{{ 'DELETE_CASHIER' | translate }}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

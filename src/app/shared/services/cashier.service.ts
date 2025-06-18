@@ -44,5 +44,68 @@ addBillCasier(storeData: FormData): Observable<any> {
 getBillCashier(): Observable<any> {
   return this._HttpClient.get(`${this.baseURL}/sales/bill_cashier` ,{ headers:this.getHeadersWithToken() });
 }
-
+   
+addCashier(cashierData: FormData): Observable<any> {
+  return this._HttpClient.post(`${this.baseURL}/general/manage-cashiers`, cashierData ,{ headers:this.getHeadersWithToken() });
 }
+
+
+  getAllCashier(): Observable<any> {
+
+  return this._HttpClient.get(`${this.baseURL}/general/manage-cashiers`, { headers: this.getHeadersWithToken() });
+}
+
+deleteCashier(cashierId: string): Observable<any> {
+  return this._HttpClient.delete(`${this.baseURL}/general/manage-cashiers/${cashierId}`, { headers:this.getHeadersWithToken() });
+}
+
+  showCashierById(id:any): Observable<any>{
+  return this._HttpClient.get(this.baseURL+"/general/manage-cashiers/"+id, { headers:this.getHeadersWithToken()  });
+}
+
+
+//   getAllStores(
+//       type: string = 'all',
+//       name: string = '',
+//       page: number = 1,
+//       perPage: number = 20
+//   ): Observable<any> {
+//    let params = new HttpParams();
+//               if (type !== 'all') params = params.set('filter[type]', type);
+//               if (name !== '') params = params.set('search', name);
+//               if (page !== 1) params = params.set('page', page);
+//               if (perPage !== 10) params = params.set('per_page', perPage);
+
+//     return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ 
+//       headers:this.getHeadersWithToken(),
+//       params: params
+//      });
+//   }
+
+
+
+//   return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
+// }
+
+//   showStoreById(id:any): Observable<any>{
+//     return this._HttpClient.get(this.baseURL+"/general/stores/"+id, { headers:this.getHeadersWithToken()  });
+//   }
+//   updateStore(store_id: string, storeData: FormData): Observable<any> {
+//     storeData.append('_method', 'PUT');
+//     return this._HttpClient.post(`${this.baseURL}/general/stores/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
+//   }
+
+// getProductBranchStoreByStoreId(storeId: string): Observable<any> {
+//   return this._HttpClient.get(`${this.baseURL}/general/product-branch-stores/get-by-store/${storeId}`, { headers:this.getHeadersWithToken() });
+// }
+}
+
+
+   
+  
+    
+  
+  
+  
+
+ 

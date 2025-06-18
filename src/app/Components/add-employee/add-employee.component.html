@@ -408,3 +408,39 @@
   </form>
 
 </div>
+
+
+
+
+
+<div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+            <tbody>
+            <tr *ngFor="let account of accounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td >{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { EntryDocumentService } from '../../shared/services/entry-documnet.service';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-document-entry',
@@ -18,7 +19,8 @@ export class DocumentEntryComponent implements OnInit {
   status ='waiting';
 
   constructor(private _EntryDocumentService: EntryDocumentService , private router: Router , 
-    private route: ActivatedRoute,private toastr:ToastrService
+    private route: ActivatedRoute,private toastr:ToastrService,
+    public _PermissionService: PermissionService
   ) {}
 
   ngOnInit(): void {

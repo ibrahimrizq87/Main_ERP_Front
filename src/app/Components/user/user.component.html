@@ -47,10 +47,16 @@
             [(ngModel)]="selectedRole" 
             (change)="onSearch()"
           >
-            <option value="">Select Role</option>
-            <option *ngFor="let role of roles" [value]="role.name">
+
+          <!-- 'client','employee','admin','delegate' -->
+            <option value="admin"> admin </option>
+            <option value="employee"> employee </option>
+            <option value="client"> client </option>
+            <option value="delegate"> delegate </option>
+
+            <!-- <option *ngFor="let role of roles" [value]="role.name">
               {{ role.name }}
-            </option>
+            </option> -->
           </select>
         </div>
         
@@ -77,6 +83,8 @@
         <th class="bg-light" scope="col">Username</th>
         <th class="bg-light" scope="col">Name</th>
         <th class="bg-light" scope="col">Image</th>
+        <th class="bg-light" scope="col">Role</th>
+
         <th class="bg-light" scope="col">Actions</th>
       </tr>
     </thead>
@@ -93,6 +101,8 @@
             height="60" 
           />
         </td>
+                <td>{{ user.admin_role ? user.admin_role : "---" }}</td>
+
         <td>
           <div class="d-flex justify-content-around align-items-center">
             <a class="nav-link" [routerLink]="['/dashboard/showUser', user.id]">

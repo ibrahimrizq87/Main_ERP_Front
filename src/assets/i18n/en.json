@@ -1,7 +1,10 @@
 {
-
-
-    "TOTAL_PAID": "Total Paid",
+  "CASHIERS_MANGAMENT": "Cashiers Management",
+  "CASHIERS": "Cashiers",
+  "CASHIER_NAME": "Cashier Name",
+  "CASHIER_LIST": "Cashier List",
+  "EMPLOYEE_SYSTEM": "Employee System",
+  "TOTAL_PAID": "Total Paid",
   "PRICE_OVERRIDE": "Price Override",
   
   "employee_name": "Employee Name",

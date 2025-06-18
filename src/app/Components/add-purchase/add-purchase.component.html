@@ -377,6 +377,9 @@
   </form>
 </div>
 
+
+
+
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -393,14 +396,14 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>#</th>
+              <th>ID</th>
               <th>{{ 'mainAccountNav.accountName' | translate }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
               style="cursor: pointer;">
-              <td>{{ i + 1 }}</td>
+              <td>{{ account.id }}</td>
               <td>{{ account.name }}</td>
             </tr>
           </tbody>
@@ -471,6 +474,7 @@
               <th>Product ID</th>
               <th>Product Name</th>
               <th>Stock</th>
+              <!-- <th>Color</th> -->
               <th>Color</th>
               <th>determinants</th>
 
@@ -485,7 +489,9 @@
                 <td><strong>{{ product.product.id }}</strong></td>
                 <td>{{ product.product.name }}</td>
                 <td>{{ product.product.stock }}</td>
-                <td colspan="4">Main Product</td>
+                <td>{{ product.product.category.name }}</td>
+
+                <td colspan="3">Main Product</td>
               </tr>
 
               <!-- Branches -->

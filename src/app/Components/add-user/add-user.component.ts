@@ -1,30 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { AccountService } from '../../shared/services/account.service';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-add-user',
   standalone: true,
-  imports: [FormsModule,CommonModule,ReactiveFormsModule],
+  imports: [FormsModule,CommonModule,ReactiveFormsModule,TranslateModule],
+
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.css'
 })
 export class AddUserComponent implements OnInit {
   msgError: string = '';
   isLoading: boolean = false;
-  roles: any;
+  roles: Role[] = [];
+  accounts: any[] = [];
 
-  constructor(private _UserService:UserService , private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
+  constructor(private _AccountService:AccountService ,private _UserService:UserService,
+     private _Router: Router,private translate: TranslateService,
+     private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   }
   
   ngOnInit(): void {
     this.loadRoles();
+    this.loadAccounts();
+
+  }
+  loadAccounts() {
+    this._AccountService.getAccountsByParent('111').subscribe({
+      next: (data) => {
+        this.accounts = data;
+      },
+      error: (err) => {
+        console.error('Failed to load accounts', err);
+      }
+    });
+  }
+  selectedRole: any;
+  onRoleChange(event: any) {
+    const selectedRole = event.target.value;
+    this.roles.forEach(role => {
+      this.selectedRole = role.id === selectedRole;
+    });
+    console.log('Selected role:', this.selectedRole);
   }
 
   userForm: FormGroup = new FormGroup({
@@ -86,4 +112,37 @@ export class AddUserComponent implements OnInit {
       }
     });
   }
+onSearchChange(){
+
+}
+
+
+  closeModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+searchQuery = '';
+
+
+onSearchChanged(event: String) {
+  console.log(event);
+}
+
+selectAccount(account: any) {
+  console.log(account);
+}
+
+
+
+}
+
+
+
+interface Role{
+  id: number;
+  name: string;
 }

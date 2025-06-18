@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
@@ -53,4 +53,28 @@ export class EmployeeService {
     storeData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/general/employees/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
   }
+
+
+
+  
+
+  getEmployeesForPopup(
+
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+ let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/employees/get-for-popup`, { 
+      headers: this.getHeadersWithToken(),
+      params: params})
+  }
+
 }

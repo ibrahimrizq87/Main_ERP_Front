@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { throwError, Observable, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -52,8 +52,23 @@ export class AccountService {
     return this._HttpClient.post(`${this.baseURL}/admin/accounts`, accountData, { headers: this.getHeadersWithToken() })
   }
 
-  getAccountsByParent(id: string): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/accounts/get-children/${id}`, { headers: this.getHeadersWithToken() })
+  getAccountsByParent(id: string,
+
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+ let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/get-children/${id}`, { 
+      headers: this.getHeadersWithToken(),
+      params: params})
   }
 
   showAccountById(id: any): Observable<any> {

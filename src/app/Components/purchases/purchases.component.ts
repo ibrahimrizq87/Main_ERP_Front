@@ -125,7 +125,7 @@ export class PurchasesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log(response.data);
-          this.purchases = response.data; 
+          this.purchases = response.data.bills; 
           this.filteredPurchases = this.purchases;
         }
       },

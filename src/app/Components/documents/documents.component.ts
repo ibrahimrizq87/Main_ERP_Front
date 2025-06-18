@@ -8,6 +8,7 @@ import { PaymentDocumentService } from '../../shared/services/pyment_document.se
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../shared/services/permission.service';
 
 @Component({
   selector: 'app-documents',
@@ -38,7 +39,9 @@ export class DocumentsComponent {
     , private fb: FormBuilder,
     private _AccountService: AccountService,
     private _PaymentDocumentService: PaymentDocumentService
-    , private router: Router,private toastr:ToastrService
+    , private router: Router,private toastr:ToastrService,
+        public _PermissionService: PermissionService
+    
   ) {
 
    

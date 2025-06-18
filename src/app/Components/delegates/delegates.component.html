@@ -5,7 +5,7 @@
             {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'DELEGATES' | translate }}
         </span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-delegate">
+    <a *ngIf="_PermissionService.hasPermission('delegates' , 'add_delegates')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-delegate">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -21,7 +21,7 @@
                 [(ngModel)]="searchTerm" 
                 (input)="filterCurrencies()" 
                 placeholder="{{ 'SEARCH' | translate }}"
-                                aria-label="Search">
+                aria-label="Search">
         </div>
     </div>
 
@@ -51,10 +51,10 @@
                   </td>
                 <!-- <td>{{ currency.value }}</td> -->
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-delegate', currency.id]">
+                    <a *ngIf="_PermissionService.hasPermission('delegates' , 'edit_delegates')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-delegate', currency.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CURRENCY' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCurrency(currency.id)" title="{{ 'DELETE_CURRENCY' | translate }}"></i>
+                    <i  *ngIf="_PermissionService.hasPermission('delegates' , 'delete_delegates')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCurrency(currency.id)" title="{{ 'DELETE_CURRENCY' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

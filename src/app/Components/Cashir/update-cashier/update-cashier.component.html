@@ -1,0 +1,171 @@
+<div class="mt-3 mb-3">
+    <h5 class="large-text">{{ 'MANAGE_CASHIERS' | translate }}</h5>
+    <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CASHIERS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CASHIERS' | translate }}</span>
+  </div>
+
+
+
+  <div class="mt-4 mb-4">
+    <div class="container">
+        <div class="row">
+        
+    
+                  <div class="form-group col-md-6">
+                    <label for="name"  class="form-label large-text">{{ 'EMPLOYEE' | translate }}</label>
+
+                   <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('employeeModal')">
+                        {{ selectedEmployee ? selectedEmployee.name : ('SELECT_EMPLOYEE' | translate) }}
+                      </button>
+
+
+
+
+                  </div>
+
+
+                   <div class="form-group col-md-6">
+                    <label for="name"  class="form-label large-text">{{ 'CASH_BOX_ACCOUNT' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('accountModal')">
+                        {{ selectedAccount ? selectedAccount.name : ('SELECT_CASH_ACCOUNTS' | translate) }}
+                      </button>
+                  </div>
+
+
+
+                   <div class="form-group col-md-6">
+                    <label for="name"  class="form-label large-text">{{ 'STORE' | translate }}</label>
+                   <button type="button" class="btn btn-outline-primary w-100"
+                        (click)="openModal('storeModal')">
+                        {{ selectedStore? selectedStore.name : ('SELECT_STORE' | translate) }}
+                      </button>
+                  </div>
+
+                
+          
+            </div>
+
+
+          <div class=" mt-4 mb-4">
+            <button (click)="handelSubmit()" class="btn btn-primary px-4 large-text">
+              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+            </button>
+         </div>
+      
+        </div>
+      
+    
+       
+      </div>
+
+
+
+
+
+
+
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('accountModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onAccountSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+            <tbody>
+            <tr *ngFor="let account of accounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td >{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="storeModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('storeModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onStoreSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+            <tbody>
+            <tr *ngFor="let account of stores; let i = index" (click)="selectStore(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td >{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('employeeModal')"></button>
+      </div>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+            <tbody>
+            <tr *ngFor="let account of employees; let i = index" (click)="selectEmployeee(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td >{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

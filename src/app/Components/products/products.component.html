@@ -4,7 +4,7 @@
       <h5>{{ 'MANAGE_PRODUCTS' | translate }}</h5>
       <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PRODUCTS' | translate }}</span>
   </div>
-  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProduct">
+  <a *ngIf="_PermissionService.hasPermission('products' , 'add_products')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProduct">
       <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
@@ -13,16 +13,12 @@
 
 
 
-<div class="container">
+<div *ngIf="_PermissionService.hasPermission('products' , 'edit_products')"  class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
   <a (click)="openModal('ImportForm')" class="btn btn-outline-info">
     export or import products
   </a>
 
-
-  <!-- <a (click)="openModal('ImportForm')" class="btn btn-outline-info ms-3">
-    import products
-  </a> -->
   </header>
 </div>
 
@@ -34,14 +30,13 @@
   <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="fw-bold">{{ 'PRODUCTS_LIST' | translate }}</span>
-        <!-- <input class="form-control search w-25" type="search" placeholder="Search..." aria-label="Search"> -->
         <input 
         class="form-control search w-25" 
         type="search" 
         placeholder="{{ 'SEARCH' | translate }}"
-                aria-label="Search" 
-        [(ngModel)]="searchTerm" 
-        (input)="searchProducts()"  
+        aria-label="Search" 
+        [(ngModel)]="searchQuery" 
+        (input)="onSearchChange()"  
       >
       </div>
   </div>
@@ -50,11 +45,10 @@
       <thead>
           <tr>
               <th class="bg-light" scope="col">ID</th>
+              <th class="bg-light" scope="col">Barcode</th>
               <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'PRODUCT_UNIT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CATEGORY' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
-
-
               <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
           </tr>
@@ -62,14 +56,11 @@
       <tbody>
         <tr *ngFor="let product of filteredProducts; let i = index">
           <th scope="row">{{ product.id }}</th>
+          <td>{{ product.barcode }}</td>
+
           <td>{{ product.name }}</td>
-          <td>{{ product.product_unit?.name || 'N/A' }}</td>
+          <td>{{ product.productCategory.name || 'N/A' }}</td>
           <td>{{ product.stock || 'N/A' }}</td>
-
-          <!-- <td>
-
-            <img [src]="product.image" alt="{{ product.name_ar }}" width="50" height="50" />
-          </td> -->
           <td>
             <img 
               [src]="product.cover_image ? product.cover_image : 'images/image.jpg'" 
@@ -78,16 +69,15 @@
               height="50" 
             />
           </td>
-          <!-- <td>{{ product.amount }}</td> -->
           <td >
             <div class="d-flex justify-content-around align-items-center">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProduct', product.id]">
+            <a *ngIf="_PermissionService.hasPermission('products' , 'details_products')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProduct', product.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
             </a>
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProduct', product.id]">
+            <a *ngIf="_PermissionService.hasPermission('products' , 'edit_products')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProduct', product.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
             </a>
-            <i
+            <i *ngIf="_PermissionService.hasPermission('products' , 'delete_products')" 
               class="fa-solid fa-trash-can btn1 bg-danger rounded"
               (click)="deleteProduct(product.id)"
             ></i>
@@ -96,11 +86,47 @@
         </tr>
       </tbody>
   </table>
+
+
+    <!-- <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="text-muted">
+      {{ 'SHOWING' | translate }} 
+      {{ (currentPage - 1) * itemsPerPage + 1 }} 
+      {{ 'TO' | translate }} 
+      {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
+      {{ 'OF' | translate }} 
+      {{ totalItems }} 
+      {{ 'ENTRIES' | translate }}
+    </div>
+
+       <select 
+            [(ngModel)]="itemsPerPage" 
+            (ngModelChange)="onItemsPerPageChange()"
+            class="form-select form-select-sm" 
+            style="width: auto;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+    
+    <pagination-controls 
+      (pageChange)="onPageChange($event)"
+      [maxSize]="5"
+      [directionLinks]="true"
+      [autoHide]="true"
+      [responsive]="true"
+      previousLabel="{{ 'PREVIOUS' | translate }}"
+      nextLabel="{{ 'NEXT' | translate }}"
+      screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+      screenReaderPageLabel="{{ 'PAGE' | translate }}"
+      screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+    </pagination-controls>
+  </div> -->
+
+
 </div>
-
-
-
-
 
 <div class="modal fade" id="ImportForm" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
@@ -110,9 +136,6 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('ImportForm')"></button>
       </div>
       <div class="modal-body">
-
-
-   
         <div class="mt-4 mb-4">
           <form [formGroup]="productImportForm" (ngSubmit)="handleForm()">
             <div class="container">
@@ -124,32 +147,23 @@
                       </div>
                       <div class="card-body pb-5">
                         <div class="row">
-
-
                           <div class="form-group col-md-6">
                             <label for="template" class="form-label">{{ 'TEMPLATE' | translate }}</label>
                             <select id="template" formControlName="template"   class="form-control">
                               <option value="1">{{ 'TEMPLATE1' | translate }}</option>
                               <option value="2">{{ 'TEMPLATE2' | translate }}</option>
                               <option value="3">{{ 'ALL_DATA_TEMPLATE' | translate }}</option>
-
                             </select>                             
-                           
                           </div>
-
-
                           <div class="form-group col-md-6">
                             <label for="file_name" class="form-label">{{ 'FILE_NAME' | translate }}</label>
                             <input type="text" id="file_name" formControlName="file_name"   class="form-control">
                           </div>
-
-
                           <div class="form-group col-md-6">
                             <label for="file" class="form-label">{{ 'FILE_TO_IMPORT' | translate }}</label>
                             <input id="file" formControlName="file" type="file" class="form-control"  accept=".xlsx,.csv"  required
                             (change)="onFileColorSelect($event)"
-                            [class.is-invalid]="productImportForm.get('file')?.errors && isSubmitted"
-                            />
+                            [class.is-invalid]="productImportForm.get('file')?.errors && isSubmitted"/>
                              
                             <div class="invalid-feedback" *ngIf="productImportForm.get('file')?.errors && isSubmitted">
                               <p >
@@ -175,10 +189,6 @@
               </div>
             </form>
           </div>
-          
-
-
-
       </div>
     </div>
   </div>

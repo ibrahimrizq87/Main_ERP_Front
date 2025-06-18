@@ -10,6 +10,8 @@ import { AccountService } from '../../shared/services/account.service';
 import { CashierService } from '../../shared/services/cashier.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Modal } from 'bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cashier',
@@ -561,7 +563,7 @@ export class CashierComponent implements OnInit {
 
       if (!error) {
 
-        this._SalesService.addSale(formData).subscribe({
+        this._CashierService.addBillCasier(formData).subscribe({
           next: (response) => {
             if (response) {
               this.toastr.success('تم اضافه الفاتوره بنجاح');

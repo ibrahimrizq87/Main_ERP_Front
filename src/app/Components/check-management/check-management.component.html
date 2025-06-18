@@ -5,10 +5,10 @@
           {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CHECKS' | translate }}
       </span>
   </div>
-  <a class="btn btn-info" routerLinkActive="active" routerLink="/dashboard/check-operation">
+  <a *ngIf="_PermissionService.hasPermission('checks' , 'edit_checks')"  class="btn btn-info" routerLinkActive="active" routerLink="/dashboard/check-operation">
       {{ 'CHECK_OPERATION' | translate }}
   </a>
-  <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addcheck">
+  <a  *ngIf="_PermissionService.hasPermission('banks' , 'add_banks')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addcheck">
       <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
   </a>
 </div>
@@ -95,19 +95,19 @@
               <td>{{ check.due_date }}</td>
               <td class="d-flex justify-content-around align-items-center">
 
-                <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,check.id)">
+                <a *ngIf="(status == 'waiting' || status == 'rejected')  && _PermissionService.hasPermission('checks' , 'edit_checks')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,check.id)">
                     approve
                   </a>
-                  <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',check.id)">
+                  <a  *ngIf="status == 'waiting' && _PermissionService.hasPermission('checks' , 'edit_checks')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',check.id)">
                     reject
                   </a>
-                  <a *ngIf="status == 'rejected' && check.number_of_moves<=1" class="btn btn-success" (click)="ManageChangeStatus('waiting',check.id)">
+                  <a *ngIf="status == 'rejected' && check.number_of_moves<=1 && _PermissionService.hasPermission('checks' , 'edit_checks')" class="btn btn-success" (click)="ManageChangeStatus('waiting',check.id)">
                     waiting
                   </a>
 
-                  <i class="fa-solid fa-trash-can btn1 bg-danger rounded" *ngIf="check.number_of_moves<=1" (click)="deleteCheck(check.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
+                  <i class="fa-solid fa-trash-can btn1 bg-danger rounded" *ngIf="status != 'approved'  && _PermissionService.hasPermission('checks' , 'delete_checks')" (click)="deleteCheck(check.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
 
-                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/check', check.id]">
+                  <a *ngIf="_PermissionService.hasPermission('checks' , 'details_checks')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/check', check.id]">
                       <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CHECK' | translate }}"></i>
                   </a>
               </td>

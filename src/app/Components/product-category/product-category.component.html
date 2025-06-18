@@ -3,7 +3,7 @@
         <h5>{{ 'MANAGE_PRODUCT_CATEGORIES' | translate }}</h5>
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'CATEGORIES' | translate }}</span>
     </div>
-    <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCategory">
+    <a *ngIf="_PermissionService.hasPermission('product_categories' , 'add_product_categories')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCategory">
         <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
     </a>
 </div>
@@ -33,10 +33,10 @@
                     <img *ngIf="category.image" [src]="category.image" alt="{{ category.name }}" class="img-thumbnail" style="width: 50px; height: 50px;">
                 </td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateproductCategory', category.id]">
+                    <a *ngIf="_PermissionService.hasPermission('product_categories' , 'edit_product_categories')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateproductCategory', category.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)"></i>
+                    <i *ngIf="_PermissionService.hasPermission('product_categories' , 'delete_product_categories')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)"></i>
                 </td>
             </tr>
         </tbody>

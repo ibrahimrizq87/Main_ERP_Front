@@ -12,6 +12,7 @@ import { CountryService } from '../../shared/services/country.service';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../../shared/services/employee.service';
 import { CompanyBranchService } from '../../shared/services/company-branch.service';
+import { AccountService } from '../../shared/services/account.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class AddEmployeeComponent {
   selectedCategory: any;
   selectedCurrency: any;
   currencies: any;
+  accounts: Account[] = [];
   employeeForm!: FormGroup;
   countries: any[] = [];
   categories: any;
@@ -50,7 +52,8 @@ export class AddEmployeeComponent {
     private _CurrencyService: CurrencyService,
     private _AccountCategoriesService: AccountCategoriesService,
     private toastr: ToastrService,
-    private _CompanyBranchService: CompanyBranchService
+    private _CompanyBranchService: CompanyBranchService,
+    private _AccountService: AccountService
   ) {
     this.employeeForm = this.fb.group({
 
@@ -171,14 +174,11 @@ onVacationDayChange(day: string, event: Event) {
 
 
   ngOnInit(): void {
-
-
     this.loadCurrency();
     this.loadCategories();
     this.loadCompanyBranches();
-
+    this.loadAccounts();
     this.loadCountries();
-
   }
 
   // Remove address
@@ -324,6 +324,22 @@ onVacationDayChange(day: string, event: Event) {
     });
   }
 
+
+    loadAccounts() {
+    this._AccountService.getAccountsByParent('111').subscribe({
+        next: (response) => {
+        if (response) {
+          console.log(response);
+          this.accounts = response.data;
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    
+    });
+  }
   onCountryChange(event: Event, index: number) {
 
     const selectedValue = (event.target as HTMLSelectElement).value;
@@ -376,6 +392,24 @@ onVacationDayChange(day: string, event: Event) {
     }
   }
   searchQuery: string = '';
+
+
+
+  onSearchChange(){
+
+}
+
+
+selectedAcount:any;
+
+
+onSearchChanged(event: String) {
+  console.log(event);
+}
+
+selectAccount(account: any) {
+  this.selectedAcount = account;
+}
 
 
 

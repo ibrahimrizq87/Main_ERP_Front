@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -55,8 +55,19 @@ export class ClientService {
   }
 
 
-  getClientsForSales(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/clients/get-clients-add-sales` ,{ headers:this.getHeadersWithToken() });
+  getClientsForSales(
+    searchTerm: string = '',
+          page: number = 1,
+          perPage: number = 10
+      ): Observable<any> {
+          let params = new HttpParams();
+    
+          if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+          if (page !== 1) params = params.set('page', page);
+          if (perPage !== 10) params = params.set('per_page', perPage);
+    return this._HttpClient.get(`${this.baseURL}/general/clients/get-clients-add-sales` ,{ 
+      headers:this.getHeadersWithToken(),
+    params:params });
   }
  
 }
