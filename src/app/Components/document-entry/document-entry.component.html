@@ -57,6 +57,75 @@
   
     </header>
   </div>
+
+
+
+
+<div class="container-fluid bg-white rounded shadow-sm p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'START_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.startDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'END_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.endDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'day'">
+      <label class="form-label mb-1">{{ 'DAY' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.day">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-1">{{ 'DATE_RANGE_TYPE' | translate }}</label>
+      <select class="form-select" 
+              [(ngModel)]="searchDateType" 
+              (change)="onSearchTypeChange()">
+        <option value="day">{{ 'DAY' | translate }}</option>
+        <option value="from_to_date">{{ 'FROM_TO_DATE' | translate }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container-fluid bg-white rounded shadow-sm p-3">
+  <div class="row g-2">
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_From' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceFrom">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_To' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceTo">
+    </div>
+ 
+ 
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-primary w-100 py-2" 
+              (click)="loadDocumentEntry(status)">
+        <i class="fa-solid fa-search me-1"></i>
+        {{ 'Search' | translate }}
+      </button>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-outline-secondary w-100 py-2" 
+              (click)="clearSerachFields()">
+        <i class="fa-solid fa-eraser me-1"></i>
+        {{ 'Clear' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
   
 
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
@@ -72,7 +141,7 @@
             <tr>
               <th class="bg-light" scope="col">#</th>
               <th class="bg-light" scope="col">{{ 'paymentDocuments.DATE' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'paymentDocuments.DELEGATE' | translate }}</th>
+              <!-- <th class="bg-light" scope="col">{{ 'paymentDocuments.DELEGATE' | translate }}</th> -->
               <th class="bg-light" scope="col">{{ 'paymentDocuments.AMOUNT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'paymentDocuments.ACTIONS' | translate }}</th>
             </tr>
@@ -81,7 +150,7 @@
             <tr *ngFor="let entry of DocumentEntry; let i = index">
                 <th scope="row">{{ entry.id }}</th>
                 <td>{{ entry.date }}</td>
-                <td>{{ entry.delegate ? entry.delegate.name : '--' }}</td>
+                <!-- <td>{{ entry.delegate ? entry.delegate.name : '--' }}</td> -->
                 <td>{{ entry.amount }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
 

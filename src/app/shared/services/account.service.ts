@@ -71,6 +71,28 @@ export class AccountService {
       params: params})
   }
 
+
+
+  getAccountsByParentIndex(id: string,
+
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+ let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/get-children-index/${id}`, { 
+      headers: this.getHeadersWithToken(),
+      params: params})
+  }
+
+
   showAccountById(id: any): Observable<any> {
     return this._HttpClient.get(this.baseURL + "/general/accounts/" + id, { headers: this.getHeadersWithToken() });
   }

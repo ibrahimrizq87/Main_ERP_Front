@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -40,8 +40,19 @@ export class VendorService {
   addVendor(storeData: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/vendors`, storeData ,{ headers:this.getHeadersWithToken() });
   }
-  getAllVendors(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/vendors` ,{ headers:this.getHeadersWithToken() });
+  getAllVendors(
+        searchTerm: string = '',
+          page: number = 1,
+          perPage: number = 10
+
+  ): Observable<any> {
+     let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 10) params = params.set('per_page', perPage);
+    return this._HttpClient.get(`${this.baseURL}/general/vendors` ,{ headers:this.getHeadersWithToken(),
+      params:params
+     });
   }
   deleteVendor(storeId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/vendors/${storeId}`, { headers:this.getHeadersWithToken() });

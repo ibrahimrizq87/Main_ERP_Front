@@ -225,7 +225,7 @@ export class AddDocumentEntryComponent implements OnInit {
     if (this.entryForm.valid && this.entryItems.length>1 && this.totalDifference == 0 &&(this.needCurrecyPrice == false || this.entryForm.get('currency_value')?.value != null)) {
       this.isLoading = true;
 
-
+console.log(this.entryForm.get('amount')?.value);
 
       const formData = new FormData();
       formData.append('manual_reference', this.entryForm.get('manual_reference')?.value || '');
@@ -234,6 +234,7 @@ export class AddDocumentEntryComponent implements OnInit {
       formData.append('currency_id', this.entryForm.get('currency_id')?.value );
       formData.append('delegate_id', this.entryForm.get('delegate_id')?.value || '');
       formData.append('note', this.entryForm.get('note')?.value || '');
+      formData.append('amount', this.totalCredit.toString() );
 
       if(this.entryForm.get('currency_value')?.value){
         

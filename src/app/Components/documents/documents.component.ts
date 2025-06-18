@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../shared/services/permission.service';
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-documents',
@@ -35,6 +36,9 @@ export class DocumentsComponent {
   searchQuery: string = ''; 
   parent_accounts_company: any;
   type: string | null = '';
+
+
+  
   constructor(private route: ActivatedRoute
     , private fb: FormBuilder,
     private _AccountService: AccountService,
@@ -43,14 +47,58 @@ export class DocumentsComponent {
         public _PermissionService: PermissionService
     
   ) {
-
+ this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadAllDocuments();
+    });
    
 
   }
 
+ onSearchChange() {
+      this.searchSubject.next(this.searchQuery);
+    }
+  
+  
+    private searchSubject = new Subject<string>();
+
+   searchDateType ='day';
+
+  filters = {
+    // vendorName:'',
+    // paymentType: 'all',
+    startDate: '',
+    endDate: '',
+    priceFrom: '',
+    priceTo: '',
+    day: this.getTodayDate(),
+  };
+
+    getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+    onSearchTypeChange(){
+    this.filters.startDate = '';
+    this.filters.endDate = '';
+    this.filters.day = '';
+  }
+
+  clearSerachFields(){
+    this.filters.priceFrom = '';
+    this.filters.priceTo = '';
+    // this.filters.paymentType = 'all';
+    // this.filters.vendorName ='';
+  }
+
+
 
   
-  changeStatus(status:string){
+changeStatus(status:string){
 this.status = status;
 this.router.navigate([`/dashboard/document/${this.type}/${status}`]);
 this.loadAllDocuments();
@@ -119,21 +167,18 @@ this.loadAllDocuments();
 
     this.parent_accounts = [6, 113, 117, 118];
     this.parent_accounts_company = [111, 112, 113, 117, 121, 211, 42, 6];
-    // this.getAccounts(this.parent_accounts, this.parent_accounts_company);
 
   }
   handleCreditNote() {
 
     this.parent_accounts = [6];
     this.parent_accounts_company = [211, 42, 513];
-    // this.getAccounts(this.parent_accounts, this.parent_accounts_company);
 
   }
   handleDebitNote() {
 
     this.parent_accounts = [6];
     this.parent_accounts_company = [112, 41];
-    // this.getAccounts(this.parent_accounts, this.parent_accounts_company);
 
   }
   get addDocumentRouterLink(): string {
@@ -150,13 +195,6 @@ this.loadAllDocuments();
     return '/dashboard/addDocument';
   }
   
-  // getParams() {
-  //   this.route.paramMap.subscribe(params => {
-  //     this.type = params.get('type');
-  //   });
-
-  // }
-
 
   onParamChange(): void {
     this.loadAllDocuments();
@@ -167,16 +205,23 @@ this.loadAllDocuments();
   loadAllDocuments(): void {
 
 
-    // if (this.type == 'credit_note'){
-    //   this.type = 'credit_note';
-    // }else if (this.type ==  'debit_note'){
-    //   this.type = 'debit_note';
-    // }
-    this._PaymentDocumentService.getDocumentsByType(this.type || '' , this.status).subscribe({
+    const startDate = this.filters.startDate || '';
+    const endDate = this.filters.endDate || '';
+    const priceFrom = this.filters.priceFrom || '';
+    const priceTo = this.filters.priceTo || '';
+    const day = this.filters.day || '';
+    this._PaymentDocumentService.getDocumentsByType(this.type || '' , this.status,
+this.searchQuery,
+      startDate,
+      endDate,
+      priceFrom,
+      priceTo,
+      day,
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
-          this.documents = response.data; 
+          this.documents = response.data.documents; 
         
         }
       },

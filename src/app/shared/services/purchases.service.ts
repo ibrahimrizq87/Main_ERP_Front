@@ -59,7 +59,7 @@ export class PurchasesService {
               let params = new HttpParams();
               if (vendorName !== '') params = params.set('vendor_name', vendorName);
               if (paymentType !== 'all') params = params.set('payment_type', paymentType);
-              if (priceFrom !== '') params = params.set('total_form', priceFrom);
+              if (priceFrom !== '') params = params.set('total_from', priceFrom);
               if (priceTo !== '') params = params.set('total_to', priceTo);
         
               if (startDate) params = params.set('startDate', startDate);

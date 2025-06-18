@@ -40,8 +40,20 @@ export class EmployeeService {
   addEmployee(storeData: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/employees`, storeData ,{ headers:this.getHeadersWithToken() });
   }
-  getAllEmployees(): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/employees` ,{ headers:this.getHeadersWithToken() });
+  getAllEmployees(
+       searchTerm: string = '',
+          page: number = 1,
+          perPage: number = 10
+
+  ): Observable<any> {
+    let params = new HttpParams();
+          if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+          if (page !== 1) params = params.set('page', page);
+          if (perPage !== 10) params = params.set('per_page', perPage);
+
+    return this._HttpClient.get(`${this.baseURL}/general/employees` ,{ headers:this.getHeadersWithToken(),
+      params:params
+     });
   }
   deleteEmployee(storeId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/employees/${storeId}`, { headers:this.getHeadersWithToken() });

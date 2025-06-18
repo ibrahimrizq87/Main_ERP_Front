@@ -18,9 +18,10 @@
             <input 
                 class="form-control search w-25" 
                 type="search" 
-                [(ngModel)]="searchTerm" 
+                (input)="onSearchChange()"
+                [(ngModel)]="searchQuery" 
                 placeholder="{{ 'SEARCH' | translate }}"
-                                aria-label="Search">
+                aria-label="Search">
         </div>
     </div>
 
@@ -38,7 +39,7 @@
             <tr *ngFor="let currency of vendors; let i = index">
                 <th scope="row">{{ currency.id }}</th>
                 <td>{{ currency.name }}</td>
-                <td>{{ currency.account_category.name }}</td>
+                <td>{{ currency.account_category }}</td>
 
                 
                 <td>

@@ -46,7 +46,7 @@ export class PurchasesComponent implements OnInit {
   }
 
 
-    onSearchTypeChange(){
+  onSearchTypeChange(){
     this.filters.startDate = '';
     this.filters.endDate = '';
     this.filters.day = '';
