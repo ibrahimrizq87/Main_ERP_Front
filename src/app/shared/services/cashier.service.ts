@@ -62,8 +62,33 @@ deleteCashier(cashierId: string): Observable<any> {
   showCashierById(id:any): Observable<any>{
   return this._HttpClient.get(this.baseURL+"/general/manage-cashiers/"+id, { headers:this.getHeadersWithToken()  });
 }
+// Route::get('/search-store-products',  'getMyStoreProducts');  
+// src/app/shared/services/cashier.service.ts
+getMyStoreProducts(searchTerm?: string): Observable<any> {
+  const params: any = {};
+  if (searchTerm && searchTerm.trim()) {
+    params.searchTerm = searchTerm;
+  }
+  return this._HttpClient.get(`${this.baseURL}/general/cashier/search-store-products`, {
+    headers: this.getHeadersWithToken(),
+    params: params
+  });
+}
 
+// add-cashier-to-myself
+// Route::get('/add-cashier-to-myself',  'addCashierToMyself'); 
+addCashierToMyself(): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/cashier/add-cashier-to-myself`, {
+    headers: this.getHeadersWithToken(),
+  });
+}
 
+addRecentProducts(productData: FormData): Observable<any> {
+  return this._HttpClient.post(`${this.baseURL}/general/cashier/add-recent-products`, productData, { headers: this.getHeadersWithToken() });
+}
+deleteRecentProducts(productId: string): Observable<any> {
+  return this._HttpClient.delete(`${this.baseURL}/general/cashier/delete-recent-products/${productId}`, { headers: this.getHeadersWithToken() });
+}
 //   getAllStores(
 //       type: string = 'all',
 //       name: string = '',

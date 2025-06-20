@@ -1,1 +1,87 @@
-<p>cashier works!</p>
+<!-- src/app/Components/cashier/cashier.component.html -->
+<div class="container-fluid">
+  <div class="row" style="height: 100vh;">
+    <!-- Left Sidebar -->
+    <div class="col-1 bg-danger d-flex flex-column justify-content-center gap-5 align-items-center p-2">
+      <button class="btn btn-light w-100" (click)="openRecentModal()">set recent</button>
+      <button class="btn btn-light w-100">back</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-8 d-flex flex-column justify-content-around p-3">
+      <div class="bg-success text-center text-dark p-2 rounded">
+        <h4>Recent Products</h4>
+        <div class="d-flex flex-wrap gap-3 justify-content-center p-3">
+          <!-- Product Cards -->
+          <div *ngFor="let product of recentProducts" class="card" style="width: 180px;">
+            <img [src]="product.product.image || 'https://via.placeholder.com/180'" class="card-img-top" alt="{{product.product.name}}" style="height: 120px; object-fit: cover;">
+            <div class="card-body p-2">
+              <h6 class="card-title mb-1 text-truncate">{{product.product.name}}</h6>
+              <p class="card-text mb-1"><small>Barcode: {{product.product.barcode}}</small></p>
+              <p class="card-text"><small>Stock: {{product.stock}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-info text-center text-dark p-5 rounded">
+        search products by barcode and name
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="col-3 bg-warning p-3 d-flex flex-column justify-content-start">
+      <div class="bg-success bg-opacity-25 p-3 mb-3 rounded"> </div>
+      <div class="bg-success bg-opacity-25 p-3 mb-3 rounded"> </div>
+      <div class="bg-success bg-opacity-25 p-3 mb-3 rounded"> </div>
+      <div class="text-dark text-center mb-3">invoice items</div>
+
+      <button class="btn btn-danger mb-3">total</button>
+      <button class="btn btn-primary" style="background-color: purple; border: none;">checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Products Modal -->
+<div class="modal fade" id="recentProductsModal" tabindex="-1" aria-labelledby="recentProductsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recentProductsModalLabel">Search Products</h5>
+        <button type="button" class="btn-close" (click)="closeRecentModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Search by name or barcode..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearchChange()"
+          >
+        </div>
+        
+        <div class="row">
+          <div *ngFor="let product of recentProducts" class="col-md-4 mb-3">
+            <div class="card h-100">
+              <img [src]="product.product.image || 'https://via.placeholder.com/180'" class="card-img-top" alt="{{product.product.name}}" style="height: 150px; object-fit: cover;">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.product.name }}</h5>
+                <p class="card-text"><small class="text-muted">Barcode: {{ product.product.barcode }}</small></p>
+               
+                <p class="card-text"><small>Stock: {{ product.stock }}</small></p>
+              </div>
+             
+            </div>
+          </div>
+          
+          <div *ngIf="searchQuery && recentProducts.length === 0" class="col-12 text-center py-5">
+            <h5>No products found for "{{ searchQuery }}"</h5>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeRecentModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
