@@ -148,6 +148,65 @@
               </li>
 
               </ng-container>
+
+
+
+
+
+               <li  class="nav-item nested">
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('FIXED_ASSETS')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> {{ 'FIXED_ASSETS' | translate }}</span>
+                  <i [ngClass]="isDropdownOpen('FIXED_ASSETS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+                
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('FIXED_ASSETS')">
+                    
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('121')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'FIXED_ASSETS_ACCOUNTS' | translate }} 
+                    </a>
+                  </li>
+
+
+                     <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('122')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'FIXED_ASSETS_COLLECTION' | translate }} 
+                    </a>
+                  </li>
+                
+                </ul>
+              </li>
+
+
+
+
+
+
+
+
+
+               <li  class="nav-item nested">
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('EXPENSES_ACCOUNT')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> {{ 'EXPENSES_ACCOUNT' | translate }}</span>
+                  <i [ngClass]="isDropdownOpen('EXPENSES_ACCOUNT') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+                
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('EXPENSES_ACCOUNT')">
+                    
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('42')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'EXPENSES_ACCOUNT' | translate }} 
+                    </a>
+                  </li>
+
+
+              
+                </ul>
+              </li>
+
+
+
+
             
 
 

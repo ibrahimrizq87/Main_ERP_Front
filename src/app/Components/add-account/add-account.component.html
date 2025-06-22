@@ -64,14 +64,30 @@
                    
                     <div class="alert alert-danger text-center">{{ 'NEED_TO_SELECT_CURRENCY' | translate }}</div>
                   </div>                
+                </div>  
+                
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+
+
+
+
+
+
+        <div *ngIf="isAssetAccount" class="row mt-3">
+        <div class="col-md-12">
+          <div class="card shadow em-card rounded-lg">
+            <div class="card-header bg-white text-black rounded-top pt-3 ">
+              <h5>{{ 'FIRXED_ASSETS_DETAILS' | translate }}</h5>
+            </div>
+            <div class="card-body pb-5">
+              <div class="row">
                
-
-                 
-           
-
-     
+             
                 
                 </div>
               </div>
@@ -86,199 +102,15 @@
             <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
           </button>
         </div>
+
+
+
+
+
+
+
       </div>
     </form>
   </div>
 
 
-
-<!-- 
-  <div *ngIf="additionalInformation" class="row mt-5">
-    <div class="col-md-12">
-      <div class="card shadow em-card rounded-lg">
-        <div class="card-header bg-white text-black rounded-top pt-3 ">
-          <h5>{{ 'ADDITIONAL_INFORMATION' | translate }}</h5>
-        </div>
-        <div class="card-body pb-5">
-          <div class="row">
-            <div class="col-md-12">
-              <div formArrayName="phones">
-                <div *ngFor="let phone of phones.controls; let i = index" [formGroupName]="i" class="form-group col-md-12">
-                  <label class="form-label">{{ 'PHONE' | translate }} {{ i + 1 }}</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" formControlName="phone" placeholder="{{ 'ENTER_PHONE_NUMBER' | translate }}" />
-                    <select class="form-select ms-2" formControlName="type">
-                      <option value="phone">{{ 'PHONE' | translate }}</option>
-                      <option value="mobile">{{ 'MOBILE' | translate }}</option>
-                    </select>
-                    <div class="input-group-append ms-3">
-                      <button type="button" class="btn btn-success" (click)="addPhoneNumber()">+</button>
-                      <button type="button" class="btn btn-danger ml-2" (click)="removePhoneNumber(i)">-</button>
-                    </div>
-                  </div>
-                  <div class="alert alert-danger" *ngIf="phones.at(i)?.get('phone')?.errors && phones.at(i)?.get('phone')?.touched">
-                    <p *ngIf="phones.at(i)?.get('phone')?.hasError('required')">{{ 'PHONE_REQUIRED' | translate }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h6 class="mt-4">{{ 'ADDRESS' | translate }}</h6>
-          <div formArrayName="addresses">
-            <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="form-group col-md-12">
-              <label class="form-label">{{ 'ADDRESS' | translate }} {{ i + 1 }}</label>
-              <div class="input-group">
-                <input type="text" class="form-control" formControlName="address" placeholder="{{ 'ENTER_ADDRESS' | translate }}" />
-                <select formControlName="city_id" class="form-control ms-2">
-                  <option value="" disabled>{{ 'SELECT_COUNTRY_AND_CITY' | translate }}</option>
-                  <optgroup *ngFor="let country of countries" [label]="country">
-                    <option *ngFor="let city of citiesByCountry[country]" [value]="city.id">{{ city.city }}</option>
-                  </optgroup>
-                </select>
-                <button type="button" class="btn btn-success ms-2" (click)="addAddress()">+</button>
-                <button type="button" class="btn btn-danger ms-2" (click)="removeAddress(i)">-</button>
-              </div>
-              <div *ngIf="address.get('address')?.hasError('required') && address.get('address')?.touched" class="text-danger">
-                {{ 'ADDRESS_REQUIRED' | translate }}
-              </div>
-              <div *ngIf="address.get('city_id')?.hasError('required') && address.get('city_id')?.touched" class="text-danger">
-                {{ 'CITY_REQUIRED' | translate }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6" *ngIf="currentAccount?.id == 623 || currentAccount?.id == 611">
-              <label class="form-label">{{ 'PRICE_CATEGORY' | translate }}</label>
-              <select class="form-control" formControlName="category_price_id">
-                <option>{{ 'SELECT_PRICE_CATEGORY' | translate }}</option>
-                <option *ngFor="let priceCategory of priceCategories" [value]="priceCategory.id">{{ priceCategory.name }}</option>
-              </select>
-            </div>
-            <div class="form-group col-md-6" *ngIf="currentAccount?.id == 611">
-              <label class="form-label">{{ 'DELEGATES' | translate }}</label>
-              <select class="form-control" formControlName="delegate_id">
-                <option>{{ 'SELECT_DELEGATES' | translate }}</option>
-                <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name_ar }}</option>
-              </select>
-            </div>
-            <div class="form-group col-md-6" (change)="onPayTypeChange($event)" *ngIf=" currentAccount?.id == 611">
-              <label class="form-label"> نوع الدفع </label>
-              <select class="form-control" formControlName="paid_type">
-                <option disabled> اختر نوع الدفع</option>
-                <option  value="invoice">بالفاتورة</option>
-                <option  value="monthly">شهريا</option>
-
-              </select>
-            </div>
-
-            <div class="form-group col-md-6" *ngIf="selectedPayType == 'invoice'">
-              <label class="form-label">عدد الفواتير</label>
-                <input id="invoice_number" formControlName="invoice_number" type="text" class="form-control" placeholder="عدد الفواتير المسموح به" />
-            </div>
-
-            <div *ngIf="currentAccount?.id == 622" class="col-md-12">
-              <div class="form-group">
-                <label for="id_number" class="form-label">{{ 'ID_NUMBER' | translate }}</label>
-                <input id="id_number" formControlName="id_number" type="text" class="form-control" placeholder="{{ 'ENTER_ID_NUMBER' | translate }}" />
-              </div>
-              <div class="form-group">
-                <label for="birthdate" class="form-label">{{ 'BIRTHDATE' | translate }}</label>
-                <input id="birthdate" formControlName="birthdate" type="date" class="form-control" placeholder="{{ 'ENTER_BIRTHDATE' | translate }}" />
-              </div>
-              <div class="form-group d-flex align-items-center gap-2">
-                <label for="on_job" class="form-label">{{ 'ON_JOB' | translate }}</label>
-                <input id="on_job" formControlName="on_job" type="checkbox" class="form-check-input" />
-              </div>
-              <div class="form-group">
-                <label for="salary" class="form-label">{{ 'SALARY' | translate }}</label>
-                <input id="salary" formControlName="salary" type="number" class="form-control" placeholder="{{ 'ENTER_SALARY' | translate }}" />
-              </div>
-              <div class="form-group">
-                <label for="start_date" class="form-label">{{ 'START_DATE' | translate }}</label>
-                <input id="start_date" formControlName="start_date" type="date" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label for="end_date" class="form-label">{{ 'END_DATE' | translate }}</label>
-                <input id="end_date" formControlName="end_date" type="date" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label for="start_work" class="form-label">{{ 'START_WORK' | translate }}</label>
-                <input id="start_work" formControlName="start_work" type="time" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label for="end_work" class="form-label">{{ 'END_WORK' | translate }}</label>
-                <input id="end_work" formControlName="end_work" type="time" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label for="name" class="form-label">{{ 'NAME' | translate }}</label>
-                <input id="name" formControlName="name" type="text" class="form-control" placeholder="{{ 'ENTER_NAME' | translate }}" />
-              </div>
-              <div class="form-group text-center col-md-12">
-                <label for="image" class="form-label"><i class="fa-solid fa-image"></i> {{ 'EMPLOYEE_IMAGE' | translate }}</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="image" (change)="onFileSelected($event)" accept="image/*" required style="display: none;">
-                  <label for="image" class="btn btn-image">
-                    <i class="fa-solid fa-file-arrow-up"></i> {{ 'CHOOSE_FILE' | translate }}
-                  </label>
-                  <span id="file-name">{{ selectedFile?.name || 'NO_FILE_CHOSEN' | translate }}</span>
-                </div>
-                <div class="alert alert-danger" *ngIf="accountForm.get('image')?.errors && accountForm.get('image')?.touched">
-                  <p *ngIf="accountForm.get('image')?.getError('invalidFileType')">{{ 'INVALID_IMAGE_FORMAT' | translate }}</p>
-                  <p *ngIf="accountForm.get('image')?.getError('fileTooLarge')">{{ 'FILE_TOO_LARGE' | translate }}</p>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-md-12" *ngIf="currentAccount?.id == 121">
-              <div class="form-group d-flex align-items-center gap-2">
-                <label for="exception_consumption" class="form-label">{{ 'EXCEPTION_CONSUMPTION' | translate }}</label>
-                <input id="exception_consumption" type="checkbox" formControlName="exception_consumption" class="form-check-input" (change)="toggleInputs($event)" />
-              </div>
-              <div class="form-group">
-                <label for="start_consumption" class="form-label">{{ 'START_CONSUMPTION' | translate }}</label>
-                <input id="start_consumption" type="date" class="form-control" formControlName="start_consumption" />
-              </div>
-              <div class="form-group">
-                <label for="number" class="form-label">{{ 'NUMBER' | translate }}</label>
-                <input id="number" type="number" class="form-control" placeholder="{{ 'ENTER_SALARY' | translate }}" formControlName="number" />
-              </div>
-              <div class="form-group">
-                <label for="percentage" class="form-label">{{ 'PERCENTAGE' | translate }}</label>
-                <input id="percentage" min="0" max="100" type="number" class="form-control" placeholder="{{ 'ENTER_SALARY' | translate }}" formControlName="percentage" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">{{ 'SELECT_DISPOSABLES' | translate }}</label>
-                <select class="form-control" formControlName="consumption_complex_account_id">
-                  <option>{{ 'SELECT_DISPOSABLES' | translate }}</option>
-                  <option *ngFor="let disosable of disosables" [value]="disosable.id">{{ disosable.name_ar }}</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">{{ 'SELECT_EXPENSES' | translate }}</label>
-                <select class="form-control" formControlName="consumption_expense_account_id">
-                  <option>{{ 'SELECT_EXPENSES' | translate }}</option>
-                  <option *ngFor="let expense of expenses" [value]="expense.id">{{ expense.name_ar }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-6" *ngIf="currentAccount?.id == 623">
-              <label class="form-label">{{ 'SELECT_STORE' | translate }}</label>
-              <select class="form-control" formControlName="store_id">
-                <option>{{ 'SELECT_STORE' | translate }}</option>
-                <ng-container *ngFor="let parent of hierarchicalStores">
-                  <option [ngValue]="parent.id">{{ parent.name_en }}</option>
-                  <ng-container *ngFor="let child of parent.children">
-                    <option [ngValue]="child.id">-{{ child.name_en }}</option>
-                    <ng-container *ngFor="let subChild of child.children">
-                      <option [ngValue]="subChild.id">--{{ subChild.name_en }}</option>
-                    </ng-container>
-                  </ng-container>
-                </ng-container>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
- -->

@@ -52,6 +52,12 @@ export class AccountService {
     return this._HttpClient.post(`${this.baseURL}/admin/accounts`, accountData, { headers: this.getHeadersWithToken() })
   }
 
+  calculateAssetExpenses(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/accounts/calculate-asset-expenses`, { headers: this.getHeadersWithToken() })
+  }
+
+  
+
   getAccountsByParent(id: string,
 
       searchTerm: string = '',
@@ -113,10 +119,7 @@ export class AccountService {
     return this._HttpClient.get(`${this.baseURL}/general/accounts/all-children`, { headers: this.getHeadersWithToken() });
   }
 
-  getParentForDocument(parent: number[], parent_company: number[]): Observable<any> {
-    return this._HttpClient.post(this.baseURL + "/general/accounts/get-accounts-for-document",
-      { "parent": parent, 'parent_company': parent_company }, { headers: this.getHeadersWithToken() });
-  }
+
 
 
 
@@ -177,6 +180,67 @@ export class AccountService {
   importAccountsData(data: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/accounts/import-accounts-data`, data, { headers: this.getHeadersWithToken() });
   }
+
+
+
+
+  getParentForDocument(parent: number[], parent_company: number[],
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+    let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+    return this._HttpClient.post(this.baseURL + "/general/accounts/get-accounts-for-document",
+      { "parent": parent, 'parent_company': parent_company }, { headers: this.getHeadersWithToken(),
+        params:params
+       });
+  }
+  
+  getAccountsCreditOrDebitNote(type:string,
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+     let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+    return this._HttpClient.get(this.baseURL + "/general/accounts/get-accounts-credit-debit-nots/"+type, { 
+      headers: this.getHeadersWithToken(),
+    params:params });
+  }
+
+
+
+  
+
+
+    getAccountsByParents(parents:number [],
+      searchTerm: string = '',
+      page: number = 1,
+      perPage: number = 20
+
+  ): Observable<any> {
+     let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (page !== 1) params = params.set('page', page);
+              if (perPage !== 20) params = params.set('per_page', perPage);
+
+      parents.forEach(parent => {
+        params = params.append('parent[]', parent); 
+      });    
+
+      return this._HttpClient.get(this.baseURL + "/general/accounts/get-accounts-parent-list", { 
+      headers: this.getHeadersWithToken(),
+      params:params 
+  });
+  }
+
 
 
 }

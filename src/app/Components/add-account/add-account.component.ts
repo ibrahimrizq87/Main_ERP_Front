@@ -42,6 +42,8 @@ export class AddAccountComponent implements OnInit {
   barentID:string='';
   currentAccount: any;
   inputsDisabled: boolean = false;
+  isAssetAccount: boolean = false;
+
   readonly maxImageSize = 2048 * 1024;
   constructor(private _AccountService: AccountService,
     private route: ActivatedRoute
@@ -84,6 +86,11 @@ export class AddAccountComponent implements OnInit {
       this.getAccount(this.type || '');
     }else{
       // this.loadGroupsType();
+    }
+
+
+    if(this.type == '121'){
+      this.isAssetAccount = true;
     }
   }
  
