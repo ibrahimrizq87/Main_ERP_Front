@@ -39,10 +39,10 @@ export class CashierService {
 
   
 addBillCasier(storeData: FormData): Observable<any> {
-  return this._HttpClient.post(`${this.baseURL}/sales/bill_cashier`, storeData ,{ headers:this.getHeadersWithToken() });
+  return this._HttpClient.post(`${this.baseURL}/general/cashier-invoices`, storeData ,{ headers:this.getHeadersWithToken() });
 }
 getBillCashier(): Observable<any> {
-  return this._HttpClient.get(`${this.baseURL}/sales/bill_cashier` ,{ headers:this.getHeadersWithToken() });
+  return this._HttpClient.get(`${this.baseURL}/general/cashier-invoices` ,{ headers:this.getHeadersWithToken() });
 }
    
 addCashier(cashierData: FormData): Observable<any> {
@@ -88,6 +88,10 @@ addRecentProducts(productData: FormData): Observable<any> {
 }
 deleteRecentProducts(productId: string): Observable<any> {
   return this._HttpClient.delete(`${this.baseURL}/general/cashier/delete-recent-products/${productId}`, { headers: this.getHeadersWithToken() });
+}
+// Route::get('/get-recent-products',  'getAllRecent');
+getAllRecent(): Observable<any> {
+  return this._HttpClient.get(`${this.baseURL}/general/cashier/get-recent-products`, { headers: this.getHeadersWithToken() });
 }
 //   getAllStores(
 //       type: string = 'all',
