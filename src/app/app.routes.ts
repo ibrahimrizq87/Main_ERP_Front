@@ -166,6 +166,10 @@ import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-s
 import { AddCashierComponent } from './Components/Cashir/add-cashier/add-cashier.component';
 import { CashiersComponent } from './Components/Cashir/cashiers/cashiers.component';
 import { UpdateCashierComponent } from './Components/Cashir/update-cashier/update-cashier.component';
+import { AddPurchaseOrderComponent } from './Components/add-purchase-order/add-purchase-order.component';
+import { PurchaseOrderComponent } from './Components/purchase-order/purchase-order.component';
+import { AddSaleOrderComponent } from './Components/add-sale-order/add-sale-order.component';
+import { SaleOrderComponent } from './Components/sale-order/sale-order.component';
 
 
 export const routes: Routes = [
@@ -186,6 +190,19 @@ export const routes: Routes = [
 
                 ]
             },
+
+
+
+            { path: "add-purchase-order", component: AddPurchaseOrderComponent },
+            { path: "purchase-order", component: PurchaseOrderComponent },
+
+            
+            { path: "add-sale-order", component: AddSaleOrderComponent },
+            { path: "sale-order", component: SaleOrderComponent },
+
+            
+
+
 
             { path: "add-return-purchase", component: AddReturnPurchaseBillComponent },
             { path: "return-purchase/:status", component: ReturnPurchaseBillsComponent },

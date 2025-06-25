@@ -456,7 +456,7 @@
             </ul>
           </li>
 
-          <li *ngIf="_PermissionService.hasAnyModule(['sale_bills' , 'return_sale_bills'])"  class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['sale_bills' , 'return_sale_bills', 'sale_order'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.SALES' | translate }}</span>
@@ -469,6 +469,15 @@
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.SALES_INVOICE' | translate }}
                 </a>
               </li>
+
+              
+              <li *ngIf="_PermissionService.hasModule('sale_order')" class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="sale-order">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'SALES_ORDER' | translate }}
+                </a>
+              </li>
+
+
               <li *ngIf="_PermissionService.hasModule('return_sale_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-sales/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_SALES' | translate }}
@@ -479,7 +488,7 @@
 
 
 
-          <li *ngIf="_PermissionService.hasAnyModule(['purchase_bills' , 'return_purchase_bills'])" class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['purchase_bills' , 'return_purchase_bills', 'purchase_order'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES_PURCHASES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.PURCHASES' | translate }}</span>
@@ -498,6 +507,14 @@
               <li *ngIf="_PermissionService.hasModule('return_purchase_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-purchase/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_PURCHASES_INVOICE' | translate }}
+                </a>
+              </li>
+
+
+
+               <li *ngIf="_PermissionService.hasModule('purchase_order')" class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="purchase-order">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'PURCHASES_ORDER' | translate }}
                 </a>
               </li>
 

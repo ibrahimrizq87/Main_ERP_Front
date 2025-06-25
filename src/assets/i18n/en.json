@@ -1,4 +1,6 @@
 { 
+  "SALES_ORDER"     : "sales order",
+    "PURCHASES_ORDER" : "purchases order",
   "EXPENSES_ACCOUNT":"expenses accounts",
   "FIRXED_ASSETS_DETAILS" : "fixed asset details",
   "ENTER_ACCOUNT_NAME_EN":"enter english account name",

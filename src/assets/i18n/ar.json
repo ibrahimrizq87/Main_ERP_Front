@@ -1,4 +1,6 @@
 {
+  "SALES_ORDER" : "ارسالية مبيعات" ,
+  "PURCHASES_ORDER" : "ارسالية مشتريات",
   "EXPENSES_ACCOUNT" : "المصارسف العمومية و الاداريه",
   "FIRXED_ASSETS_DETAILS":"تفاصيل الاصل الثابت",
   "ENTER_ACCOUNT_NAME_EN" : "ادخل اسم الحساب بالانجليزى",
