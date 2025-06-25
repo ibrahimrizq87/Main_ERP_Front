@@ -5,6 +5,7 @@ import { Modal } from 'bootstrap';
 import { Subject, debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cashier',
@@ -32,7 +33,7 @@ export class CashierComponent implements OnInit {
     type: 'purchase' // default value
   };
 
-  constructor(private _CashierService: CashierService) {
+  constructor(private _CashierService: CashierService,private toastr: ToastrService) {
     this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
@@ -136,7 +137,7 @@ export class CashierComponent implements OnInit {
   // Open checkout modal
   openCheckoutModal() {
     if (this.invoiceItems.length === 0) {
-      alert('Please add items to the invoice');
+      this.toastr.warning('Please add at least one item to the invoice before proceeding.', 'Warning');
       return;
     }
 
@@ -178,15 +179,14 @@ export class CashierComponent implements OnInit {
     this._CashierService.addBillCasier(invoiceData).subscribe({
       next: (response) => {
         console.log('Invoice saved successfully:', response);
-        alert('Invoice saved successfully!');
-        
+       this.toastr.success('Invoice saved successfully!', 'Success');
         // Reset form data
         this.resetCheckoutForm();
         this.closeCheckoutModal();
       },
       error: (error) => {
         console.error('Error saving invoice:', error);
-        alert('Error saving invoice. Please try again.');
+        this.toastr.error('Failed to save invoice. Please try again.', 'Error');
       }
     });
   }
@@ -239,7 +239,7 @@ export class CashierComponent implements OnInit {
 
   addToRecentProducts() {
     if (!this.positionInput) {
-      alert('Please enter a position');
+      this.toastr.warning('Please enter a position for the product.', 'Error');
       return;
     }
 

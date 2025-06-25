@@ -1,0 +1,497 @@
+/* Main container styles */
+.cashier-container {
+    height: 100vh;
+  }
+  
+  /* Sidebar styles */
+  .cashier-sidebar {
+    background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .cashier-sidebar-button {
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .cashier-sidebar-button:hover {
+    transform: translateY(-2px);
+  }
+  
+  .recent-button {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+  }
+  
+  .recent-button:hover {
+    box-shadow: 0 6px 20px rgba(52,152,219,0.4);
+  }
+  
+  .back-button {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+  }
+  
+  .back-button:hover {
+    box-shadow: 0 6px 20px rgba(231,76,60,0.4);
+  }
+  
+  /* Recent products section */
+  .recent-products-section {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .recent-products-header {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .recent-products-header h4 {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .recent-product-card {
+    width: 200px;
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+  }
+  
+  .recent-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  
+  .recent-product-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .recent-product-image-container img {
+    height: 130px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .recent-product-image-container img:hover {
+    transform: scale(1.05);
+  }
+  
+  .recent-product-order-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(46,204,113,0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .recent-product-card .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  
+  .recent-product-card .card-text {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+  }
+  
+  .recent-product-card .card-text:last-child {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .remove-button {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .add-to-cart-button {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .empty-recent-products {
+    color: #6c757d;
+  }
+  
+  /* Search and products section */
+  .search-products-section {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .search-input {
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    padding-left: 50px;
+    background: rgba(248,249,250,0.8);
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 15px rgba(52,152,219,0.2);
+  }
+  
+  .search-icon {
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7f8c8d;
+    font-size: 1.1em;
+  }
+  
+  .product-card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  
+  .product-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .product-image-container img {
+    height: 170px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-image-container img:hover {
+    transform: scale(1.05);
+  }
+  
+  .product-stock-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(52,152,219,0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .product-card .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  
+  .product-card .card-text {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+  }
+  
+  .product-card .card-text:last-child {
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  .add-to-invoice-button {
+    background: linear-gradient(45deg, #9b59b6, #8e44ad);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px;
+  }
+  
+  .no-products-found {
+    color: #6c757d;
+  }
+  
+  /* Invoice sidebar */
+  .invoice-sidebar {
+    background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .invoice-sidebar h4 {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .invoice-items-container {
+    max-height: 60vh;
+  }
+  
+  .invoice-item {
+    background: rgba(255,255,255,0.95);
+    border-left: 4px solid #3498db;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .invoice-item h6 {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  
+  .invoice-item p {
+    color: #7f8c8d;
+  }
+  
+  .invoice-item span:last-child {
+    color: #27ae60;
+    font-size: 1.1rem;
+  }
+  
+  .remove-item-button {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .quantity-button {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 35px;
+  }
+  
+  .empty-invoice {
+    color: rgba(255,255,255,0.5);
+  }
+  
+  .total-section {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  }
+  
+  .total-section h3 {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .checkout-button {
+    background: linear-gradient(45deg, #9b59b6, #8e44ad);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    padding: 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .checkout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(155,89,182,0.4);
+  }
+  
+  /* Checkout modal */
+  .checkout-modal {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+  
+  .checkout-modal-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 20px 20px 0 0;
+    border: none;
+  }
+  
+  .checkout-modal-body {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  }
+  
+  .checkout-input {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px;
+  }
+  
+  .checkout-modal-footer {
+    border: none;
+    padding: 20px;
+  }
+  
+  .cancel-button {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+  }
+  
+  .save-button {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+  }
+  
+  .order-summary {
+    background: rgba(255,255,255,0.8);
+    border: 2px solid #e9ecef;
+  }
+  
+  .order-summary-item {
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .order-summary-total {
+    border-top: 2px solid #3498db;
+  }
+  
+  /* Recent products modal */
+  .recent-products-modal {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+  
+  .recent-products-modal-header {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    border-radius: 20px 20px 0 0;
+    border: none;
+  }
+  
+  .recent-products-modal-body {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  }
+  
+  .position-input-container {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+  }
+  
+  .add-position-button {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 0 10px 10px 0;
+  }
+  
+  .cancel-position-button {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+    color: white;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .recent-modal-product-card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.9);
+  }
+  
+  .recent-modal-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  
+  .recent-modal-product-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .recent-modal-product-image-container img {
+    height: 160px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .recent-modal-product-image-container img:hover {
+    transform: scale(1.05);
+  }
+  
+  .recent-modal-product-stock-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(52,152,219,0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .recent-modal-product-card .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  
+  .recent-modal-product-card .card-text {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+  }
+  
+  .recent-modal-product-card .card-text:last-child {
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  .select-product-button {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .add-to-invoice-modal-button {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .no-products-found-modal {
+    color: #6c757d;
+  }
+  
+  .recent-products-modal-footer {
+    border: none;
+    padding: 20px;
+  }
+  
+  .close-recent-modal-button {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+  }
