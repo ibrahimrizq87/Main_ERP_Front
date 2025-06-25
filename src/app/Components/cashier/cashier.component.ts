@@ -6,11 +6,12 @@ import { Subject, debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import {  RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cashier',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule ,RouterModule],
   templateUrl: './cashier.component.html',
   styleUrl: './cashier.component.css'
 })
