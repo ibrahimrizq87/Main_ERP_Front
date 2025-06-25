@@ -1,4 +1,11 @@
 {
+  "SALES_ORDER" : "ارسالية مبيعات" ,
+  "PURCHASES_ORDER" : "ارسالية مشتريات",
+  "EXPENSES_ACCOUNT" : "المصارسف العمومية و الاداريه",
+  "FIRXED_ASSETS_DETAILS":"تفاصيل الاصل الثابت",
+  "ENTER_ACCOUNT_NAME_EN" : "ادخل اسم الحساب بالانجليزى",
+  "FIXED_ASSETS_ACCOUNTS" : "حسابات الاصول الثابته",
+  "FIXED_ASSETS_COLLECTION": "مجمع الاهلاك",
 "CASHIERS_MANGAMENT" : "إدارة نقاط البيع",
   "CASHIERS": "نقاط البيع",
   "CASHIER_NAME": "اسم نقطة البيع",

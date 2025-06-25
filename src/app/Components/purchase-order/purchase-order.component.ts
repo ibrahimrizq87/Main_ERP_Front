@@ -7,16 +7,18 @@ import { PurchasesService } from '../../shared/services/purchases.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../shared/services/permission.service';
-
+import { PurchasesComponent } from '../purchases/purchases.component';
+import { PurchaseOrdersService } from '../../shared/services/purchase_orders.service';
 
 @Component({
-  selector: 'app-purchases',
+  selector: 'app-purchase-order',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule,RouterModule,TranslateModule,FormsModule],
-  templateUrl: './purchases.component.html',
-  styleUrl: './purchases.component.css'
+  templateUrl: './purchase-order.component.html',
+  styleUrl: './purchase-order.component.css'
 })
-export class PurchasesComponent implements OnInit {
+export class PurchaseOrderComponent {
+
   purchases: any[] = []; 
   filteredPurchases: any[] = []; 
   searchTerm: string = '';
@@ -62,25 +64,25 @@ export class PurchasesComponent implements OnInit {
 
 
 
-  constructor(private _PurchasesService: PurchasesService, private router: Router,
+  constructor(private _PurchaseOrdersService: PurchaseOrdersService, private router: Router,
         private route: ActivatedRoute,
         private toastr:ToastrService,
         public _PermissionService: PermissionService
   ) {}
 
-  ManageChangeStatus(status:string ,id:string){
-    this._PurchasesService.UpdatePurchaseBillStatus(id ,status ).subscribe({
-      next: (response) => {
-        if (response) {
-          this.loadPurchases(this.status);
+  // ManageChangeStatus(status:string ,id:string){
+  //   this._PurchaseOrdersService.getAllPurchaseOrder(id ,status ).subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         this.loadPurchases(this.status);
 
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
   changeStatus(status:string){
     this.status = status;
     this.router.navigate([`/dashboard/purchases/${status}`]);
@@ -113,9 +115,8 @@ export class PurchasesComponent implements OnInit {
     const priceFrom = this.filters.priceFrom || '';
     const priceTo = this.filters.priceTo || '';
     const day = this.filters.day || '';
-    this._PurchasesService.getPurchaseBillsByStatus(status,
+    this._PurchaseOrdersService.getAllPurchaseOrder(
       vendorName,
-      paymentType,
       startDate,
       endDate,
       priceFrom,
@@ -147,7 +148,7 @@ export class PurchasesComponent implements OnInit {
   }
   deletePurchase(purchaseId: number): void {
     if (confirm('Are you sure you want to delete this Purchase?')) {
-      this._PurchasesService.deletePurchase(purchaseId).subscribe({
+      this._PurchaseOrdersService.deletePurchase(purchaseId).subscribe({
         next: (response) => {
           if (response) {
             this.toastr.success('تم حذف الفاتورة بنجاح');
@@ -163,20 +164,5 @@ export class PurchasesComponent implements OnInit {
       });
     }
   }
-  // changeStatus(purchaseId: number): void {
-  //   if (confirm('Are you sure you want to Approve this Purchase?')) {
-  //     this._PurchasesService.storeStatusOfPurchaseBill(purchaseId).subscribe({
-  //       next: (response) => {
-  //         if (response) {
-  //           this.router.navigate(['/dashboard/purchases']);
-  //           this.loadPurchases();
-  //         }
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //         alert('An error occurred while Approve the Purchase.');
-  //       }
-  //     });
-  //   }
-  // }
+
 }

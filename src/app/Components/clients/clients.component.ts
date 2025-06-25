@@ -7,6 +7,7 @@ import { ClientService } from '../../shared/services/client.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PermissionService } from '../../shared/services/permission.service';
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-clients',
@@ -17,8 +18,13 @@ import { PermissionService } from '../../shared/services/permission.service';
 })
 export class ClientsComponent implements OnInit {
   clients: any[] = [];
-  searchTerm: string = '';
-  
+  onSearchChange() {
+    this.searchSubject.next(this.searchQuery);
+  }
+
+
+  private searchSubject = new Subject<string>();
+  searchQuery: string = '';
   // Pagination properties
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -28,18 +34,30 @@ export class ClientsComponent implements OnInit {
     private _ClientService: ClientService, 
     private router: Router, 
     private toastr: ToastrService,
-    public _PermissionService: PermissionService) {}
+    public _PermissionService: PermissionService) {
+    
+    this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadClients();
+    });
+    }
 
   ngOnInit(): void {
     this.loadClients(); 
   }
 
   loadClients(): void {
-    this._ClientService.getAllClients().subscribe({
+    this._ClientService.getAllClients(
+      this.searchQuery,
+      this.currentPage,
+      this.itemsPerPage
+    ).subscribe({
       next: (response) => {
         if (response) {
           this.clients = response.data.clients;
-          this.updatePagination();
+
+          this.totalItems = response.data.meta.total;
           console.log(response);
         }
       },
@@ -49,32 +67,33 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  filteredClients(): any[] {
-    if (!this.searchTerm) {
-      this.totalItems = this.clients.length;
-      return this.clients;
-    }
+  // filteredClients(): any[] {
+  //   if (!this.searchTerm) {
+  //     this.totalItems = this.clients.length;
+  //     return this.clients;
+  //   }
 
-    const lowerTerm = this.searchTerm.toLowerCase();
-    return this.clients.filter((client) => {
-      return (
-        (client.name?.toLowerCase() || '').includes(lowerTerm) ||
-        (client.account_category?.toLowerCase() || '').includes(lowerTerm) ||
-        (client.delegate?.toLowerCase() || '').includes(lowerTerm) ||
-        (client.price_category?.toLowerCase() || '').includes(lowerTerm) ||
-        (client.is_suspended?.toString().toLowerCase() || '').includes(lowerTerm)
-      );
-    });
-  }
+  //   const lowerTerm = this.searchTerm.toLowerCase();
+  //   return this.clients.filter((client) => {
+  //     return (
+  //       (client.name?.toLowerCase() || '').includes(lowerTerm) ||
+  //       (client.account_category?.toLowerCase() || '').includes(lowerTerm) ||
+  //       (client.delegate?.toLowerCase() || '').includes(lowerTerm) ||
+  //       (client.price_category?.toLowerCase() || '').includes(lowerTerm) ||
+  //       (client.is_suspended?.toString().toLowerCase() || '').includes(lowerTerm)
+  //     );
+  //   });
+  // }
 
-  updatePagination(): void {
-    this.totalItems = this.filteredClients().length;
-  }
+  // updatePagination(): void {
+  //   this.totalItems = this.filteredClients().length;
+  // }
 
-  onSearchChange(): void {
-    this.currentPage = 1;
-    this.updatePagination();
-  }
+  // onSearchChange(): void {
+  //   this.currentPage = 1;
+  //   this.updatePagination();
+
+  // }
 
   onPageChange(page: number): void {
     this.currentPage = page;
@@ -82,7 +101,7 @@ export class ClientsComponent implements OnInit {
 
   onItemsPerPageChange(): void {
     this.currentPage = 1;
-    this.updatePagination();
+    // this.updatePagination();
   }
 
   deleteClient(clientId: number): void {

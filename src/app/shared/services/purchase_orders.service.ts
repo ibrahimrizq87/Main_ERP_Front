@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
-export class PurchasesService {
+export class PurchaseOrdersService {
 
   private baseURL = environment.apiUrl;
   constructor(private _HttpClient: HttpClient, private translate: TranslateService) {
@@ -38,27 +38,23 @@ export class PurchasesService {
 
 
 
-  addPurchase(purchasesData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills`, purchasesData ,{headers: this.getHeadersWithToken()  })
+  addPurchaseOrder(purchasesData: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/purchases-orders`, purchasesData ,{headers: this.getHeadersWithToken()  })
   }
 
 
-  UpdatePurchaseBillStatus(id:string , status: string): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/update-status/${id}/${status}` ,{headers: this.getHeadersWithToken()  })
-  }
 
-  getPurchaseBillsByStatus(status:string,
-      vendorName: string = '',
-      paymentType: string = 'all',
+  getAllPurchaseOrder(
+          vendorName: string = '',
       startDate: string = '',
       endDate: string = '',
       priceFrom: string = '',
       priceTo: string = '',
       day: string = '',
-  ): Observable<any>{
-              let params = new HttpParams();
+  ): Observable<any> {
+
+          let params = new HttpParams();
               if (vendorName !== '') params = params.set('vendor_name', vendorName);
-              if (paymentType !== 'all') params = params.set('payment_type', paymentType);
               if (priceFrom !== '') params = params.set('total_from', priceFrom);
               if (priceTo !== '') params = params.set('total_to', priceTo);
         
@@ -67,21 +63,20 @@ export class PurchasesService {
               if (day) params = params.set('day', day);
 
 
-    return this._HttpClient.get(`${this.baseURL}/general/purchases-bills/get-purchase-bill-by-status/${status}`, {
-       headers: this.getHeadersWithToken(),
+    return this._HttpClient.get(`${this.baseURL}/general/purchases-orders` ,{
+      headers: this.getHeadersWithToken(),
       params:params
-    })
-  }
-
- 
-  addBill(billData: FormData): Observable<any> {
-    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills`, billData, { headers: this.getHeadersWithToken() });
+      })
   }
 
 
 
-  getPurchaseById(id:any): Observable<any>{
-    return this._HttpClient.get(this.baseURL+"/general/purchases-bills/"+id, { headers: this.getHeadersWithToken() })
+
+
+
+
+  getPurchaseOrderById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/purchases-order/"+id, { headers: this.getHeadersWithToken() })
     
   }
 

@@ -89,18 +89,11 @@ if(this.selectedAccount){
     const currency_value = this.transactionForm.get('currency_value')?.value || 0;
     this.amountInLocalCurrency = amount * currency_value;
 
-
-  const value = this.transactionForm.get('amount')?.value | 0;
-  if(this.pay_bill && this.selectedBill){
-    const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
-    // console.log('to be paid:' , toBePaid)
-    // console.log('total:' , this.selectedBill.total)
-    // console.log('total paid:' , this.selectedBill.total_paid)
-    // console.log('value:' , value)
-
-    if(toBePaid < value){
-           this.transactionForm.patchValue({'amount':toBePaid});
-
+    const value = this.transactionForm.get('amount')?.value | 0;
+    if(this.pay_bill && this.selectedBill){
+      const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
+      if(toBePaid < value){
+            this.transactionForm.patchValue({'amount':toBePaid});
     }
   }
 
@@ -117,10 +110,24 @@ if(this.selectedAccount){
   
   ngOnInit(): void {
     this.getParams();
-    this.loadDelegates();
+    // this.loadDelegates();
     this.loadDefaultCurrency();
+    this.loadCurrency();
   }
 
+  loadCurrency(): void {
+    this._CurrencyService.viewAllCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          console.log(response);
+          this.currencies = response.data;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
 
 
@@ -147,37 +154,46 @@ if(this.selectedAccount){
 
 
   handleReceipt() {
-    this.parent_accounts = [6];
+    this.parent_accounts = [611 , 621 , 622 , 623 ,624];
     this.parent_accounts_company = [111, 112, 113, 117, 118];
-    this.getAccounts(this.parent_accounts, this.parent_accounts_company);
+    this.loadAccounts(this.parent_accounts , 'accounts');
+    this.loadAccounts(this.parent_accounts_company , 'company') ;
+
   }
   handlePayment() {
 
-    this.parent_accounts = [6, 113, 117, 118];
-    this.parent_accounts_company = [111, 112, 113, 117, 121, 211, 42, 6];
-    this.getAccounts(this.parent_accounts, this.parent_accounts_company);
-
+    this.parent_accounts = [611 , 621 , 622 , 623 ,624, 113, 117, 118];
+    this.parent_accounts_company = [111, 112, 113, 117, 121, 211, 42, 611 , 621 , 622 , 623 ,624];
+    this.loadAccounts(this.parent_accounts , 'accounts');
+    this.loadAccounts(this.parent_accounts_company , 'company') ;
   }
-  handleCreditNote() {
+  handleCreditAndDebitNote(type:string) {
 
-    this.parent_accounts = [6];
-    this.parent_accounts_company = [211, 42, 513];
-    this.getAccounts(this.parent_accounts, this.parent_accounts_company);
+      this._AccountService.getAccountsCreditOrDebitNote(type,
+      this.searchQuery
+      ).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("my response:", response)
+          this.accounts = response.data.accounts;
+          this.compony_accounts = response.data.compony_accounts;
+          this.updateData();
 
-  }
-  handleDebitNote() {
-
-    this.parent_accounts = [6];
-    this.parent_accounts_company = [112, 41];
-    this.getAccounts(this.parent_accounts, this.parent_accounts_company);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
 
   }
   getParams() {
     this.route.paramMap.subscribe(params => {
       this.type = params.get('type');
     });
-    console.log(this.type);
-
+    this.handelType();
+  }
+  handelType(){
     switch (this.type) {
       case 'receipt':
         this.handleReceipt();
@@ -189,13 +205,13 @@ if(this.selectedAccount){
 
       case 'credit_note':
         this.type = 'credit_note';
-        this.handleCreditNote();
+        this.handleCreditAndDebitNote('credit_note');
         break;
 
       case 'debit_note':
         this.type = 'debit_note';
 
-        this.handleDebitNote();
+        this.handleCreditAndDebitNote('debit_note');
         break;
 
       default:
@@ -206,36 +222,59 @@ if(this.selectedAccount){
   }
 
 
-  loadDelegates() {
-    this._AccountService.getAccountsByParent('623').subscribe({
+  // loadDelegates() {
+  //   this._AccountService.getAccountsByParent('623').subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         this.delegates = response.data;
+  //         this.updateData();
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
+
+
+  loadAccounts(parent: number[] , type:string) {
+  this._AccountService.getAccountsByParents(parent,
+    this.searchQuery
+  ).subscribe({
       next: (response) => {
         if (response) {
-          this.delegates = response.data;
-          console.log("my response:", response.data)
+          if(type == 'company'){
+              this.compony_accounts = response.accounts;
+          }else{
+            this.accounts = response.accounts;
+          }
+          this.updateData();
         }
       },
       error: (err) => {
         console.error(err);
       }
     });
+    
+   
   }
 
-
-
   getAccounts(parent: number[], parent_company: number[]) {
-    this._AccountService.getParentForDocument(parent, parent_company).subscribe({
+  this._AccountService.getParentForDocument(parent, parent_company).subscribe({
       next: (response) => {
         if (response) {
-          console.log("my response:", response)
-          this.currencies = response.currencies;
+          console.log("my response:", response);
           this.accounts = response.children;
           this.compony_accounts = response.children_company;
+          this.updateData();
         }
       },
       error: (err) => {
         console.error(err);
       }
     });
+    
+   
   }
 
 
@@ -289,7 +328,7 @@ if(this.selectedAccount){
 
 
       
-      formData.append('delegate_id', this.transactionForm.get('delegate_id')?.value || '');
+      // formData.append('delegate_id', this.transactionForm.get('delegate_id')?.value || '');
       formData.append('date', this.transactionForm.get('date')?.value);
       formData.append('amount', this.transactionForm.get('amount')?.value);
 
@@ -444,10 +483,6 @@ changeAmount(){
   const value = this.transactionForm.get('amount')?.value | 0;
   if(this.pay_bill && this.selectedBill){
     const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
-    console.log(toBePaid)
-        console.log(this.selectedBill.total)
-    console.log(this.selectedBill.total_paid)
-
     if(toBePaid < value){
            this.transactionForm.patchValue({'amount':toBePaid});
 
@@ -479,6 +514,7 @@ selectBill(bill:any){
 
     selectedBill:any;
     openModal(modalId: string , type:string) {
+      this.searchQuery ='';
 
       this.selectedPopUP = type;
       if(type == 'company'){
@@ -487,7 +523,6 @@ selectBill(bill:any){
         this.filteredAccounts =this.delegates;
       }else{
         this.filteredAccounts =this.accounts;
-
       }
       const modalElement = document.getElementById(modalId);
       if (modalElement) {
@@ -497,7 +532,8 @@ selectBill(bill:any){
     }
 
 
-       openSalesModal(modalId: string) {
+      openSalesModal(modalId: string) {
+      this.searchQuery ='';
 
    
       const modalElement = document.getElementById(modalId);
@@ -510,23 +546,30 @@ selectBill(bill:any){
 
     
   onSearchChange(){
-
-  
     if(this.selectedPopUP == 'company'){
-      this.filteredAccounts = this.compony_accounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-  
-    }else if (this.selectedPopUP == 'delegate'){
-      this.filteredAccounts = this.delegates.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }else{
-      this.filteredAccounts = this.accounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-      }
-   
+      this.handelType();
+    }
+    // else if (this.selectedPopUP == 'delegate'){
+    //   this.loadDelegates();
+    // }
+    else{
+      this.handelType();
+    }
+  }
+
+
+    updateData(){
+    if(this.selectedPopUP == 'company'){
+      this.filteredAccounts = this.compony_accounts;
+    }
+    
+    // else if (this.selectedPopUP == 'delegate'){
+    //   this.filteredAccounts = this.delegates;
+    // }
+    
+    else{
+      this.filteredAccounts = this.accounts;
+    }
   }
 
 

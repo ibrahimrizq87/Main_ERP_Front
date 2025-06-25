@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { PermissionService } from '../../shared/services/permission.service';
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-employees',
@@ -22,19 +23,36 @@ export class EmployeesComponent {
   constructor(private _EmployeeService: EmployeeService, private router: Router,private toastr:ToastrService,
             public _PermissionService: PermissionService
     
-  ) {}
+  ) {
+    this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadEmployees();
+    });
+  }
 
   ngOnInit(): void {
     this.loadEmployees(); 
   }
 
+
+    onSearchChange() {
+      this.searchSubject.next(this.searchQuery);
+    }
+  
+  
+    private searchSubject = new Subject<string>();
+    searchQuery: string = '';
+
   loadEmployees(): void {
-    this._EmployeeService.getAllEmployees().subscribe({
+    this._EmployeeService.getAllEmployees(
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
-          this.employees = response.data;
-          this.filteredEmployee = [...this.employees]; 
+          this.employees = response.data.employees;
+          // this.filteredEmployee = [...this.employees]; 
         }
       },
       error: (err) => {
@@ -42,15 +60,15 @@ export class EmployeesComponent {
       }
     });
   }
-  filterEmployees(): void {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredEmployee = this.employees.filter(employee => 
-      employee.currency_name_ar?.toLowerCase().includes(term) ||
-      employee.derivative_name_ar?.toLowerCase().includes(term) ||
-      employee.abbreviation?.toLowerCase().includes(term) ||
-      employee.value?.toString().toLowerCase().includes(term)
-    );
-  }
+  // filterEmployees(): void {
+  //   const term = this.searchTerm.toLowerCase();
+  //   this.filteredEmployee = this.employees.filter(employee => 
+  //     employee.currency_name_ar?.toLowerCase().includes(term) ||
+  //     employee.derivative_name_ar?.toLowerCase().includes(term) ||
+  //     employee.abbreviation?.toLowerCase().includes(term) ||
+  //     employee.value?.toString().toLowerCase().includes(term)
+  //   );
+  // }
   deleteEmployee(employee_id: number): void {
     if (confirm('Are you sure you want to delete this Employee?')) {
       this._EmployeeService.deleteEmployee(employee_id).subscribe({

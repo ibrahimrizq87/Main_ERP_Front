@@ -31,7 +31,7 @@
                   <label for="from_to_account" class="form-label">
                     {{ type === 'receipt' ? ('addTransaction.RECEIPT_FROM' | translate) :
                     type === 'payment' ? ('addTransaction.PAYMENT_TO' | translate) :
-                    type === 'creditNote' || type === 'debitNote' ? ('addTransaction.NOTIFIED_ACCOUNT' | translate) :
+                    type === 'credit_note' || type === 'debit_note' ? ('addTransaction.NOTIFIED_ACCOUNT' | translate) :
                     ('addTransaction.ACCOUNT_1' | translate) }}
                   </label>
                   <br>
@@ -44,8 +44,8 @@
                   <label for="from_to_account" class="form-label">
                     {{ type === 'receipt' ? ('addTransaction.ACCOUNT_TO_BE_RECEIPT' | translate) :
                     type === 'payment' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
-                    type === 'creditNote' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
-                    type === 'debitNote' ? ('addTransaction.ACCOUNT_TO_GET_MONEY' | translate) :
+                    type === 'credit_note' ? ('addTransaction.ACCOUNT_TO_PAYMENT_FROM' | translate) :
+                    type === 'debit_note' ? ('addTransaction.ACCOUNT_TO_GET_MONEY' | translate) :
                     ('addTransaction.ACCOUNT_2' | translate) }}
                   </label>
                   <br>
@@ -177,35 +177,37 @@
 
 <!-- Modal -->
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.SELECT_ACCOUNT' | translate }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.SEARCH_ACCOUNT' | translate"
-          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{{ 'mainAccountNav.ACCOUNT_NAME' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
-              style="cursor: pointer;">
-              <td>{{ i + 1 }}</td>
-              <td>{{ account.name }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+  
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+  
+  
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+                style="cursor: pointer;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ account.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
 

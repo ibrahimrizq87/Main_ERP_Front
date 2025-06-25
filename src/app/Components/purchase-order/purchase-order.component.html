@@ -1,0 +1,124 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5>{{ 'MANAGE_PURCHASES' | translate }}</h5>
+    <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PURCHASES' | translate }}</span>
+  </div>
+  <a *ngIf="_PermissionService.hasPermission('purchase_order' , 'add_purchase_order')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-purchase-order">
+    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+  </a>
+</div>
+
+<div class="container-fluid bg-white rounded shadow-sm p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'START_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.startDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'from_to_date'">
+      <label class="form-label mb-1">{{ 'END_DATE' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.endDate">
+    </div>
+    <div class="col-md-3" *ngIf="searchDateType == 'day'">
+      <label class="form-label mb-1">{{ 'DAY' | translate }}</label>
+      <input type="date" class="form-control" 
+             [(ngModel)]="filters.day">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-1">{{ 'DATE_RANGE_TYPE' | translate }}</label>
+      <select class="form-select" 
+              [(ngModel)]="searchDateType" 
+              (change)="onSearchTypeChange()">
+        <option value="day">{{ 'DAY' | translate }}</option>
+        <option value="from_to_date">{{ 'FROM_TO_DATE' | translate }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid bg-white rounded shadow-sm p-3">
+  <div class="row g-2">
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_From' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceFrom">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'Price_To' | translate }}</label>
+      <input type="number" class="form-control" 
+             [(ngModel)]="filters.priceTo">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-1">{{ 'VENDOR' | translate }}</label>
+      <input type="text" class="form-control" 
+             [(ngModel)]="filters.vendorName">
+    </div>
+
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-primary w-100 py-2" 
+              (click)="loadPurchases(status)">
+        <i class="fa-solid fa-search me-1"></i>
+        {{ 'Search' | translate }}
+      </button>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <button class="btn btn-outline-secondary w-100 py-2" 
+              (click)="clearSerachFields()">
+        <i class="fa-solid fa-eraser me-1"></i>
+        {{ 'Clear' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'PURCHASES_LIST' | translate }}</span>
+      <input 
+      class="form-control search w-25" 
+      type="search" 
+      placeholder="{{ 'SEARCH' | translate }}"
+      aria-label="Search"
+      [(ngModel)]="searchTerm" 
+      (input)="filterPurchases()">
+    </div>
+  </div>
+
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th class="bg-light" scope="col">#</th>
+        <th class="bg-light" scope="col">{{ 'VENDOR' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
+
+        <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let purchase of filteredPurchases; let i = index">
+        <th scope="row">{{ purchase.id }}</th>
+        <td>{{ purchase.vendor }}</td>
+        <td>{{ purchase.date || 'N/A' }}</td>
+        <td>
+          <div class="d-flex justify-content-around align-items-center">
+
+          <a *ngIf="_PermissionService.hasPermission('purchase_order' , 'details_purchase_order')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
+            <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+          </a>
+
+            <a *ngIf=" status != 'approved' &&  _PermissionService.hasPermission('purchase_order' , 'edit_purchase_order')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updatePurchase', purchase.id]">
+              <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+            </a>
+            <i *ngIf=" status != 'approved' && _PermissionService.hasPermission('purchase_order' , 'delete_purchase_order')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deletePurchase(purchase.id)"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

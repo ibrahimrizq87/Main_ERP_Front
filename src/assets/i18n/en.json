@@ -1,4 +1,11 @@
-{
+{ 
+  "SALES_ORDER"     : "sales order",
+    "PURCHASES_ORDER" : "purchases order",
+  "EXPENSES_ACCOUNT":"expenses accounts",
+  "FIRXED_ASSETS_DETAILS" : "fixed asset details",
+  "ENTER_ACCOUNT_NAME_EN":"enter english account name",
+  "FIXED_ASSETS_ACCOUNTS" : "fixed assets",
+  "FIXED_ASSETS_COLLECTION": "assets collection",
   "CASHIERS_MANGAMENT": "Cashiers Management",
   "CASHIERS": "Cashiers",
   "CASHIER_NAME": "Cashier Name",

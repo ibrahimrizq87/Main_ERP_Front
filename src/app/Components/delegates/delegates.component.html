@@ -18,8 +18,8 @@
             <input 
                 class="form-control search w-25" 
                 type="search" 
-                [(ngModel)]="searchTerm" 
-                (input)="filterCurrencies()" 
+                [(ngModel)]="searchQuery" 
+                (input)="onSearchChange()" 
                 placeholder="{{ 'SEARCH' | translate }}"
                 aria-label="Search">
         </div>
@@ -37,10 +37,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let currency of filteredCurrencies; let i = index">
+            <tr *ngFor="let currency of currencies; let i = index">
                 <th scope="row">{{ currency.id}}</th>
                 <td>{{ currency.name }}</td>
-                <td>{{ currency.account_category.name }}</td>
+                <td>{{ currency.account_category }}</td>
                 <td>
                     <img 
                       [src]="currency.image ? currency.image : 'images/image.jpg'" 

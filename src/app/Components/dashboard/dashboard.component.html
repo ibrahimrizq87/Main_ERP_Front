@@ -148,6 +148,65 @@
               </li>
 
               </ng-container>
+
+
+
+
+
+               <li  class="nav-item nested">
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('FIXED_ASSETS')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> {{ 'FIXED_ASSETS' | translate }}</span>
+                  <i [ngClass]="isDropdownOpen('FIXED_ASSETS') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+                
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('FIXED_ASSETS')">
+                    
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('121')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'FIXED_ASSETS_ACCOUNTS' | translate }} 
+                    </a>
+                  </li>
+
+
+                     <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('122')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'FIXED_ASSETS_COLLECTION' | translate }} 
+                    </a>
+                  </li>
+                
+                </ul>
+              </li>
+
+
+
+
+
+
+
+
+
+               <li  class="nav-item nested">
+                <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('EXPENSES_ACCOUNT')" style="cursor: pointer;">
+                  <span><i class="fa-solid fa-box me-2"></i> {{ 'EXPENSES_ACCOUNT' | translate }}</span>
+                  <i [ngClass]="isDropdownOpen('EXPENSES_ACCOUNT') ? 'fa-angle-up' : 'fa-angle-down'" class="fa-solid"></i>
+                </a>
+                
+                <ul class="nav flex-column nested-inside ps-3" *ngIf="isDropdownOpen('EXPENSES_ACCOUNT')">
+                    
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="accounting('42')">
+                      <i class="fa-solid fa-money-bill me-2"></i> {{ 'EXPENSES_ACCOUNT' | translate }} 
+                    </a>
+                  </li>
+
+
+              
+                </ul>
+              </li>
+
+
+
+
             
 
 
@@ -397,7 +456,7 @@
             </ul>
           </li>
 
-          <li *ngIf="_PermissionService.hasAnyModule(['sale_bills' , 'return_sale_bills'])"  class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['sale_bills' , 'return_sale_bills', 'sale_order'])"  class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.SALES' | translate }}</span>
@@ -410,6 +469,15 @@
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'sales_purchases.SALES_INVOICE' | translate }}
                 </a>
               </li>
+
+              
+              <li *ngIf="_PermissionService.hasModule('sale_order')" class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="sale-order">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'SALES_ORDER' | translate }}
+                </a>
+              </li>
+
+
               <li *ngIf="_PermissionService.hasModule('return_sale_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-sales/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_SALES' | translate }}
@@ -420,7 +488,7 @@
 
 
 
-          <li *ngIf="_PermissionService.hasAnyModule(['purchase_bills' , 'return_purchase_bills'])" class="nav-item">
+          <li *ngIf="_PermissionService.hasAnyModule(['purchase_bills' , 'return_purchase_bills', 'purchase_order'])" class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" (click)="toggleDropdown('SALES_PURCHASES')" style="cursor: pointer;">
               <i class="fa-solid fa-cart-shopping me-2"></i>
               <span>{{ 'sales_purchases.PURCHASES' | translate }}</span>
@@ -439,6 +507,14 @@
               <li *ngIf="_PermissionService.hasModule('return_purchase_bills')" class="nav-item nested">
                 <a class="nav-link" routerLinkActive="active" routerLink="return-purchase/waiting">
                   <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'RETURN_PURCHASES_INVOICE' | translate }}
+                </a>
+              </li>
+
+
+
+               <li *ngIf="_PermissionService.hasModule('purchase_order')" class="nav-item nested">
+                <a class="nav-link" routerLinkActive="active" routerLink="purchase-order">
+                  <i class="fa-solid fa-cart-shopping me-2"></i> {{ 'PURCHASES_ORDER' | translate }}
                 </a>
               </li>
 

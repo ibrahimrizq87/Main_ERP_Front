@@ -7,6 +7,8 @@ import { FormSubmittedEvent, FormsModule } from '@angular/forms';
 import { DelegateService } from '../../shared/services/delegate.service';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../shared/services/permission.service';
+import { Subject, debounceTime } from 'rxjs';
+
 @Component({
   selector: 'app-delegates',
   standalone: true,
@@ -20,23 +22,39 @@ export class DelegatesComponent {
 
   currencies: any[] = []; 
   filteredCurrencies: any[] = []; 
-  searchTerm: string = '';
+  // searchTerm: string = '';
+    onSearchChange() {
+    this.searchSubject.next(this.searchQuery);
+  }
+
+
+  private searchSubject = new Subject<string>();
+  searchQuery: string = '';
 
   constructor(private _DelegateService: DelegateService, private router: Router,private toastr:ToastrService,
     public _PermissionService: PermissionService
-  ) {}
+  ) {
+       this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(query => {
+      this.loadDelegates();
+    });
+  }
 
   ngOnInit(): void {
     this.loadDelegates(); 
   }
 
   loadDelegates(): void {
-    this._DelegateService.getAllDelegates().subscribe({
+    this._DelegateService.getAllDelegates(
+this.searchQuery,
+  //  this.currentPage,
+  //     this.itemsPerPage
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
-          this.currencies = response.data;
-          this.filteredCurrencies = [...this.currencies]; 
+          this.currencies = response.data.delegates;
         }
       },
       error: (err) => {
@@ -44,15 +62,15 @@ export class DelegatesComponent {
       }
     });
   }
-  filterCurrencies(): void {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredCurrencies = this.currencies.filter(currency => 
-      currency.currency_name_ar?.toLowerCase().includes(term) ||
-      currency.derivative_name_ar?.toLowerCase().includes(term) ||
-      currency.abbreviation?.toLowerCase().includes(term) ||
-      currency.value?.toString().toLowerCase().includes(term)
-    );
-  }
+  // filterCurrencies(): void {
+  //   const term = this.searchTerm.toLowerCase();
+  //   this.filteredCurrencies = this.currencies.filter(currency => 
+  //     currency.currency_name_ar?.toLowerCase().includes(term) ||
+  //     currency.derivative_name_ar?.toLowerCase().includes(term) ||
+  //     currency.abbreviation?.toLowerCase().includes(term) ||
+  //     currency.value?.toString().toLowerCase().includes(term)
+  //   );
+  // }
   deleteCurrency(currency_id: number): void {
     if (confirm('Are you sure you want to delete this currency?')) {
       this._DelegateService.deleteDelegate(currency_id).subscribe({

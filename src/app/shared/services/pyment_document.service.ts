@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { throwError, Observable, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
@@ -38,12 +38,32 @@ export class PaymentDocumentService {
   addDocument(documentData: FormData): Observable<any> {
     return this._HttpClient.post(`${this.baseURL}/general/payment-documents`, documentData ,{ headers: this.getHeadersWithToken() });
   }
-  getDocumentsByType(type:string , status:string): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/by-type/`+type+'/'+status,{ headers: this.getHeadersWithToken() });
+  getDocumentsByType(type:string , status:string,
+      searchTerm: string = '',
+      startDate: string = '',
+      endDate: string = '',
+      priceFrom: string = '',
+      priceTo: string = '',
+      day: string = '',
+  ): Observable<any> {
+
+ let params = new HttpParams();
+              if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+              if (priceFrom !== '') params = params.set('total_from', priceFrom);
+              if (priceTo !== '') params = params.set('total_to', priceTo);
+        
+              if (startDate) params = params.set('startDate', startDate);
+              if (endDate) params = params.set('endDate', endDate);
+              if (day) params = params.set('day', day);
+
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/by-type/`+type+'/'+status,{ 
+      headers: this.getHeadersWithToken(),
+       params: params });
   }
 
   getDocumentById(id:string ): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/`+id,{ headers: this.getHeadersWithToken() });
+    return this._HttpClient.get(`${this.baseURL}/general/payment-documents/`+id,{ headers: this.getHeadersWithToken()
+     });
   }
 
   updateDocumentById(id:string ,documentData: FormData): Observable<any> {
