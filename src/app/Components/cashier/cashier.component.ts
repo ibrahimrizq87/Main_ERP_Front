@@ -6,7 +6,7 @@ import { Subject, debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import {  RouterModule } from '@angular/router';
+import {  Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cashier',
@@ -34,7 +34,7 @@ export class CashierComponent implements OnInit {
     type: 'purchase' // default value
   };
 
-  constructor(private _CashierService: CashierService,private toastr: ToastrService) {
+  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router) {
     this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
@@ -181,6 +181,7 @@ export class CashierComponent implements OnInit {
       next: (response) => {
         console.log('Invoice saved successfully:', response);
        this.toastr.success('Invoice saved successfully!', 'Success');
+       this.router.navigate(['/printInvoice', response.data.id]); // Navigate to print invoice page
         // Reset form data
         this.resetCheckoutForm();
         this.closeCheckoutModal();

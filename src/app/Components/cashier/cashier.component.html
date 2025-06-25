@@ -3,6 +3,10 @@
   <div class="row cashier-container">
     <!-- Left Sidebar - Enhanced -->
     <div class="col-1 d-flex flex-column justify-content-center gap-4 align-items-center p-3 cashier-sidebar">
+      <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button history-button" routerLink="/history">
+         <i class="fas fa-history mb-1"></i><br>
+        <small>History</small>
+      </button>
       <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button recent-button"
               (click)="openRecentModal()">
         <i class="fas fa-clock mb-1"></i><br>

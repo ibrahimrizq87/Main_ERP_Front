@@ -495,3 +495,11 @@
     border-radius: 10px;
     padding: 10px 20px;
   }
+  .history-button {
+    background: linear-gradient(45deg, #f39c12, #e67e22);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }

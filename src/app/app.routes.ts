@@ -163,7 +163,7 @@ import { StocktakingsComponent } from './Components/stocktakings/stocktakings.co
 import { AddStocktakingsComponent } from './Components/add-stocktakings/add-stocktakings.component';
 import { UpdateStocktakingsComponent } from './Components/update-stocktakings/update-stocktakings.component';
 import { ViewStocktakingsComponent } from './Components/view-stocktakings/view-stocktakings.component';
-import { CashierComponent } from './Components/cashier/cashier.component';
+
 import { AddCashierComponent } from './Components/Cashir/add-cashier/add-cashier.component';
 import { CashiersComponent } from './Components/Cashir/cashiers/cashiers.component';
 import { UpdateCashierComponent } from './Components/Cashir/update-cashier/update-cashier.component';
@@ -171,6 +171,9 @@ import { AddPurchaseOrderComponent } from './Components/add-purchase-order/add-p
 import { PurchaseOrderComponent } from './Components/purchase-order/purchase-order.component';
 import { AddSaleOrderComponent } from './Components/add-sale-order/add-sale-order.component';
 import { SaleOrderComponent } from './Components/sale-order/sale-order.component';
+import { PrintInvoiceComponent } from './Components/print-invoice/print-invoice.component';
+import { HistoryComponent } from './Components/history/history.component';
+import { CashierComponent } from './Components/cashier/cashier.component';
 
 
 export const routes: Routes = [
@@ -180,6 +183,8 @@ export const routes: Routes = [
     { path: "loginClient", component: LoginClientComponent },
     { path: "showProductClient/:id", component: ShowproductBranchesClientComponent },
     {path:"cashier",component:CashierComponent},
+    {path:"printInvoice/:id",component:PrintInvoiceComponent},
+    {path:"history",component:HistoryComponent},
     {
         path: "dashboard", component: DashboardComponent
         , children: [
@@ -425,6 +430,7 @@ export const routes: Routes = [
             { path: "addStocktakings", component: AddStocktakingsComponent },
             { path: "updateStocktakings/:id", component: UpdateStocktakingsComponent },
             { path: "showStocktakings/:id", component: ViewStocktakingsComponent },
+
 
 
         ], canActivate: [RoleGuard],
