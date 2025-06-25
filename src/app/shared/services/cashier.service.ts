@@ -38,9 +38,11 @@ export class CashierService {
 
 
   
-addBillCasier(storeData: FormData): Observable<any> {
-  return this._HttpClient.post(`${this.baseURL}/general/cashier-invoices`, storeData ,{ headers:this.getHeadersWithToken() });
-}
+  addBillCasier(storeData: any): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/cashier-invoices`, storeData, { 
+      headers: this.getHeadersWithToken() 
+    });
+  }
 getBillCashier(): Observable<any> {
   return this._HttpClient.get(`${this.baseURL}/general/cashier-invoices` ,{ headers:this.getHeadersWithToken() });
 }
