@@ -86,7 +86,7 @@ export class CashierComponent implements OnInit {
     } 
     // Check if product is from recentProducts (search results)
     else if (product.product) {
-      productToAdd = product.product;
+      productToAdd = product.branch;
       // Use branch.default_price if available, otherwise use product.price
       price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
     } 
