@@ -1,1 +1,63 @@
-<p>print-invoice works!</p>
+<div class="invoice-container" id="invoice-content">
+    <div class="invoice-header">
+     <img src="images/logoallparts.png"alt="Logo" class="logo">
+      <div class="invoice-meta">
+        <p><strong>Invoice #:</strong> {{invoiceData?.id}}</p>
+        <p><strong>Date:</strong> {{invoiceData?.created_at }}</p>
+        <p><strong>Type:</strong> {{invoiceData?.type}}</p>
+      </div>
+    </div>
+  
+    <div class="invoice-parties">
+      <div class="store-info">
+        <h3>From:</h3>
+        <p><strong>Store:</strong> {{invoiceData?.store?.name}}</p>
+        <p><strong>Issued by:</strong> {{invoiceData?.creator?.name}}</p>
+      </div>
+      
+      <div class="customer-info">
+        <h3>To:</h3>
+        <p><strong>Name:</strong> {{invoiceData?.customer_name}}</p>
+        <p><strong>Phone:</strong> {{invoiceData?.customer_phone}}</p>
+      </div>
+    </div>
+  
+    <table class="invoice-items">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of invoiceData?.items; let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{item.product.name}} <span *ngIf="item.product.color">({{item.product.color.color}})</span></td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price }}</td>
+          <td>{{item.total }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="text-right"><strong>Total:</strong></td>
+          <td><strong>{{invoiceData?.total }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  
+    <div class="invoice-notes" *ngIf="invoiceData?.note">
+      <h3>Notes:</h3>
+      <p>{{invoiceData.note}}</p>
+    </div>
+  
+  
+  </div>
+  <div class="invoice-footer gap-2 d-flex justify-content-center  ">
+      
+    <button (click)="downloadAsPDF()" class="print-button">Download PDF</button>
+    <button (click)="goback()" class="print-button">Back</button>
+  </div>
