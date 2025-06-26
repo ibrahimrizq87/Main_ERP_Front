@@ -1,3 +1,4 @@
+<!-- src/app/Components/cashier/cashier.component.html -->
 <!-- Enhanced Cashier Interface with improved design and colors -->
 <div class="container-fluid">
   <div class="row cashier-container">
@@ -42,6 +43,24 @@
               </div>
               <div class="card-body p-3">
                 <h6 class="card-title mb-2 text-truncate">{{product.product_branch?.name}}</h6>
+                
+                <!-- Color badge for recent products -->
+                <div *ngIf="product.product_branch?.color?.color" class="mb-2">
+                  <span class="badge" [style.background-color]="product.product_branch.color.color" 
+                        [style.color]="getContrastColor(product.product_branch.color.color)">
+                    {{ product.product_branch.color.color | titlecase }}
+                  </span>
+                </div>
+                
+                <!-- Determinants for recent products -->
+                <div *ngIf="product.product_branch?.determinants?.length > 0" class="mb-2">
+                  <div *ngFor="let det of product.product_branch.determinants" class="d-inline-block me-2">
+                    <span class="badge bg-secondary">
+                      {{ det.determinant | titlecase }}: {{ det.value }}
+                    </span>
+                  </div>
+                </div>
+                
                 <p class="card-text mb-1">
                   <i class="fas fa-barcode me-1"></i>{{product.product_branch?.barcode}}
                 </p>
@@ -75,7 +94,6 @@
             <div class="d-flex justify-content-between align-items-center">
               <input type="text" class="form-control form-control-lg shadow-sm search-input"
                 placeholder="Search by name or barcode..." [(ngModel)]="searchQuery" (input)="onSearchChange()">
-
             </div>
           </div>
 
@@ -84,7 +102,6 @@
             <div *ngFor="let product of recentProducts" class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100 shadow-sm product-card">
                 <div class="product-image-container">
-                  <!-- <img [src]="product.product.image" class="card-img-top" alt="{{product.product.name}}"> -->
                   <img *ngIf="product.product?.image && product.product.image !== ''; else defaultImage"
                     [src]="product.product.image" class="card-img-top" alt="{{product.product?.name}}">
                   <ng-template #defaultImage>
@@ -99,7 +116,25 @@
                   <p class="card-text mb-2">
                     <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                   </p>
-                  <p class="card-text mb-2">
+                  
+                  <!-- Show color if exists -->
+                  <div *ngIf="product.branch?.color?.color" class="mb-2">
+                    <span class="badge" [style.background-color]="product.branch.color.color" 
+                          [style.color]="getContrastColor(product.branch.color.color)">
+                      {{ product.branch.color.color | titlecase }}
+                    </span>
+                  </div>
+                  
+                  <!-- Show determinants if they exist -->
+                  <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
+                    <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
+                      <span class="badge bg-secondary">
+                        {{ det.determinant | titlecase }}: {{ det.value }}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p class="card-text mb-3">
                     <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                   </p>
                   <div class="mt-auto">
@@ -268,7 +303,6 @@
           <div class="position-relative">
             <input type="text" class="form-control form-control-lg shadow-sm search-input"
               placeholder="Search by name or barcode..." [(ngModel)]="searchQuery" (input)="onSearchChange()">
-
           </div>
         </div>
 
@@ -289,10 +323,8 @@
           <div *ngFor="let product of recentProducts" class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100 shadow-sm recent-modal-product-card">
               <div class="recent-modal-product-image-container">
-                <!-- <img [src]="product.product.image || 'https://via.placeholder.com/180'" class="card-img-top"
-                  alt="{{product.product.name}}"> -->
-                <img *ngIf="product.product?.image  && product.product.image  !== ''; else defaultImage"
-                  [src]="product.product.image " class="card-img-top" alt="{{product.product?.name}}">
+                <img *ngIf="product.product?.image && product.product.image !== ''; else defaultImage"
+                  [src]="product.product.image" class="card-img-top" alt="{{product.product?.name}}">
                 <ng-template #defaultImage>
                   <img src="images/image.jpg" class="card-img-top" alt="Default Image">
                 </ng-template>
@@ -305,6 +337,24 @@
                 <p class="card-text mb-2">
                   <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                 </p>
+                
+                <!-- Show color if exists -->
+                <div *ngIf="product.branch?.color?.color" class="mb-2">
+                  <span class="badge" [style.background-color]="product.branch.color.color" 
+                        [style.color]="getContrastColor(product.branch.color.color)">
+                    {{ product.branch.color.color | titlecase }}
+                  </span>
+                </div>
+                
+                <!-- Show determinants if they exist -->
+                <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
+                  <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
+                    <span class="badge bg-secondary">
+                      {{ det.determinant | titlecase }}: {{ det.value }}
+                    </span>
+                  </div>
+                </div>
+                
                 <p class="card-text mb-3">
                   <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                 </p>
