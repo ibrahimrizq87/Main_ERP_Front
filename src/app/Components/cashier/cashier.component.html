@@ -1,14 +1,14 @@
+<!-- src/app/Components/cashier/cashier.component.html -->
 <!-- Enhanced Cashier Interface with improved design and colors -->
 <div class="container-fluid">
   <div class="row cashier-container">
     <!-- Left Sidebar - Enhanced -->
     <div class="col-1 d-flex flex-column justify-content-center gap-4 align-items-center p-3 cashier-sidebar">
       <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button history-button" routerLink="/history">
-         <i class="fas fa-history mb-1"></i><br>
+        <i class="fas fa-history mb-1"></i><br>
         <small>History</small>
       </button>
-      <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button recent-button"
-              (click)="openRecentModal()">
+      <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button recent-button" (click)="openRecentModal()">
         <i class="fas fa-clock mb-1"></i><br>
         <small>Recent</small>
       </button>
@@ -32,13 +32,35 @@
             <!-- Recent Product Cards -->
             <div *ngFor="let product of recentProductsList" class="card shadow-sm recent-product-card">
               <div class="recent-product-image-container">
-                <img [src]="product.product_branch?.image" class="card-img-top" alt="{{product.product_branch?.name}}">
+                <img *ngIf="product.product_branch?.image && product.product_branch.image !== ''; else defaultImage"
+                  [src]="product.product_branch.image" class="card-img-top" alt="{{product.product_branch?.name}}">
+                <ng-template #defaultImage>
+                  <img src="images/image.jpg" class="card-img-top" alt="Default Image">
+                </ng-template>
                 <div class="recent-product-order-badge">
                   #{{product.order}}
                 </div>
               </div>
               <div class="card-body p-3">
                 <h6 class="card-title mb-2 text-truncate">{{product.product_branch?.name}}</h6>
+                
+                <!-- Color badge for recent products -->
+                <div *ngIf="product.product_branch?.color?.color" class="mb-2">
+                  <span class="badge" [style.background-color]="product.product_branch.color.color" 
+                        [style.color]="getContrastColor(product.product_branch.color.color)">
+                    {{ product.product_branch.color.color | titlecase }}
+                  </span>
+                </div>
+                
+                <!-- Determinants for recent products -->
+                <div *ngIf="product.product_branch?.determinants?.length > 0" class="mb-2">
+                  <div *ngFor="let det of product.product_branch.determinants" class="d-inline-block me-2">
+                    <span class="badge bg-secondary">
+                      {{ det.determinant | titlecase }}: {{ det.value }}
+                    </span>
+                  </div>
+                </div>
+                
                 <p class="card-text mb-1">
                   <i class="fas fa-barcode me-1"></i>{{product.product_branch?.barcode}}
                 </p>
@@ -46,12 +68,10 @@
                   <i class="fas fa-dollar-sign me-1"></i>{{product.product_branch?.price}}
                 </p>
                 <div class="d-grid gap-2">
-                  <button class="btn btn-sm shadow-sm remove-button"
-                          (click)="deleteRecentProduct(product.id)">
+                  <button class="btn btn-sm shadow-sm remove-button" (click)="deleteRecentProduct(product.id)">
                     <i class="fas fa-trash me-1"></i>Remove
                   </button>
-                  <button class="btn btn-sm shadow-sm add-to-cart-button"
-                          (click)="addToInvoice(product)">
+                  <button class="btn btn-sm shadow-sm add-to-cart-button" (click)="addToInvoice(product)">
                     <i class="fas fa-plus me-1"></i>Add to Cart
                   </button>
                 </div>
@@ -72,11 +92,8 @@
           <!-- Enhanced Search Bar -->
           <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center">
-              <input type="text" class="form-control form-control-lg shadow-sm search-input" 
-                     placeholder="Search by name or barcode..." 
-                     [(ngModel)]="searchQuery"
-                     (input)="onSearchChange()">
-             
+              <input type="text" class="form-control form-control-lg shadow-sm search-input"
+                placeholder="Search by name or barcode..." [(ngModel)]="searchQuery" (input)="onSearchChange()">
             </div>
           </div>
 
@@ -85,7 +102,11 @@
             <div *ngFor="let product of recentProducts" class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100 shadow-sm product-card">
                 <div class="product-image-container">
-                  <img [src]="product.product.image" class="card-img-top" alt="{{product.product.name}}">
+                  <img *ngIf="product.product?.image && product.product.image !== ''; else defaultImage"
+                    [src]="product.product.image" class="card-img-top" alt="{{product.product?.name}}">
+                  <ng-template #defaultImage>
+                    <img src="images/image.jpg" class="card-img-top" alt="Default Image">
+                  </ng-template>
                   <div class="product-stock-badge">
                     Stock: {{product.stock}}
                   </div>
@@ -95,12 +116,29 @@
                   <p class="card-text mb-2">
                     <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                   </p>
-                  <p class="card-text mb-2">
+                  
+                  <!-- Show color if exists -->
+                  <div *ngIf="product.branch?.color?.color" class="mb-2">
+                    <span class="badge" [style.background-color]="product.branch.color.color" 
+                          [style.color]="getContrastColor(product.branch.color.color)">
+                      {{ product.branch.color.color | titlecase }}
+                    </span>
+                  </div>
+                  
+                  <!-- Show determinants if they exist -->
+                  <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
+                    <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
+                      <span class="badge bg-secondary">
+                        {{ det.determinant | titlecase }}: {{ det.value }}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p class="card-text mb-3">
                     <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                   </p>
                   <div class="mt-auto">
-                    <button class="btn w-100 shadow-sm add-to-invoice-button"
-                            (click)="addToInvoice(product)">
+                    <button class="btn w-100 shadow-sm add-to-invoice-button" (click)="addToInvoice(product)">
                       <i class="fas fa-shopping-cart me-2"></i>Add to Invoice
                     </button>
                   </div>
@@ -124,29 +162,26 @@
           <i class="fas fa-shopping-cart me-2"></i>Invoice Items
         </h4>
       </div>
-      
+
       <div class="flex-grow-1 overflow-auto mb-4 invoice-items-container">
         <div *ngFor="let item of invoiceItems; let i = index" class="invoice-item">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <h6 class="mb-0">{{item.name}}</h6>
-            <button class="btn btn-sm shadow-sm remove-item-button"
-                    (click)="removeFromInvoice(i)">×</button>
+            <button class="btn btn-sm shadow-sm remove-item-button" (click)="removeFromInvoice(i)">×</button>
           </div>
           <p class="mb-2 small">
             <i class="fas fa-dollar-sign me-1"></i>Price: ${{item.price | number:'1.2-2'}}
           </p>
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-              <button class="btn btn-sm shadow-sm me-2 quantity-button"
-                      (click)="updateQuantity(item, -1)">-</button>
+              <button class="btn btn-sm shadow-sm me-2 quantity-button" (click)="updateQuantity(item, -1)">-</button>
               <span class="fw-bold mx-2">{{item.quantity}}</span>
-              <button class="btn btn-sm shadow-sm me-3 quantity-button"
-                      (click)="updateQuantity(item, 1)">+</button>
+              <button class="btn btn-sm shadow-sm me-3 quantity-button" (click)="updateQuantity(item, 1)">+</button>
             </div>
             <span class="fw-bold">${{(item.total || 0) | number:'1.2-2'}}</span>
           </div>
         </div>
-        
+
         <div *ngIf="invoiceItems.length === 0" class="text-center py-4 empty-invoice">
           <i class="fas fa-shopping-cart fa-3x text-white-50 mb-3"></i>
           <p class="text-white-50">No items added</p>
@@ -159,10 +194,9 @@
           Total: ${{totalAmount.toFixed(2)}}
         </h3>
       </div>
-      
+
       <!-- Checkout Button -->
-      <button class="btn btn-lg shadow-lg checkout-button"
-              (click)="openCheckoutModal()">
+      <button class="btn btn-lg shadow-lg checkout-button" (click)="openCheckoutModal()">
         <i class="fas fa-credit-card me-2"></i>Checkout
       </button>
     </div>
@@ -177,7 +211,8 @@
         <h5 class="modal-title text-white fw-bold" id="checkoutModalLabel">
           <i class="fas fa-credit-card me-2"></i>Checkout Details
         </h5>
-        <button type="button" class="btn-close btn-close-white" (click)="closeCheckoutModal()" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" (click)="closeCheckoutModal()"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body p-4 checkout-modal-body">
         <form>
@@ -186,10 +221,9 @@
             <label for="customerName" class="form-label fw-semibold">
               <i class="fas fa-user me-2"></i>Customer Name
             </label>
-            <input type="text" class="form-control shadow-sm checkout-input" id="customerName" 
-                   placeholder="Enter customer name (optional)"
-                   [(ngModel)]="checkoutData.customer_name"
-                   name="customerName" maxlength="255">
+            <input type="text" class="form-control shadow-sm checkout-input" id="customerName"
+              placeholder="Enter customer name (optional)" [(ngModel)]="checkoutData.customer_name" name="customerName"
+              maxlength="255">
           </div>
 
           <!-- Customer Phone -->
@@ -197,10 +231,9 @@
             <label for="customerPhone" class="form-label fw-semibold">
               <i class="fas fa-phone me-2"></i>Customer Phone
             </label>
-            <input type="tel" class="form-control shadow-sm checkout-input" id="customerPhone" 
-                   placeholder="Enter customer phone (optional)"
-                   [(ngModel)]="checkoutData.customer_phone"
-                   name="customerPhone" maxlength="20">
+            <input type="tel" class="form-control shadow-sm checkout-input" id="customerPhone"
+              placeholder="Enter customer phone (optional)" [(ngModel)]="checkoutData.customer_phone"
+              name="customerPhone" maxlength="20">
           </div>
 
           <!-- Note -->
@@ -208,9 +241,8 @@
             <label for="note" class="form-label fw-semibold">
               <i class="fas fa-sticky-note me-2"></i>Note
             </label>
-            <textarea class="form-control shadow-sm checkout-input" id="note" rows="3" 
-                      placeholder="Enter any notes (optional)"
-                      [(ngModel)]="checkoutData.note" name="note"></textarea>
+            <textarea class="form-control shadow-sm checkout-input" id="note" rows="3"
+              placeholder="Enter any notes (optional)" [(ngModel)]="checkoutData.note" name="note"></textarea>
           </div>
 
           <!-- Transaction Type -->
@@ -218,8 +250,8 @@
             <label for="transactionType" class="form-label fw-semibold">
               <i class="fas fa-exchange-alt me-2"></i>Transaction Type
             </label>
-            <select class="form-select shadow-sm checkout-input" id="transactionType" 
-                    [(ngModel)]="checkoutData.type" name="transactionType">
+            <select class="form-select shadow-sm checkout-input" id="transactionType" [(ngModel)]="checkoutData.type"
+              name="transactionType">
               <option value="purchase">Purchase</option>
               <option value="return">Return</option>
             </select>
@@ -231,7 +263,8 @@
               <i class="fas fa-list me-2"></i>Order Summary
             </h6>
             <div class="p-4 rounded shadow-sm order-summary">
-              <div *ngFor="let item of invoiceItems" class="d-flex justify-content-between mb-2 pb-2 order-summary-item">
+              <div *ngFor="let item of invoiceItems"
+                class="d-flex justify-content-between mb-2 pb-2 order-summary-item">
                 <span>{{item.name}} ({{item.quantity}}x)</span>
                 <span class="fw-bold">${{(item.total || 0) | number:'1.2-2'}}</span>
               </div>
@@ -244,10 +277,8 @@
         </form>
       </div>
       <div class="modal-footer checkout-modal-footer">
-        <button type="button" class="btn shadow cancel-button"
-                (click)="closeCheckoutModal()">Cancel</button>
-        <button type="button" class="btn shadow save-button"
-                (click)="saveCheckout()">
+        <button type="button" class="btn shadow cancel-button" (click)="closeCheckoutModal()">Cancel</button>
+        <button type="button" class="btn shadow save-button" (click)="saveCheckout()">
           <i class="fas fa-check me-2"></i>Save & Complete Checkout
         </button>
       </div>
@@ -256,22 +287,22 @@
 </div>
 
 <!-- Enhanced Recent Products Modal -->
-<div class="modal fade" id="recentProductsModal" tabindex="-1" aria-labelledby="recentProductsModalLabel" aria-hidden="true">
+<div class="modal fade" id="recentProductsModal" tabindex="-1" aria-labelledby="recentProductsModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content recent-products-modal">
       <div class="modal-header recent-products-modal-header">
         <h5 class="modal-title text-white fw-bold" id="recentProductsModalLabel">
           <i class="fas fa-search me-2"></i>Search Products
         </h5>
-        <button type="button" class="btn-close btn-close-white" (click)="closeRecentModal()" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" (click)="closeRecentModal()"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body p-4 recent-products-modal-body">
         <div class="mb-4">
           <div class="position-relative">
-            <input type="text" class="form-control form-control-lg shadow-sm search-input" 
-                   placeholder="Search by name or barcode..." 
-                   [(ngModel)]="searchQuery" (input)="onSearchChange()">
-           
+            <input type="text" class="form-control form-control-lg shadow-sm search-input"
+              placeholder="Search by name or barcode..." [(ngModel)]="searchQuery" (input)="onSearchChange()">
           </div>
         </div>
 
@@ -280,14 +311,11 @@
             <i class="fas fa-plus-circle me-2"></i>Add {{selectedProduct?.product?.name}} to recent products
           </h6>
           <div class="input-group">
-            <input type="number" class="form-control" placeholder="Enter position number" 
-                   [(ngModel)]="positionInput">
-            <button class="btn shadow add-position-button"
-                    (click)="addToRecentProducts()">
+            <input type="number" class="form-control" placeholder="Enter position number" [(ngModel)]="positionInput">
+            <button class="btn shadow add-position-button" (click)="addToRecentProducts()">
               <i class="fas fa-plus me-1"></i>Add
             </button>
-            <button class="btn shadow ms-2 cancel-position-button"
-                    (click)="showPositionInput = false">Cancel</button>
+            <button class="btn shadow ms-2 cancel-position-button" (click)="showPositionInput = false">Cancel</button>
           </div>
         </div>
 
@@ -295,8 +323,11 @@
           <div *ngFor="let product of recentProducts" class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100 shadow-sm recent-modal-product-card">
               <div class="recent-modal-product-image-container">
-                <img [src]="product.product.image || 'https://via.placeholder.com/180'" 
-                     class="card-img-top" alt="{{product.product.name}}">
+                <img *ngIf="product.product?.image && product.product.image !== ''; else defaultImage"
+                  [src]="product.product.image" class="card-img-top" alt="{{product.product?.name}}">
+                <ng-template #defaultImage>
+                  <img src="images/image.jpg" class="card-img-top" alt="Default Image">
+                </ng-template>
                 <div class="recent-modal-product-stock-badge">
                   Stock: {{product.stock}}
                 </div>
@@ -306,17 +337,33 @@
                 <p class="card-text mb-2">
                   <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                 </p>
+                
+                <!-- Show color if exists -->
+                <div *ngIf="product.branch?.color?.color" class="mb-2">
+                  <span class="badge" [style.background-color]="product.branch.color.color" 
+                        [style.color]="getContrastColor(product.branch.color.color)">
+                    {{ product.branch.color.color | titlecase }}
+                  </span>
+                </div>
+                
+                <!-- Show determinants if they exist -->
+                <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
+                  <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
+                    <span class="badge bg-secondary">
+                      {{ det.determinant | titlecase }}: {{ det.value }}
+                    </span>
+                  </div>
+                </div>
+                
                 <p class="card-text mb-3">
                   <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                 </p>
                 <div class="mt-auto">
                   <div class="d-grid gap-2">
-                    <button class="btn shadow-sm select-product-button"
-                            (click)="selectProduct(product)">
+                    <button class="btn shadow-sm select-product-button" (click)="selectProduct(product)">
                       <i class="fas fa-hand-pointer me-1"></i>Select
                     </button>
-                    <button class="btn shadow-sm add-to-invoice-modal-button"
-                            (click)="addToInvoice(product)">
+                    <button class="btn shadow-sm add-to-invoice-modal-button" (click)="addToInvoice(product)">
                       <i class="fas fa-shopping-cart me-1"></i>Add to Invoice
                     </button>
                   </div>
@@ -325,15 +372,15 @@
             </div>
           </div>
 
-          <div *ngIf="searchQuery && recentProducts.length === 0" class="col-12 text-center py-5 no-products-found-modal">
+          <div *ngIf="searchQuery && recentProducts.length === 0"
+            class="col-12 text-center py-5 no-products-found-modal">
             <i class="fas fa-search fa-3x text-muted mb-3"></i>
             <h5 class="text-muted">No products found for "{{ searchQuery }}"</h5>
           </div>
         </div>
       </div>
       <div class="modal-footer recent-products-modal-footer">
-        <button type="button" class="btn shadow close-recent-modal-button"
-                (click)="closeRecentModal()">Close</button>
+        <button type="button" class="btn shadow close-recent-modal-button" (click)="closeRecentModal()">Close</button>
       </div>
     </div>
   </div>
