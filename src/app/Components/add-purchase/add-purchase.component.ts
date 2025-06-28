@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Modal } from 'bootstrap';
 import { CheckService } from '../../shared/services/check.service';
 import { ToastrService } from 'ngx-toastr';
+import { PurchaseOrdersService } from '../../shared/services/purchase_orders.service';
 
 @Component({
   selector: 'app-add-purchase',
@@ -62,7 +63,8 @@ export class AddPurchaseComponent implements OnInit {
     private _Router: Router,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private _PurchaseOrdersService: PurchaseOrdersService
 
   ) {
     this.purchasesBillForm = this.fb.group({
@@ -248,6 +250,66 @@ export class AddPurchaseComponent implements OnInit {
   }
 
 
+
+  purchaseOrders :any;
+
+orderSearchDate = this.getTodayDate();
+
+   loadOrders() {
+    if(this.selectedVendor){
+    this._PurchaseOrdersService.getAllPurchaseOrderPopup(
+          '',
+            this.selectedVendor.id,
+            this.orderSearchDate
+        ).subscribe({
+          next: (response) => {
+            if (response) {
+              this.purchaseOrders = response.data.bills;
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          },
+        });
+      }
+    }
+    
+selectedOrderId ='';
+
+    loadOrderById(id:string) {
+    this._PurchaseOrdersService.getPurchaseOrderById(id).subscribe({
+          next: (response) => {
+            if (response) {
+              this.selectedOrderId = id;
+
+              console.log(response)
+              response.data.items.forEach((item :any)=>{
+              this.addItem(item);
+
+              });
+              this.selectedStore = response.data.store;
+              this.purchasesBillForm.patchValue({store_id: this.selectedStore.id});
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          },
+        });
+      
+    }
+    
+
+onPurchaseOrderSearchChange(){
+  this.loadOrders();
+}
+
+selectPurchaseOrder(order:any){
+  this.loadOrderById(order.id);
+
+}
+
+
+
   onColorChange(event: Event, index: number) {
 
     const selectedProductId = (event.target as HTMLSelectElement).value;
@@ -258,15 +320,51 @@ export class AddPurchaseComponent implements OnInit {
     console.log(selectedProductId);
   }
 
-  addItem() {
+  addItem(data:any|null = null) {
+
     const items = this.purchasesBillForm.get('items') as FormArray;
+
+    if(!data){
     items.push(this.createItem());
+
+    }else{
+
+      console.log('items' , data.serial_numbers);
+    items.push(
+      this.fb.group({
+      amount: [data.quantity, Validators.required],
+      price: ['', Validators.required],
+      product_id: [data.product.id, Validators.required],
+      product: [data.product],
+      color_id: [null ],
+      type: ['branch'],
+
+      need_serial: [data.product.need_serial_number],
+      barcode: [null],
+      colors: [[]],
+      branch_data: [data.product_branch],
+      determinants: this.fb.array([]),
+
+      serialNumbers: [data.serial_numbers],
+      neededSerialNumbers: [0],
+    })
+
+    );
+
+    }
   }
 
   removeItem(index: number): void {
     this.items.removeAt(index);
   }
 
+
+
+
+  //  addItem() {
+  //   const items = this.purchasesBillForm.get('items') as FormArray;
+  //   items.push(this.createItem());
+  // }
 
 
   createItem(): FormGroup {
@@ -430,14 +528,11 @@ export class AddPurchaseComponent implements OnInit {
 
   }
   handleForm() {
-    if (this.purchasesBillForm.get('file_type')?.value != 'manual') {
-
+    if (this.purchasesBillForm.get('file_type')?.value != 'manual' && this.purchasesBillForm.get('file_type')?.value != 'purchase_order') {
       this.items.clear();
-
     }
     if (this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value) {
       this.toastr.error('يجب ادخال سعر الصرف');
-      // alert('يجب ادخال سعر الصرف');
       return;
     }
     this.isSubmited = true;
@@ -469,17 +564,21 @@ export class AddPurchaseComponent implements OnInit {
       }
       formData.append('vendor_id', this.purchasesBillForm.get('vendor_id')?.value);
       console.log(this.purchasesBillForm.get('vendor_id')?.value);
-      // if (this.selecteddelegateAccount) {
-      //   formData.append('delegate_id', this.purchasesBillForm.get('delegate_id')?.value || '');
-      // }
       formData.append('store_id', this.purchasesBillForm.get('store_id')?.value);
-      // formData.append('currency_id', this.purchasesBillForm.get('currency_id')?.value || '');
       formData.append('invoice_date', this.purchasesBillForm.get('date')?.value);
-      // formData.append('delegate_id', this.purchasesBillForm.get('delegate_id')?.value || '');
       formData.append('total', this.total.toString());
       formData.append('total_payed', this.totalPayed.toString());
       formData.append('notes', this.purchasesBillForm.get('notes')?.value || '');
       formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
+
+
+          if(this.showselectOrder && this.selectedOrderId){
+            formData.append('purchase_order_id', this.selectedOrderId);
+          }
+
+
+
+
       if (this.purchasesBillForm.get('file_type')?.value == 'items_only' || this.purchasesBillForm.get('file_type')?.value == 'all_data') {
         formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
         if (this.selectedFile) {
@@ -488,17 +587,9 @@ export class AddPurchaseComponent implements OnInit {
           this.toastr.error('يرجى اختيار ملف');
           return;
         }
-        // formData.append("file", this.purchasesBillForm.get('file')?.value);   
-        //   const file = this.purchasesBillForm.get('file')?.value;  
-        //   if (file instanceof File) { // Ensure it's a File object
-        //     formData.append('file', file, file.name);
-        //   } else {
-        //     console.error('Invalid file detected:', file);
-        //     return; // Prevent submission
-        //   }     
       }
 
-      if (this.purchasesBillForm.get('file_type')?.value == 'manual') {
+      if (this.purchasesBillForm.get('file_type')?.value == 'manual' || this.purchasesBillForm.get('file_type')?.value == 'purchase_order') {
         if (this.items && this.items.controls) {
           this.items.controls.forEach((itemControl, index) => {
             const itemValue = itemControl.value;
@@ -564,7 +655,7 @@ export class AddPurchaseComponent implements OnInit {
         }
       }
       if (!error) {
-        if (this.purchasesBillForm.get('file_type')?.value == 'manual') {
+        if (this.purchasesBillForm.get('file_type')?.value == 'manual' || this.purchasesBillForm.get('file_type')?.value == 'purchase_order') {
 
           this._PurchasesService.addPurchase(formData).subscribe({
             next: (response) => {
@@ -773,6 +864,8 @@ updateAccounts(){
       this.selectedVendor = account;
       this.purchasesBillForm.patchValue({ 'vendor_id': account.id })
 
+      this.loadOrders();
+
       this.needCurrecyPrice = false;
       this.forignCurrencyName = '';
 
@@ -905,11 +998,14 @@ updateAccounts(){
     this.purchasesBillForm.patchValue({ store_id: store.id });
     this.closeModal('storeModal');
   }
+  showselectOrder = false;
 
   onFileTypeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
 
     this.showManual = value === 'manual';
+    this.showselectOrder = value === 'purchase_order';
+
     this.showFile = value === 'all_data' || value === 'items_only';
 
     this.showAllDataExport = value === 'all_data';
@@ -917,6 +1013,10 @@ updateAccounts(){
     if (this.purchasesBillForm.get('file_type')?.value === 'manual') {
       this.addItem();
     }
+
+
+
+
   }
   exportAllDataToSheet() {
     this._PurchasesService.exportAllDataToSheet().subscribe({

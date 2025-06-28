@@ -16,6 +16,7 @@ import { ClientService } from '../../shared/services/client.service';
 import { SalesService } from '../../shared/services/sales.service';
 import { ProductBranchStoresService } from '../../shared/services/product-branch-stores.service';
 import { ToastrService } from 'ngx-toastr';
+import { SaleOrdersService } from '../../shared/services/sale_orders.service';
 
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -68,6 +69,7 @@ export class AddsalesComponent implements OnInit {
     private _ProductBranchesService: ProductBranchesService,
     private _ClientService: ClientService,
     private _ProductBranchStoresService: ProductBranchStoresService,
+    private _SaleOrdersService: SaleOrdersService,
 
     private _AccountService: AccountService,
     private _SalesService: SalesService,
@@ -293,9 +295,9 @@ export class AddsalesComponent implements OnInit {
     return pages;
   }
 
-  createItem(): FormGroup {
+  createItem(amount:number|null = null ,serialNumbers : string[] = []): FormGroup {
     return this.fb.group({
-      amount: [null, Validators.required],
+      amount: [amount, Validators.required],
       overridePrice: [false],
       price: ['', Validators.required],
       priceRanges: [[]],
@@ -304,7 +306,7 @@ export class AddsalesComponent implements OnInit {
       need_serial: [false],
       barcode: [null],
       color: [null],
-      productSerialNumbers: [[]],
+      productSerialNumbers: [serialNumbers],
       serialNumbers: [[]],
       neededSerialNumbers: [0],
     });
@@ -362,23 +364,25 @@ export class AddsalesComponent implements OnInit {
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number) {
+  addParcode(index: number , givenBarcode:string|null = null) {
     const items = this.saleForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
 
-    const barcode = item.get('barcode')?.value;
+    const barcode = givenBarcode ? givenBarcode : item.get('barcode')?.value;
     const neededBars = item.get('neededSerialNumbers')?.value;
     if (neededBars == 0) {
 
       return;
     }
     let tempList = item.get('serialNumbers')?.value || [];
-
-    tempList.forEach(() => {
-
-    });
+    const updatedTemplist = tempList.filter((b: string) => b !== barcode);
 
 
+    // tempList.forEach((barcode:any) => {
+
+    //   if(){}
+
+    // });
 
     if (barcode) {
       tempList.push({ barcode: barcode })
@@ -423,6 +427,9 @@ export class AddsalesComponent implements OnInit {
         console.warn('Invalid amount:', amount);
       }
     }
+
+
+  
 
     this.onPrice();
 
@@ -498,9 +505,35 @@ export class AddsalesComponent implements OnInit {
     return (this.saleForm.get('items') as FormArray);
   }
 
+  showselectOrder =false;
+  onFileTypeChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.showselectOrder = value === 'sale_order';
 
-  addItem(): void {
+   }
+
+  addItem(data:any|null = null): void {
+
+    if(data){
+
+    this.items.push(this.createItem(data.quantity));
+
+    // selectProduct
+    const index = this.items.length - 1;
+
+    
+    this.selectProduct(data , index);
+    this.onAmountChange(index);
+    if(data.serialNumbers){
+      data.serialNumbers.forEach((element:any) => {
+        this.addParcode(index , element.barcode);
+      });
+      // addParcode
+    }
+
+    }else{
     this.items.push(this.createItem());
+    }
   }
 
   removeItem(index: number): void {
@@ -562,6 +595,10 @@ export class AddsalesComponent implements OnInit {
 
       formData.append('notes', this.saleForm.get('notes')?.value || '');
       formData.append('date', this.saleForm.get('invoice_date')?.value);
+
+        if(this.showselectOrder && this.selectedOrderId){
+            formData.append('sale_order_id', this.selectedOrderId);
+          }
 
 
 
@@ -743,6 +780,7 @@ export class AddsalesComponent implements OnInit {
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
+      this.loadOrders();
 
       if(this.selectedClient.delegate){
         this.selecteddelegateAccount= this.selectedClient.delegate;
@@ -796,7 +834,7 @@ export class AddsalesComponent implements OnInit {
         if (response) {
           this.serialNumber = response.data;
           const itemsArray = this.saleForm.get('items') as FormArray;
-          const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+          const itemGroup = itemsArray.at(index) as FormGroup;
           itemGroup.patchValue({ productSerialNumbers: this.serialNumber });
 
           console.log('serial numbers', this.serialNumber);
@@ -810,9 +848,9 @@ export class AddsalesComponent implements OnInit {
   }
 
 
-  selectProduct(productBranchStore: any) {
+  selectProduct(productBranchStore: any , index:number|null = null) {
     const itemsArray = this.saleForm.get('items') as FormArray;
-    const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+    const itemGroup = itemsArray.at(index != null ? index :this.productIndex) as FormGroup;
 
     itemGroup.patchValue({ product: productBranchStore.product });
     console.log('productBranchStore', productBranchStore);
@@ -841,7 +879,9 @@ export class AddsalesComponent implements OnInit {
       itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
+    console.log(productBranchStore.product.id, this.selectedStore, index != null ? index :this.productIndex );
+
+    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, index ? index :this.productIndex);
     this.closeProductModel();
   }
   
@@ -881,6 +921,83 @@ export class AddsalesComponent implements OnInit {
       }
 
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   saleOrders :any;
+
+orderSearchDate = this.getTodayDate();
+
+   loadOrders() {
+    if(this.selectedClient){
+    this._SaleOrdersService.getAllSaleOrdersForPopup(
+          '',
+            this.selectedClient.account.id ,
+            this.orderSearchDate
+        ).subscribe({
+          next: (response) => {
+            if (response) {
+              this.saleOrders = response.data.bills;
+              console.log('my data::', response,this.selectedClient.id,this.orderSearchDate);
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          },
+        });
+      }
+    }
+    
+
+selectedOrderId = '';
+    loadOrderById(id:string) {
+    this._SaleOrdersService.getSaleOrderById(id).subscribe({
+          next: (response) => {
+            if (response) {
+
+
+              this.items.clear();
+  this.selectedOrderId = id;
+   this.selectedStore = response.data.store.id;
+
+              console.log('my store_id' ,this.selectedStore);
+              this.saleForm.patchValue({store_id: this.selectedStore});
+              console.log(response)
+              response.data.items.forEach((item :any)=>{
+              this.addItem(item);
+
+              });
+           
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          },
+        });
+      
+    }
+    
+
+
+onSaleOrderSearchChange(){
+  this.loadOrders();
+
+}
+
+selectSaleOrder(order:any){
+  this.loadOrderById(order.id);
+}
 
 }
 

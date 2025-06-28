@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5>{{ 'MANAGE_ASSETS' | translate }}</h5>
+    <span class="text-muted">
+      {{ 'DASHBOARD' | translate }}
+      <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
+      {{ 'ASSETS' | translate }}
+    </span>
+  </div>
+
+
+    <a *ngIf="_PermissionService.hasPermission('employees' , 'add_employees')" class="btn btn-info"  (click)="calculateAssetExpenses()">
+        Reload
+    </a>
+
+
+
+</div>
+
+<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold">{{ 'ASSETS_LIST' | translate }}</span>
+
+      <input
+        class="form-control search w-25"
+        type="search"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        placeholder="{{ 'SEARCH' | translate }}"
+        aria-label="Search"
+      />
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>{{ 'ASSET_NAME' | translate }}</th>
+          <th>{{ 'PURCHASE_PRICE' | translate }}</th>
+          <th>{{ 'CURRENT_PRICE' | translate }}</th>
+          <th>{{ 'CURRENT_PERIOD' | translate }}</th>
+          <th>{{ 'COLLECTION_ACCOUNT' | translate }}</th>
+          <th>{{ 'EXPENSES_ACCOUNT' | translate }}</th>
+          <th>{{ 'LAST_PERIOD_AMOUNT' | translate }}</th>
+          <th>{{ 'LAST_PERIOD_YEAR' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of assets; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.asset.name }}</td>
+          <td>{{ item.asset.purchase_price }}</td>
+          <td>{{ item.asset.current_price }}</td>
+          <td>{{ item.asset.current_period }}</td>
+          <td>{{ item.asset.collection_account }}</td>
+          <td>{{ item.asset.expenses_account }}</td>
+          <td>
+            {{ item.last_period?.amount ?? ('NOT_AVAILABLE' | translate) }}
+          </td>
+          <td>
+            {{ item.last_period?.year ?? ('NOT_AVAILABLE' | translate) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

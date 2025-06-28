@@ -73,22 +73,42 @@
                     placeholder="{{ 'NOTES' | translate }}..." rows="3"></textarea>
                 </div>
 
-                <div class="form-group col-md-6">
+        
+
+                 
+
+
+            <div class="form-group col-md-6">
                   <label for="file_type" class="form-label">Type</label>
                   <select id="file_type" formControlName="file_type" class="form-control"
                     (change)="onFileTypeChange($event)">
                     <option value="manual">Manual</option>
                     <option value="all_data">All Product Data</option>
                     <option value="items_only">Only Items</option>
+                    <option value="purchase_order">Purchase Order</option>
+
                   </select>
                 </div>
+
+
+                  <div class="form-group col-md-6"  *ngIf="showselectOrder">
+                    <label class="form-label">{{ 'PURCHASE_ORDER' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openModal('orderModel', 'order')">
+                      {{ 'SELECT_PURCHASE_ORDER' | translate }}
+                    </button>                   
+                  </div>
+
+
+
+
+
+                
                 <div class="d-flex align-items-end gap-3" *ngIf="showFile">
-                  <!-- Show All Data Export Button -->
                   <a *ngIf="showAllDataExport" (click)="exportAllDataToSheet()" class="btn btn-outline-info">
                     Export All Data To Sheet
                   </a>
 
-                  <!-- Show only for only_items -->
                   <a *ngIf="showItemsExport" (click)="exportItemsDataToSheet()" class="btn btn-outline-info">
                     Export Items Data To Sheet
                   </a>
@@ -100,13 +120,12 @@
                   </div>
                   <input id="file" type="file" class="form-control" (change)="onFileSelected($event)" />
                 </div>
-                <div class="form-group col-md-12" *ngIf="showManual">
+                <div class="form-group col-md-12" *ngIf="showManual || showselectOrder">
                   <div formArrayName="items" class="mt-4 ">
                     <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
                       class="mb-3 border p-3 rounded">
                       <div class="row">
 
-                        <!-- Product Selection -->
                         <div class="col-md-2">
 
                           <label class="form-label">{{ 'PRODUCT' | translate }}</label>
@@ -116,8 +135,6 @@
                           </button>
                           <input type="hidden" formControlName="product_id" [value]="item.get('product')?.value?.id" />
                         </div>
-
-                        <!-- Quantity -->
 
                         <div class="col-md-2">
                           <label for="amount">{{ 'QUANTITY' | translate }}</label>
@@ -175,7 +192,7 @@
 
                           <span *ngFor="let determinant of item.get('branch_data')?.value.determinants; let i = index">
                             <span class="badge bg-info text-dark me-1">
-                              {{ determinant.name }}: {{ determinant.value }}
+                              {{ determinant.determinant }}: {{ determinant.value }}
                             </span>
                           </span>
                         </div>
@@ -188,9 +205,6 @@
                             item.get('amount')?.value:0 }}
                           </p>
                         </div>
-
-
-
                         <ng-container *ngIf="item.get('determinants')?.value?.length">
                           <div class="row" formArrayName="determinants">
 
@@ -204,9 +218,6 @@
                                   {{ value.value }}
                                 </option>
                               </select>
-
-<!-- (change)="onColorChange($event, i)" -->
-
                             </div>
                           </div>
 
@@ -253,7 +264,6 @@
                           </div>
                         </div>
 
-                        <!-- Remove Item -->
                         <div class="col-md-12">
                           <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
                             <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
@@ -263,7 +273,6 @@
                     </div>
                   </div>
 
-                  <!-- Add Item -->
                   <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
                     <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
                   </button>
@@ -280,14 +289,9 @@
                   </div>
 
                   <div class="form-group col-md-12" *ngIf="purchasesBillForm.get('showCashAccountsDropdown')?.value">
-                    <!-- <label class="form-check-label">
-                      اختر طريقة الدفع
-                    </label> -->
-
                     <label for="payment_type" class="form-label large-text"> اختر طريقة الدفع </label>
                     <select id="payment_type" formControlName="payment_type" class="form-control"
                       (change)="onPaymentTypeChange($event)">
-                      <!-- <option disabled>اختر طريقة الدفع</option> -->
                       <option value="cash">نقدى</option>
                       <option value="check">شيك</option>
 
@@ -555,6 +559,48 @@
               <td>{{ check.source_account.name }}</td>
               <td>{{ check.payed_to.name }}</td>
               <td>{{ check.due_date }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('orderModel')"></button>
+      </div>
+      <div class="modal-body">
+        <input type="date" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="orderSearchDate" (ngModelChange)="onPurchaseOrderSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="bg-light" scope="col">{{ 'ID' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'VENDOR' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CREATED_BY' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of purchaseOrders; let i = index" (click)="selectPurchaseOrder(order)" style="cursor: pointer;">
+              <td>{{ order.id }}</td>
+              <td>{{ order.vendor }}</td>
+              <td>{{ order.date }}</td>
+              <td>{{ order.created_by }}</td>
 
             </tr>
           </tbody>

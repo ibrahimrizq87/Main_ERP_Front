@@ -45,7 +45,7 @@ export class PurchaseOrdersService {
 
 
   getAllPurchaseOrder(
-          vendorName: string = '',
+      vendorName: string = '',
       startDate: string = '',
       endDate: string = '',
       priceFrom: string = '',
@@ -71,12 +71,37 @@ export class PurchaseOrdersService {
 
 
 
+    getAllPurchaseOrderPopup(
+      searchTerm: string = '',
+      vendor_id: string = '',
+      date: string = '',
+
+      page: number = 1,
+      perPage: number = 10
+  ): Observable<any> {
+
+          let params = new HttpParams();
+          if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
+          if (vendor_id !== '') params = params.set('vendor_id', vendor_id);
+          if (date !== '') params = params.set('day', date);
+
+          if (page !== 1) params = params.set('page', page);
+          if (perPage !== 10) params = params.set('per_page', perPage);
+
+    return this._HttpClient.get(`${this.baseURL}/general/purchases-orders` ,{
+      headers: this.getHeadersWithToken(),
+      params:params
+      })
+  }
+
+
+
 
 
 
 
   getPurchaseOrderById(id:any): Observable<any>{
-    return this._HttpClient.get(this.baseURL+"/general/purchases-order/"+id, { headers: this.getHeadersWithToken() })
+    return this._HttpClient.get(this.baseURL+"/general/purchases-orders/"+id, { headers: this.getHeadersWithToken() })
     
   }
 
@@ -86,8 +111,8 @@ export class PurchaseOrdersService {
     return this._HttpClient.post(`${this.baseURL}/general/purchases-bills/${purchaseId}`, PurchaseData, {  headers: this.getHeadersWithToken() })
   }
 
-  deletePurchase(branchId: number): Observable<any> {
-    return this._HttpClient.delete(`${this.baseURL}/general/purchases-bills/${branchId}`, { headers: this.getHeadersWithToken() })
+  deletePurchaseOrder(branchId: number): Observable<any> {
+    return this._HttpClient.delete(`${this.baseURL}/general/purchases-orders/${branchId}`, { headers: this.getHeadersWithToken() })
   }
 
   approveBill(billId: string): Observable<any> {

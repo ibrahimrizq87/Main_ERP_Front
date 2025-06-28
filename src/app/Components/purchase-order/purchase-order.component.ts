@@ -146,9 +146,9 @@ export class PurchaseOrderComponent {
       );
     }
   }
-  deletePurchase(purchaseId: number): void {
+  deletePurchaseOrder(purchaseId: number): void {
     if (confirm('Are you sure you want to delete this Purchase?')) {
-      this._PurchaseOrdersService.deletePurchase(purchaseId).subscribe({
+      this._PurchaseOrdersService.deletePurchaseOrder(purchaseId).subscribe({
         next: (response) => {
           if (response) {
             this.toastr.success('تم حذف الفاتورة بنجاح');

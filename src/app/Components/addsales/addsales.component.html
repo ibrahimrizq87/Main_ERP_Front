@@ -78,6 +78,32 @@
                 </div>
 
 
+
+
+                <div class="form-group col-md-6">
+                  <label for="file_type" class="form-label">Type</label>
+                  <select id="file_type"  class="form-control"
+                    (change)="onFileTypeChange($event)">
+                    <option value="manual">Manual</option>
+                    <option value="sale_order">Sales Order</option>
+                  </select>
+                </div>
+
+
+                     <div class="form-group col-md-6"  *ngIf="showselectOrder">
+                    <label class="form-label">{{ 'SLAE_ORDER' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openModal('orderModel', 'order')">
+                      {{ 'SELECT_SLAE_ORDER' | translate }}
+                    </button>                   
+                  </div>
+
+
+
+
+
+
+
                 <div class="form-group col-md-12">
                   <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
                   <textarea id="notes" formControlName="notes" class="form-control"
@@ -564,3 +590,46 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+<div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('orderModel')"></button>
+      </div>
+      <div class="modal-body">
+        <input type="date" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="orderSearchDate" (ngModelChange)="onSaleOrderSearchChange()" />
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="bg-light" scope="col">{{ 'ID' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
+              <th class="bg-light" scope="col">{{ 'CREATED_BY' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of saleOrders; let i = index" (click)="selectSaleOrder(order)" style="cursor: pointer;">
+              <td>{{ order.id }}</td>
+              <td>{{ order.client }}</td>
+              <td>{{ order.date }}</td>
+              <td>{{ order.created_by }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
