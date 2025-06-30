@@ -125,6 +125,14 @@ export class CashierService {
   getAllRecent(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier/get-recent-products`, { headers: this.getHeadersWithToken() });
   }
+  // Route::put('/update-default-store/{store_id}',  'updateMyDefaultStore'); 
+  updateMyDefaultStore(storeId: string): Observable<any> {
+    return this._HttpClient.put(`${this.baseURL}/general/cashier/update-default-store/${storeId}`, {}, { headers: this.getHeadersWithToken() });
+  }
+  // Route::get('/get-my-info',  'getMyInfo');
+  getMyInfo(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/cashier/get-my-info`, { headers: this.getHeadersWithToken() });
+  }
   //   getAllStores(
   //       type: string = 'all',
   //       name: string = '',

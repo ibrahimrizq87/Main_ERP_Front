@@ -5,10 +5,11 @@
     <!-- Left Sidebar - Enhanced -->
     <div class="col-1 d-flex flex-column justify-content-center gap-4 align-items-center p-3 cashier-sidebar">
      <!-- setting -->
-      <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button settings-button" >
-        <i class="fas fa-cog mb-1"></i><br>
-        <small>Settings</small>
-      </button>
+    
+<button class="btn w-100 py-3 shadow-sm cashier-sidebar-button settings-button" (click)="openSettingsModal()">
+  <i class="fas fa-cog mb-1"></i><br>
+  <small>Settings</small>
+</button>
       <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button history-button" routerLink="/history">
         <i class="fas fa-history mb-1"></i><br>
         <small>History</small>
@@ -386,6 +387,114 @@
       </div>
       <div class="modal-footer recent-products-modal-footer">
         <button type="button" class="btn shadow close-recent-modal-button" (click)="closeRecentModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add this modal at the bottom of your cashier.component.html file -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content settings-modal">
+      <div class="modal-header settings-modal-header">
+        <h5 class="modal-title text-white fw-bold" id="settingsModalLabel">
+          <i class="fas fa-cog me-2"></i>{{ 'STORE_SETTINGS' | translate }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeSettingsModal()"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 settings-modal-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h6 class="fw-bold mb-0">
+            <i class="fas fa-store me-2"></i>{{ 'SELECT_STORE' | translate }}
+          </h6>
+          <div class="d-flex align-items-center gap-3">
+            <div class="input-group" style="width: 250px;">
+              <input
+                [(ngModel)]="storeSearchQuery"
+                (ngModelChange)="onStoreSearchChange()"
+                class="form-control form-control-sm"
+                type="search"
+                placeholder="{{ 'SEARCH_STORES' | translate }}"
+                aria-label="Search"
+              />
+              <span class="input-group-text">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">{{ 'STORE' | translate }}</th>
+                <th scope="col">{{ 'ADDRESS' | translate }}</th>
+                <th scope="col">{{ 'MANAGER' | translate }}</th>
+                <th scope="col">{{ 'PHONE' | translate }}</th>
+                <th scope="col">{{ 'ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let store of filteredStores" 
+                  [class.table-primary]="currentStore?.id === store.id">
+                <th scope="row">{{ store.id }}</th>
+                <td>{{ store.name }}</td>
+                <td>{{ store.address_description }}</td>
+                <td>{{ store.manager_name }}</td>
+                <td>{{ store.phone }}</td>
+                <td>
+                  <button class="btn btn-sm btn-success" 
+                          (click)="changeStore(store)"
+                          [disabled]="currentStore?.id === store.id">
+                    <i class="fas fa-check-circle me-1"></i>
+                    {{ currentStore?.id === store.id ? ('SELECTED' | translate) : ('SELECT' | translate) }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <div class="text-muted">
+            {{ 'SHOWING' | translate }} 
+            {{ (storeCurrentPage - 1) * storeItemsPerPage + 1 }} 
+            {{ 'TO' | translate }} 
+            {{ (storeCurrentPage * storeItemsPerPage) < storeTotalItems ? storeCurrentPage * storeItemsPerPage : storeTotalItems }} 
+            {{ 'OF' | translate }} 
+            {{ storeTotalItems }} 
+            {{ 'ENTRIES' | translate }}
+          </div>
+
+          <select 
+            [(ngModel)]="storeItemsPerPage" 
+            (ngModelChange)="onStoreItemsPerPageChange()"
+            class="form-select form-select-sm" 
+            style="width: auto;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <pagination-controls 
+            (pageChange)="onStorePageChange($event)"
+            [maxSize]="5"
+            [directionLinks]="true"
+            [autoHide]="true"
+            [responsive]="true"
+            previousLabel="{{ 'PREVIOUS' | translate }}"
+            nextLabel="{{ 'NEXT' | translate }}"
+            screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+            screenReaderPageLabel="{{ 'PAGE' | translate }}"
+            screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+          </pagination-controls>
+        </div>
+      </div>
+      <div class="modal-footer settings-modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeSettingsModal()">{{ 'CLOSE' | translate }}</button>
       </div>
     </div>
   </div>

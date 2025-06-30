@@ -7,11 +7,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {  Router, RouterModule } from '@angular/router';
+import { StoreService } from '../../shared/services/store.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cashier',
   standalone: true,
-  imports: [CommonModule, FormsModule ,RouterModule],
+  imports: [CommonModule, FormsModule ,RouterModule,NgxPaginationModule,TranslateModule],
   templateUrl: './cashier.component.html',
   styleUrl: './cashier.component.css'
 })
@@ -25,6 +28,15 @@ export class CashierComponent implements OnInit {
   showPositionInput: boolean = false;
   invoiceItems: any[] = []; // Array to hold selected products
   totalAmount: number = 0; // Total amount for all items
+  stores: any[] = [];
+  filteredStores: any[] = [];
+  currentStore: any = null;
+  storeSearchQuery: string = '';
+  storeCurrentPage: number = 1;
+  storeItemsPerPage: number = 5;
+  storeTotalItems: number = 0;
+  storeLastPage: number = 1;
+  private storeSearchSubject = new Subject<string>();
 
   // Checkout form data
   checkoutData = {
@@ -34,20 +46,121 @@ export class CashierComponent implements OnInit {
     type: 'purchase' // default value
   };
 
-  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router) {
+  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router,private _StoreService: StoreService) {
     this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
       this.searchProducts(query);
     });
+      // Add this for store search
+      this.storeSearchSubject.pipe(debounceTime(300)).subscribe(() => {
+        this.loadStores();
+      });
   }
 
   ngOnInit(): void {
     this.addCashierToMyself();
     this.loadRecentProducts();
     this.searchProducts(''); // Load initial products
+    this.loadStores();
+    this._CashierService.getMyInfo().subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          console.log('My info:', response.data);
+          this.currentStore = response.data.cashierData.store;
+
+          // If currentStore is not set, load the first store from the list
+          if (!this.currentStore && this.stores.length > 0) {
+            this.currentStore = this.stores[0];
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error loading my info:', err);
+      }
+    });
   }
 
+// Updated loadStores method with pagination
+loadStores(): void {
+  this._StoreService.getAllStores(
+    'all',
+    this.storeSearchQuery,
+    this.storeCurrentPage,
+    this.storeItemsPerPage
+  ).subscribe({
+    next: (response) => {
+      if (response) {
+        this.stores = response.data;
+        this.filteredStores = [...this.stores];
+        this.storeTotalItems = response.meta.total;
+        this.storeLastPage = response.meta.last_page;
+        console.log('Stores loaded:', this.currentStore);
+        // Set current store if not already set
+        // if (!this.currentStore && this.stores.length > 0) {
+        //   this.currentStore = this.stores[0];
+        // }
+      }
+    },
+    error: (err) => {
+      console.error('Error loading stores:', err);
+    }
+  });
+}
+
+onStoreSearchChange(): void {
+  this.storeSearchSubject.next(this.storeSearchQuery);
+}
+
+onStorePageChange(page: number): void {
+  this.storeCurrentPage = page;
+  this.loadStores();
+}
+
+onStoreItemsPerPageChange(): void {
+  this.storeCurrentPage = 1;
+  this.loadStores();
+}
+onPageChange(page: number): void {
+  this.storeCurrentPage = page;
+  this.loadStores();
+}
+
+
+  // Add this new method to open settings modal
+  openSettingsModal() {
+    const modalElement = document.getElementById('settingsModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  // Add this new method to close settings modal
+  closeSettingsModal() {
+    const modalElement = document.getElementById('settingsModal');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+  changeStore(store: any) {
+   
+    this._CashierService.updateMyDefaultStore(store.id).subscribe({
+      next: (response) => {
+        this.currentStore = store;
+        console.log('Current store updated successfully:', this.currentStore);
+        console.log('Default store updated successfully:', response);
+        this.toastr.success(`Store successfully changed to ${store.name}`, 'Success');
+        this.closeSettingsModal();
+      },
+      error: (err) => {
+        console.error('Error updating default store:', err);
+        this.toastr.error('Failed to change store. Please try again.', 'Error');
+      }
+    });
+  }
   loadRecentProducts() {
     this._CashierService.getAllRecent().subscribe({
       next: (response) => {
@@ -241,6 +354,8 @@ updateQuantity(item: any, change: number) {
     this._CashierService.addCashierToMyself().subscribe({
       next: (response) => {
         if (response && response.data) {
+
+          console.log('Cashier added to myself:', response);
           console.log(response.data);
         }
       },
