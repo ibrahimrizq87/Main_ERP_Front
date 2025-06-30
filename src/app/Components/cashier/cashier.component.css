@@ -503,3 +503,11 @@
     font-weight: 600;
     transition: all 0.3s ease;
   }
+  .settings-button {
+    background: linear-gradient(45deg, #8e44ad, #9b59b6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }

@@ -75,46 +75,69 @@ export class CashierComponent implements OnInit {
   }
 
   // Add product to invoice items
-  addToInvoice(product: any) {
-    let productToAdd: any;
-    let price: number;
-
-    // Check if product is from recentProductsList
-    if (product.product_branch) {
-      productToAdd = product.product_branch;
-      price = parseFloat(productToAdd.price);
-    } 
-    // Check if product is from recentProducts (search results)
-    else if (product.product) {
-      productToAdd = product.branch;
-      // Use branch.default_price if available, otherwise use product.price
-      price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
-    } 
-    // If it's neither (shouldn't happen), use the product directly
-    else {
-      productToAdd = product;
-      price = parseFloat(product.price || '0');
-    }
-
-    // Check if product already exists in invoice
-    const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
-    
-    if (existingItem) {
-      existingItem.quantity += 1;
-      existingItem.total = existingItem.quantity * existingItem.price;
-    } else {
-      this.invoiceItems.push({
-        ...productToAdd,
-        product_branch_id: productToAdd.id,
-        price: price,
-        quantity: 1,
-        total: price,
-        serial_numbers: [] // Initialize empty array for serial numbers
-      });
-    }
-    
-    this.calculateTotal();
+  // Add product to invoice items
+addToInvoice(product: any) {
+  // First check if product has stock available
+  if (product.stock <= 0) {
+    this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+    return;
   }
+
+  let productToAdd: any;
+  let price: number;
+
+  // Check if product is from recentProductsList
+  if (product.product_branch) {
+    productToAdd = product.product_branch;
+    price = parseFloat(productToAdd.price);
+    // Check stock from the product_branch
+    if (productToAdd.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  } 
+  // Check if product is from recentProducts (search results)
+  else if (product.product) {
+    productToAdd = product.branch;
+    // Use branch.default_price if available, otherwise use product.price
+    price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
+    
+    // Also check stock from the main product if available
+    if (product.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  } 
+  // If it's neither (shouldn't happen), use the product directly
+  else {
+    productToAdd = product;
+    price = parseFloat(product.price || '0');
+    
+    if (product.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  }
+
+  // Check if product already exists in invoice
+  const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
+  
+  if (existingItem) {
+    existingItem.quantity += 1;
+    existingItem.total = existingItem.quantity * existingItem.price;
+  } else {
+    this.invoiceItems.push({
+      ...productToAdd,
+      product_branch_id: productToAdd.id,
+      price: price,
+      quantity: 1,
+      total: price,
+      serial_numbers: [] // Initialize empty array for serial numbers
+    });
+  }
+  
+  this.calculateTotal();
+}
 
   // Remove product from invoice items
   removeFromInvoice(index: number) {
@@ -123,12 +146,21 @@ export class CashierComponent implements OnInit {
   }
 
   // Update quantity of an item
-  updateQuantity(item: any, change: number) {
-    item.quantity += change;
-    if (item.quantity < 1) item.quantity = 1;
-    item.total = item.quantity * item.price;
-    this.calculateTotal();
+ // Update quantity of an item
+updateQuantity(item: any, change: number) {
+  // Check if we're increasing quantity and if stock is available
+  if (change > 0 && item.stock !== undefined && item.stock !== null) {
+    if (item.quantity >= item.stock) {
+      this.toastr.warning('Cannot add more items than available in stock', 'Warning');
+      return;
+    }
   }
+  
+  item.quantity += change;
+  if (item.quantity < 1) item.quantity = 1;
+  item.total = item.quantity * item.price;
+  this.calculateTotal();
+}
 
   // Calculate total amount
   calculateTotal() {
