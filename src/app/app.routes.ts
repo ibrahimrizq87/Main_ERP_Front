@@ -174,6 +174,7 @@ import { SaleOrderComponent } from './Components/sale-order/sale-order.component
 import { PrintInvoiceComponent } from './Components/print-invoice/print-invoice.component';
 import { HistoryComponent } from './Components/history/history.component';
 import { CashierComponent } from './Components/cashier/cashier.component';
+import { FixedAssetsExpensesComponent } from './Components/fixed-assets-expenses/fixed-assets-expenses.component';
 
 
 export const routes: Routes = [
@@ -198,6 +199,7 @@ export const routes: Routes = [
                 ]
             },
 
+            { path: "fixed-assets-expenses", component: FixedAssetsExpensesComponent },
 
 
             { path: "add-purchase-order", component: AddPurchaseOrderComponent },

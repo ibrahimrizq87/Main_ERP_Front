@@ -73,6 +73,31 @@ export class SaleOrdersService {
 
 
 
+   getAllSaleOrdersForPopup( 
+      search_term: string = '',
+      client_id: string = '',
+      date: string = '',
+    ): Observable<any> {
+      let params = new HttpParams();
+              if (search_term !== '') params = params.set('search_term', search_term);
+              if (client_id !== '') params = params.set('client_id', client_id);
+              if (date !== '') params = params.set('day', date);
+    return this._HttpClient.get(`${this.baseURL}/general/sale-orders`,{ 
+      headers:this.getHeadersWithToken(),
+      params: params
+
+      });
+  }
+
+
+  getSaleOrderById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/sale-orders/"+id, { headers:this.getHeadersWithToken() })
+  }
+  
+
+
+
+
     deleteSale(saleId: number): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/sale-orders/${saleId}`, { headers:this.getHeadersWithToken() })
   }

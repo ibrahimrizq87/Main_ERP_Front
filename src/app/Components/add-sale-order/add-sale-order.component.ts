@@ -61,7 +61,6 @@ export class AddSaleOrderComponent {
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
     private _ProductsService: ProductsService,
-    private _ProductBranchesService: ProductBranchesService,
     private _ClientService: ClientService,
     private _ProductBranchStoresService: ProductBranchStoresService,
 
@@ -605,10 +604,10 @@ export class AddSaleOrderComponent {
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
 
-      // if(this.selectedClient.delegate){
-      //   this.selecteddelegateAccount= this.selectedClient.delegate;
-      //   this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
-      // }
+      if(this.selectedClient.delegate){
+        this.selecteddelegateAccount= this.selectedClient.delegate;
+        this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
+      }
 
       // this.needCurrecyPrice = false;
       // this.forignCurrencyName = '';
@@ -740,6 +739,11 @@ export class AddSaleOrderComponent {
       }
 
   }
+
+
+
+
+
 
 }
 

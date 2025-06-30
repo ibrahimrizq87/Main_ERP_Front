@@ -332,16 +332,7 @@ export class AddPurchaseOrderComponent {
       formData.append('invoice_date', this.purchasesBillForm.get('date')?.value);
       formData.append('notes', this.purchasesBillForm.get('notes')?.value || '');
       formData.append('date', this.purchasesBillForm.get('invoice_date')?.value);
-      if (this.purchasesBillForm.get('file_type')?.value == 'items_only' || this.purchasesBillForm.get('file_type')?.value == 'all_data') {
-        formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
-        if (this.selectedFile) {
-          formData.append('file', this.selectedFile, this.selectedFile.name);
-        } else {
-          this.toastr.error('يرجى اختيار ملف');
-          return;
-        }
    
-      }
 
         if (this.items && this.items.controls) {
           this.items.controls.forEach((itemControl, index) => {
@@ -391,8 +382,8 @@ export class AddPurchaseOrderComponent {
 
 
 
-
-          this._PurchaseOrdersService.addPurchaseOrder(formData).subscribe({
+if(!error){
+     this._PurchaseOrdersService.addPurchaseOrder(formData).subscribe({
             next: (response) => {
               if (response) {
                 this.toastr.success('تم اضافه الفاتوره بنجاح');
@@ -423,6 +414,8 @@ export class AddPurchaseOrderComponent {
 
           });
 
+}
+     
 
 
 
