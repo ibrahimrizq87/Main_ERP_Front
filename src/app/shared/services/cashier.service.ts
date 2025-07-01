@@ -133,6 +133,12 @@ export class CashierService {
   getMyInfo(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier/get-my-info`, { headers: this.getHeadersWithToken() });
   }
+  // Route::group(['prefix' => 'products'], function () {
+  //   Route::get('/get-serial-numbers-for-return-sales/{productId}/{storeId}', [ProductController::class, 'getProductSerialNumbersForReturnSales']);
+  // });
+  getProductSerialNumbersForReturnSales(productId: string, storeId: string): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers-for-return-sales/${productId}/${storeId}`, { headers: this.getHeadersWithToken() });
+  }
   //   getAllStores(
   //       type: string = 'all',
   //       name: string = '',

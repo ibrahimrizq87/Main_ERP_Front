@@ -38,6 +38,16 @@ export class CashierComponent implements OnInit {
   storeLastPage: number = 1;
   private storeSearchSubject = new Subject<string>();
 
+  // Serial number management
+  availableSerialNumbers: any[] = [];
+  showSerialNumberModal: boolean = false;
+  currentItemForSerial: any = null;
+  selectedSerialNumbers: string[] = [];
+  loadingSerialNumbers: boolean = false;
+serialSearchQuery: string = '';
+filteredSerialNumbers: any[] = [];
+
+
   // Checkout form data
   checkoutData = {
     customer_name: '',
@@ -126,7 +136,6 @@ onPageChange(page: number): void {
   this.loadStores();
 }
 
-
   // Add this new method to open settings modal
   openSettingsModal() {
     const modalElement = document.getElementById('settingsModal');
@@ -161,6 +170,7 @@ onPageChange(page: number): void {
       }
     });
   }
+  
   loadRecentProducts() {
     this._CashierService.getAllRecent().subscribe({
       next: (response) => {
@@ -186,71 +196,197 @@ onPageChange(page: number): void {
       });
     }
   }
-
-  // Add product to invoice items
-  // Add product to invoice items
-addToInvoice(product: any) {
-  // First check if product has stock available
-  if (product.stock <= 0) {
-    this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+// Add this method to filter serial numbers
+filterSerialNumbers(): void {
+  if (!this.serialSearchQuery) {
+    this.filteredSerialNumbers = [...this.availableSerialNumbers];
     return;
   }
-
-  let productToAdd: any;
-  let price: number;
-
-  // Check if product is from recentProductsList
-  if (product.product_branch) {
-    productToAdd = product.product_branch;
-    price = parseFloat(productToAdd.price);
-    // Check stock from the product_branch
-    if (productToAdd.stock <= 0) {
-      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
-      return;
-    }
-  } 
-  // Check if product is from recentProducts (search results)
-  else if (product.product) {
-    productToAdd = product.branch;
-    // Use branch.default_price if available, otherwise use product.price
-    price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
-    
-    // Also check stock from the main product if available
-    if (product.stock <= 0) {
-      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
-      return;
-    }
-  } 
-  // If it's neither (shouldn't happen), use the product directly
-  else {
-    productToAdd = product;
-    price = parseFloat(product.price || '0');
-    
-    if (product.stock <= 0) {
-      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
-      return;
-    }
-  }
-
-  // Check if product already exists in invoice
-  const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
   
-  if (existingItem) {
-    existingItem.quantity += 1;
-    existingItem.total = existingItem.quantity * existingItem.price;
-  } else {
-    this.invoiceItems.push({
-      ...productToAdd,
-      product_branch_id: productToAdd.id,
-      price: price,
-      quantity: 1,
-      total: price,
-      serial_numbers: [] // Initialize empty array for serial numbers
-    });
-  }
-  
-  this.calculateTotal();
+  const searchTerm = this.serialSearchQuery.toLowerCase();
+  this.filteredSerialNumbers = this.availableSerialNumbers.filter(serial => 
+    serial.serial_number.toLowerCase().includes(searchTerm)
+  );
 }
+// Update the closeSerialNumberModal method
+
+  // Load serial numbers for a product
+// Update the loadSerialNumbers method
+loadSerialNumbers(productId: string, storeId: string): void {
+  this.loadingSerialNumbers = true;
+  this._CashierService.getProductSerialNumbersForReturnSales(productId, storeId).subscribe({
+    next: (response) => {
+      if (response ) {
+        console.log('Loaded serial numbers:', response);
+        console.log(storeId);
+        console.log(productId);
+        this.availableSerialNumbers = response.data;
+        this.filteredSerialNumbers = [...response.data];
+        console.log('Available serial numbers:', this.availableSerialNumbers);
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+}
+
+  // Open serial number selection modal
+  openSerialNumberModal(item: any): void {
+    this.currentItemForSerial = item;
+    this.selectedSerialNumbers = [...item.serial_numbers]; // Copy existing serial numbers
+    
+    // Load available serial numbers
+    const productId = item.product_id || item.id;
+    const storeId = this.currentStore?.id;
+    
+    if (productId && storeId) {
+      this.loadSerialNumbers(productId, storeId);
+    }
+    
+    const modalElement = document.getElementById('serialNumberModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  // Close serial number modal
+// Update the closeSerialNumberModal method
+closeSerialNumberModal(): void {
+  const modalElement = document.getElementById('serialNumberModal');
+  if (modalElement) {
+    const modal = Modal.getInstance(modalElement);
+    modal?.hide();
+  }
+  this.currentItemForSerial = null;
+  this.selectedSerialNumbers = [];
+  this.availableSerialNumbers = [];
+  this.filteredSerialNumbers = [];
+  this.serialSearchQuery = '';
+  this.loadingSerialNumbers = false;
+}
+
+  // Toggle serial number selection
+  toggleSerialNumber(serialNumber: string): void {
+    const index = this.selectedSerialNumbers.indexOf(serialNumber);
+    if (index > -1) {
+      this.selectedSerialNumbers.splice(index, 1);
+    } else {
+      if (this.selectedSerialNumbers.length < this.currentItemForSerial.quantity) {
+        this.selectedSerialNumbers.push(serialNumber);
+      } else {
+        this.toastr.warning('You cannot select more serial numbers than the quantity', 'Warning');
+      }
+    }
+  }
+
+  // Check if serial number is selected
+  isSerialNumberSelected(serialNumber: string): boolean {
+    return this.selectedSerialNumbers.includes(serialNumber);
+  }
+
+  // Save selected serial numbers
+  saveSerialNumbers(): void {
+    if (this.selectedSerialNumbers.length !== this.currentItemForSerial.quantity) {
+      this.toastr.warning(`Please select exactly ${this.currentItemForSerial.quantity} serial numbers`, 'Warning');
+      return;
+    }
+
+    // Update the item with selected serial numbers
+    this.currentItemForSerial.serial_numbers = [...this.selectedSerialNumbers];
+    this.toastr.success('Serial numbers saved successfully', 'Success');
+    this.closeSerialNumberModal();
+  }
+
+  // Add product to invoice items
+  addToInvoice(product: any) {
+    // First check if product has stock available
+    if (product.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+
+    let productToAdd: any;
+    let price: number;
+    let needSerial: boolean = false;
+    let productId: string;
+
+    // Check if product is from recentProductsList
+    if (product.product_branch) {
+      productToAdd = product.product_branch;
+      price = parseFloat(productToAdd.price);
+      needSerial = productToAdd.need_serial_number || false;
+      productId = productToAdd.product_id || productToAdd.id;
+      // Check stock from the product_branch
+      if (productToAdd.stock <= 0) {
+        this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+        return;
+      }
+    } 
+    // Check if product is from recentProducts (search results)
+    else if (product.product) {
+      productToAdd = product.branch;
+      // Use branch.default_price if available, otherwise use product.price
+      price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
+      needSerial = product.product.need_serial_number || false;
+      productId = product.product.id;
+      
+      // Also check stock from the main product if available
+      if (product.stock <= 0) {
+        this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+        return;
+      }
+    } 
+    // If it's neither (shouldn't happen), use the product directly
+    else {
+      productToAdd = product;
+      price = parseFloat(product.price || '0');
+      needSerial = product.need_serial_number || false;
+      productId = product.id;
+      
+      if (product.stock <= 0) {
+        this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+        return;
+      }
+    }
+
+    // Check if product already exists in invoice
+    const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+      existingItem.total = existingItem.quantity * existingItem.price;
+      
+      // If product needs serial numbers, open modal to select them
+      if (needSerial) {
+        this.openSerialNumberModal(existingItem);
+      }
+    } else {
+      const newItem = {
+        ...productToAdd,
+        product_branch_id: productToAdd.id,
+        product_id: productId,
+        price: price,
+        quantity: 1,
+        total: price,
+        need_serial_number: needSerial,
+        serial_numbers: [] // Initialize empty array for serial numbers
+      };
+      
+      this.invoiceItems.push(newItem);
+      
+      // If product needs serial numbers, open modal to select them
+      if (needSerial) {
+        this.openSerialNumberModal(newItem);
+      }
+    }
+    
+    this.calculateTotal();
+  }
 
   // Remove product from invoice items
   removeFromInvoice(index: number) {
@@ -259,21 +395,29 @@ addToInvoice(product: any) {
   }
 
   // Update quantity of an item
- // Update quantity of an item
-updateQuantity(item: any, change: number) {
-  // Check if we're increasing quantity and if stock is available
-  if (change > 0 && item.stock !== undefined && item.stock !== null) {
-    if (item.quantity >= item.stock) {
-      this.toastr.warning('Cannot add more items than available in stock', 'Warning');
-      return;
+  updateQuantity(item: any, change: number) {
+    // Check if we're increasing quantity and if stock is available
+    if (change > 0 && item.stock !== undefined && item.stock !== null) {
+      if (item.quantity >= item.stock) {
+        this.toastr.warning('Cannot add more items than available in stock', 'Warning');
+        return;
+      }
     }
+    
+    const oldQuantity = item.quantity;
+    item.quantity += change;
+    if (item.quantity < 1) item.quantity = 1;
+    item.total = item.quantity * item.price;
+    
+    // If quantity changed and item needs serial numbers, we need to update serial numbers
+    if (item.need_serial_number && item.quantity !== oldQuantity) {
+      // Clear existing serial numbers if quantity changed
+      item.serial_numbers = [];
+      this.toastr.info(`Quantity changed. Please select ${item.quantity} serial numbers.`, 'Info');
+    }
+    
+    this.calculateTotal();
   }
-  
-  item.quantity += change;
-  if (item.quantity < 1) item.quantity = 1;
-  item.total = item.quantity * item.price;
-  this.calculateTotal();
-}
 
   // Calculate total amount
   calculateTotal() {
@@ -285,6 +429,14 @@ updateQuantity(item: any, change: number) {
     if (this.invoiceItems.length === 0) {
       this.toastr.warning('Please add at least one item to the invoice before proceeding.', 'Warning');
       return;
+    }
+
+    // Check if all items that need serial numbers have them selected
+    for (let item of this.invoiceItems) {
+      if (item.need_serial_number && (!item.serial_numbers || item.serial_numbers.length !== item.quantity)) {
+        this.toastr.warning(`Please select ${item.quantity} serial numbers for ${item.name}`, 'Warning');
+        return;
+      }
     }
 
     const modalElement = document.getElementById('checkoutModal');
@@ -431,6 +583,7 @@ updateQuantity(item: any, change: number) {
       this.selectedProduct = null;
     }
   }
+  
   // Add this method to calculate text color based on background color
   getContrastColor(hexColor: string): string {
     if (!hexColor) return '#000000';
