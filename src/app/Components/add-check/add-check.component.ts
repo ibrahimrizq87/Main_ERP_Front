@@ -46,8 +46,7 @@ export class AddCheckComponent {
     private _CheckServic: CheckService,
     private _BankAccountService:BankAccountService, 
     private _Router: Router,
-        private toastr: ToastrService,
-    
+    private toastr: ToastrService,
   ) {
     this.checkForm = this.fb.group({
       due_date: [null, Validators.required],
@@ -58,7 +57,6 @@ export class AddCheckComponent {
       payed_to_id: [null, Validators.required],
       bank_id: [null, Validators.required],
       source_account_id: [null, Validators.required],
-      // currency_id: [null, Validators.required],
       front_image: [null, Validators.required],
       back_image: [null, Validators.required],
       currency_value:[null],
@@ -104,25 +102,30 @@ export class AddCheckComponent {
   handleIncoming() {
 
 
-    this.source_accounts_parents = [112, 41 , 6 , 118 , 113 , 211];
-    this.destination_accounts = [112, 41 , 6 , 118 , 113 , 211];
-    this.getAccounts(this.source_accounts_parents, this.destination_accounts);
+    this.source_accounts_parents = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.destination_accounts = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.getAccounts(this.source_accounts_parents, 'source');
+    this.getAccounts(this.destination_accounts , 'payTo');
+    
 
   }
   handleOutgoing() {
 
 
-    this.source_accounts_parents = [112, 41 , 6 , 118 , 113 , 211];
-    this.destination_accounts = [112, 41 , 6 , 118 , 113 , 211];
-    this.getAccounts(this.source_accounts_parents, this.destination_accounts);
+    this.source_accounts_parents = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.destination_accounts = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.getAccounts(this.source_accounts_parents, 'source');
+    this.getAccounts(this.destination_accounts , 'payTo');
 
   }
   handleEndorsed() {
 
 
-    this.source_accounts_parents = [112, 41 , 6 , 118 , 113 , 211];
-    this.destination_accounts = [112, 41 , 6 , 118 , 113 , 211];
-    this.getAccounts(this.source_accounts_parents, this.destination_accounts);
+    this.source_accounts_parents = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.destination_accounts = [112, 41 , 611 , 621 , 622 , 623 ,624 , 118 , 113 , 211];
+    this.getAccounts(this.source_accounts_parents, 'source');
+    this.getAccounts(this.destination_accounts , 'payTo');
+
   }
 
   onFileSelected(event: any ,type:string): void {
@@ -139,14 +142,22 @@ export class AddCheckComponent {
     }
   }
 
-  getAccounts(parent: number[], parent_company: number[]) {
-    this._AccountService.getParentForDocument(parent, parent_company).subscribe({
+  getAccounts(parent: number[], type: string) {
+    this._AccountService.getAccountsByParents(parent, this.searchQuery).subscribe({
       next: (response) => {
         if (response) {
-          console.log("my response:", response)
-          this.currencies = response.currencies;
-          this.source_accounts = response.children;
-          this.pay_to_accounts = response.children_company;
+          // console.log("my response:", response)
+          // this.currencies = response.currencies;
+
+          if(type == 'payTo'){
+          this.pay_to_accounts = response.accounts;
+          }else{
+          this.source_accounts = response.accounts;
+          }
+          this.updateAccount();
+
+
+
         }
       },
       error: (err) => {
@@ -372,7 +383,6 @@ filteredAccounts: Account[] = [];
         this.filteredAccounts = this.pay_to_accounts;
       }else if(type =='source_accounts'){
         this.filteredAccounts =this.source_accounts;
-
       }
       const modalElement = document.getElementById(modalId);
       if (modalElement) {
@@ -383,22 +393,23 @@ filteredAccounts: Account[] = [];
   
 
     
-  onSearchChange(){
-
-  
+  onSearchChange()
+  {
     if(this.selectedPopUP == 'pay_to_accounts'){
-      this.filteredAccounts = this.pay_to_accounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-  
+      this.getAccounts(this.destination_accounts , 'payTo');
     }else if (this.selectedPopUP == 'source_accounts'){
-      this.filteredAccounts = this.source_accounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
-   
-  }
+      this.getAccounts(this.source_accounts_parents , 'source');
 
+    }
+  }
+updateAccount(){
+     if(this.selectedPopUP == 'pay_to_accounts'){
+        this.filteredAccounts = this.pay_to_accounts;
+      }else if(this.selectedPopUP =='source_accounts'){
+        this.filteredAccounts =this.source_accounts;
+      }
+
+}
 
 }
 
