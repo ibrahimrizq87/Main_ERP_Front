@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AccountService } from '../../shared/services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from '../../shared/services/group.service';
-// import { CityService } from '../../shared/services/city.service';
+import { Modal } from 'bootstrap';
 import { CommonModule } from '@angular/common';
 import { CheckService } from '../../shared/services/check.service';
 import { CurrencyService } from '../../shared/services/currency.service';
@@ -81,7 +81,7 @@ private _CurrencyService:CurrencyService,
 
   ngOnInit() {
     this.loadDefaultCurrency();
-    this.loadDelegates()
+    // this.loadDelegates()
   }
   currency: any ;
   loadDefaultCurrency() {
@@ -103,18 +103,18 @@ private _CurrencyService:CurrencyService,
   }
 
 
-  loadDelegates() {
-    this._AccountService.getAccountsByParent('623').subscribe({
-      next: (response) => {
-        if (response) {
-          this.delegates = response.data;
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+  // loadDelegates() {
+  //   this._AccountService.getAccountsByParent('623').subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         this.delegates = response.data;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
 
 
   loadCurrencies(){
@@ -502,7 +502,13 @@ private _CurrencyService:CurrencyService,
 
     this.needCurrecyPrice =false;
     this.entryItems.forEach((item) => {
-      if(item.check.currency_id != this.currency.id || item.creditor.currency_id != this.currency.id ||item.debitor.currency_id != this.currency.id ){
+
+
+      // console.log('item.check.currency_id' , item.check.currency_id);
+      // console.log('item.creditor.currency_id' , item.creditor.currency.id);
+      // console.log('item.debitor.currency_id' , item.debitor.currency.id);
+
+      if(item.check.currency_id != this.currency.id || item.creditor.currency.id != this.currency.id ||item.debitor.currency.id != this.currency.id ){
         this.needCurrecyPrice = true;
       }
     });
@@ -513,9 +519,12 @@ private _CurrencyService:CurrencyService,
 
   getAccounts(ids : number []){
     console.log(ids);
-    this._AccountService.getChildrenByParentIds(ids).subscribe({
+    this._AccountService.getAccountsByParents(ids,
+      this.searchQuery
+    ).subscribe({
      next: (response)=>{
-this.requiredAcounts = response.data;
+    this.requiredAcounts = response.accounts;
+    console.log(response);
 
 // console.log('required data', this.requiredAcounts);
 // console.log('required data', response);
@@ -540,10 +549,12 @@ console.log(err);
 //   }
 
 getChecks(type:number){
-  this._CheckService.getChecksForOperations(type).subscribe({
+  this._CheckService.getChecksForOperations(type,
+    this.searchQuery
+  ).subscribe({
    next:(response)=>{
 console.log(response);
-this.checks = response.data;
+this.checks = response.data.checks;
 
    },error: (err)=>{
      console.log(err);
@@ -566,12 +577,15 @@ this.checks = response.data;
       console.log("No check found with the selected ID.");
     }
   }
+  // selectedType = -1;
+  accountParentIds : number [] =[];
   onTypeChange(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
     console.log(selectedValue);
   
     // Convert selected value to integer index
     const selectedIndex = parseInt(selectedValue, 10);
+
   this.selectedOperation = selectedIndex;
     switch (selectedIndex) {
       case 0:
@@ -590,6 +604,7 @@ this.checks = response.data;
 
       this.needRequiredAccount = true;
       this.getAccounts([113 , 118]);
+      this.accountParentIds= [113 , 118];
       
       // this.getChecks(112 , null , 'incoming');
       this.getChecks(1);
@@ -614,6 +629,8 @@ this.checks = response.data;
 
       this.needRequiredAccount = true;
       this.getAccounts([111]);
+      this.accountParentIds= [111];
+
 
       // this.getChecks(112 , null , 'incoming');
       this.getChecks(3);
@@ -626,7 +643,7 @@ this.checks = response.data;
       this.needRequiredAccount = true;
       this.getAccounts([111]);
 
-      // this.getChecks(6 , 211 , 'outgoing');
+      this.accountParentIds= [111];
       this.getChecks(4);
         // Case for 'صرف الشيكات الصادرة نقدا'
         console.log("Selected operation: صرف الشيكات الصادرة نقدا");
@@ -637,7 +654,7 @@ this.checks = response.data;
       this.needRequiredAccount = true;
       this.getAccounts([112]);
 
-      // this.getChecks(113 , null , 'incoming');
+      this.accountParentIds= [112];
       this.getChecks(5);
         // Case for 'ارجاع الشيكات الواردة الى الصندوق'
         console.log("Selected operation: ارجاع الشيكات الواردة الى الصندوق");
@@ -661,6 +678,7 @@ this.checks = response.data;
 
       this.needRequiredAccount = true;
       this.getAccounts([112]);
+      this.accountParentIds= [112];
 
       // this.getChecks(118 , 112 , 'incoming');
       this.getChecks(8);
@@ -673,6 +691,7 @@ this.checks = response.data;
         this.getAccounts([112]);
         this.getChecks(9);
         // this.getChecks(113 , 112 , 'incoming');
+      this.accountParentIds= [112];
   
         // Case for 'نقل الشيكات الواردة'
         console.log("Selected operation: نقل الشيكات الواردة");
@@ -717,6 +736,41 @@ this.checks = response.data;
   }
 
 
+  onSearchChange(){
+
+    this.getAccounts(this.accountParentIds);
+
+  }
+
+
+selectAccount(account:any){
+  this.selectedAccount = account;
+  this.closeModal('accountModal')
+}
+
+  selectcheck(check:any){
+    this.selectedCheck =check; 
+    this.closeModal('checkModel');
+  }
+
+  onCheckSearchChange(){
+    this.getChecks(this.selectedOperation);
+  }
+
+  searchQuery='';
+
+
+
+    closeModal(modalId: string) {
+      this.searchQuery = '';
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+    }
+
+
   handleForm() {
     this.isSubmited = true;
     let isCorrectCurrency = true;
@@ -745,6 +799,8 @@ this.checks = response.data;
       // const entryItems = this.entryForm.get('entryItems') as FormArray;
       
       this.entryItems.forEach((item, index) => {
+
+        console.log('item.check.id:',item.check.id);
       
         formData.append(`entryItems[${index}][creditor]`, item.creditor.id);
         formData.append(`entryItems[${index}][debitor]`, item.debitor.id);
@@ -777,6 +833,37 @@ this.checks = response.data;
     
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+    openModal(modalId: string) {
+    this.searchQuery ='';
+
+    // if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
+    //   this.selectedPopUP = type;
+    //   if (type == 'cash') {
+    //     this.filteredAccounts = this.cashAccounts;
+    //   } else if (type == 'delegate') {
+    //     this.filteredAccounts = this.delegates;
+    //   } else if (type == 'vendor') {
+    //     this.filteredAccounts = this.vendors;
+    //   }
+    // }
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
 }
 
 

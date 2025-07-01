@@ -1,141 +1,285 @@
 <div class="mt-3 mb-3">
-  <h5>{{ 'MANAGE_CHECKS' | translate }}</h5>
-  <span class="text-muted">
-      {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CHECKS_MANAGEMENT' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CREATE_OPERATION_ON_CHECK' | translate }}
-  </span>
+    <h5>{{ 'MANAGE_CHECKS' | translate }}</h5>
+    <span class="text-muted">
+        {{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{
+        'CHECKS_MANAGEMENT' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{
+        'CREATE_OPERATION_ON_CHECK' | translate }}
+    </span>
 </div>
 <div class="mt-4 mb-4">
-  <form [formGroup]="checkOerationForm" (ngSubmit)="handleForm()">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="card shadow em-card rounded-lg">
-                      <div class="card-header bg-white text-black rounded-top pt-3 ">
-                          <h5>{{ 'CHECK_OPERATION_DETAILS' | translate }}</h5>
-                      </div>
-                      <div class="card-body pb-5">
-                          <div class="row">
-                              <div class="form-group col-md-6">
-                                  <label class="form-label">{{ 'SELECT_TYPE' | translate }}</label>
-                                  <select class="form-control" formControlName="type" (change)="onTypeChange($event)">
-                                      <option *ngFor="let operation of operations; let i = index" [value]="i">{{i}}: {{operation}}</option>
-                                  </select>
-                              </div>
-                              <div *ngIf="needRequiredAccount" class="form-group col-md-6">
-                                  <label class="form-label">{{ 'SELECT_ACCOUNT' | translate }}</label>
-                                  <select class="form-control" formControlName="requiredAccount" (change)="onRequiredAccountChange($event)">
-                                      <option *ngFor="let account of requiredAcounts; let i = index" [value]="account.id">{{i}}: {{account.name}}</option>
-                                  </select>
-                              </div>
-                              <div *ngIf="checks.length" class="form-group col-md-12">
-                                  <label class="form-label">{{ 'SELECT_CHECK' | translate }}</label>
-                                  <select class="form-control" formControlName="check" (change)="onCheckChange($event)">
-                                      <option *ngFor="let check of checks; let i = index" [value]="check.id"> ({{check.id}}){{check.check_number}} || {{check.due_date}} || {{check.amount}}</option>
-                                  </select>
-                              </div>
-                              <div *ngIf="needReasone" class="form-group col-md-12">
-                                  <label for="reasone" class="form-label">{{ 'REASON' | translate }}</label>
-                                  <input id="reasone" formControlName="reasone" type="text" class="form-control" placeholder="{{ 'REASON' | translate }}" />
-                              </div>
-                              <div *ngIf="selectedCheck" class="form-group col-md-6 mt-3 ">
-                                  <a (click)="addItem()" class="btn btn-success">{{ 'ADD' | translate }}</a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-12">
-                  <div class="card shadow em-card rounded-lg">
-                      <div class="card-header bg-white text-black rounded-top pt-3 ">
-                          <h5>{{ 'ENTRY_DOCUMENT_DETAILS' | translate }}</h5>
-                      </div>
-                      <div class="card-body pb-5">
-                          <div *ngFor="let item of entryItems" class="row">
-                              <div class="col-md-5">
-                                  name: {{item.debitor.name}} || id: {{item.debitor.id}}
-                              </div>
-                              <div class="col-md-2">
-                                  {{item.amount}}
-                              </div>
-                              <div class="col-md-5">
-                                  name: {{item.creditor.name}} || id: {{item.creditor.id}}
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="row mt-5">
-              <div class="col-md-12">
-                  <div class="card shadow em-card rounded-lg">
-                      <div class="card-header bg-white text-black rounded-top pt-3 ">
-                          <h5>{{ 'ADDITIONAL_INFORMATION' | translate }}</h5>
-                      </div>
-                      <div class="card-body pb-5">
-                          <div class="row">
-                              <div class="form-group col-md-6">
-                                  <label for="manual_reference" class="form-label">{{ 'MANUAL_REFERENCE' | translate }}</label>
-                                  <input id="manual_reference" formControlName="manual_reference" type="text" class="form-control" placeholder="{{ 'MANUAL_REFERENCE' | translate }}" />
-                                  <div class="alert alert-danger" *ngIf="checkOerationForm.get('manual_reference')?.touched && checkOerationForm.get('manual_reference')?.hasError('maxLength')">
-                                      Max length is 255 characters.
-                                  </div>
-                              </div>
-                              <div class="form-group col-md-6">
-                                  <label for="date" class="form-label">{{ 'DATE' | translate }}</label>
-                                  <input id="date" formControlName="date" type="date" class="form-control" />
-                                  <div class="alert alert-danger" *ngIf="checkOerationForm.get('date')?.touched && checkOerationForm.get('date')?.hasError('required')">
-                                      Date is required.
-                                  </div>
-                              </div>
-                              <div class="form-group col-md-6">
-                                  <label for="organization" class="form-label">{{ 'ORGANIZATION' | translate }}</label>
-                                  <input id="organization" formControlName="organization" type="text" class="form-control" placeholder="{{ 'ORGANIZATION' | translate }}" />
-                              </div>
-                              <!-- <div class="form-group col-md-6">
-                                  <label for="currency_id" class="form-label">{{ 'CURRENCY' | translate }}</label>
-                                  <select id="currency_id" formControlName="currency_id" class="form-control">
-                                      <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}</option>
-                                  </select>
-                              </div> -->
+    <form [formGroup]="checkOerationForm" (ngSubmit)="handleForm()">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3 ">
+                            <h5>{{ 'CHECK_OPERATION_DETAILS' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">{{ 'SELECT_TYPE' | translate }}</label>
+                                    <select class="form-control" formControlName="type" (change)="onTypeChange($event)">
+                                        <option *ngFor="let operation of operations; let i = index" [value]="i">{{i}}:
+                                            {{operation}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="needRequiredAccount" class="form-group col-md-6">
+                                    <label class="form-label">{{ 'SELECT_ACCOUNT' | translate }}</label>
+                                    <!-- <select class="form-control" formControlName="requiredAccount"
+                                        (change)="onRequiredAccountChange($event)">
+                                        <option *ngFor="let account of requiredAcounts; let i = index"
+                                            [value]="account.id">{{i}}: {{account.name}}</option>
+                                    </select> -->
+
+
+                                    <button type="button" class="btn btn-outline-primary w-100"
+                                        (click)="openModal('accountModal')">
+                                        {{ selectedAccount ? selectedAccount.name : ('SELECT_ACCOUNT' | translate) }}
+                                    </button>
+
+                                    <input type="hidden" formControlName="requiredAccount"
+                                        [value]="selectedAccount?.id" />
 
 
 
-                              <div class="form-group col-md-6" >
-                                <ng-container *ngIf="needCurrecyPrice">
-                                 <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' | translate }}</label>
-                                 <input  type="number" id="currency_value" formControlName="currency_value" class="form-control"
-                                 [class.is-invalid]="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
-               
-                                 <div class="text-danger" *ngIf="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
-                                   {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
-                                 </div>
-                                </ng-container>
-                               
-               
-                               </div>
-                              <div class="form-group col-md-6">
-                                  <label for="delegate_id" class="form-label">{{ 'DELEGATE' | translate }}</label>
-                                  <select id="delegate_id" formControlName="delegate_id" class="form-control">
-                                      <option *ngFor="let delegate of delegates" [value]="delegate.id">{{ delegate.name }}</option>
-                                  </select>
-                              </div>
-                              <div class="form-group col-md-12">
-                                  <label for="note" class="form-label">{{ 'NOTE' | translate }}</label>
-                                  <textarea id="note" formControlName="note" class="form-control" rows="3" placeholder="{{ 'NOTE' | translate }}"></textarea>
-                                  <div class="alert alert-danger" *ngIf="checkOerationForm.get('note')?.touched && checkOerationForm.get('note')?.hasError('maxLength')">
-                                      Max length is 255 characters.
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="mt-4 mb-4">
-              <button [disabled]="checkOerationForm.invalid" type="submit" class="btn btn-primary px-4">
-                  <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
-              </button>
-          </div>
+                                </div>
+
+                                <div *ngIf="checks.length" class="form-group col-md-12">
+                                    <label class="form-label">{{ 'SELECT_CHECK' | translate }}</label>
+
+
+
+                                    <button type="button" class="btn btn-outline-primary w-100"
+                                        (click)="openModal('checkModel')">
+                                        <ng-container *ngIf="selectedCheck; else selectCheckText">
+                                            {{ selectedCheck.check_number }} |
+                                            {{ selectedCheck.amount }} |
+                                            {{ selectedCheck.source_account?.name }} →
+                                            {{ selectedCheck.payed_to?.name }} |
+                                            {{ selectedCheck.due_date }}
+                                        </ng-container>
+                                        <ng-template #selectCheckText>{{ 'SELECT_CHECK' | translate }}</ng-template>
+                                        <!-- {{ selectedCheck ? selectedCheck.account.name : ('SELECT_CHECK' | translate) }} -->
+                                    </button>
+
+                                    <input type="hidden" formControlName="check" [value]="selectedCheck?.id" />
+                                </div>
+
+                                <div *ngIf="needReasone" class="form-group col-md-12">
+                                    <label for="reasone" class="form-label">{{ 'REASON' | translate }}</label>
+                                    <input id="reasone" formControlName="reasone" type="text" class="form-control"
+                                        placeholder="{{ 'REASON' | translate }}" />
+                                </div>
+                                <div *ngIf="selectedCheck" class="form-group col-md-6 mt-3 ">
+                                    <a (click)="addItem()" class="btn btn-success">{{ 'ADD' | translate }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3 ">
+                            <h5>{{ 'ENTRY_DOCUMENT_DETAILS' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div *ngFor="let item of entryItems" class="row">
+                                <div class="col-md-5">
+                                    name: {{item.debitor.name}} || id: {{item.debitor.id}}
+                                </div>
+                                <div class="col-md-2">
+                                    {{item.amount}}
+                                </div>
+                                <div class="col-md-5">
+                                    name: {{item.creditor.name}} || id: {{item.creditor.id}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+            <div class="col-md-12 mt-5">
+            <div class="card shadow em-card rounded-lg mb-4">
+                <div class="card-header bg-white text-black rounded-top pt-3">
+                <h5>{{ 'ENTRY_DOCUMENT_DETAILS' | translate }}</h5>
+                </div>
+
+                <div class="card-body pb-4">
+                <div *ngFor="let item of entryItems" class="money-transfer-card d-flex align-items-center justify-content-between border rounded p-3 mb-3">
+
+                    <div class="text-end">
+                    <div class="fw-bold">{{ item.creditor.name }}</div>
+                    <div class="text-muted small">ID: {{ item.creditor.id }}</div>
+                    </div>
+
+                    <div class="text-center mx-3 d-flex flex-column align-items-center">
+                    <span class="fw-bold text-primary">{{ item.amount | number:'1.2-2' }}</span>
+                    <span class="arrow-icon text-secondary fs-4">→</span>
+                    <span class="text-muted small">{{ 'TRANSFER' | translate }}</span>
+                    </div>
+
+                    
+
+                    <div class="text-start">
+                    <div class="fw-bold">{{ item.debitor.name }}</div>
+                    <div class="text-muted small">ID: {{ item.debitor.id }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+
+
+
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="card shadow em-card rounded-lg">
+                        <div class="card-header bg-white text-black rounded-top pt-3 ">
+                            <h5>{{ 'ADDITIONAL_INFORMATION' | translate }}</h5>
+                        </div>
+                        <div class="card-body pb-5">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="manual_reference" class="form-label">{{ 'MANUAL_REFERENCE' | translate
+                                        }}</label>
+                                    <input id="manual_reference" formControlName="manual_reference" type="text"
+                                        class="form-control" placeholder="{{ 'MANUAL_REFERENCE' | translate }}" />
+                                    <div class="alert alert-danger"
+                                        *ngIf="checkOerationForm.get('manual_reference')?.touched && checkOerationForm.get('manual_reference')?.hasError('maxLength')">
+                                        Max length is 255 characters.
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="date" class="form-label">{{ 'DATE' | translate }}</label>
+                                    <input id="date" formControlName="date" type="date" class="form-control" />
+                                    <div class="alert alert-danger"
+                                        *ngIf="checkOerationForm.get('date')?.touched && checkOerationForm.get('date')?.hasError('required')">
+                                        Date is required.
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="organization" class="form-label">{{ 'ORGANIZATION' | translate
+                                        }}</label>
+                                    <input id="organization" formControlName="organization" type="text"
+                                        class="form-control" placeholder="{{ 'ORGANIZATION' | translate }}" />
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <ng-container *ngIf="needCurrecyPrice">
+                                        <label for="currency_value" class="form-label large-text">{{ 'CURRENCY_PRICE' |
+                                            translate }}</label>
+                                        <input type="number" id="currency_value" formControlName="currency_value"
+                                            class="form-control"
+                                            [class.is-invalid]="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
+
+                                        <div class="text-danger"
+                                            *ngIf="needCurrecyPrice && isSubmited && checkOerationForm.get('currency_value')?.value == 0">
+                                            {{ 'CURRENCY_PRICE' | translate }} {{ 'IS_REQUIRED' | translate }}
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="note" class="form-label">{{ 'NOTE' | translate }}</label>
+                                    <textarea id="note" formControlName="note" class="form-control" rows="3"
+                                        placeholder="{{ 'NOTE' | translate }}"></textarea>
+                                    <div class="alert alert-danger"
+                                        *ngIf="checkOerationForm.get('note')?.touched && checkOerationForm.get('note')?.hasError('maxLength')">
+                                        Max length is 255 characters.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 mb-4">
+                <button [disabled]="checkOerationForm.invalid" type="submit" class="btn btn-primary px-4">
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<div class="modal fade" id="checkModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shiftModalLabel">{{ 'SELECT_CHECK' | translate }}</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('checkModel')"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+                    [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
+                            <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+                            <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
+                            <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
+                            <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let check of checks; let i = index" (click)="selectcheck(check)"
+                            style="cursor: pointer;">
+                            <td>{{ check.check_number }}</td>
+                            <td>{{ check.amount }}</td>
+                            <td>{{ check.source_account.name }}</td>
+                            <td>{{ check.payed_to.name }}</td>
+                            <td>{{ check.due_date }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('accountModal')"></button>
       </div>
-  </form>
+      <div class="modal-body">
+
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
+
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of requiredAcounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td>{{ account.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
