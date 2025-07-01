@@ -7,11 +7,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {  Router, RouterModule } from '@angular/router';
+import { StoreService } from '../../shared/services/store.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cashier',
   standalone: true,
-  imports: [CommonModule, FormsModule ,RouterModule],
+  imports: [CommonModule, FormsModule ,RouterModule,NgxPaginationModule,TranslateModule],
   templateUrl: './cashier.component.html',
   styleUrl: './cashier.component.css'
 })
@@ -25,6 +28,15 @@ export class CashierComponent implements OnInit {
   showPositionInput: boolean = false;
   invoiceItems: any[] = []; // Array to hold selected products
   totalAmount: number = 0; // Total amount for all items
+  stores: any[] = [];
+  filteredStores: any[] = [];
+  currentStore: any = null;
+  storeSearchQuery: string = '';
+  storeCurrentPage: number = 1;
+  storeItemsPerPage: number = 5;
+  storeTotalItems: number = 0;
+  storeLastPage: number = 1;
+  private storeSearchSubject = new Subject<string>();
 
   // Checkout form data
   checkoutData = {
@@ -34,20 +46,121 @@ export class CashierComponent implements OnInit {
     type: 'purchase' // default value
   };
 
-  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router) {
+  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router,private _StoreService: StoreService) {
     this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
       this.searchProducts(query);
     });
+      // Add this for store search
+      this.storeSearchSubject.pipe(debounceTime(300)).subscribe(() => {
+        this.loadStores();
+      });
   }
 
   ngOnInit(): void {
     this.addCashierToMyself();
     this.loadRecentProducts();
     this.searchProducts(''); // Load initial products
+    this.loadStores();
+    this._CashierService.getMyInfo().subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          console.log('My info:', response.data);
+          this.currentStore = response.data.cashierData.store;
+
+          // If currentStore is not set, load the first store from the list
+          if (!this.currentStore && this.stores.length > 0) {
+            this.currentStore = this.stores[0];
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error loading my info:', err);
+      }
+    });
   }
 
+// Updated loadStores method with pagination
+loadStores(): void {
+  this._StoreService.getAllStores(
+    'all',
+    this.storeSearchQuery,
+    this.storeCurrentPage,
+    this.storeItemsPerPage
+  ).subscribe({
+    next: (response) => {
+      if (response) {
+        this.stores = response.data;
+        this.filteredStores = [...this.stores];
+        this.storeTotalItems = response.meta.total;
+        this.storeLastPage = response.meta.last_page;
+        console.log('Stores loaded:', this.currentStore);
+        // Set current store if not already set
+        // if (!this.currentStore && this.stores.length > 0) {
+        //   this.currentStore = this.stores[0];
+        // }
+      }
+    },
+    error: (err) => {
+      console.error('Error loading stores:', err);
+    }
+  });
+}
+
+onStoreSearchChange(): void {
+  this.storeSearchSubject.next(this.storeSearchQuery);
+}
+
+onStorePageChange(page: number): void {
+  this.storeCurrentPage = page;
+  this.loadStores();
+}
+
+onStoreItemsPerPageChange(): void {
+  this.storeCurrentPage = 1;
+  this.loadStores();
+}
+onPageChange(page: number): void {
+  this.storeCurrentPage = page;
+  this.loadStores();
+}
+
+
+  // Add this new method to open settings modal
+  openSettingsModal() {
+    const modalElement = document.getElementById('settingsModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  // Add this new method to close settings modal
+  closeSettingsModal() {
+    const modalElement = document.getElementById('settingsModal');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+  changeStore(store: any) {
+   
+    this._CashierService.updateMyDefaultStore(store.id).subscribe({
+      next: (response) => {
+        this.currentStore = store;
+        console.log('Current store updated successfully:', this.currentStore);
+        console.log('Default store updated successfully:', response);
+        this.toastr.success(`Store successfully changed to ${store.name}`, 'Success');
+        this.closeSettingsModal();
+      },
+      error: (err) => {
+        console.error('Error updating default store:', err);
+        this.toastr.error('Failed to change store. Please try again.', 'Error');
+      }
+    });
+  }
   loadRecentProducts() {
     this._CashierService.getAllRecent().subscribe({
       next: (response) => {
@@ -75,46 +188,69 @@ export class CashierComponent implements OnInit {
   }
 
   // Add product to invoice items
-  addToInvoice(product: any) {
-    let productToAdd: any;
-    let price: number;
-
-    // Check if product is from recentProductsList
-    if (product.product_branch) {
-      productToAdd = product.product_branch;
-      price = parseFloat(productToAdd.price);
-    } 
-    // Check if product is from recentProducts (search results)
-    else if (product.product) {
-      productToAdd = product.branch;
-      // Use branch.default_price if available, otherwise use product.price
-      price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
-    } 
-    // If it's neither (shouldn't happen), use the product directly
-    else {
-      productToAdd = product;
-      price = parseFloat(product.price || '0');
-    }
-
-    // Check if product already exists in invoice
-    const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
-    
-    if (existingItem) {
-      existingItem.quantity += 1;
-      existingItem.total = existingItem.quantity * existingItem.price;
-    } else {
-      this.invoiceItems.push({
-        ...productToAdd,
-        product_branch_id: productToAdd.id,
-        price: price,
-        quantity: 1,
-        total: price,
-        serial_numbers: [] // Initialize empty array for serial numbers
-      });
-    }
-    
-    this.calculateTotal();
+  // Add product to invoice items
+addToInvoice(product: any) {
+  // First check if product has stock available
+  if (product.stock <= 0) {
+    this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+    return;
   }
+
+  let productToAdd: any;
+  let price: number;
+
+  // Check if product is from recentProductsList
+  if (product.product_branch) {
+    productToAdd = product.product_branch;
+    price = parseFloat(productToAdd.price);
+    // Check stock from the product_branch
+    if (productToAdd.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  } 
+  // Check if product is from recentProducts (search results)
+  else if (product.product) {
+    productToAdd = product.branch;
+    // Use branch.default_price if available, otherwise use product.price
+    price = product.branch?.default_price ? parseFloat(product.branch.default_price) : parseFloat(productToAdd.price);
+    
+    // Also check stock from the main product if available
+    if (product.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  } 
+  // If it's neither (shouldn't happen), use the product directly
+  else {
+    productToAdd = product;
+    price = parseFloat(product.price || '0');
+    
+    if (product.stock <= 0) {
+      this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
+      return;
+    }
+  }
+
+  // Check if product already exists in invoice
+  const existingItem = this.invoiceItems.find(item => item.id === productToAdd.id);
+  
+  if (existingItem) {
+    existingItem.quantity += 1;
+    existingItem.total = existingItem.quantity * existingItem.price;
+  } else {
+    this.invoiceItems.push({
+      ...productToAdd,
+      product_branch_id: productToAdd.id,
+      price: price,
+      quantity: 1,
+      total: price,
+      serial_numbers: [] // Initialize empty array for serial numbers
+    });
+  }
+  
+  this.calculateTotal();
+}
 
   // Remove product from invoice items
   removeFromInvoice(index: number) {
@@ -123,12 +259,21 @@ export class CashierComponent implements OnInit {
   }
 
   // Update quantity of an item
-  updateQuantity(item: any, change: number) {
-    item.quantity += change;
-    if (item.quantity < 1) item.quantity = 1;
-    item.total = item.quantity * item.price;
-    this.calculateTotal();
+ // Update quantity of an item
+updateQuantity(item: any, change: number) {
+  // Check if we're increasing quantity and if stock is available
+  if (change > 0 && item.stock !== undefined && item.stock !== null) {
+    if (item.quantity >= item.stock) {
+      this.toastr.warning('Cannot add more items than available in stock', 'Warning');
+      return;
+    }
   }
+  
+  item.quantity += change;
+  if (item.quantity < 1) item.quantity = 1;
+  item.total = item.quantity * item.price;
+  this.calculateTotal();
+}
 
   // Calculate total amount
   calculateTotal() {
@@ -209,6 +354,8 @@ export class CashierComponent implements OnInit {
     this._CashierService.addCashierToMyself().subscribe({
       next: (response) => {
         if (response && response.data) {
+
+          console.log('Cashier added to myself:', response);
           console.log(response.data);
         }
       },
