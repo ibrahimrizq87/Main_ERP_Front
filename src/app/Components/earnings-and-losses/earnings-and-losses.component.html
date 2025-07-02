@@ -1,0 +1,53 @@
+<div class="earnings-losses-container">
+ 
+    <div class="header-section">
+      <h1 class="report-title">قائمة الأرباح والخسائر</h1>
+      <p class="report-year">للعام المالي: {{ currentYear }}</p>
+      <button class="export-btn" (click)="exportToPDF()">
+        <i class="fas fa-download"></i>
+        تصدير إلى PDF
+      </button>
+    </div>
+  
+ 
+    <div id="earnings-losses-report" class="report-content">
+      
+      <div class="company-header">
+        <h2 class="company-name">قائمة الأرباح والخسائر</h2>
+        <p class="report-period">للعام المنتهي في {{ currentYear }}</p>
+      </div>
+  
+     
+      <div class="financial-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="item-header">البيان</th>
+              <th class="value-header">القيمة</th>
+              <th class="notes-header">ملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of earningAndLosses; let i = index" 
+                [class.highlight-row]="i === 0 || i === 2 || i === 11">
+              <td class="item-name">{{ item.key }}</td>
+              <td class="item-value" [class.red-value]="item.is_red">
+                {{ formatNumber(item.value) }}
+              </td>
+              <td class="item-notes">
+                <span *ngIf="item.note" class="note-text">{{ item.note }}</span>
+                <span *ngIf="!item.note" class="no-note">-</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+     
+  
+     
+      <div class="report-footer">
+        <p class="print-date">تاريخ الطباعة: {{ getCurrentDate()  }}</p>
+      </div>
+    </div>
+  </div>

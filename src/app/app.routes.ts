@@ -175,6 +175,7 @@ import { PrintInvoiceComponent } from './Components/print-invoice/print-invoice.
 import { HistoryComponent } from './Components/history/history.component';
 import { CashierComponent } from './Components/cashier/cashier.component';
 import { FixedAssetsExpensesComponent } from './Components/fixed-assets-expenses/fixed-assets-expenses.component';
+import { EarningsAndLossesComponent } from './Components/earnings-and-losses/earnings-and-losses.component';
 
 
 export const routes: Routes = [
@@ -432,6 +433,7 @@ export const routes: Routes = [
             { path: "addStocktakings", component: AddStocktakingsComponent },
             { path: "updateStocktakings/:id", component: UpdateStocktakingsComponent },
             { path: "showStocktakings/:id", component: ViewStocktakingsComponent },
+            {path:"earnings-and-losses", component: EarningsAndLossesComponent}
 
 
 
