@@ -165,12 +165,16 @@ export class AddSaleOrderComponent {
   }
 
   loadProducts(storeId: string) {
-    this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
+    this._ProductBranchStoresService.getByStoreId(storeId
+      , this.ProductsearchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           this.Products = response.data.products;
           this.totalProducts = response.data.meta.total;
           this.filteredProducts = this.Products;
+
+          console.log(this.ProductsearchQuery);
         }
       },
       error: (err) => {
@@ -274,7 +278,7 @@ export class AddSaleOrderComponent {
     const neededBars = item.get('neededSerialNumbers')?.value;
     const serialNumbers = item.get('serialNumbers')?.value;
     if (serialNumbers && Array.isArray(serialNumbers)) {
-      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+      const tempList = serialNumbers.filter(item => item.serial_number !== serialNumber);
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
@@ -442,16 +446,14 @@ export class AddSaleOrderComponent {
 
             if (itemValue.overridePrice) {
               formData.append(`items[${index}][has_overrided_price]`, '1');
-
             } else {
               formData.append(`items[${index}][has_overrided_price]`, '0');
-
             }
             const serialNumbers = itemControl.get('serialNumbers')?.value;
             if (serialNumbers.length > 0) {
 
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
 
               });
 
@@ -570,27 +572,9 @@ export class AddSaleOrderComponent {
 
   selectAccount(account: Account) {
 
-    // this.onPrice();
     if (this.selectedPopUP == 'cash') {
       this.selectedCashAccount = account;
       this.saleForm.patchValue({ 'cash_id': account.id })
-
-      // this.needCurrecyPrice = false;
-      // this.forignCurrencyName = '';
-      // if (this.currency.id != account.currency.id) {
-      //   this.needCurrecyPrice = true;
-      //   this.forignCurrencyName = account.currency.name;
-
-      // }
-
-      // if (this.selectedClient) {
-      //   if (this.selectedClient.account.currency.id != this.currency.id) {
-      //     this.needCurrecyPrice = true;
-      //     this.forignCurrencyName = this.selectedClient.account.currency.name;
-
-      //   }
-      // }
-
 
 
     } else if (this.selectedPopUP == 'delegate') {
@@ -609,26 +593,6 @@ export class AddSaleOrderComponent {
         this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
       }
 
-      // this.needCurrecyPrice = false;
-      // this.forignCurrencyName = '';
-
-
-      // if (this.currency.id != account.account.currency.id) {
-      //   this.needCurrecyPrice = true;
-      //   this.forignCurrencyName = account.account.currency.name;
-
-      // }
-
-      // if (this.selectedCashAccount) {
-      //   if (this.selectedCashAccount.currency.id != this.currency.id) {
-      //     this.needCurrecyPrice = true;
-      //     this.forignCurrencyName = this.selectedCashAccount.currency.name;
-
-      //   }
-      // }
-
-
-
     }
 
 
@@ -640,11 +604,7 @@ export class AddSaleOrderComponent {
   ProductsearchQuery = '';
   selectedProduct: any;
   onProductSearchChange() {
-    const query = this.ProductsearchQuery.toLowerCase();
-    this.filteredProducts = this.Products.filter(product =>
-      product.product_branch.product.name.toLowerCase().includes(query) || product.product_branch.code.toString().includes(query) || product.product_branch.stock.toString().includes(query)
-    );
-
+    this.loadProducts(this.selectedStore);
   }
 
 
@@ -676,29 +636,6 @@ export class AddSaleOrderComponent {
     console.log('productBranchStore', productBranchStore);
     itemGroup.patchValue({ product_id: productBranchStore.branch.id });
     itemGroup.patchValue({ color: productBranchStore.branch.color });
-
-
-    // productBranchStore.prices.forEach((price: any) => {
-
-    //   if (price.id == this.selectedClient.price_category?.id) {
-    //     itemGroup.patchValue({ priceRanges: price.prices });
-    //     console.log('price ranges', price.prices);
-    //     price.prices.forEach((price: any) => {
-    //       if (price.quantity_from == 0) {
-    //         itemGroup.patchValue({ price: price.price });
-    //         return;
-    //       }
-    //     })
-    //   }
-
-
-    // });
-
-
-    // if (!itemGroup.get('price')?.value) {
-    //   itemGroup.patchValue({ price: productBranchStore.branch.default_price });
-    // }
-
     this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
@@ -741,6 +678,125 @@ export class AddSaleOrderComponent {
   }
 
 
+searchText: string = '';
+selectedSerachIndex = -1;
+lastSelectedIndex = -1;
+
+
+
+productSerialNumbers :any = [];
+loadingSerialNumbers = false;
+
+searchSerialNumber(event:Event , index:number){
+  this.searchText = (event.target as HTMLSelectElement).value;
+  this.selectedSerachIndex = index;
+  const itemsArray = this.saleForm.get('items') as FormArray;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+
+  if(store_id && productId){
+    // this.productSerialNumbers = [];
+    this.loadSerialNumbers(store_id ,productId);
+  }
+}
+
+onFocus(index :number){
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  this.selectedSerachIndex = index;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const searchText  = itemGroup.get('barcode')?.value || '';
+
+  // console.log(this.selectedSerachIndex ,index);
+  if(store_id && productId && this.lastSelectedIndex != index){
+    this.productSerialNumbers = [];
+    this.searchText = searchText;
+    this.loadSerialNumbers(store_id ,productId);
+  }
+  this.lastSelectedIndex = index;
+
+}
+  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+  setTimeout(() => {
+    this.selectedSerachIndex = -1;
+  }, 200);  
+ }
+
+
+
+  loadSerialNumbers(store_id :string,productId:string){
+    this.loadingSerialNumbers =true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+    this.searchText,
+    'sale'
+  ).subscribe({
+    next: (response) => {
+      if (response ) {
+        this.productSerialNumbers = response.data.serial_numbers;
+        console.log(this.productSerialNumbers);
+        // this.filteredSerialNumbers = [...response.data.serial_numbers];
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+
+  }
+
+
+
+
+//   isOptionDisabled(option: any , index:number): boolean {
+//   // Example condition: disable if already used or expired
+//   return option.isUsed || option.status === 'expired';
+// }
+
+  isOptionDisabled(serialNumber:any , index:number): boolean {
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element:any) => {
+      if(serialNumber.serial_number == element.serial_number){
+        value = true;
+      }
+    });
+
+    return value;
+  }
 
 
 

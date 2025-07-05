@@ -564,3 +564,17 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+
+
+
+.selected-serial {
+  background-color: #d1e7dd; /* light green background */
+  border: 2px solid #0f5132;
+  color: #0f5132;
+}
+
+.unselected-serial {
+  background-color: #f8f9fa; /* light gray background */
+  border: 1px solid #ced4da;
+}

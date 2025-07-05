@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
@@ -43,30 +43,19 @@ export class CashierService {
       headers: this.getHeadersWithToken()
     });
   }
-  // Route::get('/{id}',  'show');
+
   getBillCashierById(id: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier-invoices/${id}`, {
       headers: this.getHeadersWithToken()
     });
   }
-  // {{localUrl}}general/cashier-invoices/get-my-invoices
-
-  // getMyInvoices(date?: string): Observable<any> {
-  //   let params = {};
-  //   if (date) {
-  //     params = { date };
-  //   }
-  //   return this._HttpClient.get(`${this.baseURL}/general/cashier-invoices/get-my-invoices`, {
-  //     headers: this.getHeadersWithToken(),
-  //     params
-  //   });
-  // }
+  
   getMyInvoices(date: string, page: number = 1, perPage: number = 10): Observable<any> {
-    const params = {
-      date: date,
-      page: page.toString(),
-      per_page: perPage.toString()
-    };
+
+             let params = new HttpParams();
+                      if (date !== '') params = params.set('date', date);
+                      if (page !== 1) params = params.set('page', page);
+                      if (perPage !== 10) params = params.set('per_page', perPage);
     
     return this._HttpClient.get(`${this.baseURL}/general/cashier-invoices/get-my-invoices`, {
           headers: this.getHeadersWithToken(),
@@ -94,8 +83,8 @@ export class CashierService {
   showCashierById(id: any): Observable<any> {
     return this._HttpClient.get(this.baseURL + "/general/manage-cashiers/" + id, { headers: this.getHeadersWithToken() });
   }
-  // Route::get('/search-store-products',  'getMyStoreProducts');  
-  // src/app/shared/services/cashier.service.ts
+
+  
   getMyStoreProducts(searchTerm?: string): Observable<any> {
     const params: any = {};
     if (searchTerm && searchTerm.trim()) {
@@ -107,8 +96,8 @@ export class CashierService {
     });
   }
 
-  // add-cashier-to-myself
-  // Route::get('/add-cashier-to-myself',  'addCashierToMyself'); 
+ 
+  
   addCashierToMyself(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier/add-cashier-to-myself`, {
       headers: this.getHeadersWithToken(),
@@ -121,58 +110,23 @@ export class CashierService {
   deleteRecentProducts(productId: string): Observable<any> {
     return this._HttpClient.delete(`${this.baseURL}/general/cashier/delete-recent-products/${productId}`, { headers: this.getHeadersWithToken() });
   }
-  // Route::get('/get-recent-products',  'getAllRecent');
+
   getAllRecent(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier/get-recent-products`, { headers: this.getHeadersWithToken() });
   }
-  // Route::put('/update-default-store/{store_id}',  'updateMyDefaultStore'); 
+
   updateMyDefaultStore(storeId: string): Observable<any> {
     return this._HttpClient.put(`${this.baseURL}/general/cashier/update-default-store/${storeId}`, {}, { headers: this.getHeadersWithToken() });
   }
-  // Route::get('/get-my-info',  'getMyInfo');
+
   getMyInfo(): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/cashier/get-my-info`, { headers: this.getHeadersWithToken() });
   }
-  // Route::group(['prefix' => 'products'], function () {
-  //   Route::get('/get-serial-numbers-for-return-sales/{productId}/{storeId}', [ProductController::class, 'getProductSerialNumbersForReturnSales']);
-  // });
+
   getProductSerialNumbersForReturnSales(productId: string, storeId: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers-for-return-sales/${productId}/${storeId}`, { headers: this.getHeadersWithToken() });
   }
-  //   getAllStores(
-  //       type: string = 'all',
-  //       name: string = '',
-  //       page: number = 1,
-  //       perPage: number = 20
-  //   ): Observable<any> {
-  //    let params = new HttpParams();
-  //               if (type !== 'all') params = params.set('filter[type]', type);
-  //               if (name !== '') params = params.set('search', name);
-  //               if (page !== 1) params = params.set('page', page);
-  //               if (perPage !== 10) params = params.set('per_page', perPage);
 
-  //     return this._HttpClient.get(`${this.baseURL}/general/stores` ,{ 
-  //       headers:this.getHeadersWithToken(),
-  //       params: params
-  //      });
-  //   }
-
-
-
-  //   return this._HttpClient.get(url, { headers: this.getHeadersWithToken() });
-  // }
-
-  //   showStoreById(id:any): Observable<any>{
-  //     return this._HttpClient.get(this.baseURL+"/general/stores/"+id, { headers:this.getHeadersWithToken()  });
-  //   }
-  //   updateStore(store_id: string, storeData: FormData): Observable<any> {
-  //     storeData.append('_method', 'PUT');
-  //     return this._HttpClient.post(`${this.baseURL}/general/stores/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
-  //   }
-
-  // getProductBranchStoreByStoreId(storeId: string): Observable<any> {
-  //   return this._HttpClient.get(`${this.baseURL}/general/product-branch-stores/get-by-store/${storeId}`, { headers:this.getHeadersWithToken() });
-  // }
 }
 
 

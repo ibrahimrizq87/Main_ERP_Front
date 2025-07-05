@@ -32,6 +32,10 @@
 
                 </div>
 
+
+
+
+
                 <div class="form-group col-md-6">
                   <label class="form-label">{{ 'CLIENT' | translate }}</label>
                   <button type="button" class="btn btn-outline-primary w-100"
@@ -82,21 +86,20 @@
 
                 <div class="form-group col-md-6">
                   <label for="file_type" class="form-label">Type</label>
-                  <select id="file_type"  class="form-control"
-                    (change)="onFileTypeChange($event)">
+                  <select id="file_type" class="form-control" (change)="onFileTypeChange($event)">
                     <option value="manual">Manual</option>
                     <option value="sale_order">Sales Order</option>
                   </select>
                 </div>
 
 
-                     <div class="form-group col-md-6"  *ngIf="showselectOrder">
-                    <label class="form-label">{{ 'SLAE_ORDER' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100"
-                      (click)="openModal('orderModel', 'order')">
-                      {{ 'SELECT_SLAE_ORDER' | translate }}
-                    </button>                   
-                  </div>
+                <div class="form-group col-md-6" *ngIf="showselectOrder">
+                  <label class="form-label">{{ 'SLAE_ORDER' | translate }}</label>
+                  <button type="button" class="btn btn-outline-primary w-100"
+                    (click)="openModal('orderModel', 'order')">
+                    {{ 'SELECT_SLAE_ORDER' | translate }}
+                  </button>
+                </div>
 
 
 
@@ -221,11 +224,11 @@
                             <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
                               class="col-md-3 row p-1 m-2 rounded .bg-light border">
                               <div class="col-md-10">
-                                {{serialNumber.barcode}}
+                                {{serialNumber.serial_number}}
                               </div>
                               <div class="col-md-2">
                                 <a class="btn-close" aria-label="Close"
-                                  (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
+                                  (click)="removeSerialNumber(serialNumber.serial_number , i)"></a>
 
                               </div>
                             </div>
@@ -233,15 +236,23 @@
                           </div>
 
 
-                          <div class="d-flex align-items-center mb-2">
-                            <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
-                              placeholder="Enter barcode" (change)="onBarcodeSelect($event ,i)" />
-                            <datalist id="barcodeList">
-                              <option *ngFor="let barcode of item.get('productSerialNumbers')?.value"
-                                [value]="barcode.serial_number">
-                                {{ barcode.serial_number }}
-                              </option>
-                            </datalist>
+                          <div class="d-flex align-items-center mb-2 position-relative">
+                                     <input type="text" class="form-control" formControlName="barcode"
+                              placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
+                              (input)="searchSerialNumber($event ,i)" />
+
+                            <ul *ngIf="selectedSerachIndex == i" class="list-group position-absolute w-100 shadow"
+                              style="z-index: 1050; top: 100%; text-align: center;">
+
+                              <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
+        'list-group-item-action': !isOptionDisabled(option , i),
+        'disabled-option': isOptionDisabled(option , i)
+      }" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
+                                (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
+                                {{ option.serial_number }}
+                              </li>
+                            </ul>
+
                           </div>
 
                         </div>
@@ -269,9 +280,9 @@
                   <div class=" text-black bg-secoundry border rounded  row  mt-3">
                     <div class="card-header text-center"> الدفع </div>
 
-                                        <!-- <div class="form-group col-md-12" *ngIf="selectedClient?.payment_type != 'cash'"> -->
+                    <!-- <div class="form-group col-md-12" *ngIf="selectedClient?.payment_type != 'cash'"> -->
 
-                    <div class="form-group col-md-12" >
+                    <div class="form-group col-md-12">
                       <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" formControlName="showCashAccountsDropdown"
                           (change)="paymentTriggerChange()" />
@@ -400,19 +411,15 @@
             <tr *ngIf="selectedPopUP != 'vendor'">
               <th>ID</th>
               <th>{{ 'mainAccountNav.accountName' | translate }}</th>
-              
+
             </tr>
           </thead>
-          <tbody *ngIf="selectedPopUP == 'vendor'" >
+          <tbody *ngIf="selectedPopUP == 'vendor'">
             <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
               style="cursor: pointer;">
               <td>{{ account.account.id }}</td>
-              <td>   <img 
-                    [src]="account.image ? account.image : 'images/image.jpg'" 
-                    alt="{{ account.account?.name || 'Default user' }}" 
-                    width="80" 
-                    height="60" 
-                  /></td>
+              <td> <img [src]="account.image ? account.image : 'images/image.jpg'"
+                  alt="{{ account.account?.name || 'Default user' }}" width="80" height="60" /></td>
               <td>{{ account.account.name }}</td>
               <td>{{ account.delegate.name }}</td>
               <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
@@ -420,11 +427,11 @@
 
             </tr>
           </tbody>
-            <tbody *ngIf="selectedPopUP != 'vendor'" >
+          <tbody *ngIf="selectedPopUP != 'vendor'">
             <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
               style="cursor: pointer;">
               <td>{{ account.id }}</td>
-              <td >{{ account.name }}</td>
+              <td>{{ account.name }}</td>
 
             </tr>
           </tbody>
@@ -484,66 +491,50 @@
         <!-- Custom Pagination -->
         <div class="d-flex justify-content-between align-items-center mt-4">
           <div class="text-muted">
-            {{ 'SHOWING' | translate }} 
-            {{ (currentPage - 1) * itemsPerPage + 1 }} 
-            {{ 'TO' | translate }} 
-            {{ (currentPage * itemsPerPage) < totalProducts ? currentPage * itemsPerPage : totalProducts }} 
-            {{ 'OF' | translate }} 
-            {{ totalProducts }} 
-            {{ 'ENTRIES' | translate }}
-          </div>
-          
-          <div class="d-flex align-items-center gap-3">
-            <!-- Items per page selector -->
-            <div class="d-flex align-items-center">
-              <label class="me-2">{{ 'ITEMS_PER_PAGE' | translate }}:</label>
-              <select 
-                  [(ngModel)]="itemsPerPage" 
-                  (ngModelChange)="onItemsPerPageChange()"
-                  class="form-select form-select-sm" 
-                  style="width: auto;">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-              </select>
-            </div>
-            
-            <!-- Pagination Controls -->
-            <div class="btn-group" role="group">
-              <button 
-                  type="button" 
-                  class="btn btn-outline-primary" 
-                  [disabled]="currentPage === 1"
-                  (click)="onPageChange(currentPage - 1)">
-                  {{ 'PREVIOUS' | translate }}
-              </button>
-              
-              <button 
-                  *ngFor="let page of getPages()" 
-                  type="button" 
-                  class="btn" 
-                  [class.btn-primary]="page === currentPage"
-                  [class.btn-outline-primary]="page !== currentPage"
-                  (click)="onPageChange(page)">
-                  {{ page }}
-              </button>
-              
-              <button 
-                  type="button" 
-                  class="btn btn-outline-primary" 
-                  [disabled]="currentPage * itemsPerPage >= totalProducts"
-                  (click)="onPageChange(currentPage + 1)">
-                  {{ 'NEXT' | translate }}
-              </button>
-            </div>
+            {{ 'SHOWING' | translate }}
+            {{ (currentPage - 1) * itemsPerPage + 1 }}
+            {{ 'TO' | translate }}
+            {{ (currentPage * itemsPerPage) < totalProducts ? currentPage * itemsPerPage : totalProducts }} {{ 'OF' |
+              translate }} {{ totalProducts }} {{ 'ENTRIES' | translate }} </div>
+
+              <div class="d-flex align-items-center gap-3">
+                <!-- Items per page selector -->
+                <div class="d-flex align-items-center">
+                  <label class="me-2">{{ 'ITEMS_PER_PAGE' | translate }}:</label>
+                  <select [(ngModel)]="itemsPerPage" (ngModelChange)="onItemsPerPageChange()"
+                    class="form-select form-select-sm" style="width: auto;">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary" [disabled]="currentPage === 1"
+                    (click)="onPageChange(currentPage - 1)">
+                    {{ 'PREVIOUS' | translate }}
+                  </button>
+
+                  <button *ngFor="let page of getPages()" type="button" class="btn"
+                    [class.btn-primary]="page === currentPage" [class.btn-outline-primary]="page !== currentPage"
+                    (click)="onPageChange(page)">
+                    {{ page }}
+                  </button>
+
+                  <button type="button" class="btn btn-outline-primary"
+                    [disabled]="currentPage * itemsPerPage >= totalProducts" (click)="onPageChange(currentPage + 1)">
+                    {{ 'NEXT' | translate }}
+                  </button>
+                </div>
+              </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
 
@@ -551,85 +542,84 @@
 
 
 
-<div class="modal fade" id="checkModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog  modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('checkModel')"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Search Input -->
-        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
+  <div class="modal fade" id="checkModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('checkModel')"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Search Input -->
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="searchQuery" (ngModelChange)="onCheckSearchChange()" />
 
-        <!-- Accounts Table -->
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
+          <!-- Accounts Table -->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="bg-light" scope="col">{{ 'CHECK_NO' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'FROM' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'TO' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'DUE_DATE' | translate }}</th>
 
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let check of checks; let i = index" (click)="selectcheck(check)" style="cursor: pointer;">
-              <td>{{ check.check_number }}</td>
-              <td>{{ check.amount }}</td>
-              <td>{{ check.source_account.name }}</td>
-              <td>{{ check.payed_to.name }}</td>
-              <td>{{ check.due_date }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let check of checks; let i = index" (click)="selectcheck(check)" style="cursor: pointer;">
+                <td>{{ check.check_number }}</td>
+                <td>{{ check.amount }}</td>
+                <td>{{ check.source_account.name }}</td>
+                <td>{{ check.payed_to.name }}</td>
+                <td>{{ check.due_date }}</td>
 
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-<div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog  modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('orderModel')"></button>
-      </div>
-      <div class="modal-body">
-        <input type="date" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="orderSearchDate" (ngModelChange)="onSaleOrderSearchChange()" />
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th class="bg-light" scope="col">{{ 'ID' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
-              <th class="bg-light" scope="col">{{ 'CREATED_BY' | translate }}</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let order of saleOrders; let i = index" (click)="selectSaleOrder(order)" style="cursor: pointer;">
-              <td>{{ order.id }}</td>
-              <td>{{ order.client }}</td>
-              <td>{{ order.date }}</td>
-              <td>{{ order.created_by }}</td>
-
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
+
+
+
+
+  <div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('orderModel')"></button>
+        </div>
+        <div class="modal-body">
+          <input type="date" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="orderSearchDate" (ngModelChange)="onSaleOrderSearchChange()" />
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="bg-light" scope="col">{{ 'ID' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'CREATED_BY' | translate }}</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of saleOrders; let i = index" (click)="selectSaleOrder(order)"
+                style="cursor: pointer;">
+                <td>{{ order.id }}</td>
+                <td>{{ order.client }}</td>
+                <td>{{ order.date }}</td>
+                <td>{{ order.created_by }}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

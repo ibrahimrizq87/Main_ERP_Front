@@ -167,11 +167,7 @@ export class AddReturnSalesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log("delegates", response)
-          const delegates = response.data;
-          delegates.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = delegates.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const delegates = response.data.accounts;
           this.delegates = delegates;
         }
       },
@@ -185,11 +181,7 @@ export class AddReturnSalesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log("CashAccounts", response)
-          const cashAccounts = response.data;
-          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const cashAccounts = response.data.accounts;
           this.cashAccounts = cashAccounts;
         }
       },
@@ -263,87 +255,17 @@ export class AddReturnSalesComponent implements OnInit {
   }
   searchTerm = new FormControl('');
 
-  onBarcodeSelect(barcode: Event, index: number) {
-    {
-      const selectedValue = (barcode.target as HTMLSelectElement).value;
-
-      const items = this.saleForm.get('items') as FormArray;
-      const item = items.at(index) as FormGroup;
-
-      const neededBars = item.get('neededSerialNumbers')?.value;
-      if (neededBars == 0) {
-        item.patchValue({ barcode: null });
-        return;
-      }
-      let tempList = item.get('serialNumbers')?.value || [];
-      let isdublicated = false;
-      tempList.forEach((item: any) => {
-        if (item.barcode == selectedValue) {
-          this.toastr.error('هذا السيريال موجود بالفعل');
-          isdublicated = true;
-          return;
-        }
-      });
-
-      if (isdublicated) {
-        item.patchValue({ barcode: null });
-
-        return;
-      }
-      if (selectedValue) {
-        tempList.push({ barcode: selectedValue })
-        item.patchValue({ serialNumbers: tempList });
-        console.log(tempList);
-        item.patchValue({ barcode: null });
-        item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-      }
-    }
-  }
-
-
   removeSerialNumber(serialNumber: string, index: number) {
     const items = this.saleForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
     const neededBars = item.get('neededSerialNumbers')?.value;
     const serialNumbers = item.get('serialNumbers')?.value;
     if (serialNumbers && Array.isArray(serialNumbers)) {
-      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+      const tempList = serialNumbers.filter(item => item.serial_number !== serialNumber);
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number) {
-    const items = this.saleForm.get('items') as FormArray;
-    const item = items.at(index) as FormGroup;
-
-    const barcode = item.get('barcode')?.value;
-    const neededBars = item.get('neededSerialNumbers')?.value;
-    if (neededBars == 0) {
-
-      return;
-    }
-    let tempList = item.get('serialNumbers')?.value || [];
-
-    tempList.forEach(() => {
-
-    });
-
-
-
-    if (barcode) {
-      tempList.push({ barcode: barcode })
-      item.patchValue({ serialNumbers: tempList });
-      console.log(tempList);
-      item.patchValue({ barcode: null });
-      item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-    }
-
-  }
-
 
   onAmountChange(index: number): void {
 
@@ -523,7 +445,7 @@ export class AddReturnSalesComponent implements OnInit {
             if (serialNumbers.length > 0) {
 
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
 
               });
 
@@ -792,7 +714,7 @@ export class AddReturnSalesComponent implements OnInit {
       itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
+    // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
 
@@ -817,6 +739,131 @@ export class AddReturnSalesComponent implements OnInit {
       const modal = Modal.getInstance(modalElement);
       modal?.hide();
     }
+  }
+
+
+
+
+
+
+searchText: string = '';
+selectedSerachIndex = -1;
+lastSelectedIndex = -1;
+
+
+
+productSerialNumbers :any = [];
+loadingSerialNumbers = false;
+
+searchSerialNumber(event:Event , index:number){
+  this.searchText = (event.target as HTMLSelectElement).value;
+  this.selectedSerachIndex = index;
+  const itemsArray = this.saleForm.get('items') as FormArray;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+
+  if(store_id && productId){
+    // this.productSerialNumbers = [];
+    this.loadSerialNumbers(store_id ,productId);
+  }
+}
+
+onFocus(index :number){
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  this.selectedSerachIndex = index;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const searchText  = itemGroup.get('barcode')?.value || '';
+
+  // console.log(this.selectedSerachIndex ,index);
+  if(store_id && productId && this.lastSelectedIndex != index){
+    this.productSerialNumbers = [];
+    this.searchText = searchText;
+    this.loadSerialNumbers(store_id ,productId);
+  }
+  this.lastSelectedIndex = index;
+
+}
+  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+  setTimeout(() => {
+    this.selectedSerachIndex = -1;
+  }, 200);  
+ }
+
+
+
+  loadSerialNumbers(store_id :string,productId:string){
+    this.loadingSerialNumbers =true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+    this.searchText,
+    'return'
+  ).subscribe({
+    next: (response) => {
+      if (response ) {
+        this.productSerialNumbers = response.data.serial_numbers;
+        console.log(this.productSerialNumbers);
+        // this.filteredSerialNumbers = [...response.data.serial_numbers];
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+
+  }
+
+
+
+
+//   isOptionDisabled(option: any , index:number): boolean {
+//   // Example condition: disable if already used or expired
+//   return option.isUsed || option.status === 'expired';
+// }
+
+  isOptionDisabled(serialNumber:any , index:number): boolean {
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element:any) => {
+      if(serialNumber.serial_number == element.serial_number){
+        value = true;
+      }
+    });
+
+    return value;
   }
 
 }
