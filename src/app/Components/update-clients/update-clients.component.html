@@ -149,92 +149,87 @@
 
            
       
-
-                  <div class="border rounded p-3 mt-2" >
-                    <h5>{{ 'ADDRESSES' | translate }}</h5>
-                    <div formArrayName="addresses">
-                      <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="row mt-2 border rounded shadow p-3">
-
-
-
-                        <div class="col-md-4">
-                          <input formControlName="address_name" type="text" class="form-control"
-                                 placeholder="{{ 'ADDRESS_NAME' | translate }}"
-                                 [class.is-invalid]="isSubmitted && address.get('address_name')?.invalid"
-                                 >
-
-                                 <div class="invalid-feedback" *ngIf="isSubmitted && address.get('address_name')?.invalid">
-                                    <p *ngIf="address.get('address_name')?.hasError('required')">
-                                      {{ 'ADDRESS_NAME_REQUIRED' | translate }}
-                                    </p>
-                                    <p *ngIf="address.get('address_name')?.hasError('maxlength')">
-                                      {{ 'MAX_LENGTH_255' | translate }}
-                                    </p>
-                                  </div>
-
+                <div class="border rounded p-3 mt-2">
+                  <h5>{{ 'ADDRESSES' | translate }}</h5>
+                  <div formArrayName="addresses">
+                    <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i"
+                      class="row mt-2 border rounded shadow p-3">
+  
+  
+  
+                      <div class="col-md-4">
+                        <input formControlName="address_name" type="text" class="form-control"
+                          placeholder="{{ 'ADDRESS_NAME' | translate }}"
+                          [class.is-invalid]="isSubmitted && address.get('address_name')?.invalid">
+  
+                        <div class="invalid-feedback" *ngIf="isSubmitted && address.get('address_name')?.invalid">
+                          <p *ngIf="address.get('address_name')?.hasError('required')">
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+                          <p *ngIf="address.get('address_name')?.hasError('maxlength')">
+                            {{ 'MAX_LENGTH_255' | translate }}
+                          </p>
                         </div>
-
-
-                      
-
-                        <div class="col-md-3">
-                            <select class="form-control" (change)="onCountryChange($event ,i)"   formControlName="country_id">
-                             <option>{{ 'SELECT_COUNTRY' | translate }}</option>
-                             <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
-                             </option>
-                           </select> 
+  
+                      </div>
+  
+  
+  
+  
+                      <div class="col-md-3">
+                        <select class="form-control" (change)="onCountryChange($event ,i)" formControlName="country_id">
+                          <option disabled>{{ 'SELECT_COUNTRY' | translate }}</option>
+                          <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}
+                          </option>
+                        </select>
+                      </div>
+  
+  
+  
+                      <div class="form-group col-md-4 ">
+                        <select *ngIf="address.get('cities')?.value.length>0" class="form-control"
+                          (change)="onCityChange($event)" formControlName="city_id"
+                          [class.is-invalid]="isSubmitted && address.get('city_id')?.invalid">
+                          <!-- <option>{{ 'SELECT_CURRENCY' | translate }}</option> -->
+                          <option *ngFor="let city of address.get('cities')?.value" [value]="city.id">{{ city.name }}
+                          </option>
+                        </select>
+  
+                        <div class="invalid-feedback" *ngIf="isSubmitted && address.get('city_id')?.invalid">
+                          <p>
+                            {{ 'ADDRESS_NAME_REQUIRED' | translate }}
+                          </p>
+  
                         </div>
-
-
-             
-
-                    
-
-
-                        <div class="form-group col-md-4 ">
-                             <select *ngIf="address.get('cities')?.value.length>0" class="form-control" (change)="onCityChange($event)"   formControlName="city_id"
-                                
-                                [class.is-invalid]="isSubmitted && address.get('city_id')?.invalid"
-                                >
-                              <!-- <option>{{ 'SELECT_CURRENCY' | translate }}</option> -->
-                              <option *ngFor="let city of address.get('cities')?.value" [value]="city.id">{{ city.name }}
-                              </option>
-                            </select> 
-
-                            <div class="invalid-feedback" *ngIf="isSubmitted && address.get('city_id')?.invalid">
-                                <p >
-                                  {{ 'ADDRESS_NAME_REQUIRED' | translate }}
-                                </p>
-                              
-                              </div>
-          
-                            <div *ngIf="address.get('cities')?.value.length<=0"  class="alert alert-warning">
-                              {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
-                            </div>
-                            <!-- <div class="alert alert-danger" *ngIf="bankBranchForm.get('country_id')?.errors && bankBranchForm.get('country_id')?.touched">
+  
+                        <div *ngIf="address.get('cities')?.value.length<=0" class="alert alert-warning">
+                          {{ 'PLEASE_SELECT_A_COUNTRY_HAS_CITIES' | translate }}
+                        </div>
+                        <!-- <div class="alert alert-danger" *ngIf="bankBranchForm.get('country_id')?.errors && bankBranchForm.get('country_id')?.touched">
                               <p *ngIf="bankBranchForm.get('country_id')?.getError('required')">{{ 'addCity.city_required' | translate }}</p>
                             </div> -->
-                          </div>
-
-
-                          <div class="col-md-10 mt-2">
-                            <input formControlName="address_description" type="text" class="form-control"
-                                   placeholder="{{ 'ADDRESS_DESCRIPTION' | translate }}">
-                          </div>
-  
-
-
-                        <div class="col-md-2 mt-2">
-                          <button type="button" class="btn btn-danger" (click)="removeAddress(i)">
-                            <i class="fa fa-trash"></i>
-                          </button>
-                        </div>
-
-
                       </div>
-                      <button type="button" class="btn btn-success mt-2" (click)="addAddress()">+ {{ 'ADD_ADDRESS' | translate }}</button>
+  
+  
+                      <div class="col-md-10 mt-2">
+                        <input formControlName="address_description" type="text" class="form-control"
+                          placeholder="{{ 'ADDRESS_DESCRIPTION' | translate }}">
+                      </div>
+  
+  
+  
+                      <div class="col-md-2 mt-2">
+                        <button type="button" class="btn btn-danger" (click)="removeAddress(i)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+  
+  
                     </div>
+                    <button type="button" class="btn btn-success mt-2" (click)="addAddress()">+ {{ 'ADD_ADDRESS' |
+                      translate }}</button>
                   </div>
+                </div>
       
                   <!-- Phones Section -->
                   <div class="border rounded p-3 mt-3">

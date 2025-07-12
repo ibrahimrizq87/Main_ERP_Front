@@ -255,7 +255,7 @@ removeCurrentDelegate(){
     this._PriceService.viewAllCategory().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response);
+          console.log("priceCategories",response);
           this.priceCategories = response.data;
         }
       },

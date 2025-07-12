@@ -108,8 +108,15 @@ onVacationDayChange(day: string, event: Event) {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      // Handle new file upload
       this.selectedFile = file;
-      this.employeeForm.patchValue({ image: file });
+      
+      // Create a preview URL for the new image
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.employeeForm.patchValue({ image: e.target.result });
+      };
+      reader.readAsDataURL(file);
     }
   }
   validateImage(control: AbstractControl): ValidationErrors | null {
@@ -193,7 +200,9 @@ onVacationDayChange(day: string, event: Event) {
     this._EmployeeService.showEmployeeById(employeeId).subscribe({
       next: (response) => {
         if (response && response.data) {
-          console.log(response)
+          console.log("Employee data:", response.data);
+          
+          // Patch basic form values
           this.employeeForm.patchValue({
             ar: response.data.account.name_lang.ar,
             en: response.data.account.name_lang.en,
@@ -202,15 +211,69 @@ onVacationDayChange(day: string, event: Event) {
             salary: response.data.salary,
             join_date: response.data.join_date,
             image: response.data.image,
-            phones: response.data.phones,
-            addresses: response.data.addresses,
-
+            user_name: response.data.account.user_name,
+            password: response.data.account.password,
+            bonus_type: response.data.bonus_type,
+            hourly_bonus_amount: response.data.hourly_bonus_amount,
+            start_time: response.data.start_time,
+            end_time: response.data.end_time,
+            location_attendance_needed: response.data.location_attendance_needed,
+            company_branch_id: response.data.company_branch_id
           });
-
+  
+          // Handle image
+          if (response.data.image) {
+            this.selectedFile = response.data.image;
+          }
+  
+          // Clear existing addresses and phones
+          while (this.addresses.length !== 0) {
+            this.addresses.removeAt(0);
+          }
+          while (this.phones.length !== 0) {
+            this.phones.removeAt(0);
+          }
+  
+          // Add addresses from response
+          if (response.data.addresses && response.data.addresses.length > 0) {
+            response.data.addresses.forEach((address: any) => {
+              const addressGroup = this.fb.group({
+                address_name: [address.address_name, [Validators.required, Validators.maxLength(255)]],
+                address_description: [address.address_description, [Validators.maxLength(500)]],
+                city_id: [address.city.country.id, Validators.required],
+                cities: [[]],
+                country_id: [address.city?.country.id || '']
+              });
+              this.addresses.push(addressGroup);
+              
+              // Load cities for this address if country is available
+              if (address.city?.country.id) {
+                this.loadCities(address.city.country.id, this.addresses.length - 1);
+              }
+            });
+          }
+  
+          // Add phones from response
+          if (response.data.phones && response.data.phones.length > 0) {
+            response.data.phones.forEach((phone: any) => {
+              this.phones.push(this.fb.group({
+                phone_name: [phone.phone_name, Validators.maxLength(255)],
+                phone: [phone.phone, [Validators.required, Validators.maxLength(255)]]
+              }));
+            });
+          }
+  
+          // Set vacation days
+          if (response.data.vacation_days && response.data.vacation_days.length > 0) {
+            response.data.vacation_days.forEach((day: string) => {
+              this.vacationDays.push(this.fb.control(day));
+            });
+          }
         }
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err);
+        console.error("Error fetching employee:", err);
+        this.toastr.error('Failed to load employee data');
       }
     });
   }
@@ -396,6 +459,28 @@ onVacationDayChange(day: string, event: Event) {
       }
     });
   }
+  // loadCities(id: string, index: number): void {
+  //   this._CityService.viewAllcitiesByCountry(id).subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         const addressControl = this.addresses.at(index) as FormGroup;
+  //         addressControl.patchValue({ 
+  //           cities: response.data,
+  //           country_id: id 
+  //         });
+          
+  //         // Try to preserve the existing city_id if it exists in the new cities list
+  //         const currentCityId = addressControl.get('city_id')?.value;
+  //         if (currentCityId && response.data.some((city: any) => city.country.id === currentCityId)) {
+  //           addressControl.patchValue({ city_id: currentCityId });
+  //         }
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
 
   openModal(modalId: string) {
 

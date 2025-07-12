@@ -112,6 +112,19 @@
                     {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
                   </div>
                 </div>
+                <!-- <div class="form-group col-md-6">
+                  <label class="form-label">{{ 'SELECT_CURRENCY' | translate }}</label>
+                  <select class="form-control" (change)="onCurrencyChange($event)" formControlName="currency_id"
+                    [class.is-invalid]="isSubmitted && !selectedCurrency ">
+                    <option disabled>{{ 'SELECT_CURRENCY' | translate }}</option>
+                    <option *ngFor="let currency of currencies" [value]="currency.id">{{ currency.name }}
+                    </option>
+                  </select>
+                  <div *ngIf="isSubmitted && !selectedCurrency " class="invalid-feedback">
+
+                    {{ 'NEED_TO_SELECT_CURRENCY' | translate }}
+                  </div>
+                </div> -->
 
                 <!-- //salary -->
                 <div class="form-group col-md-6">

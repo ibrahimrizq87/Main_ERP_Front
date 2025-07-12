@@ -132,7 +132,12 @@
               <!-- Image Upload -->
               <div class="form-group">
                 <label class="form-label">{{ 'UPLOAD_IMAGE' | translate }}</label>
-                <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+                <div class="d-flex align-items-center gap-3">
+                  <div *ngIf="employeeForm.get('image')?.value" class="image-preview">
+                    <img [src]="employeeForm.get('image')?.value" alt="Employee Image" class="img-thumbnail" style="max-height: 100px;">
+                  </div>
+                  <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+                </div>
               </div>
               <!-- 'hourly_bonus_amount' => 'nullable|numeric', -->
               <div class="row">
