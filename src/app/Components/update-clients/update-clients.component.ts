@@ -340,9 +340,7 @@ removeCurrentDelegate(){
      
       });
       const client_id = this.route.snapshot.paramMap.get('id');
-
       if(client_id){
-
         this._ClientService.updateClient(client_id,formData).subscribe({
           next: (response) => {
             console.log(response);
@@ -359,24 +357,21 @@ removeCurrentDelegate(){
             console.log(err);
           }
         });
-
       }
-
-   
     }else{
       this.toastr.error('الرجاء ملئ جميع الحقول المطلوبة');
-      // alert('invalid')
     }
   }
 
 
   loadDelegates() {
     
-    this._DelegateService.getAllDelegates().subscribe({
+    this._DelegateService.getAllDelegates(
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
-          this.delegates = response.data;
-          this.filteredAccounts = this.delegates ;
+          this.delegates = response.data.delegates;
         }
       },
       error: (err) => {
@@ -449,10 +444,7 @@ removeCurrentDelegate(){
   
     
              
-                this.filteredAccounts = this.delegates.filter(account =>
-                  account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-                );
-            
+             this.loadDelegates();
               
             }
           

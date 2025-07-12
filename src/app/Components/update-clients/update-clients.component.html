@@ -305,7 +305,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              <tr *ngFor="let account of delegates; let i = index" (click)="selectAccount(account)"
                 style="cursor: pointer;">
                 <td>{{ i + 1 }}</td>
                 <td>{{ account.name }}</td>

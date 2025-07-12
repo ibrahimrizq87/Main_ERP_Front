@@ -375,11 +375,14 @@ removeCurrentDelegate(){
 
   loadDelegates() {
     
-    this._DelegateService.getAllDelegates().subscribe({
+    this._DelegateService.getAllDelegates(
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
-          this.delegates = response.data;
-          this.filteredAccounts = this.delegates ;
+          this.delegates = response.data.delegates;
+          // this.filteredAccounts = this.delegates ;
+          console.log('delegeates' , this.delegates);
         }
       },
       error: (err) => {
@@ -401,8 +404,6 @@ removeCurrentDelegate(){
 
   loadCities(id:string ,index:number): void {
 
-    console.log('id',id);
-    console.log('index',index);
 
     this._CityService.viewAllcitiesByCountry(id).subscribe({
       next: (response) => {
@@ -451,10 +452,7 @@ removeCurrentDelegate(){
             onSearchChange(){
   
     
-             
-                this.filteredAccounts = this.delegates.filter(account =>
-                  account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-                );
+             this.loadDelegates();
             
               
             }
