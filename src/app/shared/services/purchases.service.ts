@@ -82,9 +82,14 @@ export class PurchasesService {
 
   getPurchaseById(id:any): Observable<any>{
     return this._HttpClient.get(this.baseURL+"/general/purchases-bills/"+id, { headers: this.getHeadersWithToken() })
-    
   }
 
+
+
+
+  getPurchaseByIdForUpdate(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/purchases-bills/get-by-id-update/"+id, { headers: this.getHeadersWithToken() })
+  }
 
   updatePurchase(purchaseId: string, PurchaseData: FormData): Observable<any> {
     PurchaseData.append('_method', 'PUT');

@@ -137,7 +137,7 @@ getRowClass(record: any): string {
     this._EmployeeService.getAllEmployees().subscribe({
       next: (response) => {
         if (response) {
-          this.employees = response.data;
+          this.employees = response.data.employees;
         }
       },
       error: (err) => {

@@ -129,7 +129,7 @@
         <thead>
             <tr>
                 <th class="bg-light" scope="col">#</th>
-                <th class="bg-light" scope="col">{{ 'DELEGATE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'INVOICE_DATE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'PRICE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'PYMENT_TYPE' | translate }}</th>
@@ -140,7 +140,7 @@
         <tbody>
             <tr *ngFor="let sale of filteredSales; let i = index">
                 <th scope="row">{{ sale.id }}</th>
-                <td>{{ sale.delegate.name }}</td>
+                <td>{{ sale.client }}</td>
                 <td>{{ sale.date || 'N/A' }}</td>
                 <td>{{ sale.total }}</td>
                 <td>{{ sale.payment_type }}</td>

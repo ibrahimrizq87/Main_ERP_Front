@@ -96,11 +96,8 @@ export class UpdateReturnSalesComponent implements OnInit {
       },
       error: (err) => {
         if (err.status == 404) {
-          // console.log('here')
           this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
-          
           this._Router.navigate(['/dashboard/currency']);
-
         }
         console.log(err);
       }

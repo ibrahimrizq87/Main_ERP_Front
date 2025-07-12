@@ -10,6 +10,9 @@ import {  Router, RouterModule } from '@angular/router';
 import { StoreService } from '../../shared/services/store.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductsService } from '../../shared/services/products.service';
+import { ClientService } from '../../shared/services/client.service';
+import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-cashier',
@@ -44,31 +47,31 @@ export class CashierComponent implements OnInit {
   currentItemForSerial: any = null;
   selectedSerialNumbers: string[] = [];
   loadingSerialNumbers: boolean = false;
-serialSearchQuery: string = '';
-filteredSerialNumbers: any[] = [];
+  serialSearchQuery: string = '';
+  filteredSerialNumbers: any[] = [];
+selectedClient:any;
 
-
-  // Checkout form data
   checkoutData = {
     customer_name: '',
     customer_phone: '',
+    client_id: '',
     note: '',
-    type: 'purchase' // default value
+    type: 'purchase' 
   };
 
-  constructor(private _CashierService: CashierService,private toastr: ToastrService,private router: Router,private _StoreService: StoreService) {
+  constructor(private _AccountService:AccountService,private _ProductsService: ProductsService,private _CashierService: CashierService,private toastr: ToastrService,private router: Router,private _StoreService: StoreService) {
     this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
       this.searchProducts(query);
     });
-      // Add this for store search
       this.storeSearchSubject.pipe(debounceTime(300)).subscribe(() => {
         this.loadStores();
       });
   }
 
   ngOnInit(): void {
+    this.loadClients();
     this.addCashierToMyself();
     this.loadRecentProducts();
     this.searchProducts(''); // Load initial products
@@ -76,10 +79,7 @@ filteredSerialNumbers: any[] = [];
     this._CashierService.getMyInfo().subscribe({
       next: (response) => {
         if (response && response.data) {
-          console.log('My info:', response.data);
           this.currentStore = response.data.cashierData.store;
-
-          // If currentStore is not set, load the first store from the list
           if (!this.currentStore && this.stores.length > 0) {
             this.currentStore = this.stores[0];
           }
@@ -105,11 +105,7 @@ loadStores(): void {
         this.filteredStores = [...this.stores];
         this.storeTotalItems = response.meta.total;
         this.storeLastPage = response.meta.last_page;
-        console.log('Stores loaded:', this.currentStore);
-        // Set current store if not already set
-        // if (!this.currentStore && this.stores.length > 0) {
-        //   this.currentStore = this.stores[0];
-        // }
+
       }
     },
     error: (err) => {
@@ -117,6 +113,54 @@ loadStores(): void {
     }
   });
 }
+clients:any;
+clientSearchQuery = '';
+ openModal(modalId: string) {
+    this.clientSearchQuery ='';
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  closeModal(modalId: string) {
+    this.clientSearchQuery ='';
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+  selectClient(account:any){
+    this.selectedClient =account;
+    this.closeModal('clientModal');
+  }
+
+  onClientSearchChange(){
+    this.loadClients();
+
+  }
+
+
+
+    loadClients(): void {
+    this._AccountService.getAccountsByParent(
+      '611',
+       this.clientSearchQuery
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log("clients", response)
+          this.clients = response.data.accounts;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
 onStoreSearchChange(): void {
   this.storeSearchSubject.next(this.storeSearchQuery);
@@ -198,31 +242,32 @@ onPageChange(page: number): void {
   }
 // Add this method to filter serial numbers
 filterSerialNumbers(): void {
-  if (!this.serialSearchQuery) {
-    this.filteredSerialNumbers = [...this.availableSerialNumbers];
-    return;
-  }
-  
-  const searchTerm = this.serialSearchQuery.toLowerCase();
-  this.filteredSerialNumbers = this.availableSerialNumbers.filter(serial => 
-    serial.serial_number.toLowerCase().includes(searchTerm)
-  );
-}
-// Update the closeSerialNumberModal method
+  const productId = this.currentItemForSerial.product_id || this.currentItemForSerial.id;
+  const storeId = this.currentStore?.id;
 
-  // Load serial numbers for a product
-// Update the loadSerialNumbers method
+  if (productId && storeId) {
+      this.loadSerialNumbers(productId, storeId);
+  }
+
+}
+
+
 loadSerialNumbers(productId: string, storeId: string): void {
   this.loadingSerialNumbers = true;
-  this._CashierService.getProductSerialNumbersForReturnSales(productId, storeId).subscribe({
+let type = 'sale';
+  if(this.checkoutData.type == 'return'){
+type = 'return';
+
+
+  }
+  this._ProductsService.getSerialNumbers(productId, storeId,
+    this.serialSearchQuery,
+    type
+  ).subscribe({
     next: (response) => {
       if (response ) {
-        console.log('Loaded serial numbers:', response);
-        console.log(storeId);
-        console.log(productId);
-        this.availableSerialNumbers = response.data;
-        this.filteredSerialNumbers = [...response.data];
-        console.log('Available serial numbers:', this.availableSerialNumbers);
+        this.availableSerialNumbers = response.data.serial_numbers;
+        this.filteredSerialNumbers = [...response.data.serial_numbers];
       }
       this.loadingSerialNumbers = false;
     },
@@ -234,12 +279,10 @@ loadSerialNumbers(productId: string, storeId: string): void {
   });
 }
 
-  // Open serial number selection modal
   openSerialNumberModal(item: any): void {
     this.currentItemForSerial = item;
-    this.selectedSerialNumbers = [...item.serial_numbers]; // Copy existing serial numbers
+    this.selectedSerialNumbers = [...item.serial_numbers]; 
     
-    // Load available serial numbers
     const productId = item.product_id || item.id;
     const storeId = this.currentStore?.id;
     
@@ -254,8 +297,7 @@ loadSerialNumbers(productId: string, storeId: string): void {
     }
   }
 
-  // Close serial number modal
-// Update the closeSerialNumberModal method
+
 closeSerialNumberModal(): void {
   const modalElement = document.getElementById('serialNumberModal');
   if (modalElement) {
@@ -270,7 +312,6 @@ closeSerialNumberModal(): void {
   this.loadingSerialNumbers = false;
 }
 
-  // Toggle serial number selection
   toggleSerialNumber(serialNumber: string): void {
     const index = this.selectedSerialNumbers.indexOf(serialNumber);
     if (index > -1) {
@@ -284,27 +325,22 @@ closeSerialNumberModal(): void {
     }
   }
 
-  // Check if serial number is selected
   isSerialNumberSelected(serialNumber: string): boolean {
     return this.selectedSerialNumbers.includes(serialNumber);
   }
 
-  // Save selected serial numbers
   saveSerialNumbers(): void {
     if (this.selectedSerialNumbers.length !== this.currentItemForSerial.quantity) {
       this.toastr.warning(`Please select exactly ${this.currentItemForSerial.quantity} serial numbers`, 'Warning');
       return;
     }
 
-    // Update the item with selected serial numbers
     this.currentItemForSerial.serial_numbers = [...this.selectedSerialNumbers];
     this.toastr.success('Serial numbers saved successfully', 'Success');
     this.closeSerialNumberModal();
   }
 
-  // Add product to invoice items
   addToInvoice(product: any) {
-    // First check if product has stock available
     if (product.stock <= 0) {
       this.toastr.warning('This product is out of stock and cannot be added to the invoice.', 'Warning');
       return;
@@ -360,11 +396,7 @@ closeSerialNumberModal(): void {
     if (existingItem) {
       existingItem.quantity += 1;
       existingItem.total = existingItem.quantity * existingItem.price;
-      
-      // If product needs serial numbers, open modal to select them
-      if (needSerial) {
-        this.openSerialNumberModal(existingItem);
-      }
+
     } else {
       const newItem = {
         ...productToAdd,
@@ -380,9 +412,9 @@ closeSerialNumberModal(): void {
       this.invoiceItems.push(newItem);
       
       // If product needs serial numbers, open modal to select them
-      if (needSerial) {
-        this.openSerialNumberModal(newItem);
-      }
+      // if (needSerial) {
+      //   this.openSerialNumberModal(newItem);
+      // }
     }
     
     this.calculateTotal();
@@ -424,14 +456,12 @@ closeSerialNumberModal(): void {
     this.totalAmount = this.invoiceItems.reduce((sum, item) => sum + (item.total || 0), 0);
   }
 
-  // Open checkout modal
   openCheckoutModal() {
     if (this.invoiceItems.length === 0) {
       this.toastr.warning('Please add at least one item to the invoice before proceeding.', 'Warning');
       return;
     }
 
-    // Check if all items that need serial numbers have them selected
     for (let item of this.invoiceItems) {
       if (item.need_serial_number && (!item.serial_numbers || item.serial_numbers.length !== item.quantity)) {
         this.toastr.warning(`Please select ${item.quantity} serial numbers for ${item.name}`, 'Warning');
@@ -455,13 +485,22 @@ closeSerialNumberModal(): void {
     }
   }
 
-  // Save checkout data and submit to API
+  onInvoiceTypeChange(){
+    this.invoiceItems = [];
+  }
+
   saveCheckout() {
-    // Prepare the data according to the API requirements
+
+
+
+
+
     const invoiceData = {
       customer_name: this.checkoutData.customer_name || null,
       customer_phone: this.checkoutData.customer_phone || null,
       note: this.checkoutData.note || null,
+      client_id: this.selectedClient?.id || null,
+
       total: this.totalAmount,
       type: this.checkoutData.type,
       items: this.invoiceItems.map(item => ({
@@ -472,11 +511,11 @@ closeSerialNumberModal(): void {
       }))
     };
 
-    console.log('Submitting invoice data:', invoiceData);
+    // console.log('Submitting invoice data:', invoiceData);
 
     this._CashierService.addBillCasier(invoiceData).subscribe({
       next: (response) => {
-        console.log('Invoice saved successfully:', response);
+        // console.log('Invoice saved successfully:', response);
        this.toastr.success('Invoice saved successfully!', 'Success');
        this.router.navigate(['/printInvoice', response.data.id]); // Navigate to print invoice page
         // Reset form data
@@ -496,10 +535,12 @@ closeSerialNumberModal(): void {
       customer_name: '',
       customer_phone: '',
       note: '',
+      client_id: '',
       type: 'purchase'
     };
     this.invoiceItems = [];
     this.totalAmount = 0;
+    this.selectedClient = null;
   }
 
   addCashierToMyself() {

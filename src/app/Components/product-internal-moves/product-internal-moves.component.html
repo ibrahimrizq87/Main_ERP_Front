@@ -124,15 +124,15 @@
       <tr *ngFor="let productMove of filteredMoves; let i = index">
         <th scope="row">{{ productMove.id }}</th>
         <td>{{ productMove?.supervisor_name ||'N/A' }}</td>
-        <td>{{ productMove?.from_store?.name || 'N/A' }}</td>
-        <td>{{ productMove?.to_store?.name ||"N/A"}}</td>
+        <td>{{ productMove?.from_store || 'N/A' }}</td>
+        <td>{{ productMove?.to_store ||"N/A"}}</td>
         <td>
           <div class="d-flex justify-content-around align-items-center">
             <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-info"
               (click)="ManageChangeStatus('approved' ,productMove.id)">
               approve
             </a>
-            <a *ngIf="(status == 'approved' || status == 'waiting') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-danger"
+            <a *ngIf="(status == 'waiting') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-danger"
               (click)="ManageChangeStatus('rejected',productMove.id)">
               reject
             </a>

@@ -2,12 +2,12 @@
   <div class="row cashier-container">
     <!-- Left Sidebar - Enhanced -->
     <div class="col-1 d-flex flex-column justify-content-center gap-4 align-items-center p-3 cashier-sidebar">
-     <!-- setting -->
-    
-<button class="btn w-100 py-3 shadow-sm cashier-sidebar-button settings-button" (click)="openSettingsModal()">
-  <i class="fas fa-cog mb-1"></i><br>
-  <small>Settings</small>
-</button>
+      <!-- setting -->
+
+      <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button settings-button" (click)="openSettingsModal()">
+        <i class="fas fa-cog mb-1"></i><br>
+        <small>Settings</small>
+      </button>
       <button class="btn w-100 py-3 shadow-sm cashier-sidebar-button history-button" routerLink="/history">
         <i class="fas fa-history mb-1"></i><br>
         <small>History</small>
@@ -47,15 +47,15 @@
               </div>
               <div class="card-body p-3">
                 <h6 class="card-title mb-2 text-truncate">{{product.product_branch?.name}}</h6>
-                
+
                 <!-- Color badge for recent products -->
                 <div *ngIf="product.product_branch?.color?.color" class="mb-2">
-                  <span class="badge" [style.background-color]="product.product_branch.color.color" 
-                        [style.color]="getContrastColor(product.product_branch.color.color)">
+                  <span class="badge" [style.background-color]="product.product_branch.color.color"
+                    [style.color]="getContrastColor(product.product_branch.color.color)">
                     {{ product.product_branch.color.color | titlecase }}
                   </span>
                 </div>
-                
+
                 <!-- Determinants for recent products -->
                 <div *ngIf="product.product_branch?.determinants?.length > 0" class="mb-2">
                   <div *ngFor="let det of product.product_branch.determinants" class="d-inline-block me-2">
@@ -64,7 +64,7 @@
                     </span>
                   </div>
                 </div>
-                
+
                 <p class="card-text mb-1">
                   <i class="fas fa-barcode me-1"></i>{{product.product_branch?.barcode}}
                 </p>
@@ -120,15 +120,15 @@
                   <p class="card-text mb-2">
                     <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                   </p>
-                  
+
                   <!-- Show color if exists -->
                   <div *ngIf="product.branch?.color?.color" class="mb-2">
-                    <span class="badge" [style.background-color]="product.branch.color.color" 
-                          [style.color]="getContrastColor(product.branch.color.color)">
+                    <span class="badge" [style.background-color]="product.branch.color.color"
+                      [style.color]="getContrastColor(product.branch.color.color)">
                       {{ product.branch.color.color | titlecase }}
                     </span>
                   </div>
-                  
+
                   <!-- Show determinants if they exist -->
                   <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
                     <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
@@ -137,7 +137,7 @@
                       </span>
                     </div>
                   </div>
-                  
+
                   <p class="card-text mb-3">
                     <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                   </p>
@@ -176,7 +176,7 @@
           <p class="mb-2 small">
             <i class="fas fa-dollar-sign me-1"></i>Price: ${{item.price | number:'1.2-2'}}
           </p>
-          
+
           <!-- Serial Number Indicator -->
           <div *ngIf="item.need_serial_number" class="mb-2">
             <div class="d-flex align-items-center justify-content-between">
@@ -188,7 +188,7 @@
               </button>
             </div>
           </div>
-          
+
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <button class="btn btn-sm shadow-sm me-2 quantity-button" (click)="updateQuantity(item, -1)">-</button>
@@ -205,14 +205,28 @@
         </div>
       </div>
 
-      <!-- Total Section -->
+
+      <div class="rounded mb-4 shadow-sm text-center ">
+        <button type="button" class="btn btn-primary w-100 text-white" (click)="openModal('clientModal')">
+          {{ selectedClient ? selectedClient.name : ('CLIENT' | translate) }}
+        </button>
+      </div>
+
+      <div class="rounded mb-4 shadow-sm text-center ">
+
+        <select class="form-select shadow-sm checkout-input" id="transactionType" (change)="onInvoiceTypeChange()"
+          [(ngModel)]="checkoutData.type" name="transactionType">
+          <option value="purchase">Purchase</option>
+          <option value="return">Return</option>
+        </select>
+      </div>
+
       <div class="rounded p-4 mb-4 shadow-sm text-center total-section">
         <h3 class="text-white mb-0">
           Total: ${{totalAmount.toFixed(2)}}
         </h3>
       </div>
 
-      <!-- Checkout Button -->
       <button class="btn btn-lg shadow-lg checkout-button" (click)="openCheckoutModal()">
         <i class="fas fa-credit-card me-2"></i>Checkout
       </button>
@@ -221,7 +235,8 @@
 </div>
 
 <!-- Serial Number Selection Modal -->
-<div class="modal fade" id="serialNumberModal" tabindex="-1" aria-labelledby="serialNumberModalLabel" aria-hidden="true">
+<div class="modal fade" id="serialNumberModal" tabindex="-1" aria-labelledby="serialNumberModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content serial-modal">
       <div class="modal-header serial-modal-header">
@@ -237,15 +252,16 @@
             <i class="fas fa-info-circle me-2"></i>
             Please select exactly <strong>{{currentItemForSerial?.quantity}}</strong> serial numbers for this item.
             <br>
-            <small>Selected: <strong>{{selectedSerialNumbers.length}}</strong> / <strong>{{currentItemForSerial?.quantity}}</strong></small>
+            <small>Selected: <strong>{{selectedSerialNumbers.length}}</strong> /
+              <strong>{{currentItemForSerial?.quantity}}</strong></small>
           </div>
         </div>
 
         <!-- Search for Serial Numbers -->
         <div class="mb-4">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search serial numbers..." 
-                   [(ngModel)]="serialSearchQuery" (input)="filterSerialNumbers()">
+            <input type="text" class="form-control" placeholder="Search serial numbers..."
+              [(ngModel)]="serialSearchQuery" (input)="filterSerialNumbers()">
             <span class="input-group-text">
               <i class="fas fa-search"></i>
             </span>
@@ -262,22 +278,16 @@
         <!-- Serial Numbers Grid -->
         <div *ngIf="!loadingSerialNumbers" class="row">
           <div *ngFor="let serial of filteredSerialNumbers" class="col-md-6 col-lg-4 mb-3">
-            <div class="card serial-number-card" 
-                 [class.selected]="isSerialNumberSelected(serial.serial_number)"
-                 (click)="toggleSerialNumber(serial.serial_number)">
-              <div class="card-body p-3">
+            <div class="card serial-number-card" [class.selected]="isSerialNumberSelected(serial.serial_number)"
+              (click)="toggleSerialNumber(serial.id)">
+              <div class="card-body p-3" [ngClass]="{'selected-serial': isSerialNumberSelected(serial.serial_number),'unselected-serial': !isSerialNumberSelected(serial.serial_number)}">
                 <div class="d-flex align-items-center justify-content-between">
                   <div>
-                    <h6 class="card-title mb-1">{{serial.serial_number}}</h6>
+                    <h6 class="card-title mb-1">{{ serial.serial_number }}</h6>
                     <small class="text-muted">
                       <i class="fas fa-calendar me-1"></i>
-                      {{serial.created_at | date:'short'}}
+                      {{ serial.created_at | date: 'short' }}
                     </small>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" 
-                           [checked]="isSerialNumberSelected(serial.serial_number)"
-                           (change)="toggleSerialNumber(serial.serial_number)">
                   </div>
                 </div>
               </div>
@@ -293,9 +303,8 @@
       </div>
       <div class="modal-footer serial-modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeSerialNumberModal()">Cancel</button>
-        <button type="button" class="btn btn-primary" 
-                [disabled]="selectedSerialNumbers.length !== currentItemForSerial?.quantity"
-                (click)="saveSerialNumbers()">
+        <button type="button" class="btn btn-primary"
+          [disabled]="selectedSerialNumbers.length !== currentItemForSerial?.quantity" (click)="saveSerialNumbers()">
           <i class="fas fa-save me-2"></i>Save Serial Numbers
         </button>
       </div>
@@ -317,7 +326,7 @@
       <div class="modal-body p-4 checkout-modal-body">
         <form>
           <!-- Customer Name -->
-          <div class="mb-3">
+          <div class="mb-3" *ngIf="!selectedClient">
             <label for="customerName" class="form-label fw-semibold">
               <i class="fas fa-user me-2"></i>Customer Name
             </label>
@@ -327,7 +336,7 @@
           </div>
 
           <!-- Customer Phone -->
-          <div class="mb-3">
+          <div class="mb-3" *ngIf="!selectedClient">
             <label for="customerPhone" class="form-label fw-semibold">
               <i class="fas fa-phone me-2"></i>Customer Phone
             </label>
@@ -343,18 +352,6 @@
             </label>
             <textarea class="form-control shadow-sm checkout-input" id="note" rows="3"
               placeholder="Enter any notes (optional)" [(ngModel)]="checkoutData.note" name="note"></textarea>
-          </div>
-
-          <!-- Transaction Type -->
-          <div class="mb-3">
-            <label for="transactionType" class="form-label fw-semibold">
-              <i class="fas fa-exchange-alt me-2"></i>Transaction Type
-            </label>
-            <select class="form-select shadow-sm checkout-input" id="transactionType" [(ngModel)]="checkoutData.type"
-              name="transactionType">
-              <option value="purchase">Purchase</option>
-              <option value="return">Return</option>
-            </select>
           </div>
 
           <!-- Order Summary -->
@@ -444,15 +441,15 @@
                 <p class="card-text mb-2">
                   <i class="fas fa-barcode me-2"></i>{{ product.product.barcode }}
                 </p>
-                
+
                 <!-- Show color if exists -->
                 <div *ngIf="product.branch?.color?.color" class="mb-2">
-                  <span class="badge" [style.background-color]="product.branch.color.color" 
-                        [style.color]="getContrastColor(product.branch.color.color)">
+                  <span class="badge" [style.background-color]="product.branch.color.color"
+                    [style.color]="getContrastColor(product.branch.color.color)">
                     {{ product.branch.color.color | titlecase }}
                   </span>
                 </div>
-                
+
                 <!-- Show determinants if they exist -->
                 <div *ngIf="product.branch?.determinants?.length > 0" class="mb-2">
                   <div *ngFor="let det of product.branch.determinants" class="d-inline-block me-2">
@@ -461,7 +458,7 @@
                     </span>
                   </div>
                 </div>
-                
+
                 <p class="card-text mb-3">
                   <i class="fas fa-dollar-sign me-1"></i>{{ product.branch.default_price }}
                 </p>
@@ -511,14 +508,9 @@
           </h6>
           <div class="d-flex align-items-center gap-3">
             <div class="input-group" style="width: 250px;">
-              <input
-                [(ngModel)]="storeSearchQuery"
-                (ngModelChange)="onStoreSearchChange()"
-                class="form-control form-control-sm"
-                type="search"
-                placeholder="{{ 'SEARCH_STORES' | translate }}"
-                aria-label="Search"
-              />
+              <input [(ngModel)]="storeSearchQuery" (ngModelChange)="onStoreSearchChange()"
+                class="form-control form-control-sm" type="search" placeholder="{{ 'SEARCH_STORES' | translate }}"
+                aria-label="Search" />
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
@@ -539,17 +531,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let store of filteredStores" 
-                  [class.table-primary]="currentStore?.id === store.id">
+              <tr *ngFor="let store of filteredStores" [class.table-primary]="currentStore?.id === store.id">
                 <th scope="row">{{ store.id }}</th>
                 <td>{{ store.name }}</td>
                 <td>{{ store.address_description }}</td>
                 <td>{{ store.manager_name }}</td>
                 <td>{{ store.phone }}</td>
                 <td>
-                  <button class="btn btn-sm btn-success" 
-                          (click)="changeStore(store)"
-                          [disabled]="currentStore?.id === store.id">
+                  <button class="btn btn-sm btn-success" (click)="changeStore(store)"
+                    [disabled]="currentStore?.id === store.id">
                     <i class="fas fa-check-circle me-1"></i>
                     {{ currentStore?.id === store.id ? ('SELECTED' | translate) : ('SELECT' | translate) }}
                   </button>
@@ -561,43 +551,67 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4">
           <div class="text-muted">
-            {{ 'SHOWING' | translate }} 
-            {{ (storeCurrentPage - 1) * storeItemsPerPage + 1 }} 
-            {{ 'TO' | translate }} 
-            {{ (storeCurrentPage * storeItemsPerPage) < storeTotalItems ? storeCurrentPage * storeItemsPerPage : storeTotalItems }} 
-            {{ 'OF' | translate }} 
-            {{ storeTotalItems }} 
-            {{ 'ENTRIES' | translate }}
+            {{ 'SHOWING' | translate }}
+            {{ (storeCurrentPage - 1) * storeItemsPerPage + 1 }}
+            {{ 'TO' | translate }}
+            {{ (storeCurrentPage * storeItemsPerPage) < storeTotalItems ? storeCurrentPage * storeItemsPerPage :
+              storeTotalItems }} {{ 'OF' | translate }} {{ storeTotalItems }} {{ 'ENTRIES' | translate }} </div>
+
+              <select [(ngModel)]="storeItemsPerPage" (ngModelChange)="onStoreItemsPerPageChange()"
+                class="form-select form-select-sm" style="width: auto;">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+
+              <pagination-controls (pageChange)="onStorePageChange($event)" [maxSize]="5" [directionLinks]="true"
+                [autoHide]="true" [responsive]="true" previousLabel="{{ 'PREVIOUS' | translate }}"
+                nextLabel="{{ 'NEXT' | translate }}" screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
+                screenReaderPageLabel="{{ 'PAGE' | translate }}"
+                screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
+              </pagination-controls>
           </div>
-
-          <select 
-            [(ngModel)]="storeItemsPerPage" 
-            (ngModelChange)="onStoreItemsPerPageChange()"
-            class="form-select form-select-sm" 
-            style="width: auto;">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-
-          <pagination-controls 
-            (pageChange)="onStorePageChange($event)"
-            [maxSize]="5"
-            [directionLinks]="true"
-            [autoHide]="true"
-            [responsive]="true"
-            previousLabel="{{ 'PREVIOUS' | translate }}"
-            nextLabel="{{ 'NEXT' | translate }}"
-            screenReaderPaginationLabel="{{ 'PAGINATION' | translate }}"
-            screenReaderPageLabel="{{ 'PAGE' | translate }}"
-            screenReaderCurrentLabel="{{ 'CURRENT_PAGE' | translate }}">
-          </pagination-controls>
         </div>
-      </div>
-      <div class="modal-footer settings-modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeSettingsModal()">{{ 'CLOSE' | translate }}</button>
+        <div class="modal-footer settings-modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeSettingsModal()">{{ 'CLOSE' | translate
+            }}</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+
+
+
+  <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+        </div>
+        <div class="modal-body">
+
+          <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+            [(ngModel)]="clientSearchQuery" (ngModelChange)="onClientSearchChange()" />
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of clients; let i = index" (click)="selectClient(account)"
+                style="cursor: pointer;">
+                <td>{{ account.id }}</td>
+                <td>{{ account.name }}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

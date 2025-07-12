@@ -176,6 +176,7 @@ import { HistoryComponent } from './Components/history/history.component';
 import { CashierComponent } from './Components/cashier/cashier.component';
 import { FixedAssetsExpensesComponent } from './Components/fixed-assets-expenses/fixed-assets-expenses.component';
 import { EarningsAndLossesComponent } from './Components/earnings-and-losses/earnings-and-losses.component';
+import { AttendanceSheetOperationsComponent } from './Components/attendance-sheet-operations/attendance-sheet-operations.component';
 
 
 export const routes: Routes = [
@@ -210,6 +211,7 @@ export const routes: Routes = [
             { path: "add-sale-order", component: AddSaleOrderComponent },
             { path: "sale-order", component: SaleOrderComponent },
 
+            { path: "attendance-operations", component: AttendanceSheetOperationsComponent },
             
 
 

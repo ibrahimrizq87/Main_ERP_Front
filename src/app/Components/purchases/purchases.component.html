@@ -167,7 +167,7 @@
             <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,purchase.id)">
               approve
             </a>
-            <a  *ngIf="(status == 'approved' || status == 'waiting') && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
+            <a  *ngIf="(status == 'waiting') && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
               reject
             </a>
             <a *ngIf="status == 'rejected' && _PermissionService.hasPermission('purchase_bills' , 'edit_purchase_bills')" class="btn btn-success" (click)="ManageChangeStatus('waiting',purchase.id)">

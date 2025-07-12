@@ -98,7 +98,7 @@ export class ProductInternalMovesComponent implements OnInit {
 
 
     const fromStore = this.filters.fromStore || '';
-    const toStore = this.filters.toStore || 'all';
+    const toStore = this.filters.toStore || '';
     const startDate = this.filters.startDate || '';
     const endDate = this.filters.endDate || '';
     const day = this.filters.day || '';
@@ -113,7 +113,7 @@ export class ProductInternalMovesComponent implements OnInit {
     ).subscribe({
       next: (response) => {
         if (response) {
-          console.log(response.data);
+          console.log(response);
           this.productMoves = response.data.moves;
           this.filteredMoves = this.productMoves;
         }

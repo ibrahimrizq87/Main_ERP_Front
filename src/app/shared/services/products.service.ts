@@ -68,8 +68,25 @@ export class ProductsService {
       });
   }
 
-  getSerialNumbers(productId:string , storeId:string): Observable<any> {
-    return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers/${productId}/${storeId}`,{ headers:this.getHeadersWithToken()  });
+  getSerialNumbers(productId:string , storeId:string,
+     searchQuery: string = '',
+     type: string = 'sale',
+
+      page: number = 1,
+      perPage: number = 10
+  ): Observable<any> {
+
+          let params = new HttpParams();
+                  // if (type !== 'all') params = params.set('filter[type]', type);
+                  if (searchQuery !== '') params = params.set('searchTerm', searchQuery);
+                  if (type !== 'sale') params = params.set('type', type);
+                  if (page !== 1) params = params.set('page', page);
+                  if (perPage !== 10) params = params.set('per_page', perPage);
+
+
+    return this._HttpClient.get(`${this.baseURL}/general/products/get-serial-numbers/${productId}/${storeId}`,{ 
+      headers:this.getHeadersWithToken(),
+      params:params  });
   }
 
   getSerialNumbersForReturnSales(productId:string , storeId:string): Observable<any> {

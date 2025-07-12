@@ -44,9 +44,9 @@ export class ProductInternalMovesService {
                   let params = new HttpParams();
                   if (fromStore !== '') params = params.set('fromStore', fromStore);
                   if (toStore !== '') params = params.set('toStore', toStore);
-                  if (startDate) params = params.set('startDate', startDate);
-                  if (endDate) params = params.set('endDate', endDate);
-                  if (day) params = params.set('day', day);
+                  if (startDate !== '') params = params.set('startDate', startDate);
+                  if (endDate !== '') params = params.set('endDate', endDate);
+                  if (day !== '') params = params.set('day', day);
     
     
  

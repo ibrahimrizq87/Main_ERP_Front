@@ -22,3 +22,10 @@ label{
     width: 3px;           
     background-color: #145388; 
   }
+
+  .disabled-option {
+  background-color: #e9ecef;
+  color: #6c757d;
+  pointer-events: none; /* prevents hover and click, if desired */
+  user-select: none;
+}
