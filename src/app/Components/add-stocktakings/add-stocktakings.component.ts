@@ -27,6 +27,8 @@ export class AddStocktakingsComponent implements OnInit {
   isLoading: boolean = false;
   stores: any[] = [];
   selectedStore: string = '';
+  selectedStoreObject: any;
+
   dynamicInputs: FormArray<FormControl>;
   inputDisabled: boolean[] = [];
   confirmationData: any = null;
@@ -89,7 +91,10 @@ export class AddStocktakingsComponent implements OnInit {
   }
 
   loadStores() {
-    this._StoreService.getAllStores().subscribe({
+    this._StoreService.getAllStores(
+      'all',
+      this.storeSearchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           this.stores = response.data;
@@ -101,12 +106,38 @@ export class AddStocktakingsComponent implements OnInit {
     });
   }
 
-  onStoreChange(event: Event): void {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedStore = selectedValue;
-    this.loadProductBranches(this.selectedStore);
-  }
+  // onStoreChange(event: Event): void {
+  //   const selectedValue = (event.target as HTMLSelectElement).value;
+  //   this.selectedStore = selectedValue;
+  //   this.stocktackingForm.patchValue({ store_id: selectedValue });
+  //   this.loadProductBranches(this.selectedStore);
+  // }
 
+  openStoreModal() {
+    const modalElement = document.getElementById('storeModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+  
+  closeStoreModal() {
+const modalElement = document.getElementById('storeModal');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }  }
+
+   selectStore(store: any) {
+    this.stocktackingForm.patchValue({ store_id: store.id });
+      this.selectedStore = store.id;
+    this.loadProductBranches(this.selectedStore);
+
+      this.closeStoreModal(); // Close modal after selection
+    }
+
+
+storeSearchQuery = '';
   loadProductBranches(storeId: string) {
     this._StocktakingService.getBranchesByStore(storeId).subscribe({
       next: (response) => {

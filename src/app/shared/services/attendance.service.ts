@@ -57,5 +57,23 @@ export class AttendanceService {
     return this._HttpClient.post(`${this.baseURL}/general/attendances/${id}`, data, { headers: this.getHeadersWithToken() });
   }
 
+ importAttendance( data: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/attendances/import`, data, { headers: this.getHeadersWithToken() });
+  }
+
+
+   exportAttendanceTemplate(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/attendances/export-attendance`, { 
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+ });
+
+
+
+
+ 
+  }
+
+
   
 }

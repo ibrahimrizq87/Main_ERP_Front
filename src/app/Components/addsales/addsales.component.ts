@@ -43,6 +43,7 @@ export class AddsalesComponent implements OnInit {
   vendors: any[] = [];
   selectedType: string = 'purchase';
   selectedStore: string = '';
+  selectedStoreObject :any;
   checks: any;
 
   needCurrecyPrice: boolean = false;
@@ -212,9 +213,12 @@ export class AddsalesComponent implements OnInit {
     });
 
   }
-
+storeSearchTerm = '';
   loadStores() {
-    this._StoreService.getAllStores().subscribe({
+    this._StoreService.getAllStores(
+      'store',
+      this.storeSearchTerm
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -228,13 +232,13 @@ export class AddsalesComponent implements OnInit {
   }
 
 
-  onStoreChange(event: Event): void {
-    const selectedValue = (event.target as HTMLSelectElement).value;
+  // onStoreChange(event: Event): void {
+  //   const selectedValue = (event.target as HTMLSelectElement).value;
 
-    this.selectedStore = selectedValue;
-    this.loadProducts(this.selectedStore);
+  //   this.selectedStore = selectedValue;
+  //   this.loadProducts(this.selectedStore);
 
-  }
+  // }
   selectedCurrency: any;
   onCurrencyChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
@@ -260,6 +264,20 @@ export class AddsalesComponent implements OnInit {
       },
     });
   }
+
+
+    selectStore(store: any) {
+    this.selectedStore = store;
+    this.selectedStore = store.id;
+    this.loadProducts(this.selectedStore);
+    this.selectedStoreObject = store;
+  this.saleForm.patchValue({ store_id: store.id });
+
+    // this.purchasesBillForm.patchValue({ store_id: store.id });
+    this.closeModal('storeModal');
+  }
+
+
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadProducts(this.selectedStore);
@@ -1104,13 +1122,6 @@ onFocus(index :number){
 
   }
 
-
-
-
-//   isOptionDisabled(option: any , index:number): boolean {
-//   // Example condition: disable if already used or expired
-//   return option.isUsed || option.status === 'expired';
-// }
 
   isOptionDisabled(serialNumber:any , index:number): boolean {
     const items = this.saleForm.get('items') as FormArray;

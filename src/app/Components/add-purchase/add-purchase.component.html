@@ -427,6 +427,7 @@
 
       <div class="modal-body">
         <input type="text" class="form-control mb-3" [(ngModel)]="storeSearchTerm"
+          (input)="loadStores()"
           placeholder="{{ 'SEARCH' | translate }}" />
 
         <table class="table table-bordered table-striped">
@@ -437,7 +438,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let store of filteredStores()" (click)="selectStore(store)"
+            <tr *ngFor="let store of stores" (click)="selectStore(store)"
               class="cursor-pointer hover-highlight">
               <td>{{ store.id }}</td>
               <td>{{ store.name }}</td>

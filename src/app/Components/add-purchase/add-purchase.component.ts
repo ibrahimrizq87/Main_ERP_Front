@@ -207,8 +207,8 @@ export class AddPurchaseComponent implements OnInit {
 
   loadStores() {
     this._StoreService.getAllStores(
-      'all', 
-      this.searchQuery, 
+      'store', 
+      this.storeSearchTerm, 
       1, 
       20 
     ).subscribe({
@@ -984,13 +984,6 @@ updateAccounts(){
       const modal = Modal.getInstance(modalElement);
       modal?.hide();
     }
-  }
-  filteredStores() {
-    if (!this.storeSearchTerm) return this.stores;
-    const term = this.storeSearchTerm.toLowerCase();
-    return this.stores.filter(store =>
-      store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
-    );
   }
 
   selectStore(store: any) {

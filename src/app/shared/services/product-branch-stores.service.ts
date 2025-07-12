@@ -57,4 +57,24 @@ export class ProductBranchStoresService {
       headers: this.getHeadersWithToken(),
     params:params })
   }
+
+
+
+    getByStoreIdWithoutPrices(id:string,
+      searchQuery: string = '',
+      page: number = 1,
+      perPage: number = 10
+  ): Observable<any> {
+
+
+              let params = new HttpParams();
+                      // if (type !== 'all') params = params.set('filter[type]', type);
+                      if (searchQuery !== '') params = params.set('searchTerm', searchQuery);
+                      if (page !== 1) params = params.set('page', page);
+                      if (perPage !== 10) params = params.set('per_page', perPage);
+    
+    return this._HttpClient.get(`${this.baseURL}/general/product-branch-stores/get-by-store-without-prices/${id}`,{ 
+      headers: this.getHeadersWithToken(),
+    params:params })
+  }
 }

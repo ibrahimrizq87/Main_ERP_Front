@@ -20,7 +20,7 @@
             </div>
             <div class="card-body pb-5">
               <div class="row">
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="store_id" class="form-label large-text">{{ 'STORE' | translate }}</label>
                   <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)"
                     [class.is-invalid]="!selectedStore && isSubmited">
@@ -28,6 +28,27 @@
                     <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
                   </select>
                   <div class="invalid-feedback" *ngIf="!selectedStore && isSubmited">
+                    {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
+                  </div>
+                </div> -->
+
+                   <div class="form-group col-md-6">
+                  <div class="form-group col-md-6">
+                    <label class="form-label">{{ 'STORE' | translate }}</label>
+                    <button type="button" class="btn btn-outline-primary w-100"
+                      (click)="openStoreModal()">
+                      {{ selectedStoreObject ? selectedStoreObject?.name : ('STORE' | translate) }}
+                    </button>
+
+                    <input type="hidden" formControlName="store_id" [value]="selectedStoreObject?.id" />
+                    <div class="text-danger" *ngIf="!selectedStoreObject && isSubmited">
+                      {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
+                    </div>
+                  </div>
+
+
+
+                  <div class="invalid-feedback" *ngIf="!selectedStoreObject  && isSubmited">
                     {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -200,3 +221,36 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+<div class="modal fade" id="storeModal" tabindex="-1" aria-labelledby="storeModalLabel" aria-hidden="true" tabindex="-1" #storeModalRef>
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'SELECT_STORE' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeStoreModal()"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" [(ngModel)]="storeSearchQuery" placeholder="{{ 'SEARCH' | translate }}" (ngModelChange)="loadStores()" />
+  
+          <table class="table table-striped table-hover table-bordered rounded">
+            <thead class="table-dark">
+              <tr>
+                <th>{{ 'ID' | translate }}</th>
+                <th>{{ 'STORE' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let store of stores" (click)="selectStore(store)" style="cursor: pointer;">
+                <td>{{ store.id }}</td>
+                <td>{{ store.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
