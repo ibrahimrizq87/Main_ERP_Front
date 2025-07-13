@@ -83,6 +83,14 @@ export class UpdateClientsComponent {
       delegate_id: ['', Validators.required],
       price_category_id: [''],
       account_category_id: ['', Validators.required],
+      
+      payment_type: ['cash', Validators.required],
+      has_max_sales: [false],
+      max_sales_amount: [''],
+      bill_no: [''],
+      max_payment_day: [''],
+      payment_day: [''],
+
       image: [null], 
       currency_id: ['', Validators.required],
       addresses: this.fb.array([]),
@@ -103,20 +111,21 @@ export class UpdateClientsComponent {
       }
     });
   }
+
   selectedCity:any;
   get addresses(): FormArray {
     return this.clientForm.get('addresses') as FormArray;
   }
+
   onCityChange(event:Event){
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedCity =selectedValue;
   }
-  // Getter for phones
+
   get phones(): FormArray {
     return this.clientForm.get('phones') as FormArray;
   }
 
-  // Add new address
   addAddress(): void {
     this.addresses.push(this.fb.group({
       address_name: ['', [Validators.required, Validators.maxLength(255)]],
@@ -128,9 +137,6 @@ export class UpdateClientsComponent {
     }));
   }
 
-
-
-
 onCurrencyChange(event:Event){
   this.selectedCurrency = (event.target as HTMLSelectElement).value;
 }
@@ -140,8 +146,6 @@ removeCurrentDelegate(){
   this.selecteddelegateAccount =null;
  this.clientForm.patchValue({'delegate_id':null});
 }
-
-
 
   ngOnInit(): void {
     const currency_id = this.route.snapshot.paramMap.get('id'); 
@@ -166,14 +170,25 @@ removeCurrentDelegate(){
             ar: client.account.name_lang.ar,
             en: client.account.name_lang.en,
             delegate_id: client.delegate.id,
-
             price_category_id: client.price_category.id,
             account_category_id: client.account_category.id,
             currency_id: client.currency_id,
+            payment_type: client.payment_type,
+            has_max_sales: client.has_sales_limit || false,
+            max_sales_amount: client.max_sales || '',
+            bill_no: client.bill_number || '',
+            payment_day: client.payment_day || '',
+            max_payment_day: client.bill_limit_day_number || '',
+
           });
+
+
           this.selectedCaegory = client.account_category_id;
           this.selectedCurrency =  client.currency_id;
-          if(client.image){
+          if(client.price_category){
+this.selectedPriceCaegory = client.price_category.id;
+          }
+           if(client.image){
             this.currentImage = client.image;
           }
           if(client.delegate){
@@ -265,20 +280,6 @@ removeCurrentDelegate(){
     });
   }
 
-  // loadDelegates(): void {
-  //   this._DelegateService.getAllDelegates().subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         this.delegates = response.data;
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
-
-
   loadCurrency(): void {
     this._CurrencyService.viewAllCurrency().subscribe({
       next: (response) => {
@@ -302,18 +303,6 @@ removeCurrentDelegate(){
       this.isLoading = true;
 
 
-
-
-      // 'addresses' => 'nullable|array',
-      // 'addresses.*.address_description' => 'nullable|string|max:500',
-      // 'addresses.*.address_name' => 'required|string|max:255',
-      // 'addresses.*.city_id' =>  'required|exists:cities,id',
-
-
-     
-      // 'phones' => 'nullable|array',
-      // 'phones.*.phone_name' => 'nullable|string|max:255',
-      // 'phones.*.phone' => 'required|string|max:255',
       
       const formData = new FormData();
       formData.append('name[ar]', this.clientForm.get('ar')?.value);
@@ -332,6 +321,26 @@ removeCurrentDelegate(){
         formData.append(`addresses[${index}][address_name]`, element.get('address_name')?.value );
         formData.append(`addresses[${index}][city_id]`, element.get('city_id')?.value);
       });
+
+         formData.append(`payment_type`,this.clientForm.get('payment_type')?.value);
+
+    if(this.clientForm.get('payment_type')?.value == 'mounthly'){
+    formData.append(`payment_day`,this.clientForm.get('payment_day')?.value);
+    }else if(this.clientForm.get('payment_type')?.value == 'bill_no'){
+    formData.append(`bill_number`,this.clientForm.get('bill_no')?.value);
+    formData.append(`bill_limit_day_number`,this.clientForm.get('max_payment_day')?.value);
+      
+  }
+    if(this.clientForm.get('payment_type')?.value != 'cash'){
+          if(this.clientForm.get('has_max_sales')?.value){
+            formData.append(`has_sales_limit`,'1');
+            formData.append(`max_sales`,this.clientForm.get('max_sales_amount')?.value);
+          }else{
+          formData.append(`has_sales_limit`,'0');
+          }
+
+    }
+
 
 
       this.phones.controls.forEach((element,index) => {

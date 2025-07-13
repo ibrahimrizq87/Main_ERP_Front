@@ -78,8 +78,8 @@ export class UpdateEmployeesComponent {
       location_attendance_needed: [false],
       company_branch_id: [''],
       vacation_days: this.fb.array([]),
-      user_name: ['', [Validators.required, Validators.maxLength(255)]],
-      password: ['', [Validators.required]],
+      // user_name: ['', [Validators.required, Validators.maxLength(255)]],
+      // password: ['', [Validators.required]],
     });
   }
   get vacationDays(): FormArray {
@@ -108,10 +108,7 @@ onVacationDayChange(day: string, event: Event) {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      // Handle new file upload
       this.selectedFile = file;
-      
-      // Create a preview URL for the new image
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.employeeForm.patchValue({ image: e.target.result });
@@ -159,12 +156,12 @@ onVacationDayChange(day: string, event: Event) {
   get phones(): FormArray {
     return this.employeeForm.get('phones') as FormArray;
   }
+inVacationDays (day: string): boolean  {
 
+    return this.vacationDays.value.includes(day);
+  }
   // Add new address
   addAddress(): void {
-
-
-
     this.addresses.push(this.fb.group({
       address_name: ['', [Validators.required, Validators.maxLength(255)]],
       address_description: ['', [Validators.maxLength(500)]],
@@ -222,9 +219,9 @@ onVacationDayChange(day: string, event: Event) {
           });
   
           // Handle image
-          if (response.data.image) {
-            this.selectedFile = response.data.image;
-          }
+          // if (response.data.image) {
+          //   this.selectedFile = response.data.image;
+          // }
   
           // Clear existing addresses and phones
           while (this.addresses.length !== 0) {
@@ -252,7 +249,10 @@ onVacationDayChange(day: string, event: Event) {
               }
             });
           }
-  
+
+          this.selectedCategory = response.data.account_category.id;
+            this.selectedCurrency = response.data.currency_id;
+
           // Add phones from response
           if (response.data.phones && response.data.phones.length > 0) {
             response.data.phones.forEach((phone: any) => {
@@ -265,6 +265,8 @@ onVacationDayChange(day: string, event: Event) {
   
           // Set vacation days
           if (response.data.vacation_days && response.data.vacation_days.length > 0) {
+
+            console.log("Vacation days:", response.data.vacation_days);
             response.data.vacation_days.forEach((day: string) => {
               this.vacationDays.push(this.fb.control(day));
             });
@@ -340,22 +342,13 @@ onVacationDayChange(day: string, event: Event) {
 
   handleForm() {
     this.isSubmitted = true;
+
+
+    console.log(this.employeeForm.get('start_time')?.value);
+    console.log(this.employeeForm.get('end_time')?.value);
+
     if (this.employeeForm.valid) {
       this.isLoading = true;
-
-
-
-
-      // 'addresses' => 'nullable|array',
-      // 'addresses.*.address_description' => 'nullable|string|max:500',
-      // 'addresses.*.address_name' => 'required|string|max:255',
-      // 'addresses.*.city_id' =>  'required|exists:cities,id',
-
-
-
-      // 'phones' => 'nullable|array',
-      // 'phones.*.phone_name' => 'nullable|string|max:255',
-      // 'phones.*.phone' => 'required|string|max:255',
 
       const formData = new FormData();
       formData.append('name[ar]', this.employeeForm.get('ar')?.value);
@@ -423,6 +416,12 @@ onVacationDayChange(day: string, event: Event) {
     } else {
       this.toastr.error('خطا في البيانات المدخله');
       // alert('invalid')
+       Object.keys(this.employeeForm.controls).forEach((key) => {
+        const control = this.employeeForm.get(key);
+        if (control && control.invalid) {
+          console.log(`Invalid Field: ${key}`, control.errors);
+        }
+      });
     }
   }
 

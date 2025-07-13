@@ -164,15 +164,10 @@ removeCurrentDelegate(){
 
   }
 
-
-
-
-  // Remove address
   removeAddress(index: number): void {
     this.addresses.removeAt(index);
   }
 
-  // Add new phone
   addPhone(): void {
     this.phones.push(this.fb.group({
       phone_name: ['', Validators.maxLength(255)],
@@ -180,7 +175,6 @@ removeCurrentDelegate(){
     }));
   }
 
-  // Remove phone
   removePhone(index: number): void {
     this.phones.removeAt(index);
   }
@@ -190,7 +184,6 @@ removeCurrentDelegate(){
       this.clientForm.patchValue({ image: file });
     }
   }
-
 
   loadCategories(): void {
     this._AccountCategoriesService.getAllAccountCategoryByType('client').subscribe({
@@ -206,7 +199,6 @@ removeCurrentDelegate(){
     });
   }
 
-
   loadPriceCategories(): void {
     this._PriceService.viewAllCategory().subscribe({
       next: (response) => {
@@ -220,20 +212,6 @@ removeCurrentDelegate(){
       }
     });
   }
-
-  // loadDelegates(): void {
-  //   this._DelegateService.getAllDelegates().subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         this.delegates = response.data;
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
-
 
   loadCurrency(): void {
     this._CurrencyService.viewAllCurrency().subscribe({
@@ -249,60 +227,33 @@ removeCurrentDelegate(){
     });
   }
 
-
-
-
   handleForm() {
-   this.isSubmitted  = true;
-
+  this.isSubmitted  = true;
   let isValid = true;
   let errorMessage = '';
   if(this.clientForm.get('payment_type')?.value != 'cash'){
 
-
-    if(this.clientForm.get('has_max_sales')?.value && !this.clientForm.get('max_sales_amount')?.value){
-          isValid =false;
+  if(this.clientForm.get('has_max_sales')?.value && !this.clientForm.get('max_sales_amount')?.value){
+    isValid =false;
   }
-
 
   if(this.clientForm.get('payment_type')?.value == 'mounthly'){
-
-
     if(!this.clientForm.get('payment_day')?.value){
-          isValid =false;
-  }
-
-    
+      isValid =false;
+  } 
     
   }else if(this.clientForm.get('payment_type')?.value == 'bill_no'){
-
     if(!this.clientForm.get('bill_no')?.value || !this.clientForm.get('max_payment_day')?.value ){
-          isValid =false;
+      isValid =false;
   }
 
   }else{
     isValid =false;
-
   }
   }
    
     if (this.clientForm.valid && isValid) {
       this.isLoading = true;
-
-
-
-
-      // 'addresses' => 'nullable|array',
-      // 'addresses.*.address_description' => 'nullable|string|max:500',
-      // 'addresses.*.address_name' => 'required|string|max:255',
-      // 'addresses.*.city_id' =>  'required|exists:cities,id',
-
-
-     
-      // 'phones' => 'nullable|array',
-      // 'phones.*.phone_name' => 'nullable|string|max:255',
-      // 'phones.*.phone' => 'required|string|max:255',
-      
       const formData = new FormData();
       formData.append('name[ar]', this.clientForm.get('ar')?.value);
       formData.append('name[en]', this.clientForm.get('en')?.value);

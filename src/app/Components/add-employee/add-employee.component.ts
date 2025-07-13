@@ -177,7 +177,7 @@ onVacationDayChange(day: string, event: Event) {
     this.loadCurrency();
     this.loadCategories();
     this.loadCompanyBranches();
-    this.loadAccounts();
+    // this.loadAccounts();
     this.loadCountries();
   }
 
@@ -325,21 +325,21 @@ onVacationDayChange(day: string, event: Event) {
   }
 
 
-    loadAccounts() {
-    this._AccountService.getAccountsByParent('111').subscribe({
-        next: (response) => {
-        if (response) {
-          console.log(response);
-          this.accounts = response.data;
+  //   loadAccounts() {
+  //   this._AccountService.getAccountsByParent('111').subscribe({
+  //       next: (response) => {
+  //       if (response) {
+  //         console.log(response);
+  //         this.accounts = response.data;
 
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     }
     
-    });
-  }
+  //   });
+  // }
   onCountryChange(event: Event, index: number) {
 
     const selectedValue = (event.target as HTMLSelectElement).value;

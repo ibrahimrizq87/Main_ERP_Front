@@ -97,6 +97,63 @@
 
 
 
+                        <div class="form-group col-md-6">
+                        <label for="payment_type" class="form-label large-text">{{ 'PAYMENT_TYPE' | translate }}</label>
+                        <select id="payment_type" (change)="onPriceCategoryChange($event)" formControlName="payment_type" class="form-control">
+                          <option value="cash">
+                            cash
+                          </option>
+                          <option value="mounthly">
+                            mounthly
+                          </option>
+                          <option value="bill_no">
+                            bill number
+                          </option>
+                        </select>
+                 
+                      </div>
+
+
+                        <div class="form-group col-md-3" *ngIf="clientForm.get('payment_type')?.value == 'bill_no'">
+                        <label for="bill_no" class="form-label large-text">{{ 'bill_no' | translate }}</label>
+                        <input formControlName="bill_no" type="number" class="form-control"
+                                 placeholder="{{ 'bill_no' | translate }}">
+                      </div>
+
+                      <div class="form-group col-md-3" *ngIf="clientForm.get('payment_type')?.value == 'bill_no'">
+                        <label for="max_payment_day" class="form-label large-text">{{ 'max_payment_day' | translate }}</label>
+                        <input formControlName="max_payment_day" type="number" class="form-control"
+                                 placeholder="{{ 'max_payment_day' | translate }}">
+                      </div>
+
+
+                        <div class="form-group col-md-6" *ngIf="clientForm.get('payment_type')?.value == 'mounthly'">
+                        <label for="payment_day" class="form-label large-text">{{ 'payment_day' | translate }}</label>
+                        <input formControlName="payment_day" type="number" class="form-control"
+                                 placeholder="{{ 'payment_day' | translate }}">
+                      </div>
+
+                      <div class="form-group col-md-6" *ngIf="clientForm.get('payment_type')?.value != 'cash'">
+                        <!-- <label for="has_max_sales" class="form-label large-text">{{ 'has_max_sales' | translate }}</label>
+                        <input formControlName="has_max_sales" type="checkbox" class="form-control"
+                                 placeholder="{{ 'has_max_sales' | translate }}"> -->
+
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="has_max_sales" formControlName="has_max_sales">
+                    <label class="custom-control-label" for="has_max_sales">Dose this client has a max sales</label>
+                  </div>
+  
+                      </div>
+
+
+                      <div class="form-group col-md-6" *ngIf="clientForm.get('has_max_sales')?.value">
+                        <label for="max_sales_amount" class="form-label large-text">{{ 'max_sales_amount' | translate }}</label>
+                        <input formControlName="max_sales_amount" type="number" class="form-control"
+                                 placeholder="{{ 'max_sales_amount' | translate }}">
+                      </div>
+
+
+
 
                     <div class="form-group col-md-6">
                         <label for="account_category_id" class="form-label large-text">{{ 'ACCOUNT_CATEGORY' | translate }}</label>
