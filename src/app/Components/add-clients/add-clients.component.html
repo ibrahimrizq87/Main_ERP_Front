@@ -155,7 +155,7 @@
                                  placeholder="{{ 'payment_day' | translate }}">
                       </div>
 
-                         <div class="form-group col-md-6" *ngIf="clientForm.get('payment_type')?.value != 'cash'">
+                      <div class="form-group col-md-6" *ngIf="clientForm.get('payment_type')?.value != 'cash'">
                         <!-- <label for="has_max_sales" class="form-label large-text">{{ 'has_max_sales' | translate }}</label>
                         <input formControlName="has_max_sales" type="checkbox" class="form-control"
                                  placeholder="{{ 'has_max_sales' | translate }}"> -->
@@ -379,7 +379,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              <tr *ngFor="let account of delegates; let i = index" (click)="selectAccount(account)"
                 style="cursor: pointer;">
                 <td>{{ i + 1 }}</td>
                 <td>{{ account.name }}</td>

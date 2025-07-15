@@ -22,7 +22,7 @@ import { CountryService } from '../../shared/services/country.service';
 export class UpdateDelegateComponent {
 
   currentImage:any;
-    msgError: string = '';
+  msgError: string = '';
   isLoading: boolean = false;
   type ='client';
   isSubmitted = false;
@@ -61,12 +61,9 @@ export class UpdateDelegateComponent {
 
   }
 
-
-
-
-onCurrencyChange(event:Event){
-  this.selectedCurrency = (event.target as HTMLSelectElement).value;
-}
+  onCurrencyChange(event:Event){
+    this.selectedCurrency = (event.target as HTMLSelectElement).value;
+  }
 
 
   ngOnInit(): void {
@@ -77,8 +74,8 @@ onCurrencyChange(event:Event){
       image: [null], // File Upload
       account_category_id: ['', Validators.required],
       currency_id: ['', Validators.required],
-      user_name: ['', [Validators.required, Validators.maxLength(255)]],
-      password: ['', [Validators.required]],
+      // user_name: ['', [Validators.required, Validators.maxLength(255)]],
+      // password: ['', [Validators.required]],
       salary: ['', [Validators.required, Validators.min(1)]],
       join_date: ['', Validators.required],
       start_time: ['', Validators.required],
@@ -188,6 +185,8 @@ onVacationDayChange(day: string, event: Event) {
             salary: delegate.salary,
             join_date: delegate.join_date,
             start_time: delegate.start_time,
+            currency_id: delegate.currency_id,
+
             end_time: delegate.end_time,
             location_attendance_needed: delegate.location_attendance_needed == 1 ? true : false,
             company_branch_id: delegate.company_branch_id,
@@ -195,7 +194,47 @@ onVacationDayChange(day: string, event: Event) {
 
           });
 
+
+           if (response.data.vacation_days && response.data.vacation_days.length > 0) {
+
+            response.data.vacation_days.forEach((day: string) => {
+              this.vacationDays.push(this.fb.control(day));
+            });
+          }
           
+ while (this.addresses.length !== 0) {
+            this.addresses.removeAt(0);
+          }
+          while (this.phones.length !== 0) {
+            this.phones.removeAt(0);
+          }
+  
+          // Add addresses from response
+          if (response.data.addresses && response.data.addresses.length > 0) {
+            response.data.addresses.forEach((address: any) => {
+              const addressGroup = this.fb.group({
+                address_name: [address.address_name, [Validators.required, Validators.maxLength(255)]],
+                address_description: [address.address_description, [Validators.maxLength(500)]],
+                city_id: [address.city.country.id, Validators.required],
+                cities: [[]],
+                country_id: [address.city?.country.id || '']
+              });
+              this.addresses.push(addressGroup);
+              
+              // Load cities for this address if country is available
+              if (address.city?.country.id) {
+                this.loadCities(address.city.country.id, this.addresses.length - 1);
+              }
+            });
+          }
+           if (response.data.phones && response.data.phones.length > 0) {
+            response.data.phones.forEach((phone: any) => {
+              this.phones.push(this.fb.group({
+                phone_name: [phone.phone_name, Validators.maxLength(255)],
+                phone: [phone.phone, [Validators.required, Validators.maxLength(255)]]
+              }));
+            });
+          }
 
         
         this.selectedCaegory = delegate.account_category_id;
@@ -215,6 +254,11 @@ onVacationDayChange(day: string, event: Event) {
         console.error(err);
       }
     });
+  }
+
+  inVacationDays (day: string): boolean  {
+
+    return this.vacationDays.value.includes(day);
   }
   loadCategories(): void {
     this._AccountCategoriesService.getAllAccountCategoryByType('delegate').subscribe({
@@ -288,7 +332,19 @@ onVacationDayChange(day: string, event: Event) {
     });
   }
 
+//  selectedFile: File | null = null;
 
+  // onFileSelected(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     this.selectedFile = file;
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       this.employeeForm.patchValue({ image: e.target.result });
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
   handleForm() {
    this.isSubmitted  = true;
     if (this.delegateForm.valid) {
@@ -302,12 +358,18 @@ onVacationDayChange(day: string, event: Event) {
       this.phones.controls.forEach((element, index) => {
         formData.append(`phones[${index}][phone_name]`, element.get('phone_name')?.value || '');
         formData.append(`phones[${index}][phone]`, element.get('phone')?.value);
-
       });
+
       if( this.delegateForm.get('image')?.value){
         formData.append('image', this.delegateForm.get('image')?.value);
 
       }
+
+
+      // console.log(this.selectedFile)
+      // if (this.selectedFile) {
+      //   formData.append('image', this.selectedFile);
+      // }
       formData.append('account_category_id', this.delegateForm.get('account_category_id')?.value);
       formData.append('currency_id', this.delegateForm.get('currency_id')?.value);
       formData.append('user_name', this.delegateForm.get('user_name')?.value);
@@ -348,12 +410,18 @@ onVacationDayChange(day: string, event: Event) {
           this.toastr.error('حدث خطا اثناء اضافه العميل');
           this.isLoading = false;
           this.msgErrors = err.error.errors;
-          // console.log(err.error)
-          // console.log(err);
           console.log(err.error.errors);;
         }
       });
-    }}
+    }}else{
+        this.toastr.error('خطا في البيانات المدخله');
+       Object.keys(this.delegateForm.controls).forEach((key) => {
+        const control = this.delegateForm.get(key);
+        if (control && control.invalid) {
+          console.log(`Invalid Field: ${key}`, control.errors);
+        }
+      });
+    }
   }
   onCancel() {
     this.delegateForm.reset();
