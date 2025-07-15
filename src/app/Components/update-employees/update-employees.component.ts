@@ -211,7 +211,7 @@ onVacationDayChange(day: string, event: Event) {
             salary: response.data.salary,
             join_date: response.data.join_date,
             image: response.data.image,
-            user_name: response.data.account.user_name,
+            user_name: response.data.user_name,
             password: response.data.account.password,
             bonus_type: response.data.bonus_type,
             hourly_bonus_amount: response.data.hourly_bonus_amount,
@@ -278,7 +278,9 @@ onVacationDayChange(day: string, event: Event) {
     });
   }
 
-
+  isDaySelected(day: string): boolean {
+    return this.vacationDays.value.includes(day);
+  }
 
 
   // Remove address

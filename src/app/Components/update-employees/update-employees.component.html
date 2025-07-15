@@ -312,13 +312,14 @@
                 <h5>{{ 'VACATION_DAYS' | translate }}</h5>
                 <div class="form-group">
                   <label class="form-label large-text mb-3">{{ 'SELECT_VACATION_DAYS' | translate }}</label>
-                  <div class="row g-3">  <!-- Added g-3 for consistent gutter spacing -->
+                  <div class="row g-3">
                     <!-- Saturday -->
                     <div class="col-md-3">
-                      <div class="form-check d-flex align-items-center gap-2">  <!-- Added flex alignment and gap -->
+                      <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="saturday" 
-                               (change)="onVacationDayChange('Saturday', $event)">
-                        <label class="form-check-label mb-0" for="saturday">  <!-- mb-0 to remove default margin -->
+                               (change)="onVacationDayChange('Saturday', $event)"
+                               [checked]="isDaySelected('Saturday')">
+                        <label class="form-check-label mb-0" for="saturday">
                           {{ 'SATURDAY' | translate }}
                         </label>
                       </div>
@@ -328,7 +329,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="sunday" 
-                               (change)="onVacationDayChange('Sunday', $event)">
+                               (change)="onVacationDayChange('Sunday', $event)"
+                               [checked]="isDaySelected('Sunday')">
                         <label class="form-check-label mb-0" for="sunday">
                           {{ 'SUNDAY' | translate }}
                         </label>
@@ -339,7 +341,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="monday" 
-                               (change)="onVacationDayChange('Monday', $event)">  <!-- Fixed day parameter -->
+                               (change)="onVacationDayChange('Monday', $event)"
+                               [checked]="isDaySelected('Monday')">
                         <label class="form-check-label mb-0" for="monday">
                           {{ 'MONDAY' | translate }}
                         </label>
@@ -350,7 +353,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="tuesday" 
-                               (change)="onVacationDayChange('Tuesday', $event)">  <!-- Fixed day parameter -->
+                               (change)="onVacationDayChange('Tuesday', $event)"
+                               [checked]="isDaySelected('Tuesday')">
                         <label class="form-check-label mb-0" for="tuesday">
                           {{ 'TUESDAY' | translate }}
                         </label>
@@ -361,7 +365,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="wednesday" 
-                               (change)="onVacationDayChange('Wednesday', $event)">  <!-- Fixed day parameter -->
+                               (change)="onVacationDayChange('Wednesday', $event)"
+                               [checked]="isDaySelected('Wednesday')">
                         <label class="form-check-label mb-0" for="wednesday">
                           {{ 'WEDNESDAY' | translate }}
                         </label>
@@ -372,7 +377,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="thursday" 
-                               (change)="onVacationDayChange('Thursday', $event)">  <!-- Fixed day parameter -->
+                               (change)="onVacationDayChange('Thursday', $event)"
+                               [checked]="isDaySelected('Thursday')">
                         <label class="form-check-label mb-0" for="thursday">
                           {{ 'THURSDAY' | translate }}
                         </label>
@@ -383,7 +389,8 @@
                     <div class="col-md-3">
                       <div class="form-check d-flex align-items-center gap-2">
                         <input class="form-check-input m-0" type="checkbox" id="friday" 
-                               (change)="onVacationDayChange('Friday', $event)">  <!-- Fixed day parameter -->
+                               (change)="onVacationDayChange('Friday', $event)"
+                               [checked]="isDaySelected('Friday')">
                         <label class="form-check-label mb-0" for="friday">
                           {{ 'FRIDAY' | translate }}
                         </label>
