@@ -194,21 +194,22 @@ export class UpdatePurchaseComponent {
 
           if(purchaseData.payed_from_account){
           this.addAccount(purchaseData.payed_from_account, 'cash');
+          
 
+           this.purchasesBillForm.patchValue({
+            showCashAccountsDropdown: true,
+          });
+        
           }
 
           this.addAccount(purchaseData.vendor, 'vendor');
 
-          this.needCurrecyPrice = false;
-          if(purchaseData.currency_price_value > 0){
-            this.needCurrecyPrice = true;
-          }
 
-          // if (purchaseData.items && Array.isArray(purchaseData.items)) {
-          //   purchaseData.items.forEach(item => {
-          //     this.addItem(item);
-          //   });
-          // }
+          if (purchaseData.items && Array.isArray(purchaseData.items)) {
+            purchaseData.items.forEach((item:any) => {
+              this.addItem(item);
+            });
+          }
         }
       },
       error: (err) => {
@@ -362,7 +363,7 @@ export class UpdatePurchaseComponent {
     items.push(
       this.fb.group({
       amount: [data.quantity, Validators.required],
-      price: ['', Validators.required],
+      price: [data.price, Validators.required],
       product_id: [data.product.id, Validators.required],
       product: [data.product],
       color_id: [null ],
@@ -374,7 +375,7 @@ export class UpdatePurchaseComponent {
       branch_data: [data.product_branch],
       determinants: this.fb.array([]),
 
-      serialNumbers: [data.serial_numbers],
+      serialNumbers: [data.serial_numbers||[]],
       neededSerialNumbers: [0],
     })
 
@@ -440,7 +441,7 @@ export class UpdatePurchaseComponent {
 
 
     if (barcode) {
-      tempList.push({ barcode: barcode })
+      tempList.push({ serial_number : barcode })
       item.patchValue({ serialNumbers: tempList });
       console.log(tempList);
       item.patchValue({ barcode: null });
@@ -474,13 +475,32 @@ export class UpdatePurchaseComponent {
     const amount = item.get('amount')?.value || 0;
     if (item.get('product')?.value?.need_serial_number) {
       if (typeof amount === 'number' && amount >= 0) {
-        item.patchValue({ neededSerialNumbers: amount })
+
+
+      const serialNumbers = item.get('serialNumbers')?.value;
+      const count = serialNumbers.length || 0;
+
+
+
+        item.patchValue({ neededSerialNumbers: (amount - count)})
 
       } else {
         console.warn('Invalid amount:', amount);
       }
     }
+
+    this.updateNumbers();
   }
+
+
+  updateNumbers(){
+
+    this.onPrice();
+
+
+
+  }
+
   payedAmount() {
     if ((this.purchasesBillForm.get('payed_price')?.value || 0) > this.total) {
       this.purchasesBillForm.patchValue({ payed_price: this.total });
@@ -499,9 +519,6 @@ export class UpdatePurchaseComponent {
     this.total = 0;
     this.items.controls.forEach((itemControl) => {
       const itemValue = itemControl.value;
-      console.log('amount', itemValue.amount);
-      console.log('price', itemValue.price);
-
       if (itemValue) {
         this.total += (itemValue.amount || 0) * (itemValue.price || 0);
       }
@@ -528,9 +545,7 @@ export class UpdatePurchaseComponent {
 
   }
   handleForm() {
-    if (this.purchasesBillForm.get('file_type')?.value != 'manual' && this.purchasesBillForm.get('file_type')?.value != 'purchase_order') {
-      this.items.clear();
-    }
+
     if (this.purchasesBillForm.get('payment_type')?.value == 'cash' && this.selectedVendor && this.needCurrecyPrice && !this.purchasesBillForm.get('currency_price_value')?.value) {
       this.toastr.error('يجب ادخال سعر الصرف');
       return;
@@ -576,15 +591,6 @@ export class UpdatePurchaseComponent {
 
 
 
-      if (this.purchasesBillForm.get('file_type')?.value == 'items_only' || this.purchasesBillForm.get('file_type')?.value == 'all_data') {
-        formData.append("file_type", this.purchasesBillForm.get('file_type')?.value);
-        if (this.selectedFile) {
-          formData.append('file', this.selectedFile, this.selectedFile.name);
-        } else {
-          this.toastr.error('يرجى اختيار ملف');
-          return;
-        }
-      }
 
         if (this.items && this.items.controls) {
           this.items.controls.forEach((itemControl, index) => {
@@ -595,6 +601,9 @@ export class UpdatePurchaseComponent {
               error = true;
               return;
             }
+
+              console.log('neededSerialNumbers' , itemValue.neededSerialNumbers);
+
 
             if (itemValue) {
               if (itemValue.type == 'product') {
@@ -612,6 +621,11 @@ export class UpdatePurchaseComponent {
               }
 
               formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
+
+
+              console.log('quantity' , itemValue.amount);
+              console.log('price' , itemValue.price);
+
               formData.append(`items[${index}][price]`, itemValue.price || '0');
 
               if (itemValue.colors.length > 0) {
@@ -630,7 +644,7 @@ export class UpdatePurchaseComponent {
               if (serialNumbers.length > 0) {
 
                 serialNumbers.forEach((item: any, internalIndex: number) => {
-                  formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                  formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.serial_number);
 
                 });
               }
@@ -640,10 +654,16 @@ export class UpdatePurchaseComponent {
             }
           });
         }
-      
-      if (!error) {
 
-          this._PurchasesService.addPurchase(formData).subscribe({
+
+        // alert (error);
+      
+      const salary_id = this.route.snapshot.paramMap.get('id');
+      if (!error && salary_id) {
+
+
+
+          this._PurchasesService.updatePurchase(salary_id ,formData).subscribe({
             next: (response) => {
               if (response) {
                 this.toastr.success('تم اضافه الفاتوره بنجاح');
@@ -652,14 +672,11 @@ export class UpdatePurchaseComponent {
                 this._Router.navigate(['/dashboard/purchases/waiting']);
               }
             },
-
             error: (err: HttpErrorResponse) => {
               this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
               this.isLoading = false;
               this.msgError = [];
-
               if (err.error && err.error.errors) {
-
                 for (const key in err.error.errors) {
                   if (err.error.errors[key] instanceof Array) {
                     this.msgError.push(...err.error.errors[key]);
@@ -668,7 +685,6 @@ export class UpdatePurchaseComponent {
                   }
                 }
               }
-
               console.error(this.msgError);
             },
 

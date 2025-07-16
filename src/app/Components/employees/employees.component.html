@@ -55,8 +55,14 @@
                     <i class="fa-solid fa-eye btn1 bg-primary rounded"
                         title="{{ 'VIEW_EMPLOYEE' | translate }}"></i>
                 </a>
-                <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')"  class="nav-link" routerLinkActive="active"
+                <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')  && !employee.delegate"  class="nav-link" routerLinkActive="active"
                 [routerLink]="['/dashboard/update-employee', employee.id]">
+                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                    title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
+            </a>
+
+            <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')  && employee.delegate"  class="nav-link" routerLinkActive="active"
+                [routerLink]="['/dashboard/update-delegate', employee.delegate.id]">
                 <i class="fa-solid fa-pencil btn1 bg-success rounded"
                     title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
             </a>
