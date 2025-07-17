@@ -31,7 +31,14 @@ export class ProductCategoryComponent {
   }
 
   loadUnits(): void {
-    this._ProductCategoriesService.getAllProductCategories().subscribe({
+    // searchQuery: string = '',
+    // type: string = '',
+    // parent_id: string = '',
+    this._ProductCategoriesService.getAllProductCategories(
+      this.searchTerm,
+      'parent' 
+
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -44,6 +51,8 @@ export class ProductCategoryComponent {
       }
     });
   }
+
+  
   deleteCategory(unitId: number): void {
     if (confirm('Are you sure you want to delete this Unit?')) {
       this._ProductCategoriesService.deleteProductCategory(unitId).subscribe({
@@ -57,19 +66,12 @@ export class ProductCategoryComponent {
         error: (err) => {
           this.toastr.error('حدث خطا اثناء حذف الوحدة');
           console.error(err);
-          // alert('An error occurred while deleting the Unit.');
         }
       });
     }
   }
   searchCategories(): void {
-    if (this.searchTerm.trim() === '') {
-      this.filteredCategories = [...this.categories];
-    } else {
-      this.filteredCategories = this.categories.filter(unit =>
-        unit.unit.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
+this.loadUnits();
   }
 }
 

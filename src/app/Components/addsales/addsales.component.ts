@@ -18,6 +18,11 @@ import { ProductBranchStoresService } from '../../shared/services/product-branch
 import { ToastrService } from 'ngx-toastr';
 import { SaleOrdersService } from '../../shared/services/sale_orders.service';
 
+  /////  keyboard short cuts 
+
+  import {  ElementRef, QueryList, ViewChild, ViewChildren, HostListener, AfterViewInit } from '@angular/core';
+
+  /////  keyboard short cuts 
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -896,6 +901,10 @@ storeSearchTerm = '';
     // console.log(productBranchStore.product.id, this.selectedStore, index != null ? index :this.productIndex );
 
     // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, index ? index :this.productIndex);
+
+
+
+    this.lastSelectedIndex = -1;
     this.closeProductModel();
   }
   
@@ -1136,6 +1145,81 @@ onFocus(index :number){
 
     return value;
   }
+
+
+
+
+  /////  keyboard short cuts 
+
+
+  @ViewChild('formRoot') formRoot!: ElementRef;
+  // All form fields (input, select, button, etc.)
+  @ViewChildren('field') fields!: QueryList<ElementRef>;
+
+  private currentFocusIndex = 0;
+
+  ngAfterViewInit() {
+    setTimeout(() => this.setInitialFocus(), 0);
+  }
+
+    private getFocusableElements(): HTMLElement[] {
+    if (!this.formRoot) return [];
+    const formElement = this.formRoot.nativeElement as HTMLElement;
+    return Array.from(formElement.querySelectorAll('[data-focusable="true"]')) as HTMLElement[];
+  }
+
+  private setInitialFocus(index: number = 0) {
+    const elements = this.getFocusableElements();
+    if (elements[index]) {
+      elements[index].focus();
+      this.currentFocusIndex = index;
+    }
+  }
+
+
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    const focusables = this.getFocusableElements();
+    console.log(event)
+    if (!focusables.length) return;
+
+    const targetInsideForm = this.formRoot.nativeElement.contains(event.target);
+    if (!targetInsideForm) return;
+
+    // Custom key mapping
+    if (event.key === 's') {
+      event.preventDefault();
+      this.moveFocus(1);
+    } else if (event.key === 'w') {
+      event.preventDefault();
+      this.moveFocus(-1);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      this.activateElement(focusables[this.currentFocusIndex]);
+    }
+  }
+
+  private moveFocus(direction: number) {
+    const focusables = this.getFocusableElements();
+    if (!focusables.length) return;
+
+    this.currentFocusIndex =
+      (this.currentFocusIndex + direction + focusables.length) % focusables.length;
+
+    focusables[this.currentFocusIndex]?.focus();
+  }
+
+  private activateElement(element: HTMLElement) {
+    const tag = element.tagName;
+    if (tag === 'BUTTON') {
+      element.click();
+    } else if (tag === 'SELECT') {
+      element.focus(); // Or simulate "open" if needed
+    }
+  }
+
+    /////  keyboard short cuts 
 
 
 }

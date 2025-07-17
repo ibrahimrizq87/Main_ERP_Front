@@ -10,7 +10,7 @@
 </div>
 
 <div class="mt-4 mb-4">
-  <form [formGroup]="saleForm" (ngSubmit)="handleForm()">
+  <form #formRoot [formGroup]="saleForm" (ngSubmit)="handleForm()">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -38,7 +38,7 @@
 
                 <div class="form-group col-md-6">
                   <label class="form-label">{{ 'CLIENT' | translate }}</label>
-                  <button type="button" class="btn btn-outline-primary w-100"
+                  <button data-focusable="true" type="button" class="btn btn-outline-primary w-100"
                     (click)="openModal('shiftModal' , 'vendor')">
                     {{ selectedClient ? selectedClient.account.name : ('CLIENT' | translate) }}
                   </button>
@@ -52,7 +52,8 @@
                 <div class="form-group col-md-6">
                   <label for="delegate_id" class="form-label large-text">{{ 'DELEGATE' | translate }}</label>
                   <br>
-                  <a (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
+                  <a  tabindex="0"
+  data-focusable="true" (click)="openModal('shiftModal' , 'delegate')" class="btn btn-outline-info">
                     {{selecteddelegateAccount? selecteddelegateAccount.name : 'اختر الحساب'}}
                   </a>
                   <i class=" ms-1 fa-solid fa-trash-can btn1 bg-danger rounded p-1"
@@ -63,7 +64,7 @@
                     <div class="form-group col-md-6">
                   <div class="form-group col-md-6">
                     <label class="form-label">{{ 'STORE' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100"
+                    <button data-focusable="true" type="button" class="btn btn-outline-primary w-100"
                       (click)="openModal('storeModal', 'store')">
                       {{ selectedStoreObject ? selectedStoreObject?.name : ('STORE' | translate) }}
                     </button>
@@ -84,7 +85,7 @@
 
                 <div *ngIf="needCurrecyPrice" class="form-group col-md-6">
                   <label class="form-label large-text">سعر عملة ال ({{forignCurrencyName}})</label>
-                  <input formControlName="currency_price_value" type="number" class="form-control"
+                  <input  formControlName="currency_price_value" type="number" class="form-control"
                     (input)="currencyPrice()" />
                 </div>
 
@@ -93,7 +94,7 @@
 
                 <div class="form-group col-md-6">
                   <label for="file_type" class="form-label">Type</label>
-                  <select id="file_type" class="form-control" (change)="onFileTypeChange($event)">
+                  <select data-focusable="true" id="file_type" class="form-control" (change)="onFileTypeChange($event)">
                     <option value="manual">Manual</option>
                     <option value="sale_order">Sales Order</option>
                   </select>
@@ -102,7 +103,7 @@
 
                 <div class="form-group col-md-6" *ngIf="showselectOrder">
                   <label class="form-label">{{ 'SLAE_ORDER' | translate }}</label>
-                  <button type="button" class="btn btn-outline-primary w-100"
+                  <button data-focusable="true" type="button" class="btn btn-outline-primary w-100"
                     (click)="openModal('orderModel', 'order')">
                     {{ 'SELECT_SLAE_ORDER' | translate }}
                   </button>
@@ -479,7 +480,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
-              <td><strong>{{ branch.product.barcode }}</strong></td>
+              <td><strong>{{ branch.branch.barcode }}</strong></td>
               <td>{{ branch.branch.code }}</td>
               <td>{{ branch.product.name }}</td>
               <td>{{ branch.stock }}</td>

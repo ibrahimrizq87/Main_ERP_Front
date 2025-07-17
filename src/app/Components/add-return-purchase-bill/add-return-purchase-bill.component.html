@@ -390,7 +390,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
-              <td><strong>{{ branch.product.barcode }}</strong></td>
+              <td><strong>{{ branch.branch.barcode }}</strong></td>
               <td>{{ branch.branch.code }}</td>
               <td>{{ branch.product.name }}</td>
               <td>{{ branch.stock }}</td>

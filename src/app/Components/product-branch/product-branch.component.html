@@ -36,18 +36,30 @@
     <thead>
       <tr>
         <th class="bg-light" scope="col">ID</th>
+        <th class="bg-light" scope="col">Barcode</th>
+
         <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'COLOR' | translate }}</th>
+        <th class="bg-light" scope="col">{{ 'DETERMENANTS' | translate }}</th>
         <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let branch of branches; let i = index">
         <th scope="row">{{ branch.code }}</th>
+        <th scope="row">{{ branch.barcode }}</th>
+
         <td>{{ branch.product.name }}</td>
         <td>{{ branch.stock }}</td>
-        <td>{{ branch.product_color?.color?.color ?? "N/A"}}</td>
+                <td>{{ branch.product_color?.color?.color ?? "N/A"}}</td>
+
+        <td><span *ngFor="let determinant of branch.determinants; let i = index">
+                  <span class="badge bg-info text-dark me-1">
+                    {{ determinant.determinant }}: {{ determinant.value }}
+                  </span>
+                </span></td>
+
         <td class="d-flex justify-content-center gap-3 align-items-center">
           <a  *ngIf="_PermissionService.hasPermission('product_branches' , 'details_product_branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProductBranch', branch.id]">
             <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>

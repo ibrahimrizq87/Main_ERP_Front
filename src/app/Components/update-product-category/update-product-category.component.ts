@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 import { ToastrService } from 'ngx-toastr';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-update-product-category',
@@ -17,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UpdateProductCategoryComponent {
 
-
+  selectedCategory:any;
   msgError: string = '';
   isLoading: boolean = false;
   isSubmitted = false;
@@ -36,6 +37,8 @@ export class UpdateProductCategoryComponent {
     if (unitId) {
       this.fetchProductCategory(unitId);
     }
+    this.loadParents();
+
   }
 
   fetchProductCategory(unitId: string): void {
@@ -46,10 +49,9 @@ export class UpdateProductCategoryComponent {
           console.log(categoryData)
           this.categoryForm.patchValue({
             name: categoryData.name,
-            // image: UnitsData.name,
           });
-          
-          // Clear existing commissions
+
+          this.selectedCategory =categoryData.parent || null;
           while (this.commissions.length) {
             this.commissions.removeAt(0);
           }
@@ -118,6 +120,11 @@ export class UpdateProductCategoryComponent {
         formData.append('image', this.categoryForm.get('image')?.value);
       }
 
+
+      if(this.selectedCategory){
+        formData.append('parent_id', this.selectedCategory.id);    
+      }
+
       this.commissions.controls.forEach((element, index) => {
        
         formData.append(`commissions[${index}][from]`, element.get('from')?.value);
@@ -150,4 +157,53 @@ export class UpdateProductCategoryComponent {
     this.categoryForm.reset();
     this._Router.navigate(['/dashboard/productCategories']);
   }
+
+
+
+
+      openModal(modalId: string) {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = new Modal(modalElement);
+          modal.show();
+        }
+      }
+    closeModal(modalId: string) {
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+    }
+  
+  searchQuery = '';
+  parents:any;
+      loadParents(): void {
+      // searchQuery: string = '',
+      // type: string = '',
+      // parent_id: string = '',
+      this._ProductCategoriesService.getAllProductCategories(
+        this.searchQuery,
+        'parent' 
+  
+      ).subscribe({
+        next: (response) => {
+          if (response) {
+            this.parents = response.data; 
+            // this.filteredCategories = [...this.categories];
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+  
+  selectCategory(parent:any){
+    this.selectedCategory = parent;
+    this.closeModal('categoryModal'); 
+  
+  }
+
+
 }
