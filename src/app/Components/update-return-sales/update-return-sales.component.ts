@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductBranchesService } from '../../shared/services/product_branches.service';
 
 @Component({
   selector: 'app-update-return-sales',
@@ -39,7 +40,7 @@ export class UpdateReturnSalesComponent implements OnInit {
   selectedType: string = 'purchase';
   selectedStore: string = '';
   checks: any;
-
+  returnSalesData: any;
   needCurrecyPrice: boolean = false;
   forignCurrencyName = '';
 
@@ -57,15 +58,17 @@ export class UpdateReturnSalesComponent implements OnInit {
     private _StoreService: StoreService,
     private _CurrencyService: CurrencyService,
     private _ProductsService: ProductsService,
+    private _ProductBranchesService: ProductBranchesService,
     private _ClientService: ClientService,
     private _ProductBranchStoresService: ProductBranchStoresService,
+
     private _AccountService: AccountService,
     private _SalesService: SalesService,
     private _Router: Router,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
     private toastr: ToastrService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
 
   ) {
     this.saleForm = this.fb.group({
@@ -86,6 +89,113 @@ export class UpdateReturnSalesComponent implements OnInit {
     });
     this.dynamicInputs = this.fb.array([]);
   }
+  loadReturnSaleBill(id: string) {
+    this._SalesService.getReturnSaleById(id).subscribe({
+      next: (response) => {
+        if (response) {
+          const saleData = response.data;
+          this.returnSalesData = saleData;
+          console.log("Return Sales data:", saleData);
+  
+          // Initialize payment account data
+          if (saleData.payed_to_account) {
+            this.selectedCashAccount = {
+              id: saleData.payed_to_account.id,
+              name: saleData.payed_to_account?.name,
+              account: saleData.payed_to_account,
+              currency: saleData.payed_to_account.currency,
+              current_balance: saleData.payed_to_account.current_balance
+            };
+            
+            this.saleForm.patchValue({
+              cash_id: saleData.payed_to_account.id,
+              showCashAccountsDropdown: true
+            });
+          }
+  
+          this.selectedClient = {
+            id: saleData.client.id,
+            name: saleData.client?.name,
+            account: {
+              id: saleData.client.id,
+              name: saleData.client?.name,
+              currency: saleData.client.currency
+            },
+            delegate: saleData.delegate,
+            price_category: saleData.client.price_category || null // Ensure this is set properly
+          };
+  
+          // Set delegate data if exists
+          if (saleData.delegate) {
+            this.selecteddelegateAccount = {
+              id: saleData.delegate.id,
+              name: saleData.delegate?.name,
+              account: saleData.delegate, // Use the delegate object as account
+              currency: saleData.delegate.currency
+            };
+          }
+  
+          // Patch basic form values
+          this.saleForm.patchValue({
+            invoice_date: saleData.date,
+            vendor_id: saleData.client.id,
+            store_id: saleData.store.id,
+            payment_type: saleData.payment_type,
+            payed_price: saleData.total_payed || 0,
+            notes: saleData.note || '',
+            delegate_id: saleData.delegate?.id || null,
+            showCashAccountsDropdown: !!saleData.payed_to_account || !!saleData.check
+          });
+  
+          // Clear existing items
+          while (this.items.length !== 0) {
+            this.items.removeAt(0);
+          }
+  
+          // Add items from sale data
+          saleData.SaleBillItems.forEach((item: any) => {
+            const newItem = this.createItem();
+            this.items.push(newItem);
+            
+            const index = this.items.length - 1;
+            const itemGroup = this.items.at(index) as FormGroup;
+  
+            // Prepare product data for the form
+            const productData = {
+              id: item.product_branch.id,
+              name: item.product_branch.product?.name,
+              need_serial_number: item.product_branch.product.need_serial_number,
+              stock: item.quantity
+            };
+  
+            // Patch item values
+            itemGroup.patchValue({
+              product_id: item.product_branch.id,
+              product: productData,
+              price: item.price,
+              color: item.product_color,
+              amount: item.quantity,
+              serialNumbers: item.productSerialNumbers || [],
+              neededSerialNumbers: item.product_branch.product.need_serial_number 
+                ? item.quantity - (item.productSerialNumbers?.length || 0) 
+                : 0
+            });
+          });
+  
+          this.total = saleData.total;
+          this.totalPayed = saleData.total_payed;
+  
+          // Load products for the store
+          this.loadProducts(saleData.store.id.toString());
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error("Error loading sale bill:", err);
+        this.msgError = err.error.error;
+        this.toastr.error('Failed to load sale bill');
+      }
+    });
+  }
   loadDefaultCurrency() {
     this._CurrencyService.getDefultCurrency().subscribe({
       next: (response) => {
@@ -96,8 +206,11 @@ export class UpdateReturnSalesComponent implements OnInit {
       },
       error: (err) => {
         if (err.status == 404) {
+          // console.log('here')
           this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          // alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
           this._Router.navigate(['/dashboard/currency']);
+
         }
         console.log(err);
       }
@@ -142,55 +255,18 @@ export class UpdateReturnSalesComponent implements OnInit {
     this.loadCashAccounts();
     this.loadChecks();
     this.loadDefaultCurrency();
-    const returnSaleId = this.route.snapshot.paramMap.get('id'); 
-    if (returnSaleId) {
-      this.loadReturnSaleBill(returnSaleId);
+    const unitId = this.route.snapshot.paramMap.get('id');
+    if (unitId) {
+      this.loadReturnSaleBill(unitId);
     }
-  }
-  loadReturnSaleBill(id: string) {
-    this._SalesService.getReturnSaleById(id).subscribe({
-      next: (response) => {
-        if (response) {
-          console.log('return sale bill', response);
-          const data = response.data;
-          this.saleForm.patchValue({
-            invoice_date: data.date,
-            vendor_id: data.client.id,
-            store_id: data.store.id,
-            delegate_id: data.delegate.id,
-            notes: data.note,
-          });
-
-          this.selectedStore = data.store_id;
-          this.loadProducts(this.selectedStore);
-
-          const itemsArray = this.saleForm.get('items') as FormArray;
-          itemsArray.clear();
-
-          data.items.forEach((item: any) => {
-            const itemGroup = this.createItem();
-            itemGroup.patchValue({
-              amount: item.quantity,
-              price: item.price,
-              product_id: item.product_branch_id,
-              productSerialNumbers: item.serial_numbers
-            });
-            itemsArray.push(itemGroup);
-          });
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
   }
 
   loadSuppliers(): void {
-    this._ClientService.getAllClients().subscribe({
+    this._ClientService.getClientsForSales().subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
-          this.vendors = response.data;
+          this.vendors = response.data.clients;
         }
       },
       error: (err) => {
@@ -203,11 +279,7 @@ export class UpdateReturnSalesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log("delegates", response)
-          const delegates = response.data;
-          delegates.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = delegates.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const delegates = response.data.accounts;
           this.delegates = delegates;
         }
       },
@@ -221,11 +293,7 @@ export class UpdateReturnSalesComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log("CashAccounts", response)
-          const cashAccounts = response.data;
-          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const cashAccounts = response.data.accounts;
           this.cashAccounts = cashAccounts;
         }
       },
@@ -269,7 +337,8 @@ export class UpdateReturnSalesComponent implements OnInit {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          console.log('product branches response', response);
+          this.Products = response.data.products;
 
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;
@@ -299,87 +368,17 @@ export class UpdateReturnSalesComponent implements OnInit {
   }
   searchTerm = new FormControl('');
 
-  onBarcodeSelect(barcode: Event, index: number) {
-    {
-      const selectedValue = (barcode.target as HTMLSelectElement).value;
-
-      const items = this.saleForm.get('items') as FormArray;
-      const item = items.at(index) as FormGroup;
-
-      const neededBars = item.get('neededSerialNumbers')?.value;
-      if (neededBars == 0) {
-        item.patchValue({ barcode: null });
-        return;
-      }
-      let tempList = item.get('serialNumbers')?.value || [];
-      let isdublicated = false;
-      tempList.forEach((item: any) => {
-        if (item.barcode == selectedValue) {
-          this.toastr.error('هذا السيريال موجود بالفعل');
-          isdublicated = true;
-          return;
-        }
-      });
-
-      if (isdublicated) {
-        item.patchValue({ barcode: null });
-
-        return;
-      }
-      if (selectedValue) {
-        tempList.push({ barcode: selectedValue })
-        item.patchValue({ serialNumbers: tempList });
-        console.log(tempList);
-        item.patchValue({ barcode: null });
-        item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-      }
-    }
-  }
-
-
   removeSerialNumber(serialNumber: string, index: number) {
     const items = this.saleForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
     const neededBars = item.get('neededSerialNumbers')?.value;
     const serialNumbers = item.get('serialNumbers')?.value;
     if (serialNumbers && Array.isArray(serialNumbers)) {
-      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+      const tempList = serialNumbers.filter(item => item.serial_number !== serialNumber);
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number) {
-    const items = this.saleForm.get('items') as FormArray;
-    const item = items.at(index) as FormGroup;
-
-    const barcode = item.get('barcode')?.value;
-    const neededBars = item.get('neededSerialNumbers')?.value;
-    if (neededBars == 0) {
-
-      return;
-    }
-    let tempList = item.get('serialNumbers')?.value || [];
-
-    tempList.forEach(() => {
-
-    });
-
-
-
-    if (barcode) {
-      tempList.push({ barcode: barcode })
-      item.patchValue({ serialNumbers: tempList });
-      console.log(tempList);
-      item.patchValue({ barcode: null });
-      item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-    }
-
-  }
-
 
   onAmountChange(index: number): void {
 
@@ -403,7 +402,7 @@ export class UpdateReturnSalesComponent implements OnInit {
         item.patchValue({ price: price.price });
       }
     })
-    if (item.get('product')?.value?.product_branch.product.need_serial_number) {
+    if (item.get('product')?.value?.need_serial_number) {
       if (typeof amount === 'number' && amount >= 0) {
         item.patchValue({ neededSerialNumbers: amount - serialNumbers })
 
@@ -473,9 +472,14 @@ export class UpdateReturnSalesComponent implements OnInit {
     if (control) control.disable();
   }
 
+
   getDynamicInputs(item: AbstractControl): FormArray {
     return (item.get('dynamicInputs') as FormArray);
   }
+
+
+
+
 
   get items() {
     return (this.saleForm.get('items') as FormArray);
@@ -554,11 +558,16 @@ export class UpdateReturnSalesComponent implements OnInit {
             if (serialNumbers.length > 0) {
 
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
 
               });
 
             }
+
+
+
+
+
           }
         });
       }
@@ -717,11 +726,17 @@ export class UpdateReturnSalesComponent implements OnInit {
       this.selecteddelegateAccount = account;
       this.saleForm.patchValue({ 'delegate_id': account.id })
 
-    } else if (this.selectedPopUP == 'vendor') {
+    }  else if (this.selectedPopUP == 'vendor') {
+
+
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
 
+      if(this.selectedClient.delegate){
+        this.selecteddelegateAccount= this.selectedClient.delegate;
+        this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
+      }
 
       this.needCurrecyPrice = false;
       this.forignCurrencyName = '';
@@ -744,6 +759,7 @@ export class UpdateReturnSalesComponent implements OnInit {
 
 
     }
+
 
 
     this.cdr.detectChanges();
@@ -786,14 +802,15 @@ export class UpdateReturnSalesComponent implements OnInit {
     const itemsArray = this.saleForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
 
-    itemGroup.patchValue({ product: productBranchStore });
+    itemGroup.patchValue({ product: productBranchStore.product });
     console.log('productBranchStore', productBranchStore);
-    itemGroup.patchValue({ product_id: productBranchStore.product_branch.id });
-    itemGroup.patchValue({ color: productBranchStore.product_branch.product_color });
+    itemGroup.patchValue({ product_id: productBranchStore.branch.id });
+    itemGroup.patchValue({ color: productBranchStore.branch.color });
 
 
-    productBranchStore.product_branch.prices.forEach((price: any) => {
-      if (price.id == this.selectedClient.price_category.id) {
+    productBranchStore.prices.forEach((price: any) => {
+
+      if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
         price.prices.forEach((price: any) => {
@@ -803,16 +820,21 @@ export class UpdateReturnSalesComponent implements OnInit {
           }
         })
       }
+
+
     });
 
 
     if (!itemGroup.get('price')?.value) {
-      itemGroup.patchValue({ price: productBranchStore.product_branch.default_price });
+      itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    this.getSerialNumbers(productBranchStore.product_branch.product.id, this.selectedStore, this.productIndex);
+    // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
+
+
+
   productIndex: number = -1;
   openProductModal(index: number) {
     this.productIndex = index;
@@ -833,10 +855,132 @@ export class UpdateReturnSalesComponent implements OnInit {
       modal?.hide();
     }
   }
-  onCancel(): void {
-    this.saleForm.reset();
-    this._Router.navigate(['/dashboard/return-sales/waiting']);
-  }  
+
+
+
+
+
+
+searchText: string = '';
+selectedSerachIndex = -1;
+lastSelectedIndex = -1;
+
+
+
+productSerialNumbers :any = [];
+loadingSerialNumbers = false;
+
+searchSerialNumber(event:Event , index:number){
+  this.searchText = (event.target as HTMLSelectElement).value;
+  this.selectedSerachIndex = index;
+  const itemsArray = this.saleForm.get('items') as FormArray;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+
+  if(store_id && productId){
+    // this.productSerialNumbers = [];
+    this.loadSerialNumbers(store_id ,productId);
+  }
+}
+
+onFocus(index :number){
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  this.selectedSerachIndex = index;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const searchText  = itemGroup.get('barcode')?.value || '';
+
+  // console.log(this.selectedSerachIndex ,index);
+  if(store_id && productId && this.lastSelectedIndex != index){
+    this.productSerialNumbers = [];
+    this.searchText = searchText;
+    this.loadSerialNumbers(store_id ,productId);
+  }
+  this.lastSelectedIndex = index;
+
+}
+  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+  setTimeout(() => {
+    this.selectedSerachIndex = -1;
+  }, 200);  
+ }
+
+
+
+  loadSerialNumbers(store_id :string,productId:string){
+    this.loadingSerialNumbers =true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+    this.searchText,
+    'return'
+  ).subscribe({
+    next: (response) => {
+      if (response ) {
+        this.productSerialNumbers = response.data.serial_numbers;
+        console.log(this.productSerialNumbers);
+        // this.filteredSerialNumbers = [...response.data.serial_numbers];
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+
+  }
+
+
+
+
+//   isOptionDisabled(option: any , index:number): boolean {
+//   // Example condition: disable if already used or expired
+//   return option.isUsed || option.status === 'expired';
+// }
+
+  isOptionDisabled(serialNumber:any , index:number): boolean {
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element:any) => {
+      if(serialNumber.serial_number == element.serial_number){
+        value = true;
+      }
+    });
+
+    return value;
+  }
+
 }
 
 
@@ -847,7 +991,8 @@ interface Account {
   id: string;
   name: string;
   account: Account;
-  currency: Currency
+  currency: Currency;
+  current_balance?: number;
 }
 
 
