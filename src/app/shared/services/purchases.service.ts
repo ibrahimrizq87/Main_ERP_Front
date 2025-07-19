@@ -179,7 +179,12 @@ export class PurchasesService {
   UpdateReturnPurchaseBillStatus(id:string , status: string): Observable<any> {
     return this._HttpClient.get(`${this.baseURL}/general/return-purchase-bills/update-status/${id}/${status}` ,{headers: this.getHeadersWithToken()  })
   }
-
+  updateReturnPurchase(purchaseId: string, PurchaseData: FormData): Observable<any> {
+    const token = localStorage.getItem('Token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    PurchaseData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/return-purchase-bills/${purchaseId}`, PurchaseData, { headers })
+  }
 
   getReturnPurchaseById(id:any): Observable<any>{
     return this._HttpClient.get(this.baseURL+"/general/return-purchase-bills/"+id, { headers: this.getHeadersWithToken() })

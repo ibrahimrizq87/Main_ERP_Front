@@ -161,7 +161,7 @@ export class SalesService {
     const token = localStorage.getItem('Token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     salesData.append('_method', 'PUT');
-    return this._HttpClient.post(`${this.baseURL}/return-sale-bills/${saleId}`, salesData, { headers })
+    return this._HttpClient.post(`${this.baseURL}/general/return-sale-bills/${saleId}`, salesData, { headers })
   }
 
     getReturnBillsByClientId(id:any): Observable<any>{

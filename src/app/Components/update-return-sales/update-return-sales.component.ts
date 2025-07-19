@@ -20,11 +20,14 @@ import { ProductBranchesService } from '../../shared/services/product_branches.s
 @Component({
   selector: 'app-update-return-sales',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,TranslateModule,FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, FormsModule],
   templateUrl: './update-return-sales.component.html',
   styleUrl: './update-return-sales.component.css'
 })
 export class UpdateReturnSalesComponent implements OnInit {
+  cancel() {
+    this._Router.navigate(['/dashboard/return-sales/waiting']);
+  }
 
 
   private productSubscription: Subscription = Subscription.EMPTY;
@@ -96,23 +99,20 @@ export class UpdateReturnSalesComponent implements OnInit {
           const saleData = response.data;
           this.returnSalesData = saleData;
           console.log("Return Sales data:", saleData);
-  
-          // Initialize payment account data
+
           if (saleData.payed_to_account) {
             this.selectedCashAccount = {
               id: saleData.payed_to_account.id,
-              name: saleData.payed_to_account?.name,
+              name: saleData.payed_to_account[0] || 'Unknown', // Handle array-style name
               account: saleData.payed_to_account,
-              currency: saleData.payed_to_account.currency,
+              currency: saleData.payed_to_account.currency || this.currency,
               current_balance: saleData.payed_to_account.current_balance
             };
-            
             this.saleForm.patchValue({
               cash_id: saleData.payed_to_account.id,
               showCashAccountsDropdown: true
             });
           }
-  
           this.selectedClient = {
             id: saleData.client.id,
             name: saleData.client?.name,
@@ -122,19 +122,20 @@ export class UpdateReturnSalesComponent implements OnInit {
               currency: saleData.client.currency
             },
             delegate: saleData.delegate,
-            price_category: saleData.client.price_category || null // Ensure this is set properly
+            price_category: saleData.client.price_category || null
           };
-  
-          // Set delegate data if exists
+
+
           if (saleData.delegate) {
             this.selecteddelegateAccount = {
               id: saleData.delegate.id,
-              name: saleData.delegate?.name,
-              account: saleData.delegate, // Use the delegate object as account
-              currency: saleData.delegate.currency
+              name: saleData.delegate[0] || 'Unknown',
+              account: saleData.delegate,
+              currency: saleData.delegate.currency || this.currency
             };
+            this.saleForm.patchValue({ delegate_id: saleData.delegate.id });
           }
-  
+
           // Patch basic form values
           this.saleForm.patchValue({
             invoice_date: saleData.date,
@@ -146,45 +147,49 @@ export class UpdateReturnSalesComponent implements OnInit {
             delegate_id: saleData.delegate?.id || null,
             showCashAccountsDropdown: !!saleData.payed_to_account || !!saleData.check
           });
-  
-          // Clear existing items
+
+
           while (this.items.length !== 0) {
             this.items.removeAt(0);
           }
-  
-          // Add items from sale data
-          saleData.SaleBillItems.forEach((item: any) => {
+
+
+          saleData.items.forEach((item: any) => {
             const newItem = this.createItem();
             this.items.push(newItem);
-            
+
             const index = this.items.length - 1;
             const itemGroup = this.items.at(index) as FormGroup;
-  
-            // Prepare product data for the form
+
+            // Create the proper product data structure
             const productData = {
-              id: item.product_branch.id,
-              name: item.product_branch.product?.name,
-              need_serial_number: item.product_branch.product.need_serial_number,
-              stock: item.quantity
+              id: item.branch.id,
+              name: item.product.name,
+              need_serial_number: item.product.need_serial_number,
+              stock: item.stock,
+              branch: item.branch, // Include branch data
+              product: item.product // Include product data
             };
-  
+
             // Patch item values
             itemGroup.patchValue({
-              product_id: item.product_branch.id,
+              product_id: item.branch.id,
               product: productData,
-              price: item.price,
-              color: item.product_color,
+              price: item.price || item.branch.default_price,
+              color: item.branch?.color ? {
+                color: item.branch.color.color,
+                image: item.branch.color.image
+              } : null,
               amount: item.quantity,
               serialNumbers: item.productSerialNumbers || [],
-              neededSerialNumbers: item.product_branch.product.need_serial_number 
-                ? item.quantity - (item.productSerialNumbers?.length || 0) 
+              neededSerialNumbers: item.product.need_serial_number
+                ? item.quantity - (item.productSerialNumbers?.length || 0)
                 : 0
             });
           });
-  
           this.total = saleData.total;
           this.totalPayed = saleData.total_payed;
-  
+
           // Load products for the store
           this.loadProducts(saleData.store.id.toString());
         }
@@ -333,14 +338,32 @@ export class UpdateReturnSalesComponent implements OnInit {
     this.selectedCurrency = selectedValue;
   }
 
+  // loadProducts(storeId: string) {
+  //   this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         console.log('product branches response', response);
+  //         this.Products = response.data.products;
+
+  //         console.log('product branches', this.Products);
+  //         this.filteredProducts = this.Products;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     },
+  //   });
+  // }
   loadProducts(storeId: string) {
     this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
       next: (response) => {
         if (response) {
-          console.log('product branches response', response);
-          this.Products = response.data.products;
-
-          console.log('product branches', this.Products);
+          this.Products = response.data.products.map((item: any) => ({
+            ...item,
+            // Ensure consistent structure
+            product: item.product || item,
+            branch: item.branch || item.product_branch
+          }));
           this.filteredProducts = this.Products;
         }
       },
@@ -349,11 +372,10 @@ export class UpdateReturnSalesComponent implements OnInit {
       },
     });
   }
-
   createItem(): FormGroup {
     return this.fb.group({
       amount: [null, Validators.required],
-     
+
       price: ['', Validators.required],
       priceRanges: [[]],
       product_id: ['', Validators.required],
@@ -575,37 +597,37 @@ export class UpdateReturnSalesComponent implements OnInit {
 
       if (!error) {
         const returnSaleId = this.route.snapshot.paramMap.get('id');
-        if(returnSaleId){
-        this._SalesService.updateReturnSale(returnSaleId,formData).subscribe({
-          next: (response) => {
-            if (response) {
-              this.toastr.success('تم اضافه الفاتوره بنجاح');
-              console.log(response);
+        if (returnSaleId) {
+          this._SalesService.updateReturnSale(returnSaleId, formData).subscribe({
+            next: (response) => {
+              if (response) {
+                this.toastr.success('تم اضافه الفاتوره بنجاح');
+                console.log(response);
+                this.isLoading = false;
+                this._Router.navigate(['/dashboard/return-sales/waiting']);
+              }
+            },
+
+            error: (err: HttpErrorResponse) => {
               this.isLoading = false;
-              this._Router.navigate(['/dashboard/return-sales/waiting']);
-            }
-          },
+              this.msgError = [];
+              this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
+              if (err.error && err.error.errors) {
 
-          error: (err: HttpErrorResponse) => {
-            this.isLoading = false;
-            this.msgError = [];
-            this.toastr.error('حدث خطا اثناء اضافه الفاتوره');
-            if (err.error && err.error.errors) {
-
-              for (const key in err.error.errors) {
-                if (err.error.errors[key] instanceof Array) {
-                  this.msgError.push(...err.error.errors[key]);
-                } else {
-                  this.msgError.push(err.error.errors[key]);
+                for (const key in err.error.errors) {
+                  if (err.error.errors[key] instanceof Array) {
+                    this.msgError.push(...err.error.errors[key]);
+                  } else {
+                    this.msgError.push(err.error.errors[key]);
+                  }
                 }
               }
-            }
 
-            console.error(this.msgError);
-          },
+              console.error(this.msgError);
+            },
 
-        });
-      }
+          });
+        }
       }
     } else {
       Object.keys(this.saleForm.controls).forEach((key) => {
@@ -726,15 +748,15 @@ export class UpdateReturnSalesComponent implements OnInit {
       this.selecteddelegateAccount = account;
       this.saleForm.patchValue({ 'delegate_id': account.id })
 
-    }  else if (this.selectedPopUP == 'vendor') {
+    } else if (this.selectedPopUP == 'vendor') {
 
 
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
       console.log('selectedClient', this.selectedClient);
 
-      if(this.selectedClient.delegate){
-        this.selecteddelegateAccount= this.selectedClient.delegate;
+      if (this.selectedClient.delegate) {
+        this.selecteddelegateAccount = this.selectedClient.delegate;
         this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
       }
 
@@ -798,41 +820,79 @@ export class UpdateReturnSalesComponent implements OnInit {
   }
 
 
+  // selectProduct(productBranchStore: any) {
+  //   const itemsArray = this.saleForm.get('items') as FormArray;
+  //   const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
+
+  //   itemGroup.patchValue({ product: productBranchStore.product });
+  //   console.log('productBranchStore', productBranchStore);
+  //   itemGroup.patchValue({ product_id: productBranchStore.branch.id });
+  //   itemGroup.patchValue({ color: productBranchStore.branch.color });
+
+
+  //   productBranchStore.prices.forEach((price: any) => {
+
+  //     if (price.id == this.selectedClient.price_category?.id) {
+  //       itemGroup.patchValue({ priceRanges: price.prices });
+  //       console.log('price ranges', price.prices);
+  //       price.prices.forEach((price: any) => {
+  //         if (price.quantity_from == 0) {
+  //           itemGroup.patchValue({ price: price.price });
+  //           return;
+  //         }
+  //       })
+  //     }
+
+
+  //   });
+
+
+  //   if (!itemGroup.get('price')?.value) {
+  //     itemGroup.patchValue({ price: productBranchStore.branch.default_price });
+  //   }
+
+  //   // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
+  //   this.closeProductModel();
+  // }
   selectProduct(productBranchStore: any) {
     const itemsArray = this.saleForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
 
-    itemGroup.patchValue({ product: productBranchStore.product });
-    console.log('productBranchStore', productBranchStore);
-    itemGroup.patchValue({ product_id: productBranchStore.branch.id });
-    itemGroup.patchValue({ color: productBranchStore.branch.color });
+    // Create the proper product structure
+    const productData = {
+      id: productBranchStore.branch.id,
+      name: productBranchStore.product.name,
+      need_serial_number: productBranchStore.product.need_serial_number,
+      stock: productBranchStore.stock,
+      branch: productBranchStore.branch,
+      product: productBranchStore.product
+    };
 
-
-    productBranchStore.prices.forEach((price: any) => {
-
-      if (price.id == this.selectedClient.price_category?.id) {
-        itemGroup.patchValue({ priceRanges: price.prices });
-        console.log('price ranges', price.prices);
-        price.prices.forEach((price: any) => {
-          if (price.quantity_from == 0) {
-            itemGroup.patchValue({ price: price.price });
-            return;
-          }
-        })
-      }
-
-
+    itemGroup.patchValue({
+      product: productData,
+      product_id: productBranchStore.branch.id,
+      color: productBranchStore.branch.color
     });
 
-
-    if (!itemGroup.get('price')?.value) {
-      itemGroup.patchValue({ price: productBranchStore.branch.default_price });
+    // Handle pricing
+    if (this.selectedClient?.price_category) {
+      const priceRange = productBranchStore.prices.find(
+        (p: any) => p.id === this.selectedClient.price_category.id
+      );
+      if (priceRange) {
+        itemGroup.patchValue({
+          priceRanges: priceRange.prices,
+          price: priceRange.prices[0]?.price || productBranchStore.branch.default_price
+        });
+      }
+    } else {
+      itemGroup.patchValue({
+        price: productBranchStore.branch.default_price
+      });
     }
 
-    // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
-
 
 
   productIndex: number = -1;
@@ -861,49 +921,49 @@ export class UpdateReturnSalesComponent implements OnInit {
 
 
 
-searchText: string = '';
-selectedSerachIndex = -1;
-lastSelectedIndex = -1;
+  searchText: string = '';
+  selectedSerachIndex = -1;
+  lastSelectedIndex = -1;
 
 
 
-productSerialNumbers :any = [];
-loadingSerialNumbers = false;
+  productSerialNumbers: any = [];
+  loadingSerialNumbers = false;
 
-searchSerialNumber(event:Event , index:number){
-  this.searchText = (event.target as HTMLSelectElement).value;
-  this.selectedSerachIndex = index;
-  const itemsArray = this.saleForm.get('items') as FormArray;
+  searchSerialNumber(event: Event, index: number) {
+    this.searchText = (event.target as HTMLSelectElement).value;
+    this.selectedSerachIndex = index;
+    const itemsArray = this.saleForm.get('items') as FormArray;
 
-  const itemGroup = itemsArray.at(index) as FormGroup;
-  const store_id  = this.saleForm.get('store_id')?.value;
-  const productId = itemGroup.get('product')?.value?.id;
+    const itemGroup = itemsArray.at(index) as FormGroup;
+    const store_id = this.saleForm.get('store_id')?.value;
+    const productId = itemGroup.get('product')?.value?.id;
 
-  if(store_id && productId){
-    // this.productSerialNumbers = [];
-    this.loadSerialNumbers(store_id ,productId);
+    if (store_id && productId) {
+      // this.productSerialNumbers = [];
+      this.loadSerialNumbers(store_id, productId);
+    }
   }
-}
 
-onFocus(index :number){
-  const itemsArray = this.saleForm.get('items') as FormArray;
-  this.selectedSerachIndex = index;
+  onFocus(index: number) {
+    const itemsArray = this.saleForm.get('items') as FormArray;
+    this.selectedSerachIndex = index;
 
-  const itemGroup = itemsArray.at(index) as FormGroup;
-  const store_id  = this.saleForm.get('store_id')?.value;
-  const productId = itemGroup.get('product')?.value?.id;
-  const searchText  = itemGroup.get('barcode')?.value || '';
+    const itemGroup = itemsArray.at(index) as FormGroup;
+    const store_id = this.saleForm.get('store_id')?.value;
+    const productId = itemGroup.get('product')?.value?.id;
+    const searchText = itemGroup.get('barcode')?.value || '';
 
-  // console.log(this.selectedSerachIndex ,index);
-  if(store_id && productId && this.lastSelectedIndex != index){
-    this.productSerialNumbers = [];
-    this.searchText = searchText;
-    this.loadSerialNumbers(store_id ,productId);
+    // console.log(this.selectedSerachIndex ,index);
+    if (store_id && productId && this.lastSelectedIndex != index) {
+      this.productSerialNumbers = [];
+      this.searchText = searchText;
+      this.loadSerialNumbers(store_id, productId);
+    }
+    this.lastSelectedIndex = index;
+
   }
-  this.lastSelectedIndex = index;
-
-}
-  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+  selectOption(serialNumber: any, index: number, GivenserialNumber: any = null) {
     const items = this.saleForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
 
@@ -916,7 +976,7 @@ onFocus(index :number){
     console.log(CurrentSerialNumber);
 
     if (CurrentSerialNumber) {
-      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number, id: CurrentSerialNumber.id })
       item.patchValue({ serialNumbers: tempList });
       console.log(tempList);
       item.patchValue({ barcode: null });
@@ -928,52 +988,52 @@ onFocus(index :number){
   }
 
   onInputBlur(): void {
-  setTimeout(() => {
-    this.selectedSerachIndex = -1;
-  }, 200);  
- }
+    setTimeout(() => {
+      this.selectedSerachIndex = -1;
+    }, 200);
+  }
 
 
 
-  loadSerialNumbers(store_id :string,productId:string){
-    this.loadingSerialNumbers =true;
+  loadSerialNumbers(store_id: string, productId: string) {
+    this.loadingSerialNumbers = true;
 
     this._ProductsService.getSerialNumbers(productId, store_id,
-    this.searchText,
-    'return'
-  ).subscribe({
-    next: (response) => {
-      if (response ) {
-        this.productSerialNumbers = response.data.serial_numbers;
-        console.log(this.productSerialNumbers);
-        // this.filteredSerialNumbers = [...response.data.serial_numbers];
+      this.searchText,
+      'return'
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.productSerialNumbers = response.data.serial_numbers;
+          console.log(this.productSerialNumbers);
+          // this.filteredSerialNumbers = [...response.data.serial_numbers];
+        }
+        this.loadingSerialNumbers = false;
+      },
+      error: (err) => {
+        console.error('Error loading serial numbers:', err);
+        this.toastr.error('Failed to load serial numbers', 'Error');
+        this.loadingSerialNumbers = false;
       }
-      this.loadingSerialNumbers = false;
-    },
-    error: (err) => {
-      console.error('Error loading serial numbers:', err);
-      this.toastr.error('Failed to load serial numbers', 'Error');
-      this.loadingSerialNumbers = false;
-    }
-  });
+    });
 
   }
 
 
 
 
-//   isOptionDisabled(option: any , index:number): boolean {
-//   // Example condition: disable if already used or expired
-//   return option.isUsed || option.status === 'expired';
-// }
+  //   isOptionDisabled(option: any , index:number): boolean {
+  //   // Example condition: disable if already used or expired
+  //   return option.isUsed || option.status === 'expired';
+  // }
 
-  isOptionDisabled(serialNumber:any , index:number): boolean {
+  isOptionDisabled(serialNumber: any, index: number): boolean {
     const items = this.saleForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
     const tempList = item.get('serialNumbers')?.value || [];
     let value = false;
-    tempList.forEach((element:any) => {
-      if(serialNumber.serial_number == element.serial_number){
+    tempList.forEach((element: any) => {
+      if (serialNumber.serial_number == element.serial_number) {
         value = true;
       }
     });

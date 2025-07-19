@@ -119,14 +119,14 @@
                           </div>
                         </div>
 
-                       
+
 
 
 
 
 
                         <!-- Total Price -->
-                        <div class="col-md-2" >
+                        <div class="col-md-2">
                           <label for="price">{{ 'price' | translate }}</label>
                           <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
                             [class.is-invalid]="item.get('price')?.invalid && isSubmited" />
@@ -136,19 +136,17 @@
                         </div>
 
 
-                        <div class="col-md-1" >
+                        <div class="col-md-1">
                           <label for="price">{{ 'price' | translate }}</label>
-                          <p>{{ getFormattedPrice(item) }}</p>  
+                          <p>{{ getFormattedPrice(item) }}</p>
                         </div>
 
                         <div class="col-md-1" *ngIf="item.get('color')?.value">
-                          <label>color</label>
-
-                          <img [src]="item.get('color')?.value.image" alt="" height="30" width="30">
-                          {{ item.get('color')?.value.color.color }}
-
-
-
+                          <label>Color</label>
+                          <div *ngIf="item.get('color')?.value as color">
+                            <img *ngIf="color.image" [src]="color.image" alt="Color" height="30" width="30">
+                            <span>{{ color.color }}</span>
+                          </div>
                         </div>
 
 
@@ -201,24 +199,24 @@
                           </div> -->
 
 
-                                          <div class="d-flex align-items-center mb-2 position-relative">
-                                   <input type="text" class="form-control" formControlName="barcode"
-                            placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
-                            (input)="searchSerialNumber($event ,i)" />
+                          <div class="d-flex align-items-center mb-2 position-relative">
+                            <input type="text" class="form-control" formControlName="barcode"
+                              placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
+                              (input)="searchSerialNumber($event ,i)" />
 
-                          <ul *ngIf="selectedSerachIndex == i" class="list-group position-absolute w-100 shadow"
-                            style="z-index: 1050; top: 100%; text-align: center;">
+                            <ul *ngIf="selectedSerachIndex == i" class="list-group position-absolute w-100 shadow"
+                              style="z-index: 1050; top: 100%; text-align: center;">
 
-                            <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
+                              <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
       'list-group-item-action': !isOptionDisabled(option , i),
       'disabled-option': isOptionDisabled(option , i)
     }" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
-                              (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
-                              {{ option.serial_number }}
-                            </li>
-                          </ul>
+                                (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
+                                {{ option.serial_number }}
+                              </li>
+                            </ul>
 
-                        </div>
+                          </div>
 
                         </div>
 
@@ -331,9 +329,12 @@
         </ul>
       </div>
       <!-- <p *ngIf="msgError" class="alert alert-danger">{{msgError}}</p> -->
-      <div class="mt-4 mb-4">
+      <div class="mt-4 mb-4 d-flex justify-content-between w-25 ">
         <button type="submit" class="btn btn-primary px-4">
-          <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+          <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'UPDATE' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary px-4" (click)="cancel()">
+          <i class="fa-solid fa-ban"></i> {{ 'CANCEL' | translate }}
         </button>
       </div>
     </div>
@@ -349,65 +350,61 @@
 
 
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-<div class="modal-dialog  modal-xl">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
-    </div>
-    <div class="modal-body">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('shiftModal')"></button>
+      </div>
+      <div class="modal-body">
 
-      <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-        [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
-
-
-      <table class="table table-striped">
-        <thead>
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
 
 
-          <tr *ngIf="selectedPopUP == 'vendor'">
-            <th>ID</th>
-            <th>{{ 'Image' | translate }}</th>
-            <th>{{ 'mainAccountNav.accountName' | translate }}</th>
-            <th>{{ 'DELEGATE' | translate }}</th>
-            <th>{{ 'IS_SUSBENDED' | translate }}</th>
-
-          </tr>
-          <tr *ngIf="selectedPopUP != 'vendor'">
-            <th>ID</th>
-            <th>{{ 'mainAccountNav.accountName' | translate }}</th>
-            
-          </tr>
-        </thead>
-        <tbody *ngIf="selectedPopUP == 'vendor'" >
-          <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
-            style="cursor: pointer;">
-            <td>{{ account.account.id }}</td>
-            <td>   <img 
-                  [src]="account.image ? account.image : 'images/image.jpg'" 
-                  alt="{{ account.account?.name || 'Default user' }}" 
-                  width="80" 
-                  height="60" 
-                /></td>
-            <td>{{ account.account?.name }}</td>
-            <td>{{ account.delegate?.name }}</td>
-            <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
+        <table class="table table-striped">
+          <thead>
 
 
-          </tr>
-        </tbody>
-          <tbody *ngIf="selectedPopUP != 'vendor'" >
-          <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
-            style="cursor: pointer;">
-            <td>{{ account.id }}</td>
-            <td >{{ account.name }}</td>
+            <tr *ngIf="selectedPopUP == 'vendor'">
+              <th>ID</th>
+              <th>{{ 'Image' | translate }}</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+              <th>{{ 'DELEGATE' | translate }}</th>
+              <th>{{ 'IS_SUSBENDED' | translate }}</th>
 
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+            <tr *ngIf="selectedPopUP != 'vendor'">
+              <th>ID</th>
+              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody *ngIf="selectedPopUP == 'vendor'">
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.account.id }}</td>
+              <td> <img [src]="account.image ? account.image : 'images/image.jpg'"
+                  alt="{{ account.account?.name || 'Default user' }}" width="80" height="60" /></td>
+              <td>{{ account.account?.name }}</td>
+              <td>{{ account.delegate?.name }}</td>
+              <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
+
+
+            </tr>
+          </tbody>
+          <tbody *ngIf="selectedPopUP != 'vendor'">
+            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+              style="cursor: pointer;">
+              <td>{{ account.id }}</td>
+              <td>{{ account.name }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 </div>
 
 
@@ -416,58 +413,58 @@
 
 
 <div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-<div class="modal-dialog  modal-xl">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="closeProductModel()"></button>
-    </div>
-    <div class="modal-body">
-      <!-- Search Input -->
-      <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-        [(ngModel)]="ProductsearchQuery" (ngModelChange)="onProductSearchChange()" />
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeProductModel()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Search Input -->
+        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
+          [(ngModel)]="ProductsearchQuery" (ngModelChange)="onProductSearchChange()" />
 
-      <!-- Accounts Table -->
+        <!-- Accounts Table -->
 
-      <table class="table table-striped table-hover table-bordered rounded">
-        <thead class="table-dark">
-          <tr>
-            <th>Barcode</th>
-            <th>code</th>
-            <th>Product Name</th>
-            <th>Stock</th>
-            <th>Color</th>
-            <th>determinants</th>
+        <table class="table table-striped table-hover table-bordered rounded">
+          <thead class="table-dark">
+            <tr>
+              <th>Barcode</th>
+              <th>code</th>
+              <th>Product Name</th>
+              <th>Stock</th>
+              <th>Color</th>
+              <th>determinants</th>
 
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Main Product Row -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Main Product Row -->
 
-          <!-- Branches -->
-          <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
-            <td><strong>{{ branch.product.barcode }}</strong></td>
-            <td>{{ branch.branch.code }}</td>
-            <td>{{ branch.product.name }}</td>
-            <td>{{ branch.stock }}</td>
-            <td>{{ branch.branch.product_color ? branch.branch.color.color : " -- "}}</td>
+            <!-- Branches -->
+            <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
+              <td><strong>{{ branch.product.barcode }}</strong></td>
+              <td>{{ branch.branch.code }}</td>
+              <td>{{ branch.product.name }}</td>
+              <td>{{ branch.stock }}</td>
+              <td>{{ branch.branch.product_color ? branch.branch.color.color : " -- "}}</td>
 
-            <td>
-              <span *ngFor="let determinant of branch.branch.determinants; let i = index">
-                <span class="badge bg-info text-dark me-1">
-                  {{ determinant.determinant }}: {{ determinant.value }}
+              <td>
+                <span *ngFor="let determinant of branch.branch.determinants; let i = index">
+                  <span class="badge bg-info text-dark me-1">
+                    {{ determinant.determinant }}: {{ determinant.value }}
+                  </span>
                 </span>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
 
 
+      </div>
     </div>
   </div>
-</div>
 
 
 </div>
