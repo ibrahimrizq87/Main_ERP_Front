@@ -45,7 +45,7 @@
       <thead>
           <tr>
               <th class="bg-light" scope="col">ID</th>
-              <th class="bg-light" scope="col">Barcode</th>
+              <!-- <th class="bg-light" scope="col">Barcode</th> -->
               <th class="bg-light" scope="col">{{ 'PRODUCT' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'CATEGORY' | translate }}</th>
               <th class="bg-light" scope="col">{{ 'AMOUNT' | translate }}</th>
@@ -56,7 +56,7 @@
       <tbody>
         <tr *ngFor="let product of filteredProducts; let i = index">
           <th scope="row">{{ product.id }}</th>
-          <td>{{ product.barcode }}</td>
+          <!-- <td>{{ product.barcode }}</td> -->
 
           <td>{{ product.name }}</td>
           <td>{{ product.productCategory.name || 'N/A' }}</td>

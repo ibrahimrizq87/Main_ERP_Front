@@ -160,14 +160,14 @@ export class AddReturnPurchaseBillComponent {
 
 
   loadSuppliers(): void {
-    this._AccountService.getAccountsByParent('621').subscribe({
+    this._AccountService.getAccountsByParent(
+      '621'
+      ,this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("suppliers", response)
-          const Suppliers = response.data;
-          Suppliers.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = Suppliers.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
+          const Suppliers = response.data.accounts;
           this.vendors = Suppliers;
         }
       },
@@ -176,14 +176,51 @@ export class AddReturnPurchaseBillComponent {
       }
     });
   }
-
-
+  currentPage = 1; 
+  itemsPerPage = 10; 
+  totalProducts = 0;
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+    this.loadProducts(this.selectedStore);
+  }
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.loadProducts(this.selectedStore);
+  }
+  getPages(): number[] {
+    const totalPages = Math.ceil(this.totalProducts / this.itemsPerPage);
+    const maxVisiblePages = 5;
+    const pages: number[] = [];
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const half = Math.floor(maxVisiblePages / 2);
+      let start = Math.max(1, this.currentPage - half);
+      const end = Math.min(totalPages, start + maxVisiblePages - 1);
+      
+      if (end - start + 1 < maxVisiblePages) {
+        start = end - maxVisiblePages + 1;
+      }
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  }
   loadProducts(storeId: string) {
-    this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
+    this._ProductBranchStoresService.getByStoreId(storeId,
+      this.ProductsearchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           this.Products = response.data.products;
-
+          console.log(response)
+          this.totalProducts = response.data.meta.total;
           console.log('product branches', this.Products);
           this.filteredProducts = this.Products;
         }
@@ -196,16 +233,16 @@ export class AddReturnPurchaseBillComponent {
 
 
   loadCashAccounts(): void {
-    this._AccountService.getAccountsByParent('111').subscribe({
+    this._AccountService.getAccountsByParent('111'
+      ,this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log("CashAccounts", response)
-          const cashAccounts = response.data;
-          cashAccounts.forEach((account: { hasChildren: any; id: any; }) => {
-            account.hasChildren = cashAccounts.some((childAccount: { parent_id: any; }) => childAccount.parent_id === account.id);
-          });
-
+          const cashAccounts = response.data.accounts;
+     
           this.cashAccounts = cashAccounts;
+          this.updateData();
         }
       },
       error: (err) => {
@@ -215,8 +252,22 @@ export class AddReturnPurchaseBillComponent {
 
   }
 
+  updateData(){
+    if (this.selectedPopUP == 'cash') {
+      this.filteredAccounts = this.cashAccounts;
+    }else if (this.selectedPopUP == 'vendor') {
+      this.filteredAccounts = this.vendors;
+    }
+
+  }
+
+
   loadStores() {
-    this._StoreService.getAllStores().subscribe({
+    this._StoreService.getAllStores(
+      'all',
+      this.storeSearchTerm
+
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -230,10 +281,10 @@ export class AddReturnPurchaseBillComponent {
   }
 
  
-  onStoreChange(event: Event): void {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedStore = selectedValue;
-  }
+  // onStoreChange(event: Event): void {
+  //   const selectedValue = (event.target as HTMLSelectElement).value;
+  //   this.selectedStore = selectedValue;
+  // }
 
 
 
@@ -324,31 +375,31 @@ export class AddReturnPurchaseBillComponent {
     }
   }
 
-  addParcode(index: number) {
+
+    addParcode(index: number , givenBarcode:any) {
     const items = this.purchasesBillForm.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
 
-    const barcode = item.get('barcode')?.value;
+    const barcode = givenBarcode ;
     const neededBars = item.get('neededSerialNumbers')?.value;
     if (neededBars == 0) {
-
       return;
     }
     let tempList = item.get('serialNumbers')?.value || [];
-
-    tempList.forEach(() => {
-
-    });
+    const updatedTemplist = tempList.filter((b: string) => b !== barcode);
 
 
 
     if (barcode) {
-      tempList.push({ barcode: barcode })
+      tempList.push({ serial_number: barcode.serial_number , id:barcode.id })
       item.patchValue({ serialNumbers: tempList });
       console.log(tempList);
       item.patchValue({ barcode: null });
       item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
     }
+
   }
   updateDynamicInputs(index: number, amount: number): void {
     const items = this.purchasesBillForm.get('items') as FormArray;
@@ -502,7 +553,7 @@ export class AddReturnPurchaseBillComponent {
             const serialNumbers = itemControl.get('serialNumbers')?.value;
             if (serialNumbers.length > 0) {
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
               });
             }
            
@@ -624,19 +675,11 @@ export class AddReturnPurchaseBillComponent {
 
 
   onSearchChange() {
-
-
     if (this.selectedPopUP == 'cash') {
-      this.filteredAccounts = this.cashAccounts.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-
+      this.loadCashAccounts();
     }else if (this.selectedPopUP == 'vendor') {
-      this.filteredAccounts = this.vendors.filter(account =>
-        account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      this.loadSuppliers();
     }
-
   }
 
 
@@ -707,6 +750,9 @@ if(this.selectedCheck){
   ProductsearchQuery = '';
   selectedProduct: any;
   onProductSearchChange() {
+    if(this.selectedStore){
+      this.loadProducts(this.selectedStore.id);
+    }
 
   }
   getDeterminants(item: AbstractControl<any, any>): FormArray {
@@ -717,23 +763,19 @@ if(this.selectedCheck){
   selectProduct(branch: any ) {
     const itemsArray = this.purchasesBillForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(this.productIndex) as FormGroup;
-console.log('branch: ',branch);
+    // console.log('branch: ',branch.branch);
     itemGroup.patchValue({ product: branch.product });
     itemGroup.patchValue({ product_id: branch.branch.id });
     
       itemGroup.patchValue({ type: 'branch' });
       itemGroup.patchValue({
         branch_data: {
-          color: branch?.color,
+          color: branch?.branch?.color,
           determinants: branch?.branch.determinants
         }
       });
+      this.lastSelectedIndex = -1;
 
-// console.log('product: ', branch.product_branch.product.id);
-// console.log('selectedStore: ', this.selectedStore.id);
-// console.log('product: ', branch.product_branch.product.id);
-
-    this.getSerialNumbers(branch.product.id, this.selectedStore.id, this.productIndex);
     this.closeProductModel();
   }
   productIndex: number = -1;
@@ -756,13 +798,13 @@ console.log('branch: ',branch);
       modal?.hide();
     }
   }
-  filteredStores() {
-    if (!this.storeSearchTerm) return this.stores;
-    const term = this.storeSearchTerm.toLowerCase();
-    return this.stores.filter(store =>
-      store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
-    );
-  }
+  // filteredStores() {
+  //   if (!this.storeSearchTerm) return this.stores;
+  //   const term = this.storeSearchTerm.toLowerCase();
+  //   return this.stores.filter(store =>
+  //     store.name.toLowerCase().includes(term) || store.id.toString().includes(term)
+  //   );
+  // }
   
   selectStore(store: any) {
     this.selectedStore = store;
@@ -776,6 +818,130 @@ console.log('branch: ',branch);
     const input = event.target as HTMLInputElement;
     this.total = Number(input.value);
   }
+
+
+
+
+
+searchText: string = '';
+selectedSerachIndex = -1;
+lastSelectedIndex = -1;
+
+  options: string[] = ['Apple', 'Banana', 'Cherry', 'Date', 'Grape', 'Kiwi'];
+
+  filteredOptions(): string[] {
+    return this.options.filter(option =>
+      option.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
+productSerialNumbers :any = [];
+loadingSerialNumbers = false;
+
+searchSerialNumber(event:Event , index:number){
+  this.searchText = (event.target as HTMLSelectElement).value;
+  this.selectedSerachIndex = index;
+  const itemsArray = this.purchasesBillForm.get('items') as FormArray;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.purchasesBillForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+
+  if(store_id && productId){
+    // this.productSerialNumbers = [];
+    this.loadSerialNumbers(store_id ,productId);
+  }
+}
+
+onFocus(index :number){
+  const itemsArray = this.purchasesBillForm.get('items') as FormArray;
+  this.selectedSerachIndex = index;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.purchasesBillForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const searchText  = itemGroup.get('barcode')?.value || '';
+
+  // console.log(this.selectedSerachIndex ,index);
+  if(store_id && productId && this.lastSelectedIndex != index){
+    this.productSerialNumbers = [];
+    this.searchText = searchText;
+    this.loadSerialNumbers(store_id ,productId);
+  }
+  this.lastSelectedIndex = index;
+
+}
+  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+  setTimeout(() => {
+    this.selectedSerachIndex = -1;
+  }, 200);  
+ }
+
+
+
+  loadSerialNumbers(store_id :string,productId:string){
+    this.loadingSerialNumbers =true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+    this.searchText,
+    'return_purchase'
+  ).subscribe({
+    next: (response) => {
+      if (response ) {
+        this.productSerialNumbers = response.data.serial_numbers;
+        console.log(this.productSerialNumbers);
+        // this.filteredSerialNumbers = [...response.data.serial_numbers];
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+
+  }
+
+
+  isOptionDisabled(serialNumber:any , index:number): boolean {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element:any) => {
+      if(serialNumber.serial_number == element.serial_number){
+        value = true;
+      }
+    });
+
+    return value;
+  }
+
 }
 
 interface Account {

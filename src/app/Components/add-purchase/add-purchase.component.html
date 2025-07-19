@@ -490,7 +490,7 @@
               <!-- Main Product Row -->
               <tr class="table-primary" (click)="selectProduct(product.product, 'product', product.product.id)"
                 style="cursor: pointer;">
-                <td><strong>{{ product.product.barcode }}</strong></td>
+                <td><strong>----- </strong></td>
                 <td><strong>{{ product.product.id }}</strong></td>
                 <td>{{ product.product.name }}</td>
                 <td>{{ product.product.stock }}</td>
@@ -502,7 +502,7 @@
               <!-- Branches -->
               <tr *ngFor="let branch of product.branches"
                 (click)="selectProduct(product.product, 'branch', branch.id, branch)" style="cursor: pointer;">
-                  <td> --- </td>
+                  <td> {{ branch.barcode }} </td>
 
                 <td>{{ branch.code }}</td>
                 <td>{{ product.product.name }}</td>

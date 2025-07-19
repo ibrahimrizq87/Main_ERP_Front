@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -41,7 +41,23 @@ export class ProductCategoriesService {
     return this._HttpClient.post(`${this.baseURL}/general/product-categories`,data,{ headers:this.getHeadersWithToken() })
   }
 
-  getAllProductCategories(): Observable<any> {
+  getAllProductCategories(
+    searchQuery: string = '',
+    type: string = '',
+    parent_id: string = '',
+
+      page: number = 1,
+      perPage: number = 20
+  ): Observable<any> {
+
+        let params = new HttpParams();
+                          if (searchQuery !== '') params = params.set('searchTerm', searchQuery);
+                          if (type !== '') params = params.set('type', type);
+                          if (parent_id !== '') params = params.set('parent_id', parent_id);
+
+                          if (page !== 1) params = params.set('page', page);
+                          if (perPage !== 20) params = params.set('per_page', perPage);
+                          
     return this._HttpClient.get(`${this.baseURL}/general/product-categories`,{ headers:this.getHeadersWithToken() });
   }
 

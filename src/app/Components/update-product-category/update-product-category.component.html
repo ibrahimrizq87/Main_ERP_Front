@@ -41,6 +41,18 @@
                   </label>
                   <span id="file-name">{{ selectedFile?.name || ('NO_FILE_CHOSEN' | translate) }}</span>
                 </div>
+
+
+                                   <div class="form-group col-md-6">
+                                    <label for="to_store_id" class="form-label large-text"> {{ 'CATEGORY' | translate }}</label>
+                                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('categoryModal')">
+                                      {{ selectedCategory?.name || ('SELECT_CATEGORY' | translate) }}
+                                    </button>
+                                    <input type="hidden" formControlName="parent_id" [value]="selectedCategory?.id" />
+                                  
+                                  </div>
+
+                                  
                 <div class="form-group col-md-3" *ngIf="categoryImage">
                   <img [src]="categoryImage" alt="Category Preview" class="img-fluid rounded" style="max-width: 150px;">
                 </div>
@@ -126,3 +138,36 @@
     </div>
   </form>
 </div>
+
+
+
+
+  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="storeModalLabel" aria-hidden="true" tabindex="-1" #storeModalRef>
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'SELECT_CATEGORY' | translate }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('categoryModal')"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" [(ngModel)]="searchQuery" placeholder="{{ 'SEARCH' | translate }}" (ngModelChange)="loadParents()" />
+  
+          <table class="table table-striped table-hover table-bordered rounded">
+            <thead class="table-dark">
+              <tr>
+                <th>{{ 'ID' | translate }}</th>
+                <th>{{ 'CATEGORY' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let parent of parents" (click)="selectCategory(parent)" style="cursor: pointer;">
+                <td>{{ parent.id }}</td>
+                <td>{{ parent.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

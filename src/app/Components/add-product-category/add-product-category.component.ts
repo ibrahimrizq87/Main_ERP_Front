@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductCategoriesService } from '../../shared/services/product_categories.service';
 import { ToastrService } from 'ngx-toastr';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-add-product-category',
@@ -16,10 +17,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './add-product-category.component.css'
 })
 export class AddProductCategoryComponent {
-
+  isSubmited =false;
   msgError: string = '';
   isLoading: boolean = false;
   isSubmitted = false;
+  selectedCategory:any;
+  parents:any;
   constructor(private _ProductCategoriesService:ProductCategoriesService ,private _Router: Router,private translate: TranslateService,private toastr: ToastrService) {
     // this.translate.setDefaultLang('en'); 
   
@@ -60,6 +63,52 @@ export class AddProductCategoryComponent {
   removeCommissions(index: number): void {
     this.commissions.removeAt(index);
   }
+
+
+    openModal(modalId: string) {
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = new Modal(modalElement);
+        modal.show();
+      }
+    }
+  closeModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+    }
+  }
+
+searchQuery = '';
+
+    loadParents(): void {
+    // searchQuery: string = '',
+    // type: string = '',
+    // parent_id: string = '',
+    this._ProductCategoriesService.getAllProductCategories(
+      this.searchQuery,
+      'parent' 
+
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.parents = response.data; 
+          // this.filteredCategories = [...this.categories];
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+selectCategory(parent:any){
+  this.selectedCategory = parent;
+  this.closeModal('categoryModal'); 
+
+}
+
   handleForm() {
    
     if (this.categoryForm.valid) {
@@ -73,12 +122,15 @@ export class AddProductCategoryComponent {
         formData.append('image', this.categoryForm.get('image')?.value);
       }
 
+
+      if(this.selectedCategory){
+        formData.append('parent_id', this.selectedCategory.id);    
+      }
+
       this.commissions.controls.forEach((element, index) => {
-       
         formData.append(`commissions[${index}][from]`, element.get('from')?.value);
         formData.append(`commissions[${index}][to]`, element.get('to')?.value);
         formData.append(`commissions[${index}][precentage]`, element.get('precentage')?.value);
-
       });
       this._ProductCategoriesService.addProductCategory(formData).subscribe({
         next: (response) => {
@@ -98,4 +150,10 @@ export class AddProductCategoryComponent {
       });
     }
   }
+
+
+
+    ngOnInit(): void {
+      this.loadParents();
+    }
 }
