@@ -1,6 +1,7 @@
 { 
+  "ALL_DATA_SIMPLE_TEMPLATE": "All Data (Simple Template)",
   "SALES_ORDER"     : "sales order",
-    "PURCHASES_ORDER" : "purchases order",
+  "PURCHASES_ORDER" : "purchases order",
   "EXPENSES_ACCOUNT":"expenses accounts",
   "FIRXED_ASSETS_DETAILS" : "fixed asset details",
   "ENTER_ACCOUNT_NAME_EN":"enter english account name",

@@ -29,10 +29,10 @@
                 <th scope="row">{{ unit.id }}</th>
                 <td>{{ unit.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductUnit', unit.id]">
+                    <a *ngIf="unit.id != 1"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductUnit', unit.id]">
                         <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteUnit(unit.id)"></i>
+                    <i *ngIf="unit.id != 1" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteUnit(unit.id)"></i>
                 </td>
             </tr>
         </tbody>
