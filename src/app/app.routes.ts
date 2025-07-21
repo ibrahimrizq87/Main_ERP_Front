@@ -177,6 +177,7 @@ import { CashierComponent } from './Components/cashier/cashier.component';
 import { FixedAssetsExpensesComponent } from './Components/fixed-assets-expenses/fixed-assets-expenses.component';
 import { EarningsAndLossesComponent } from './Components/earnings-and-losses/earnings-and-losses.component';
 import { AttendanceSheetOperationsComponent } from './Components/attendance-sheet-operations/attendance-sheet-operations.component';
+import { UpdateReturnPurchaseComponent } from './Components/update-return-purchase/update-return-purchase.component';
 
 
 export const routes: Routes = [
@@ -219,7 +220,7 @@ export const routes: Routes = [
             { path: "add-return-purchase", component: AddReturnPurchaseBillComponent },
             { path: "return-purchase/:status", component: ReturnPurchaseBillsComponent },
             { path: "show-return-purchase/:id", component: ViewReturnPurchaseBillComponent },
-
+            { path: "update-return-purchase/:id", component: UpdateReturnPurchaseComponent },
 
             // cashiers
             { path: "add-cashier", component: AddCashierComponent },
