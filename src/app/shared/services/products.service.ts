@@ -71,6 +71,7 @@ export class ProductsService {
   getSerialNumbers(productId:string , storeId:string,
      searchQuery: string = '',
      type: string = 'sale',
+     saleBillId: string = '',
 
       page: number = 1,
       perPage: number = 10
@@ -80,6 +81,8 @@ export class ProductsService {
                   // if (type !== 'all') params = params.set('filter[type]', type);
                   if (searchQuery !== '') params = params.set('searchTerm', searchQuery);
                   if (type !== 'sale') params = params.set('type', type);
+                  if (saleBillId !== '') params = params.set('saleBillId', saleBillId);
+
                   if (page !== 1) params = params.set('page', page);
                   if (perPage !== 10) params = params.set('per_page', perPage);
 

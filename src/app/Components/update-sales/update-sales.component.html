@@ -76,19 +76,6 @@
                   <input formControlName="currency_price_value" type="number" class="form-control"
                     (input)="currencyPrice()" />
                 </div>
-
-
-
-
-                <!-- <div class="form-group col-md-6">
-                  <label for="file_type" class="form-label">Type</label>
-                  <select id="file_type" class="form-control" (change)="onFileTypeChange($event)">
-                    <option value="manual">Manual</option>
-                    <option value="sale_order">Sales Order</option>
-                  </select>
-                </div> -->
-
-
                 <div class="form-group col-md-6" *ngIf="showselectOrder">
                   <label class="form-label">{{ 'SLAE_ORDER' | translate }}</label>
                   <button type="button" class="btn btn-outline-primary w-100"
@@ -96,12 +83,6 @@
                     {{ 'SELECT_SLAE_ORDER' | translate }}
                   </button>
                 </div>
-
-
-
-
-
-
 
                 <div class="form-group col-md-12">
                   <label for="notes" class="form-label large-text">{{ 'NOTES' | translate }}</label>
@@ -153,10 +134,6 @@
                         </div>
 
 
-
-
-
-                        <!-- Total Price -->
                         <div class="col-md-2" *ngIf="item.get('overridePrice')?.value">
                           <label for="price">{{ 'price' | translate }}</label>
                           <input formControlName="price" type="number" class="form-control" (input)="onPrice()"
@@ -166,21 +143,9 @@
                           </div>
                         </div>
 
-
                         <div class="col-md-1" *ngIf="!item.get('overridePrice')?.value">
                           <label for="price">{{ 'price' | translate }}</label>
                           <p>{{ getFormattedPrice(item) }}</p>
-
-                          <!-- <p>
-                          {{
-                            needCurrecyPrice
-                              ? saleForm.get('currency_price_value')?.value > 0
-                                ? (item.get('price')?.value / saleForm.get('currency_price_value')?.value) | number:'1.2-2'
-                                : item.get('price')?.value | number:'1.2-2'
-                              : item.get('price')?.value | number:'1.2-2'
-                          }}
-                        </p> -->
-
                         </div>
 
                         <div class="col-md-1" *ngIf="item.get('color')?.value">
@@ -188,9 +153,6 @@
 
                           <img [src]="item.get('color')?.value.image" alt="" height="30" width="30">
                           {{ item.get('color')?.value.color.color }}
-
-
-
                         </div>
 
 
@@ -202,7 +164,6 @@
                             (getFormattedPrice(item) * (item.get('amount')?.value || 0))
                             | number:'1.2-2'
                             }}
-                            <!-- {{getFormattedPrice(item) * item.get('amount')?.value ? getFormattedPrice(item) * item.get('amount')?.value:0 }} -->
                           </p>
                         </div>
 
@@ -220,32 +181,32 @@
                             <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
                               class="col-md-3 row p-1 m-2 rounded .bg-light border">
                               <div class="col-md-10">
-                                {{serialNumber.barcode}}
+                                {{serialNumber.serial_number}}
                               </div>
                               <div class="col-md-2">
                                 <a class="btn-close" aria-label="Close"
                                   (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
-
                               </div>
                             </div>
-
                           </div>
+                          <div class="d-flex align-items-center mb-2 position-relative">
+                            <input type="text" class="form-control" formControlName="barcode"
+                              placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
+                              (input)="searchSerialNumber($event ,i)" />
 
+                            <ul *ngIf="selectedSerachIndex == i" class="list-group position-absolute w-100 shadow"
+                              style="z-index: 1050; top: 100%; text-align: center;">
 
-                          <div class="d-flex align-items-center mb-2">
-                            <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
-                              placeholder="Enter barcode" (change)="onBarcodeSelect($event ,i)" />
-                            <datalist id="barcodeList">
-                              <option *ngFor="let barcode of item.get('productSerialNumbers')?.value"
-                                [value]="barcode.serial_number">
-                                {{ barcode.serial_number }}
-                              </option>
-                            </datalist>
+                              <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
+                                'list-group-item-action': !isOptionDisabled(option , i),
+                                'disabled-option': isOptionDisabled(option , i)}" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
+                                (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
+                                {{ option.serial_number }}
+                              </li>
+                            </ul>
                           </div>
-
                         </div>
 
-                        <!-- Remove Item -->
                         <div class="col-md-12">
                           <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">
                             <i class="fa-solid fa-trash"></i> {{ 'REMOVE_ITEM' | translate }}
@@ -255,20 +216,12 @@
                     </div>
                   </div>
 
-                  <!-- Add Item -->
                   <button type="button" class="btn btn-primary mt-3" (click)="addItem()">
                     <i class="fa-solid fa-plus"></i> {{ 'ADD_ITEM' | translate }}
                   </button>
 
-
-
-
-
-
                   <div class=" text-black bg-secoundry border rounded  row  mt-3">
                     <div class="card-header text-center"> الدفع </div>
-
-                    <!-- <div class="form-group col-md-12" *ngIf="selectedClient?.payment_type != 'cash'"> -->
 
                     <div class="form-group col-md-12">
                       <label class="form-check-label">
@@ -278,9 +231,7 @@
                       </label>
                     </div>
 
-
-                    <div
-                      *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'"
+                    <div *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'cash'"
                       class="form-group col-md-6">
                       <label class="form-label large-text">{{ 'SELECT_CASH_ACCOUNTS' | translate }}</label>
                       <button type="button" class="btn btn-outline-primary w-100"
@@ -295,11 +246,7 @@
                       class="form-group col-md-6">
                       <label class="form-label large-text">سوف يتم دفع هذا المبلغ</label>
                       <input formControlName="payed_price" type="number" class="form-control" (input)="payedAmount()" />
-
                     </div>
-
-
-
 
                     <div
                       *ngIf="saleForm.get('showCashAccountsDropdown')?.value && saleForm.get('payment_type')?.value == 'check'"
@@ -310,40 +257,15 @@
                         {{ selectedCheck ? selectedCheck.payed_to.name : ('SELECT_CHECK_ACCOUNTS' | translate) }}
                       </button>
                       <input type="hidden" formControlName="check_id" [value]="selectedCheck?.id" />
-
                     </div>
-
-
-
-
                   </div>
 
-
-
-
-
                   <div class="form-group col-md-6">
-
                     <p><strong>Total: </strong>{{total}}</p>
                     <p><strong>Total Payed: </strong>{{totalPayed}}</p>
                     <p><strong>the rest: </strong>{{total -totalPayed}}</p>
-
                   </div>
-
-
-
-
-
                 </div>
-
-
-
-
-
-
-
-
-
               </div>
             </div>
           </div>
@@ -355,7 +277,6 @@
           <li *ngFor="let error of msgError">{{ error }}</li>
         </ul>
       </div>
-      <!-- <p *ngIf="msgError" class="alert alert-danger">{{msgError}}</p> -->
       <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
         <button type="submit" class="btn btn-primary px-4">
           <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
@@ -365,12 +286,6 @@
     </div>
   </form>
 </div>
-
-
-
-
-
-
 
 <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
@@ -383,12 +298,8 @@
 
         <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
           [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
-
-
         <table class="table table-striped">
           <thead>
-
-
             <tr *ngIf="selectedPopUP == 'vendor'">
               <th>ID</th>
               <th>{{ 'Image' | translate }}</th>
@@ -575,40 +486,3 @@
 
 
 
-
-  <div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('orderModel')"></button>
-        </div>
-        <div class="modal-body">
-          <input type="date" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-            [(ngModel)]="orderSearchDate" (ngModelChange)="onSaleOrderSearchChange()" />
-
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th class="bg-light" scope="col">{{ 'ID' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'CLIENT' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
-                <th class="bg-light" scope="col">{{ 'CREATED_BY' | translate }}</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let order of saleOrders; let i = index" (click)="selectSaleOrder(order)"
-                style="cursor: pointer;">
-                <td>{{ order.id }}</td>
-                <td>{{ order.client }}</td>
-                <td>{{ order.date }}</td>
-                <td>{{ order.created_by }}</td>
-
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>

@@ -171,7 +171,7 @@
                           </div>
 
 
-                          <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
+                          <!-- <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
                             <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
                               class="col-md-3 row p-1 m-2 rounded .bg-light border">
                               <div class="col-md-10">
@@ -184,8 +184,19 @@
                               </div>
                             </div>
 
+                          </div> -->
+                          <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
+                            <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
+                              class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                              <div class="col-md-10">
+                                {{serialNumber.serial_number}}
+                              </div>
+                              <div class="col-md-2">
+                                <a class="btn-close" aria-label="Close"
+                                  (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
+                              </div>
+                            </div>
                           </div>
-
 
                           <!-- <div class="d-flex align-items-center mb-2">
                             <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
@@ -208,14 +219,12 @@
                               style="z-index: 1050; top: 100%; text-align: center;">
 
                               <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
-      'list-group-item-action': !isOptionDisabled(option , i),
-      'disabled-option': isOptionDisabled(option , i)
-    }" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
+                                'list-group-item-action': !isOptionDisabled(option , i),
+                                'disabled-option': isOptionDisabled(option , i)}" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
                                 (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
                                 {{ option.serial_number }}
                               </li>
                             </ul>
-
                           </div>
 
                         </div>

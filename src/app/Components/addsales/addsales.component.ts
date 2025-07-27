@@ -400,15 +400,6 @@ storeSearchTerm = '';
     let tempList = item.get('serialNumbers')?.value || [];
     const updatedTemplist = tempList.filter((b: string) => b !== barcode);
 
-
-    // tempList.forEach((barcode:any) => {
-
-    //   if(){}
-
-    // });
-
-    // console.log(barcode);
-
     if (barcode) {
       tempList.push({ serial_number: barcode.serial_number , id:barcode.id })
       item.patchValue({ serialNumbers: tempList });

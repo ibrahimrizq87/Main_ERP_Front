@@ -80,13 +80,28 @@ filteredStores: any[] = [];
   fetchMoveData(productMoveId: string): void {
     this._ProductInternalMovesService.getProductMovesById(productMoveId).subscribe({
       next: (response) => {
-        console.log(response.data);
+
+        const moveData = response.data;
+        console.log('moveData:' , response.data);
         this.productMoves.patchValue({
-          supervisor_name: response.data.supervisor_name,
-          from_store_id: response.data.from_store_id?.id,
-          to_store_id: response.data.to_store_id?.id,
-          note: response.data.note,
+          supervisor_name: moveData.supervisor_name,
+          from_store_id: moveData.from_store_id?.id,
+          to_store_id: moveData.to_store_id?.id,
+          note: moveData.note,
         });
+
+        this.selectedFromStore =moveData.from_store;
+        this.selectedToStore = moveData.to_store;
+
+
+        this.loadProducts(this.selectedFromStore.id);
+
+
+
+
+
+
+
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error fetching purchase data:', err.message);
@@ -127,8 +142,8 @@ filteredStores: any[] = [];
     this._StoreService.getAllStores().subscribe({
       next: (response) => {
         if (response) {
-          console.log(response);
-          this.stores = response.data;
+          // console.log(response);
+          this.stores = response.data.stores;
         }
       },
       error: (err) => {
@@ -137,12 +152,14 @@ filteredStores: any[] = [];
     });
   }
   loadProducts(storeId: string) {
-    this._ProductBranchStoresService.getByStoreId(storeId).subscribe({
+    this._ProductBranchStoresService.getByStoreIdWithoutPrices(storeId,
+       this.ProductsearchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
-          this.Products = response.data;
+          this.Products = response.data.products;
 
-          console.log('product branches', this.Products);
+          console.log('product branches', response);
           this.filteredProducts = this.Products;
         }
       },

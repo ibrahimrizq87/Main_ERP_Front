@@ -101,13 +101,16 @@ export class UpdateSalesComponent implements OnInit {
         if (response) {
           console.log(response);
           this.currency = response.data;
+
+           if (this.currency.id != this.selectedClient.account.currency.id) {
+            this.needCurrecyPrice = true;
+            this.forignCurrencyName = this.selectedClient.account.currency.name;
+          }
         }
       },
       error: (err) => {
         if (err.status == 404) {
-          // console.log('here')
           this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
-          // alert('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع')
           this._Router.navigate(['/dashboard/currency']);
 
         }
@@ -157,177 +160,11 @@ export class UpdateSalesComponent implements OnInit {
     this.loadStores();
     this.loadSuppliers();
     this.loadDelegates();
+    // this.loadDefaultCurrency();
     this.loadCashAccounts();
     this.loadChecks();
   }
 
-  // loadSaleBill(id: string) {
-  //   this._SalesService.getSaleById(id).subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         const UnitsData = response.data;
-  //         this.salesData = UnitsData;
-  //         console.log("purchase data", UnitsData)
-  //         this.saleForm.patchValue({
-  //           invoice_date: UnitsData.invoice_date,
-  //           vendor_id: UnitsData.vendor.account.id,
-  //           store_id: UnitsData.store.id,
-  //           payment_type: UnitsData.payment_type,
-  //           payed_price: UnitsData.total_payed || 0,
-  //           notes: UnitsData.notes || '',
-  //           showCashAccountsDropdown: !!UnitsData.payed_from_account || !!UnitsData.check
-  //         });
-
-  //         UnitsData.purchaseBillItems.forEach((item: any) => {
-  //           this.addItem(item)
-  //         });
-
-  //         this.total = UnitsData.total;
-  //         this.totalPayed = UnitsData.total_payed;
-
-
-  //         this.selectedClient = UnitsData.vendor;
-  //         this.selectedCurrency = UnitsData.currency.id;
-  //         this.selectedStore = UnitsData.store.id;
-  //         if (UnitsData.payment_type == 'check') {
-  //           this.selectedCheck = UnitsData.check || null;
-  //           this.saleForm.patchValue({
-  //             showCashAccountsDropdown: true,
-  //             payment_type: ['check'],
-  //             check_id: UnitsData.check.id
-  //           });
-
-  //         } else if (UnitsData.payment_type == 'cash') {
-  //           this.selectedCashAccount = UnitsData.payed_from_account || null;
-  //           this.saleForm.patchValue({
-  //             showCashAccountsDropdown: true,
-  //             cash_id: UnitsData.payed_from_account?.id,
-  //           });
-  //         }
-
-
-
-
-
-  //       }
-  //     },
-  //     error: (err: HttpErrorResponse) => {
-  //       this.msgError = err.error.error;
-  //     }
-  //   });
-  // }
-
-  // loadSaleBill(id: string) {
-  //   this._SalesService.getSaleById(id).subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         const saleData = response.data;
-  //         this.salesData = saleData;
-  //         console.log("sales data", saleData);
-  
-  //       // Initialize client data
-  //       this.selectedClient = {
-  //         ...saleData.client_details,
-  //         account: {
-  //           id: saleData.client.id,
-  //           name: saleData.client.name
-  //         }
-  //       };
-
-  //       // Initialize delegate data if exists
-  //       if (saleData.delegate) {
-  //         this.selecteddelegateAccount = {
-  //           id: saleData.delegate.id,
-  //           name: saleData.delegate.name,
-  //           account: saleData.delegate, // or whatever structure your Account interface expects
-  //           currency: saleData.delegate.currency // Ensure to include the currency property
-  //         };
-  //       }
-  //         // Patch basic form values
-  //         this.saleForm.patchValue({
-  //           invoice_date: saleData.date,
-  //           vendor_id: saleData.client.id,
-  //           store_id: saleData.store.id,
-  //           payment_type: saleData.payment_type,
-  //           payed_price: saleData.total_payed || 0,
-  //           notes: saleData.note || '',
-  //           delegate_id: saleData.delegate?.id || null,
-  //           showCashAccountsDropdown: !!saleData.payed_to_account || !!saleData.check
-  //         });
-  
-  //         // Clear existing items
-  //         while (this.items.length) {
-  //           this.items.removeAt(0);
-  //         }
-  
-  //         // Add items from sale data
-  //         saleData.saleBillItems.forEach((item: any) => {
-  //           const serialNumbers = item.productSerialNumbers || [];
-  //           const newItem = this.createItem(item.quantity, serialNumbers);
-            
-  //           this.items.push(newItem);
-  //           const index = this.items.length - 1;
-            
-  //           // Patch product data
-  //           const itemGroup = this.items.at(index) as FormGroup;
-  //           itemGroup.patchValue({
-  //             product_id: item.product_branch.id,
-  //             product: {
-  //               id: item.product_branch.product.id,
-  //               name: item.product_branch.product.name,
-  //               need_serial_number: item.product_branch.product.need_serial_number,
-  //               stock: item.quantity // You might need to adjust this based on your actual data
-  //             },
-  //             price: item.price,
-  //             color: item.product_color,
-  //             serialNumbers: serialNumbers,
-  //             neededSerialNumbers: item.product_branch.product.need_serial_number ? item.quantity - serialNumbers.length : 0
-  //           });
-  
-  //           // If there are price ranges, patch them
-  //           if (item.priceRanges) {
-  //             itemGroup.patchValue({
-  //               priceRanges: item.priceRanges
-  //             });
-  //           }
-  //         });
-  
-  //         this.total = saleData.total;
-  //         this.totalPayed = saleData.total_payed;
-  
-  //         this.selectedClient = saleData.client_details;
-  //         this.selectedStore = saleData.store.id;
-  
-  //         // Handle payment type specific data
-  //         if (saleData.payment_type == 'check') {
-  //           this.selectedCheck = saleData.check || null;
-  //           this.saleForm.patchValue({
-  //             check_id: saleData.check?.id
-  //           });
-  //         } else if (saleData.payment_type == 'cash') {
-  //           this.selectedCashAccount = saleData.payed_to_account || null;
-  //           this.saleForm.patchValue({
-  //             cash_id: saleData.payed_to_account?.id
-  //           });
-  //         }
-  
-  //         // Handle currency if needed
-  //         if (saleData.currency) {
-  //           this.selectedCurrency = saleData.currency.id;
-  //           this.needCurrecyPrice = true;
-  //           this.forignCurrencyName = saleData.currency.name;
-  //           this.saleForm.patchValue({
-  //             currency_price_value: saleData.currency_price_value
-  //           });
-  //         }
-  //       }
-  //     },
-  //     error: (err: HttpErrorResponse) => {
-  //       this.msgError = err.error.error;
-  //       this.toastr.error('Failed to load sale bill');
-  //     }
-  //   });
-  // }
   loadSaleBill(id: string) {
     this._SalesService.getSaleById(id).subscribe({
       next: (response) => {
@@ -335,7 +172,6 @@ export class UpdateSalesComponent implements OnInit {
           const saleData = response.data;
           this.salesData = saleData;
           console.log("Sales data:", saleData);
-    // Initialize payment account data
     if (saleData.payed_to_account) {
       this.selectedCashAccount = {
         id: saleData.payed_to_account.id,
@@ -350,20 +186,17 @@ export class UpdateSalesComponent implements OnInit {
         cash_id: saleData.payed_to_account.id,
         showCashAccountsDropdown: true
       });
-
-      // Handle currency if different from default
-      // if (saleData.payed_to_account.currency) {
-      //   this.needCurrecyPrice = true;
-      //   this.forignCurrencyName = saleData.payed_to_account.currency.name;
-      // }
     }
           // Patch basic form values
           this.saleForm.patchValue({
             invoice_date: saleData.date,
             vendor_id: saleData.client.id,
             store_id: saleData.store.id,
-            payment_type: saleData.payment_type,
+            payment_type: 'cash',
             payed_price: saleData.total_payed || 0,
+            currency_price_value:saleData.currency_price_value || 0,
+
+            cash_id: saleData.payed_to_account?.id || null,
             notes: saleData.note || '',
             delegate_id: saleData.delegate?.id || null,
             showCashAccountsDropdown: !!saleData.payed_to_account || !!saleData.check
@@ -373,6 +206,10 @@ export class UpdateSalesComponent implements OnInit {
           while (this.items.length !== 0) {
             this.items.removeAt(0);
           }
+
+          console.log('payed_to_account:::' , saleData.payed_to_account)
+
+
   
           // Add items from sale data
           saleData.SaleBillItems.forEach((item: any) => {
@@ -387,12 +224,15 @@ export class UpdateSalesComponent implements OnInit {
               id: item.product_branch.id,
               name: item.product_branch.product.name,
               need_serial_number: item.product_branch.product.need_serial_number,
-              stock: item.quantity // You might need to adjust this based on actual stock
+              stock: item.stock // You might need to adjust this based on actual stock
             };
   
             // Patch item values
             itemGroup.patchValue({
+              bill_item_id: item.id,
               product_id: item.product_branch.id,
+
+              overridePrice: item.has_overrided_price,
               product: productData,
               price: item.price,
               color: item.product_color,
@@ -412,12 +252,27 @@ export class UpdateSalesComponent implements OnInit {
   
           // Set client and delegate
           this.selectedClient = {
-            ...saleData.client_details,
+            // ...saleData.client_details,
+              price_category: {
+              id: saleData.client.price_category.id,
+              name: saleData.client.price_category.name
+            },
             account: {
               id: saleData.client.id,
-              name: saleData.client.name
+              name: saleData.client.name,
+              currency:saleData.client.currency
             }
           };
+          this.loadDefaultCurrency();
+
+          // if (this.currency.id != saleData.client.currency.id) {
+          //   this.needCurrecyPrice = true;
+          //   this.forignCurrencyName = saleData.client.currency.name;
+
+          // }
+
+
+
   
           if (saleData.delegate) {
             this.selecteddelegateAccount = {
@@ -425,6 +280,15 @@ export class UpdateSalesComponent implements OnInit {
               name: saleData.delegate.name,
               account: saleData.delegate.account, // Ensure to include the account property
               currency: saleData.delegate.currency // Ensure to include the currency property
+            };
+          }
+
+          if (saleData.payed_to_account) {
+            this.selectedCashAccount = {
+              id: saleData.payed_to_account.id,
+              name: saleData.payed_to_account.name,
+              account: saleData.payed_to_account.account, // Ensure to include the account property
+              currency: saleData.payed_to_account.currency // Ensure to include the currency property
             };
           }
   
@@ -576,6 +440,8 @@ export class UpdateSalesComponent implements OnInit {
 
   createItem(amount: number | null = null, serialNumbers: string[] = []): FormGroup {
     return this.fb.group({
+      bill_item_id: [''],
+
       amount: [amount, Validators.required],
       overridePrice: [false],
       price: ['', Validators.required],
@@ -643,37 +509,54 @@ export class UpdateSalesComponent implements OnInit {
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number, givenBarcode: string | null = null) {
-    const items = this.saleForm.get('items') as FormArray;
-    const item = items.at(index) as FormGroup;
+  // addParcode(index: number, givenBarcode: string | null = null) {
+  //   const items = this.saleForm.get('items') as FormArray;
+  //   const item = items.at(index) as FormGroup;
 
-    const barcode = givenBarcode ? givenBarcode : item.get('barcode')?.value;
-    const neededBars = item.get('neededSerialNumbers')?.value;
-    if (neededBars == 0) {
+  //   const barcode = givenBarcode ? givenBarcode : item.get('barcode')?.value;
+  //   const neededBars = item.get('neededSerialNumbers')?.value;
+  //   if (neededBars == 0) {
 
-      return;
+  //     return;
+  //   }
+  //   let tempList = item.get('serialNumbers')?.value || [];
+  //   const updatedTemplist = tempList.filter((b: string) => b !== barcode);
+
+  //   if (barcode) {
+  //     tempList.push({ barcode: barcode })
+  //     item.patchValue({ serialNumbers: tempList });
+  //     console.log(tempList);
+  //     item.patchValue({ barcode: null });
+  //     item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+  //   }
+
+  // }
+
+    addParcode(index: number , givenBarcode:any) {
+      const items = this.saleForm.get('items') as FormArray;
+      const item = items.at(index) as FormGroup;
+  
+      const barcode = givenBarcode ;
+      const neededBars = item.get('neededSerialNumbers')?.value;
+      if (neededBars == 0) {
+        return;
+      }
+      let tempList = item.get('serialNumbers')?.value || [];
+      const updatedTemplist = tempList.filter((b: string) => b !== barcode);
+  
+      if (barcode) {
+        tempList.push({ serial_number: barcode.serial_number , id:barcode.id })
+        item.patchValue({ serialNumbers: tempList });
+        console.log(tempList);
+        item.patchValue({ barcode: null });
+        item.patchValue({ neededSerialNumbers: neededBars - 1 });
+  
+  
+      }
+  
     }
-    let tempList = item.get('serialNumbers')?.value || [];
-    const updatedTemplist = tempList.filter((b: string) => b !== barcode);
-
-
-    // tempList.forEach((barcode:any) => {
-
-    //   if(){}
-
-    // });
-
-    if (barcode) {
-      tempList.push({ barcode: barcode })
-      item.patchValue({ serialNumbers: tempList });
-      console.log(tempList);
-      item.patchValue({ barcode: null });
-      item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-    }
-
-  }
 
 
   onAmountChange(index: number): void {
@@ -684,16 +567,14 @@ export class UpdateSalesComponent implements OnInit {
     const stock = item.get('product')?.value.stock;
     const serialNumbers = item.get('serialNumbers')?.value.length || 0;
 
+    console.log('stock::', item.get('product')?.value);
+
     if (amount > stock) {
       amount = stock;
       item.patchValue({ amount: stock });
     }
     const priceRanges = item.get('priceRanges')?.value || [];
     priceRanges.forEach((price: any) => {
-      console.log('quantity_from', price.quantity_from);
-      console.log('quantity_to', price.quantity_to);
-
-      console.log('amount', amount);
       if (price.quantity_from < amount && price.quantity_to >= amount) {
         item.patchValue({ price: price.price });
       }
@@ -738,7 +619,7 @@ export class UpdateSalesComponent implements OnInit {
       const currencyPrice = this.saleForm.get('currency_price_value')?.value;
 
       if (itemValue) {
-        if (currencyPrice) {
+        if (currencyPrice && currencyPrice > 0) {
           if (this.needCurrecyPrice && currencyPrice > 0) {
             this.total += +(((itemValue.amount || 0) * (itemValue.price || 0) / currencyPrice).toFixed(2));
           }
@@ -796,11 +677,7 @@ export class UpdateSalesComponent implements OnInit {
     if (data) {
 
       this.items.push(this.createItem(data.quantity));
-
-      // selectProduct
       const index = this.items.length - 1;
-
-
       this.selectProduct(data, index);
       this.onAmountChange(index);
       if (data.serialNumbers) {
@@ -875,9 +752,9 @@ export class UpdateSalesComponent implements OnInit {
       formData.append('notes', this.saleForm.get('notes')?.value || '');
       formData.append('date', this.saleForm.get('invoice_date')?.value);
 
-      if (this.showselectOrder && this.selectedOrderId) {
-        formData.append('sale_order_id', this.selectedOrderId);
-      }
+      // if (this.showselectOrder && this.selectedOrderId) {
+      //   formData.append('sale_order_id', this.selectedOrderId);
+      // }
 
 
 
@@ -895,19 +772,15 @@ export class UpdateSalesComponent implements OnInit {
             formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
             formData.append(`items[${index}][price]`, itemValue.price || '0');
 
-
             if (itemValue.overridePrice) {
               formData.append(`items[${index}][has_overrided_price]`, '1');
-
             } else {
               formData.append(`items[${index}][has_overrided_price]`, '0');
-
             }
             const serialNumbers = itemControl.get('serialNumbers')?.value;
             if (serialNumbers.length > 0) {
-
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
 
               });
 
@@ -1026,7 +899,7 @@ export class UpdateSalesComponent implements OnInit {
 
 
 
-  selectAccount(account: Account) {
+    selectAccount(account: Account) {
 
     this.onPrice();
     if (this.selectedPopUP == 'cash') {
@@ -1038,7 +911,6 @@ export class UpdateSalesComponent implements OnInit {
       if (this.currency.id != account.currency.id) {
         this.needCurrecyPrice = true;
         this.forignCurrencyName = account.currency.name;
-
       }
 
       if (this.selectedClient) {
@@ -1060,11 +932,9 @@ export class UpdateSalesComponent implements OnInit {
 
       this.selectedClient = account;
       this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
-      console.log('selectedClient', this.selectedClient);
-      this.loadOrders();
 
-      if (this.selectedClient.delegate) {
-        this.selecteddelegateAccount = this.selectedClient.delegate;
+      if(this.selectedClient.delegate){
+        this.selecteddelegateAccount= this.selectedClient.delegate;
         this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
       }
 
@@ -1075,25 +945,90 @@ export class UpdateSalesComponent implements OnInit {
       if (this.currency.id != account.account.currency.id) {
         this.needCurrecyPrice = true;
         this.forignCurrencyName = account.account.currency.name;
-
       }
 
       if (this.selectedCashAccount) {
         if (this.selectedCashAccount.currency.id != this.currency.id) {
           this.needCurrecyPrice = true;
           this.forignCurrencyName = this.selectedCashAccount.currency.name;
-
         }
       }
-
-
-
     }
 
 
     this.cdr.detectChanges();
     this.closeModal('shiftModal');
   }
+
+
+  // selectAccount(account: Account) {
+
+  //   this.onPrice();
+  //   if (this.selectedPopUP == 'cash') {
+  //     this.selectedCashAccount = account;
+  //     this.saleForm.patchValue({ 'cash_id': account.id })
+
+  //     this.needCurrecyPrice = false;
+  //     this.forignCurrencyName = '';
+  //     if (this.currency.id != account.currency.id) {
+  //       this.needCurrecyPrice = true;
+  //       this.forignCurrencyName = account.currency.name;
+
+  //     }
+
+  //     if (this.selectedClient) {
+  //       if (this.selectedClient.account.currency.id != this.currency.id) {
+  //         this.needCurrecyPrice = true;
+  //         this.forignCurrencyName = this.selectedClient.account.currency.name;
+
+  //       }
+  //     }
+
+
+
+  //   } else if (this.selectedPopUP == 'delegate') {
+  //     this.selecteddelegateAccount = account;
+  //     this.saleForm.patchValue({ 'delegate_id': account.id })
+
+  //   } else if (this.selectedPopUP == 'vendor') {
+
+
+  //     this.selectedClient = account;
+  //     this.saleForm.patchValue({ 'vendor_id': this.selectedClient.account.id });
+  //     console.log('selectedClient', this.selectedClient);
+  //     this.loadOrders();
+
+  //     if (this.selectedClient.delegate) {
+  //       this.selecteddelegateAccount = this.selectedClient.delegate;
+  //       this.saleForm.patchValue({ 'delegate_id': this.selectedClient.delegate.id })
+  //     }
+
+  //     this.needCurrecyPrice = false;
+  //     this.forignCurrencyName = '';
+
+
+  //     if (this.currency.id != account.account.currency.id) {
+  //       this.needCurrecyPrice = true;
+  //       this.forignCurrencyName = account.account.currency.name;
+
+  //     }
+
+  //     if (this.selectedCashAccount) {
+  //       if (this.selectedCashAccount.currency.id != this.currency.id) {
+  //         this.needCurrecyPrice = true;
+  //         this.forignCurrencyName = this.selectedCashAccount.currency.name;
+
+  //       }
+  //     }
+
+
+
+  //   }
+
+
+  //   this.cdr.detectChanges();
+  //   this.closeModal('shiftModal');
+  // }
 
   filteredProducts: any;
   ProductsearchQuery = '';
@@ -1140,7 +1075,6 @@ export class UpdateSalesComponent implements OnInit {
 
 
     productBranchStore.prices.forEach((price: any) => {
-
       if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
@@ -1160,9 +1094,11 @@ export class UpdateSalesComponent implements OnInit {
       itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
 
-    console.log(productBranchStore.product.id, this.selectedStore, index != null ? index : this.productIndex);
+    this.lastSelectedIndex = -1;
 
-    this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, index ? index : this.productIndex);
+    // console.log(productBranchStore.product.id, this.selectedStore, index != null ? index : this.productIndex);
+
+    // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, index ? index : this.productIndex);
     this.closeProductModel();
   }
 
@@ -1211,77 +1147,125 @@ export class UpdateSalesComponent implements OnInit {
 
 
 
+searchText: string = '';
+selectedSerachIndex = -1;
+lastSelectedIndex = -1;
+
+productSerialNumbers :any = [];
+loadingSerialNumbers = false;
+
+searchSerialNumber(event:Event , index:number){
+  this.searchText = (event.target as HTMLSelectElement).value;
+  this.selectedSerachIndex = index;
+
+  const itemsArray = this.saleForm.get('items') as FormArray;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const billItemId  = itemGroup.get('bill_item_id')?.value || '';
+
+  if(store_id && productId){
+    // this.productSerialNumbers = [];
+    this.loadSerialNumbers(store_id ,productId,billItemId);
+  }
+}
+
+onFocus(index :number){
+  const itemsArray = this.saleForm.get('items') as FormArray;
+  this.selectedSerachIndex = index;
+
+  const itemGroup = itemsArray.at(index) as FormGroup;
+  const store_id  = this.saleForm.get('store_id')?.value;
+  const productId = itemGroup.get('product')?.value?.id;
+  const searchText  = itemGroup.get('barcode')?.value || '';
+  const billItemId  = itemGroup.get('bill_item_id')?.value || '';
 
 
+    // console.log('billItemId :' , billItemId)
 
 
+  // console.log(this.selectedSerachIndex ,index);
+  if(store_id && productId && this.lastSelectedIndex != index){
+    this.productSerialNumbers = [];
+    this.searchText = searchText;
+    this.loadSerialNumbers(store_id ,productId ,billItemId);
+  }
+  this.lastSelectedIndex = index;
 
+}
+  selectOption(serialNumber:any , index:number , GivenserialNumber :any = null){
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
 
-
-
-  saleOrders: any;
-
-  orderSearchDate = this.getTodayDate();
-
-  loadOrders() {
-    if (this.selectedClient) {
-      this._SaleOrdersService.getAllSaleOrdersForPopup(
-        '',
-        this.selectedClient.account.id,
-        this.orderSearchDate
-      ).subscribe({
-        next: (response) => {
-          if (response) {
-            this.saleOrders = response.data.bills;
-            console.log('my data::', response, this.selectedClient.id, this.orderSearchDate);
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
     }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number , id:CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+  setTimeout(() => {
+    this.selectedSerachIndex = -1;
+  }, 200);  
+ }
+
+
+
+  loadSerialNumbers(store_id :string,productId:string ,billItemId:string){
+    this.loadingSerialNumbers =true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+    this.searchText,
+    'return_sale',
+    billItemId
+  ).subscribe({
+    next: (response) => {
+      if (response ) {
+        this.productSerialNumbers = response.data.serial_numbers;
+        // console.log(this.productSerialNumbers);
+      }
+      this.loadingSerialNumbers = false;
+    },
+    error: (err) => {
+      console.error('Error loading serial numbers:', err);
+      this.toastr.error('Failed to load serial numbers', 'Error');
+      this.loadingSerialNumbers = false;
+    }
+  });
+
   }
 
 
-  selectedOrderId = '';
-  loadOrderById(id: string) {
-    this._SaleOrdersService.getSaleOrderById(id).subscribe({
-      next: (response) => {
-        if (response) {
-
-
-          this.items.clear();
-          this.selectedOrderId = id;
-          this.selectedStore = response.data.store.id;
-
-          console.log('my store_id', this.selectedStore);
-          this.saleForm.patchValue({ store_id: this.selectedStore });
-          console.log(response)
-          response.data.items.forEach((item: any) => {
-            this.addItem(item);
-
-          });
-
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      },
+  isOptionDisabled(serialNumber:any , index:number): boolean {
+    const items = this.saleForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element:any) => {
+      if(serialNumber.serial_number == element.serial_number){
+        value = true;
+      }
     });
 
+    return value;
   }
 
 
-
-  onSaleOrderSearchChange() {
-    this.loadOrders();
-
-  }
-
-  selectSaleOrder(order: any) {
-    this.loadOrderById(order.id);
-  }
 
 }
 

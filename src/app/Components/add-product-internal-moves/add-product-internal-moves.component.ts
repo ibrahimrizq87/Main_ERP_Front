@@ -455,6 +455,7 @@ filteredStores: any[] = [];
     itemGroup.patchValue({ product: productBranchStore });
     console.log('productBranchStore', productBranchStore);
     itemGroup.patchValue({ product_id: productBranchStore.branch.id });
+    this.lastSelectedIndex =-1;
   
     // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();

@@ -174,21 +174,16 @@ cancel() {
                 id: item.product?.id,
                 name: item.product?.name,
                 need_serial_number: item.product?.need_serial_number,
-                stock: item.stock,
-                branch: item.branch,
-                product: item.product
               };
   
               // Patch item values
               itemGroup.patchValue({
-                product_id: item.product.id,
+                product_id: item.product_branch.id,
                 product: productData,
                 price: item.price,
                 amount: item.quantity,
                 serialNumbers: item.productSerialNumbers || [],
-                neededSerialNumbers: item.product?.need_serial_number 
-                  ? item.quantity - (item.productSerialNumbers?.length || 0)
-                  : 0
+                neededSerialNumbers: 0
               });
             });
           }
@@ -460,18 +455,29 @@ cancel() {
  }
 
 
+  removeSerialNumber(serialNumber: string, index: number) {
+    const items = this.purchasesBillForm.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    const serialNumbers = item.get('serialNumbers')?.value;
+    if (serialNumbers && Array.isArray(serialNumbers)) {
+      const tempList = serialNumbers.filter(item => item.serial_number !== serialNumber);
+      item.patchValue({ serialNumbers: tempList });
+      item.patchValue({ neededSerialNumbers: neededBars + 1 });
+    }
+  }
 
- removeSerialNumber(serialNumber: string, index: number) {
-   const items = this.purchasesBillForm.get('items') as FormArray;
-   const item = items.at(index) as FormGroup;
-   const neededBars = item.get('neededSerialNumbers')?.value;
-   const serialNumbers = item.get('serialNumbers')?.value;
-   if (serialNumbers && Array.isArray(serialNumbers)) {
-     const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
-     item.patchValue({ serialNumbers: tempList });
-     item.patchValue({ neededSerialNumbers: neededBars + 1 });
-   }
- }
+//  removeSerialNumber(serialNumber: string, index: number) {
+//    const items = this.purchasesBillForm.get('items') as FormArray;
+//    const item = items.at(index) as FormGroup;
+//    const neededBars = item.get('neededSerialNumbers')?.value;
+//    const serialNumbers = item.get('serialNumbers')?.value;
+//    if (serialNumbers && Array.isArray(serialNumbers)) {
+//      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+//      item.patchValue({ serialNumbers: tempList });
+//      item.patchValue({ neededSerialNumbers: neededBars + 1 });
+//    }
+//  }
 
 
    addParcode(index: number , givenBarcode:any) {
@@ -525,14 +531,24 @@ cancel() {
    const items = this.purchasesBillForm.get('items') as FormArray;
    const item = items.at(index) as FormGroup;
    const amount = item.get('amount')?.value || 0;
-   if (item.get('product')?.value?.need_serial_number) {
-     if (typeof amount === 'number' && amount >= 0) {
-       item.patchValue({ neededSerialNumbers: amount })
+    const serialNumbers = item.get('serialNumbers')?.value.length || 0;
 
-     } else {
-       console.warn('Invalid amount:', amount);
-     }
-   }
+  //  if (item.get('product')?.value?.need_serial_number) {
+  //    if (typeof amount === 'number' && amount >= 0) {
+  //      item.patchValue({ neededSerialNumbers: amount })
+
+  //    } else {
+  //      console.warn('Invalid amount:', amount);
+  //    }
+  //  }
+      if (item.get('product')?.value?.need_serial_number) {
+      if (typeof amount === 'number' && amount >= 0) {
+        item.patchValue({ neededSerialNumbers: amount - serialNumbers })
+
+      } else {
+        console.warn('Invalid amount:', amount);
+      }
+    }
 
    // this.calculateTotal();
 
@@ -645,7 +661,7 @@ cancel() {
 
          if (itemValue) {
 
-           formData.append(`items[${index}][product_id]`, itemValue.product_id);
+           formData.append(`items[${index}][product_branch_id]`, itemValue.product_id);
            formData.append(`items[${index}][quantity]`, itemValue.amount || '0');
            formData.append(`items[${index}][price]`, itemValue.price || '0');
            const serialNumbers = itemControl.get('serialNumbers')?.value;

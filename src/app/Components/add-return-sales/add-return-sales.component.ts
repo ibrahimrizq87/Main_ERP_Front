@@ -713,7 +713,7 @@ export class AddReturnSalesComponent implements OnInit {
     if (!itemGroup.get('price')?.value) {
       itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
-
+    this.lastSelectedIndex = -1;
     // this.getSerialNumbers(productBranchStore.product.id, this.selectedStore, this.productIndex);
     this.closeProductModel();
   }
@@ -779,7 +779,6 @@ onFocus(index :number){
   const productId = itemGroup.get('product')?.value?.id;
   const searchText  = itemGroup.get('barcode')?.value || '';
 
-  // console.log(this.selectedSerachIndex ,index);
   if(store_id && productId && this.lastSelectedIndex != index){
     this.productSerialNumbers = [];
     this.searchText = searchText;
