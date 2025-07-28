@@ -7,13 +7,14 @@ label{
 }
 .card-header h5 {
     font-size: 15px;
-  
-    
+     
   }
-  .card-header {
+
+.card-header {
     position: relative;
   }
-  .card-header ::after {
+
+.card-header ::after {
     content: '';         
     position: absolute;
     top: 25%;               
@@ -21,7 +22,7 @@ label{
     height: 50%;          
     width: 3px;           
     background-color: #145388; 
-  }
+}
 
   .disabled-option {
   background-color: #e9ecef;

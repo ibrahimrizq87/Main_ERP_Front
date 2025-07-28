@@ -65,7 +65,7 @@
                                                     <button type="button" class="btn btn-outline-primary w-100"
                                                         (click)="openProductModal(i)">
                                                         {{ item.get('product')?.value ?
-                                                        item.get('product')?.value.product_branch.product.name :
+                                                        item.get('product')?.value.product.name :
                                                         ('PRODUCT' | translate) }}
                                                     </button>
                                                     <input type="hidden" formControlName="product_id"
@@ -73,9 +73,10 @@
                                                 </div>
 
 
+
                                                 <div class="col-md-2">
                                                     <label for="quantity">{{ 'QUANTITY' | translate }}</label>
-                                                    <input formControlName="quantity" type="number" class="form-control"
+                                                    <input (input)="onquantityChange(i)" formControlName="quantity" type="number" class="form-control"
                                                         [readonly]="!item.get('product')?.value"
                                                         [class.is-invalid]="item.get('quantity')?.invalid && isSubmited" />
                                                     <p class="text-warning" *ngIf="!item.get('product')?.value ">
@@ -94,36 +95,35 @@
                                                     </div>
 
 
-                                                    <div class="row rounded border shadow p-2"
-                                                        *ngIf="item.get('serialNumbers')?.value.length>0">
-                                                        <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
-                                                            class="col-md-3 row p-1 m-2 rounded .bg-light border">
-                                                            <div class="col-md-10">
-                                                                {{serialNumber.barcode}}
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <a class="btn-close" aria-label="Close"
-                                                                    (click)="removeSerialNumber(serialNumber.barcode , i)"></a>
+                                                      <div class="row rounded border shadow p-2" *ngIf="item.get('serialNumbers')?.value.length>0">
+                            <div *ngFor="let serialNumber of item.get('serialNumbers')?.value"
+                              class="col-md-3 row p-1 m-2 rounded .bg-light border">
+                              <div class="col-md-10">
+                                {{serialNumber.serial_number}}
+                              </div>
+                              <div class="col-md-2">
+                                <a class="btn-close" aria-label="Close"
+                                  (click)="removeSerialNumber(serialNumber.serial_number , i)"></a>
+                              </div>
+                            </div>
+                          </div>
 
-                                                            </div>
-                                                        </div>
+                          <div class="d-flex align-items-center mb-2 position-relative">
+                            <input type="text" class="form-control" formControlName="barcode"
+                              placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
+                              (input)="searchSerialNumber($event ,i)" />
 
-                                                    </div>
+                            <ul *ngIf="selectedSerachIndex == i" class="list-group position-absolute w-100 shadow"
+                              style="z-index: 1050; top: 100%; text-align: center;">
 
-
-                                                    <div class="d-flex align-items-center mb-2">
-                                                        <input formControlName="barcode" list="barcodeList" type="text"
-                                                            class="form-control me-2" placeholder="Enter barcode"
-                                                            (change)="onBarcodeSelect($event ,i)" />
-                                                        <datalist id="barcodeList">
-                                                            <option
-                                                                *ngFor="let barcode of item.get('productSerialNumbers')?.value"
-                                                                [value]="barcode.serial_number">
-                                                                {{ barcode.serial_number }}
-                                                            </option>
-                                                        </datalist>
-                                                    </div>
-
+                              <li *ngFor="let option of productSerialNumbers" class="list-group-item" [ngClass]="{
+                                'list-group-item-action': !isOptionDisabled(option , i),
+                                'disabled-option': isOptionDisabled(option , i)}" [style.cursor]="isOptionDisabled(option , i) ? 'not-allowed' : 'pointer'"
+                                (click)="!isOptionDisabled(option , i) && selectOption(option , i)">
+                                {{ option.serial_number }}
+                              </li>
+                            </ul>
+                          </div>
                                                 </div>
 
                                                 <!-- Remove Item -->
@@ -185,7 +185,9 @@
                     <thead class="table-dark">
                         <tr>
                             <!-- <th>#</th> -->
-                            <th>Product ID</th>
+                            <th>Barcode</th>
+                            <th>code</th>
+
                             <th>Product Name</th>
                             <th>Stock</th>
                             <th>Color</th>
@@ -193,27 +195,22 @@
 
                         </tr>
                     </thead>
-                    <tbody>
-                        
-                        <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
-                            <td>{{ branch.product_branch.code }}</td>
-                            <td>{{ branch.product_branch.product.name }}</td>
-                            <td>{{ branch.product_branch.stock }}</td>
-                            <td *ngIf="branch.product_branch.product_color">{{
-                                branch.product_branch.product_color.color.color}}</td>
-                            <td *ngIf="!branch.product_branch.product_color"> -- </td>
-
-                            <td>
-                                <span
-                                    *ngFor="let determinant of branch.product_branch.determinantValues; let i = index">
-                                    <span class="badge bg-info text-dark me-1">
-                                        {{ determinant.determinantValue.determinant.name }}: {{
-                                        determinant.determinantValue.value }}
-                                    </span>
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
+                   <tbody>
+            <tr *ngFor="let branch of filteredProducts" (click)="selectProduct(branch)" style="cursor: pointer;">
+              <td><strong>{{ branch.branch.barcode }}</strong></td>
+              <td>{{ branch.branch.code }}</td>
+              <td>{{ branch.product.name }}</td>
+              <td>{{ branch.stock }}</td>
+              <td>{{ branch.branch.product_color ? branch.branch.color.color : " -- "}}</td>
+              <td>
+                <span *ngFor="let determinant of branch.branch.determinants; let i = index">
+                  <span class="badge bg-info text-dark me-1">
+                    {{ determinant.determinant }}: {{ determinant.value }}
+                  </span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
                 </table>
 
             </div>

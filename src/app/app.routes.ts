@@ -178,6 +178,8 @@ import { FixedAssetsExpensesComponent } from './Components/fixed-assets-expenses
 import { EarningsAndLossesComponent } from './Components/earnings-and-losses/earnings-and-losses.component';
 import { AttendanceSheetOperationsComponent } from './Components/attendance-sheet-operations/attendance-sheet-operations.component';
 import { UpdateReturnPurchaseComponent } from './Components/update-return-purchase/update-return-purchase.component';
+import { UpdateSaleOrderComponent } from './Components/update-sale-order/update-sale-order.component';
+import { UpdatePurchaseOrderComponent } from './Components/update-purchase-order/update-purchase-order.component';
 
 
 export const routes: Routes = [
@@ -207,10 +209,13 @@ export const routes: Routes = [
 
             { path: "add-purchase-order", component: AddPurchaseOrderComponent },
             { path: "purchase-order", component: PurchaseOrderComponent },
+            { path: "update-purchase-order/:id", component: UpdatePurchaseOrderComponent },
 
             
             { path: "add-sale-order", component: AddSaleOrderComponent },
             { path: "sale-order", component: SaleOrderComponent },
+            { path: "update-sale-order/:id", component: UpdateSaleOrderComponent },
+            
 
             { path: "attendance-operations", component: AttendanceSheetOperationsComponent },
             

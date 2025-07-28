@@ -45,6 +45,12 @@ export class SaleOrdersService {
     return this._HttpClient.post(`${this.baseURL}/general/sale-orders`, salesData ,{ headers:this.getHeadersWithToken() })
   }
 
+
+  updateSaleOrder(salesData: FormData , id:string): Observable<any> {
+    salesData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/sale-orders/${id}`, salesData ,{ headers:this.getHeadersWithToken() })
+  }
+
   getAllSaleOrders( 
       clientName: string = '',
       startDate: string = '',

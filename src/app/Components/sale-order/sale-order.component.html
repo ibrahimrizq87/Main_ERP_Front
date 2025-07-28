@@ -112,7 +112,7 @@
             <a *ngIf="_PermissionService.hasPermission('sale_order' , 'details_sale_order')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showSale', sale.id]">
               <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
-            <a  *ngIf="_PermissionService.hasPermission('sale_order' , 'edit_sale_order')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateSale', sale.id]">
+            <a  *ngIf="_PermissionService.hasPermission('sale_order' , 'edit_sale_order')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-sale-order', sale.id]">
               <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
             </a>
             <i  *ngIf="_PermissionService.hasPermission('sale_order' , 'edit_sale_order')" 

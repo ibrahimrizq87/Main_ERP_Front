@@ -85,10 +85,42 @@ filteredStores: any[] = [];
         console.log('moveData:' , response.data);
         this.productMoves.patchValue({
           supervisor_name: moveData.supervisor_name,
-          from_store_id: moveData.from_store_id?.id,
-          to_store_id: moveData.to_store_id?.id,
+          from_store_id: moveData.from_store?.id,
+          to_store_id: moveData.to_store?.id,
           note: moveData.note,
         });
+
+
+
+
+
+          while (this.items.length !== 0) {
+            this.items.removeAt(0);
+          }
+
+
+
+          moveData.items.forEach((item: any) => {
+            const newItem = this.createItem();
+            this.items.push(newItem);
+
+            const index = this.items.length - 1;
+            const itemGroup = this.items.at(index) as FormGroup;
+            itemGroup.patchValue({
+              product_id: item.product_branch.id,
+              product: item.product_branch,
+              color: item.product_branch?.color ? {
+                color: item.product_branch.color.color,
+                image: item.product_branch.color.image
+              } : null,
+              quantity: item.quantity,
+              serialNumbers: item.serials || [],
+              neededSerialNumbers: 0
+            });
+          });
+
+
+        
 
         this.selectedFromStore =moveData.from_store;
         this.selectedToStore = moveData.to_store;
@@ -221,48 +253,18 @@ filteredStores: any[] = [];
       }
     }
   }
-
-
   removeSerialNumber(serialNumber: string, index: number) {
     const items = this.productMoves.get('items') as FormArray;
     const item = items.at(index) as FormGroup;
     const neededBars = item.get('neededSerialNumbers')?.value;
     const serialNumbers = item.get('serialNumbers')?.value;
     if (serialNumbers && Array.isArray(serialNumbers)) {
-      const tempList = serialNumbers.filter(item => item.barcode !== serialNumber);
+      const tempList = serialNumbers.filter(item => item.serial_number !== serialNumber);
       item.patchValue({ serialNumbers: tempList });
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number) {
-    const items = this.productMoves.get('items') as FormArray;
-    const item = items.at(index) as FormGroup;
 
-    const barcode = item.get('barcode')?.value;
-    const neededBars = item.get('neededSerialNumbers')?.value;
-    if (neededBars == 0) {
-
-      return;
-    }
-    let tempList = item.get('serialNumbers')?.value || [];
-
-    tempList.forEach(() => {
-
-    });
-
-
-
-    if (barcode) {
-      tempList.push({ barcode: barcode })
-      item.patchValue({ serialNumbers: tempList });
-      console.log(tempList);
-      item.patchValue({ barcode: null });
-      item.patchValue({ neededSerialNumbers: neededBars - 1 });
-
-
-    }
-
-  }
 
 
   onquantityChange(index: number): void {
@@ -277,17 +279,8 @@ filteredStores: any[] = [];
       quantity = stock;
       item.patchValue({ quantity: stock });
     }
-    const priceRanges = item.get('priceRanges')?.value || [];
-    priceRanges.forEach((price: any) => {
-      console.log('quantity_from', price.quantity_from);
-      console.log('quantity_to', price.quantity_to);
 
-      console.log('quantity', quantity);
-      if (price.quantity_from < quantity && price.quantity_to >= quantity) {
-        item.patchValue({ price: price.price });
-      }
-    })
-    if (item.get('product')?.value?.product_branch.product.need_serial_number) {
+    if (item.get('product')?.value?.product.need_serial_number) {
       if (typeof quantity === 'number' && quantity >= 0) {
         item.patchValue({ neededSerialNumbers: quantity - serialNumbers })
 
@@ -295,8 +288,6 @@ filteredStores: any[] = [];
         console.warn('Invalid quantity:', quantity);
       }
     }
-
-   
 
   }
  
@@ -358,7 +349,7 @@ filteredStores: any[] = [];
             if (serialNumbers.length > 0) {
 
               serialNumbers.forEach((item: any, internalIndex: number) => {
-                formData.append(`items[${index}][serial_numbers][${internalIndex}][serial_number]`, item.barcode);
+                formData.append(`items[${index}][serial_numbers][${internalIndex}]`, item.id);
 
               });
 
@@ -465,9 +456,9 @@ filteredStores: any[] = [];
 
     itemGroup.patchValue({ product: productBranchStore });
     console.log('productBranchStore', productBranchStore);
-    itemGroup.patchValue({ product_id: productBranchStore.product_branch.id });
+    itemGroup.patchValue({ product_id: productBranchStore.branch.id });
   
-    this.getSerialNumbers(productBranchStore.product_branch.product.id, this.selectedStore, this.productIndex);
+    this.lastSelectedIndex =-1;
     this.closeProductModel();
   }
   productIndex: number = -1;
@@ -495,6 +486,134 @@ filteredStores: any[] = [];
    
     this._Router.navigate(['/dashboard/productInternalMoves/waiting']); 
   }  
+
+
+
+
+
+
+
+
+  searchText: string = '';
+  selectedSerachIndex = -1;
+  lastSelectedIndex = -1;
+
+
+
+  productSerialNumbers: any = [];
+  loadingSerialNumbers = false;
+
+  searchSerialNumber(event: Event, index: number) {
+    this.searchText = (event.target as HTMLSelectElement).value;
+    this.selectedSerachIndex = index;
+    const itemsArray = this.productMoves.get('items') as FormArray;
+
+    const itemGroup = itemsArray.at(index) as FormGroup;
+    const store_id = this.productMoves.get('store_id')?.value;
+    const productId = itemGroup.get('product')?.value?.id;
+
+    if (store_id && productId) {
+      this.loadSerialNumbers(store_id, productId);
+    }
+  }
+
+  onFocus(index: number) {
+    const itemsArray = this.productMoves.get('items') as FormArray;
+    this.selectedSerachIndex = index;
+
+    const itemGroup = itemsArray.at(index) as FormGroup;
+    const store_id = this.productMoves.get('from_store_id')?.value;
+    const productId = itemGroup.get('product')?.value?.product.id;
+    const searchText = itemGroup.get('barcode')?.value || '';
+    // const serialNumbers = itemGroup.get('serialNumbers')?.value || '';
+
+  console.log(store_id ,productId, searchText);
+
+
+
+
+
+  
+    
+
+    if (store_id && productId && this.lastSelectedIndex != index) {
+      this.productSerialNumbers = [];
+      this.searchText = searchText;
+      this.loadSerialNumbers(store_id, productId);
+    }
+    this.lastSelectedIndex = index;
+
+  }
+  selectOption(serialNumber: any, index: number, GivenserialNumber: any = null) {
+    const items = this.productMoves.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+
+    const CurrentSerialNumber = GivenserialNumber ? GivenserialNumber : serialNumber;
+    const neededBars = item.get('neededSerialNumbers')?.value;
+    if (neededBars == 0) {
+      return;
+    }
+    let tempList = item.get('serialNumbers')?.value || [];
+    console.log(CurrentSerialNumber);
+
+    if (CurrentSerialNumber) {
+      tempList.push({ serial_number: CurrentSerialNumber.serial_number, id: CurrentSerialNumber.id })
+      item.patchValue({ serialNumbers: tempList });
+      console.log(tempList);
+      item.patchValue({ barcode: null });
+      item.patchValue({ neededSerialNumbers: neededBars - 1 });
+
+
+    }
+
+  }
+
+  onInputBlur(): void {
+    setTimeout(() => {
+      this.selectedSerachIndex = -1;
+    }, 200);
+  }
+
+
+
+  loadSerialNumbers(store_id: string, productId: string) {
+    this.loadingSerialNumbers = true;
+
+    this._ProductsService.getSerialNumbers(productId, store_id,
+      this.searchText,
+      'sale'
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          this.productSerialNumbers = response.data.serial_numbers;
+          console.log(this.productSerialNumbers);
+        }
+        this.loadingSerialNumbers = false;
+      },
+      error: (err) => {
+        console.error('Error loading serial numbers:', err);
+        this.toastr.error('Failed to load serial numbers', 'Error');
+        this.loadingSerialNumbers = false;
+      }
+    });
+
+  }
+
+  isOptionDisabled(serialNumber: any, index: number): boolean {
+    const items = this.productMoves.get('items') as FormArray;
+    const item = items.at(index) as FormGroup;
+    const tempList = item.get('serialNumbers')?.value || [];
+    let value = false;
+    tempList.forEach((element: any) => {
+      if (serialNumber.serial_number == element.serial_number) {
+        value = true;
+      }
+    });
+
+    return value;
+  }
+
+
 }
 
 

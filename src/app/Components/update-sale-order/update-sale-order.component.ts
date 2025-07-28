@@ -4,7 +4,7 @@ import { StoreService } from '../../shared/services/store.service';
 import { CurrencyService } from '../../shared/services/currency.service';
 import { ProductsService } from '../../shared/services/products.service';
 import { AccountService } from '../../shared/services/account.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,13 +19,15 @@ import { ToastrService } from 'ngx-toastr';
 import { SaleOrdersService } from '../../shared/services/sale_orders.service';
 
 @Component({
-  selector: 'app-add-sale-order',
+  selector: 'app-update-sale-order',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, FormsModule, TranslateModule ],
-  templateUrl: './add-sale-order.component.html',
-  styleUrl: './add-sale-order.component.css'
+  templateUrl: './update-sale-order.component.html',
+  styleUrl: './update-sale-order.component.css'
 })
-export class AddSaleOrderComponent {  
+export class UpdateSaleOrderComponent {
+
+
   private productSubscription: Subscription = Subscription.EMPTY;
   isSubmited = false;
   serialNumber: SerialNumber[] = [];
@@ -69,6 +71,8 @@ export class AddSaleOrderComponent {
     private _Router: Router,
     private cdr: ChangeDetectorRef,
     private _CheckService: CheckService,
+    private route: ActivatedRoute,
+    
     private toastr: ToastrService,
 
   ) {
@@ -97,7 +101,86 @@ export class AddSaleOrderComponent {
     this.loadStores();
     this.loadSuppliers();
     this.loadDelegates();
+
+      const unitId = this.route.snapshot.paramMap.get('id');
+    if (unitId) {
+      this.loadSaleOrder(unitId);
+    }
    }
+
+   loadSaleOrder(id:string) {
+    this._SaleOrdersService.getSaleOrderById(id).subscribe({
+      next: (response) => {
+        const orderData = response.data;
+        console.log('order_data:' , orderData);
+
+
+
+        this.saleForm.patchValue({
+          invoice_date: orderData.date,
+          vendor_id: orderData.client.id,
+          store_id: orderData.store.id,
+          delegate_id: orderData.delegate?.id,
+          notes: orderData.note,
+        });
+        this.selectedClient = {
+          account:orderData.client
+        };
+        if(orderData.delegate){
+          this.selecteddelegateAccount = {
+            id:orderData.delegate.id,
+            name:orderData.delegate.name,
+            account:orderData.delegate,
+            currency:orderData.currency
+
+          };
+        }
+
+          while (this.items.length !== 0) {
+            this.items.removeAt(0);
+          }
+
+
+
+  
+          // Add items from sale data
+          orderData.items.forEach((item: any) => {
+
+            const newItem = this.createItem();
+            this.items.push(newItem);
+            
+            const index = this.items.length - 1;
+            const itemGroup = this.items.at(index) as FormGroup;
+  
+            // Prepare product data for the form
+            const productData = {
+              id: item.product.id,
+              name: item.product.name,
+              stock: item.product.stock,
+              need_serial_number: item.product.need_serial_number,
+            };
+  
+            // Patch item values
+            itemGroup.patchValue({
+              product_id: item.branch.id,
+
+              product: productData,
+              color: item.branch.color,
+              amount: item.quantity,
+              serialNumbers: item.serialNumbers || [],
+              neededSerialNumbers:0
+            });
+
+          });
+
+
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
 
   loadSuppliers(): void {
     this._ClientService.getClientsForSales(
@@ -233,43 +316,43 @@ export class AddSaleOrderComponent {
   }
   searchTerm = new FormControl('');
 
-  onBarcodeSelect(barcode: Event, index: number) {
-    {
-      const selectedValue = (barcode.target as HTMLSelectElement).value;
-      const items = this.saleForm.get('items') as FormArray;
-      const item = items.at(index) as FormGroup;
+  // onBarcodeSelect(barcode: Event, index: number) {
+  //   {
+  //     const selectedValue = (barcode.target as HTMLSelectElement).value;
+  //     const items = this.saleForm.get('items') as FormArray;
+  //     const item = items.at(index) as FormGroup;
 
-      const neededBars = item.get('neededSerialNumbers')?.value;
-      if (neededBars == 0) {
-        item.patchValue({ barcode: null });
-        return;
-      }
-      let tempList = item.get('serialNumbers')?.value || [];
-      let isdublicated = false;
-      tempList.forEach((item: any) => {
-        if (item.barcode == selectedValue) {
-          this.toastr.error('هذا السيريال موجود بالفعل');
-          isdublicated = true;
-          return;
-        }
-      });
+  //     const neededBars = item.get('neededSerialNumbers')?.value;
+  //     if (neededBars == 0) {
+  //       item.patchValue({ barcode: null });
+  //       return;
+  //     }
+  //     let tempList = item.get('serialNumbers')?.value || [];
+  //     let isdublicated = false;
+  //     tempList.forEach((item: any) => {
+  //       if (item.barcode == selectedValue) {
+  //         this.toastr.error('هذا السيريال موجود بالفعل');
+  //         isdublicated = true;
+  //         return;
+  //       }
+  //     });
 
-      if (isdublicated) {
-        item.patchValue({ barcode: null });
+  //     if (isdublicated) {
+  //       item.patchValue({ barcode: null });
 
-        return;
-      }
-      if (selectedValue) {
-        tempList.push({ barcode: selectedValue })
-        item.patchValue({ serialNumbers: tempList });
-        console.log(tempList);
-        item.patchValue({ barcode: null });
-        item.patchValue({ neededSerialNumbers: neededBars - 1 });
+  //       return;
+  //     }
+  //     if (selectedValue) {
+  //       tempList.push({ barcode: selectedValue })
+  //       item.patchValue({ serialNumbers: tempList });
+  //       console.log(tempList);
+  //       item.patchValue({ barcode: null });
+  //       item.patchValue({ neededSerialNumbers: neededBars - 1 });
 
 
-      }
-    }
-  }
+  //     }
+  //   }
+  // }
 
 
   removeSerialNumber(serialNumber: string, index: number) {
@@ -283,27 +366,7 @@ export class AddSaleOrderComponent {
       item.patchValue({ neededSerialNumbers: neededBars + 1 });
     }
   }
-  addParcode(index: number) {
-    const items = this.saleForm.get('items') as FormArray;
-    const item = items.at(index) as FormGroup;
 
-    const barcode = item.get('barcode')?.value;
-    const neededBars = item.get('neededSerialNumbers')?.value;
-    if (neededBars == 0) {
-      return;
-    }
-    let tempList = item.get('serialNumbers')?.value || [];
-    tempList.forEach(() => {
-    });
-
-    if (barcode) {
-      tempList.push({ barcode: barcode })
-      item.patchValue({ serialNumbers: tempList });
-      console.log(tempList);
-      item.patchValue({ barcode: null });
-      item.patchValue({ neededSerialNumbers: neededBars - 1 });
-    }
-  }
 
 
   onAmountChange(index: number): void {
@@ -314,6 +377,7 @@ export class AddSaleOrderComponent {
     const stock = item.get('product')?.value.stock;
     const serialNumbers = item.get('serialNumbers')?.value.length || 0;
 
+console.log(stock);
     if (amount > stock) {
       amount = stock;
       item.patchValue({ amount: stock });
@@ -465,7 +529,10 @@ export class AddSaleOrderComponent {
 
       if (!error) {
 
-        this._SaleOrdersService.addSaleOrder(formData).subscribe({
+        const unitId = this.route.snapshot.paramMap.get('id');
+        if(unitId){
+
+        this._SaleOrdersService.updateSaleOrder(formData ,unitId).subscribe({
           next: (response) => {
             if (response) {
               this.toastr.success('تم اضافه الفاتوره بنجاح');
@@ -493,7 +560,7 @@ export class AddSaleOrderComponent {
             console.error(this.msgError);
           },
 
-        });
+        });}
       }
     }  else {
       Object.keys(this.saleForm.controls).forEach((key) => {

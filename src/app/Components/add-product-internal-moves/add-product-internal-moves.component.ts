@@ -35,12 +35,12 @@ export class AddProductInternalMovesComponent implements OnInit, AfterViewInit  
   dynamicInputs: FormArray<FormControl>; 
   inputDisabled: boolean[] = []; 
  
- ///////////////////////
- selectedFromStore: any = null;
-selectedToStore: any = null;
-storeModalTarget: 'from' | 'to' = 'from';
-storeSearchQuery: string = '';
-filteredStores: any[] = [];
+
+  selectedFromStore: any = null;
+  selectedToStore: any = null;
+  storeModalTarget: 'from' | 'to' = 'from';
+  storeSearchQuery: string = '';
+  filteredStores: any[] = [];
 
   constructor(private fb: FormBuilder,
     private _StoreService: StoreService,
@@ -85,24 +85,14 @@ filteredStores: any[] = [];
     if (this.storeModalTarget === 'from') {
       this.selectedFromStore = store;
       this.productMoves.get('from_store_id')?.setValue(store.id);
-      // this.onStoreChangeByStore(store.id.toString()); // Convert store.id to a string
-      this.loadProducts(store.id.toString()); // Load products for the selected store
+      this.loadProducts(store.id.toString()); 
     } else {
       this.selectedToStore = store;
       this.productMoves.get('to_store_id')?.setValue(store.id);
     }
-    this.closeStoreModal(); // Close modal after selection
+    this.closeStoreModal();
   }
-  // onStoreChangeByStore(storeId: string): void {
-  //   this.selectedStore = storeId;
-  //   this.loadProducts(storeId);
-  // }  
-  // filterStores() {
-  //   const query = this.storeSearchQuery.toLowerCase();
-  //   this.filteredStores = this.stores.filter(store =>
-  //     store.name.toLowerCase().includes(query) || store.id.toString().includes(query)
-  //   );
-  // }
+  
   loadStores() {
     this._StoreService.getAllStores(
       'all',

@@ -43,6 +43,11 @@ export class PurchaseOrdersService {
   }
 
 
+  updatePurchaseOrder(purchasesData: FormData  , id:string): Observable<any> {
+    purchasesData.append('_method', 'PUT');
+    return this._HttpClient.post(`${this.baseURL}/general/purchases-orders/${id}`, purchasesData ,{headers: this.getHeadersWithToken()  })
+  }
+
 
   getAllPurchaseOrder(
       vendorName: string = '',
