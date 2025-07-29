@@ -19,13 +19,13 @@ import { AccountService } from '../../shared/services/account.service';
 })
 export class SalariesReportsComponent implements OnInit {
   employees: any[] = [];
-  selectedEmployeeId: string = '';
+  // selectedEmployeeId: string = '';
   selectedMonth: string = this.getCurrentMonth();
   salariesData: any = null;
   isLoading: boolean = false;
   actionType = 'not_paid';
 
-
+selectedEmployeeId ='all';
   savedSalariesData: any;
   constructor(
     private _SalaryService: SalaryService,
@@ -62,6 +62,8 @@ export class SalariesReportsComponent implements OnInit {
       next: (response) => {
         if (response) {
           this.employees = response.data.employees;
+          console.log(this.employees);
+
         }
       },
       error: (err) => {
@@ -106,13 +108,6 @@ export class SalariesReportsComponent implements OnInit {
       alert('make sure to provide all data');
       completeData = false;
     }
-
-    //  'account_id' => 'required|exists:accounts,id',
-    //     'currency_price' => 'nullable|numeric|min:0',
-
-    //     'salaries' => 'required|array',
-    //     'salaries.*.salary_id' => 'required|exists:salaries,id',
-    //     'salaries.*.currency_price' =>  'nullable|numeric|min:0',
     formData.append('salaries[0][salary_id]', salary.id);
     if (salary.need_currency_value) {
       formData.append('salaries[0][currency_price_value]', salary.currnceyPrice);

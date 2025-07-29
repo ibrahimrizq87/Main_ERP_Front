@@ -54,7 +54,7 @@
             <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
                 <option value="" selected>{{ 'ALL_EMPLOYEES' | translate }}</option>
                 <option *ngFor="let employee of employees" [value]="employee.id">
-                    {{ employee?.account?.name }}
+                    {{ employee?.name }}
                 </option>
             </select>
         </div>

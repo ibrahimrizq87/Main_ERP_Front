@@ -55,7 +55,7 @@
                         <option value="all">{{ 'ALL_EMPLOYEES' | translate }}</option>
 
                         <option *ngFor="let employee of employees" [value]="employee.id">
-                            {{ employee?.account?.name }}
+                            {{ employee?.name }}
                         </option>
                     </select>
                 </div>

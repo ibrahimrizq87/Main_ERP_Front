@@ -112,7 +112,7 @@ export class VecationRequestsComponent implements OnInit {
       next: (response) => {
         if (response) {
           console.log(response);
-          this.employees = response.data;
+          this.employees = response.data.employees;
         }
       },
       error: (err) => {
