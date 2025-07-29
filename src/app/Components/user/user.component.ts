@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule, NgxPaginationModule,TranslateModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })

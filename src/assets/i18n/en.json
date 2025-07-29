@@ -1083,6 +1083,12 @@
   "NEXT": "Next",
   "ALL_TYPES":"All Types",
   "DELEGATE_CAR":"Delegate Car",
-  "EARNING_AND_LOSSES":"Earnings and Losses"
+  "EARNING_AND_LOSSES":"Earnings and Losses",
+  "CASHIER":"Cashier",
+  "ATTENDANCE_OPERATIONS":"Attendance Operations",
+  "MANAGE_USERS":"Manage Users",
+  
+    "ADD_USER": "Add Users"
+  
 
 }

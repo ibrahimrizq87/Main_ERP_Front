@@ -400,7 +400,7 @@ export const routes: Routes = [
             { path: "update-return-sale/:id", component: UpdateReturnSalesComponent },
             { path: "show-return-sale/:id", component: ViewReturnSalesComponent },
 
-
+            { path: "", component: UserComponent },
             { path: "users", component: UserComponent },
             { path: "addUser", component: AddUserComponent },
             { path: "updateUser/:id", component: UpdateUserComponent },

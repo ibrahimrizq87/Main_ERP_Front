@@ -1074,6 +1074,12 @@
   "NEXT": "التالي",
   "ALL_TYPES":"جميع الأنواع",
   "DELEGATE_CAR":" سيارة المندوب",
-  "EARNING_AND_LOSSES":"الأرباح والخسائر"
+  "EARNING_AND_LOSSES":"الأرباح والخسائر",
+  "CASHIER":"أمين الصندوق",
+  "ATTENDANCE_OPERATIONS":"عمليات الحضور",
+  "MANAGE_USERS":"إدارة المستخدمين",
+
+    "ADD_USER": "إضافة مستخدم"
+  
 
 }

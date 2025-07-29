@@ -1,92 +1,97 @@
-#dashboard{
+#dashboard {
     background-color: #F8FAF9;
-    /* direction: rtl; */
+    direction: rtl;
 }
-.logoimg{
-    width:100px;
+
+.logoimg {
+    width: 100px;
 }
+
 .sidebar {
     background-color: #FFFFFF;
     height: 100vh;
-    overflow:auto;
-   
+    overflow: auto;
     padding-top: 10px;
     border-right: 1px solid #ddd;
 }
-.nav-item{
+
+.nav-item {
     cursor: pointer;
 }
+
+/* Base nav-link styling */
 .sidebar .nav-link {
     color: #333;
     font-weight: bold;
     font-size: 14px;
     padding: 8px;
-    border-radius: 15px;
-    transition: all 0.3s ease; 
+    border-radius: 3px;
+    transition: all 0.3s ease;
 }
-.icon{
+
+.icon {
     padding: 8px;
     background-color: #FFFFFF;
-    border-radius: 20%;
+    border-radius: 5%;
 }
 
-.sidebar .nav-link:hover, .nav-link.active {
-    background-color: #145388;
+/* Hover and active states for main nav-item elements (parent dropdowns) */
+.sidebar .nav-item > .nav-link:hover,
+.sidebar .nav-item:has(.nav-item.nested .nav-link.active) > .nav-link {
+    background-color: #003E29;
     color: white !important;
-  .nav-link{
-    color: white !important; 
-  }
-    .icon{
-       
-        padding: 8px;
-        background-color: #FFFFFF;
-        color:black !important;
-        border-radius: 20% !important;
-    }
-
 }
-.nested{
+
+.sidebar .nav-item > .nav-link:hover .icon,
+.sidebar .nav-item:has(.nav-item.nested .nav-link.active) > .nav-link .icon {
+    background-color: #FFFFFF;
+    color: black !important;
+    border-radius: 5% !important;
+}
+
+/* Override for nested items to have different styling */
+.sidebar .nav-item.nested > .nav-link:hover,
+.sidebar .nav-item.nested > .nav-link.active {
+    background-color: transparent !important;
+    color: #003E29 !important;
+    font-weight: bold !important;
+}
+
+/* Special handling for nested-inside items (different styling) */
+.sidebar .nav-item.nested-inside .nav-link:hover,
+.sidebar .nav-item.nested-inside .nav-link.active {
+    background-color: #e9ecef;
+    color: #003E29 !important;
+    border-radius: 3px;
+}
+
+/* Layout classes */
+/* .nested {
     margin-left: 40px !important;
-  
-}
-.nested-inside{
-    margin-left: 10px !important;
-  
-}
-.nested-inside a{
+} */
+
+/* .nested-inside { */
+    /* margin-left: 10px !important; */
+    /* border-left: 2px solid #ccc; */
+    /* padding-left: 10px; */
+/* } */
+
+/* Font size adjustments */
+.nested .nav-link,
+.nested-inside .nav-link {
     font-size: 13px !important;
     font-weight: 500 !important;
-} 
-
-.nested a{
-    font-size: 13px !important;
-    font-weight: 500 !important;
 }
-.nested .nav-link:hover, .nav-link.active {
-   
-background-color: transparent !important;
-color:#145388  !important;
-font-weight: bold !important;
 
+.nested-inside .nav-link {
+    padding: 6px 10px;
 }
+
 .profile-content {
     background-color: #FDFEFE;
 }
 
-
-.nested-inside {
-    border-left: 2px solid #ccc;
-    padding-left: 10px;  /* Reduced spacing */
-  }
-  
-  .nav-link {
+/* Additional utility classes */
+.nav-link {
     transition: background-color 0.3s ease;
-    padding: 6px 10px;  /* Tightened padding for a more compact look */
-    font-size: 14px;    /* Slightly smaller font for better alignment */
-  }
-  
-  .nav-link:hover {
-    background-color: #e9ecef; /* Subtle hover effect */
-    border-radius: 3px;
-  }
-  
+}
