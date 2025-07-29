@@ -715,17 +715,28 @@ storeSearchTerm = '';
     this.closeModal('checkModel');
   }
   closeModal(modalId: string) {
+     this.currentModalId = null;
+  this.isModalOpen = false;
     this.searchQuery ='';
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
       const modal = Modal.getInstance(modalElement);
       modal?.hide();
     }
+      setTimeout(() => {
+    this.updateFocusableElements();
+    this.currentFocusIndex = 0;
+    this.focusCurrentElement();
+  }, 100);
   }
+
+
 
 
   openModal(modalId: string, type: string) {
     this.searchQuery ='';
+    this.currentModalId = modalId;
+    this.isModalOpen = true;
 
     if (modalId == 'checkModel') { } else if (modalId == 'shiftModal') {
       this.selectedPopUP = type;
@@ -742,6 +753,12 @@ storeSearchTerm = '';
       const modal = new Modal(modalElement);
       modal.show();
     }
+
+    setTimeout(() => {
+    this.updateFocusableElements();
+    this.currentFocusIndex = 0;
+    this.focusCurrentElement();
+    }, 100);
   }
 
 
@@ -1143,72 +1160,256 @@ onFocus(index :number){
   /////  keyboard short cuts 
 
 
-  @ViewChild('formRoot') formRoot!: ElementRef;
-  // All form fields (input, select, button, etc.)
-  @ViewChildren('field') fields!: QueryList<ElementRef>;
+  // @ViewChild('formRoot') formRoot!: ElementRef;
+  // // All form fields (input, select, button, etc.)
+  // @ViewChildren('field') fields!: QueryList<ElementRef>;
 
-  private currentFocusIndex = 0;
+  // private currentFocusIndex = 0;
 
-  ngAfterViewInit() {
-    setTimeout(() => this.setInitialFocus(), 0);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.setInitialFocus(), 0);
+  // }
 
-    private getFocusableElements(): HTMLElement[] {
-    if (!this.formRoot) return [];
-    const formElement = this.formRoot.nativeElement as HTMLElement;
-    return Array.from(formElement.querySelectorAll('[data-focusable="true"]')) as HTMLElement[];
-  }
+  //   private getFocusableElements(): HTMLElement[] {
+  //   if (!this.formRoot) return [];
+  //   const formElement = this.formRoot.nativeElement as HTMLElement;
+  //   return Array.from(formElement.querySelectorAll('[data-focusable="true"]')) as HTMLElement[];
+  // }
 
-  private setInitialFocus(index: number = 0) {
-    const elements = this.getFocusableElements();
-    if (elements[index]) {
-      elements[index].focus();
-      this.currentFocusIndex = index;
+  // private setInitialFocus(index: number = 0) {
+  //   const elements = this.getFocusableElements();
+  //   if (elements[index]) {
+  //     elements[index].focus();
+  //     this.currentFocusIndex = index;
+  //   }
+  // }
+
+
+
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeydown(event: KeyboardEvent) {
+  //   const focusables = this.getFocusableElements();
+  //   console.log(event)
+  //   if (!focusables.length) return;
+
+  //   const targetInsideForm = this.formRoot.nativeElement.contains(event.target);
+  //   if (!targetInsideForm) return;
+
+  //   // Custom key mapping
+  //   if (event.key === 's') {
+  //     event.preventDefault();
+  //     this.moveFocus(1);
+  //   } else if (event.key === 'w') {
+  //     event.preventDefault();
+  //     this.moveFocus(-1);
+  //   } else if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     this.activateElement(focusables[this.currentFocusIndex]);
+  //   }
+  // }
+
+  // private moveFocus(direction: number) {
+  //   const focusables = this.getFocusableElements();
+  //   if (!focusables.length) return;
+
+  //   this.currentFocusIndex =
+  //     (this.currentFocusIndex + direction + focusables.length) % focusables.length;
+
+  //   focusables[this.currentFocusIndex]?.focus();
+  // }
+
+  // private activateElement(element: HTMLElement) {
+  //   const tag = element.tagName;
+  //   if (tag === 'BUTTON') {
+  //     element.click();
+  //   } else if (tag === 'SELECT') {
+  //     element.focus(); // Or simulate "open" if needed
+  //   }
+  // }
+
+
+  // Add these to your component class
+
+private currentFocusIndex = 0;
+private focusableElements: HTMLElement[] = [];
+private isModalOpen = false;
+private currentModalId: string | null = null;
+
+ngAfterViewInit() {
+  this.initializeKeyboardNavigation();
+}
+
+private initializeKeyboardNavigation() {
+  setTimeout(() => {
+    this.updateFocusableElements();
+    if (this.focusableElements.length > 0) {
+      this.focusCurrentElement();
     }
+  }, 0);
+}
+// private updateFocusableElements() {
+//   const rootElement = this.currentModalId 
+//     ? document.getElementById(this.currentModalId)
+//     : this.formRoot?.nativeElement;
+
+//   if (!rootElement) return;
+
+//   // Cast NodeListOf<Element> to Array<HTMLElement>
+//   this.focusableElements = Array.from(
+//     rootElement.querySelectorAll<HTMLElement>(
+//       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+//     )
+//   ).filter((el: HTMLElement) => {
+//     const style = getComputedStyle(el as Element);
+//     return !el.hasAttribute('disabled') && 
+//            style.display !== 'none' &&
+//            style.visibility !== 'hidden';
+//   });
+// }
+@ViewChild('formRoot', { static: false }) formRoot!: ElementRef<HTMLElement>;
+private updateFocusableElements() {
+  const rootElement = this.currentModalId 
+    ? document.getElementById(this.currentModalId)
+    : this.formRoot?.nativeElement;
+
+  if (!rootElement) return;
+
+  // Cast NodeListOf<Element> to Array<HTMLElement>
+  this.focusableElements = Array.from(
+    rootElement.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((el: HTMLElement) => {
+    const style = getComputedStyle(el as Element);
+    return !el.hasAttribute('disabled') && 
+           style.display !== 'none' &&
+           style.visibility !== 'hidden';
+  });
+}
+
+private activateCurrentElement() {
+  const element = this.focusableElements[this.currentFocusIndex];
+  if (!element) return;
+
+  if (element.tagName === 'BUTTON') {
+    (element as HTMLButtonElement).click();
+  } else if (element.tagName === 'INPUT' && 
+             (element as HTMLInputElement).type === 'checkbox') {
+    const input = element as HTMLInputElement;
+    input.checked = !input.checked;
+    // Trigger change event if needed
+    input.dispatchEvent(new Event('change'));
+  } else {
+    element.click();
+  }
+}
+
+private focusCurrentElement() {
+  if (this.focusableElements[this.currentFocusIndex]) {
+    this.focusableElements[this.currentFocusIndex].focus();
+  }
+}
+
+@HostListener('document:keydown', ['$event'])
+handleKeydown(event: KeyboardEvent) {
+  // Ignore if typing in an input/textarea
+  const target = event.target as HTMLElement;
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+    if (event.key === 'Escape') {
+      if (this.currentModalId) {
+        this.closeModal(this.currentModalId);
+      }
+    }
+    return;
   }
 
+  // Global shortcuts (work anywhere)
+  switch (event.key) {
+    case 'F1':
+      event.preventDefault();
+      this.addItem();
+      break;
+    case 'F2':
+      event.preventDefault();
+      this.handleForm();
+      break;
+  }
 
-
-  @HostListener('document:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) {
-    const focusables = this.getFocusableElements();
-    console.log(event)
-    if (!focusables.length) return;
-
-    const targetInsideForm = this.formRoot.nativeElement.contains(event.target);
-    if (!targetInsideForm) return;
-
-    // Custom key mapping
-    if (event.key === 's') {
+  // Form navigation
+  switch (event.key) {
+    case 'ArrowDown':
+    case 'ArrowRight':
       event.preventDefault();
       this.moveFocus(1);
-    } else if (event.key === 'w') {
+      break;
+    case 'ArrowUp':
+    case 'ArrowLeft':
       event.preventDefault();
       this.moveFocus(-1);
-    } else if (event.key === 'Enter') {
+      break;
+    case 'Enter':
       event.preventDefault();
-      this.activateElement(focusables[this.currentFocusIndex]);
-    }
+      this.activateCurrentElement();
+      break;
+    case 'Tab':
+      event.preventDefault();
+      if (event.shiftKey) {
+        this.moveFocus(-1);
+      } else {
+        this.moveFocus(1);
+      }
+      break;
+    case 'Escape':
+      if (this.currentModalId) {
+        this.closeModal(this.currentModalId);
+      }
+      break;
   }
+}
 
-  private moveFocus(direction: number) {
-    const focusables = this.getFocusableElements();
-    if (!focusables.length) return;
+private moveFocus(direction: number) {
+  this.currentFocusIndex = 
+    (this.currentFocusIndex + direction + this.focusableElements.length) % 
+    this.focusableElements.length;
+  this.focusCurrentElement();
+}
 
-    this.currentFocusIndex =
-      (this.currentFocusIndex + direction + focusables.length) % focusables.length;
+// private activateCurrentElement() {
+//   const element = this.focusableElements[this.currentFocusIndex];
+//   if (!element) return;
 
-    focusables[this.currentFocusIndex]?.focus();
+//   if (element.tagName === 'BUTTON') {
+//     element.click();
+//   } else if (element.tagName === 'INPUT' && element.type === 'checkbox') {
+//     (element as HTMLInputElement).checked = !(element as HTMLInputElement).checked;
+//   } else {
+//     element.click(); // Fallback for other elements
+//   }
+// }
+
+// Modify your modal open/close methods
+
+
+// Add these shortcuts for common actions
+@HostListener('document:keydown.control.n', ['$event'])
+addNewItemShortcut(event: KeyboardEvent) {
+  event.preventDefault();
+  this.addItem();
+}
+
+@HostListener('document:keydown.control.s', ['$event'])
+saveFormShortcut(event: KeyboardEvent) {
+  event.preventDefault();
+  this.handleForm();
+}
+
+@HostListener('document:keydown.escape', ['$event'])
+closeModalShortcut(event: KeyboardEvent) {
+  if (this.currentModalId) {
+    event.preventDefault();
+    this.closeModal(this.currentModalId);
   }
-
-  private activateElement(element: HTMLElement) {
-    const tag = element.tagName;
-    if (tag === 'BUTTON') {
-      element.click();
-    } else if (tag === 'SELECT') {
-      element.focus(); // Or simulate "open" if needed
-    }
-  }
+}
 
     /////  keyboard short cuts 
 
