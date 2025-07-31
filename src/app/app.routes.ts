@@ -287,7 +287,7 @@ export const routes: Routes = [
 
 
             { path: "showPaymentDocument/:id", component: ShowPaymentDocumentComponent },
-            { path: "updatePaymentDocument/:id", component: UpdatePaymentDocumentComponent },
+            { path: "updatePaymentDocument/:id/:type", component: UpdatePaymentDocumentComponent },
             { path: "updateEntryDocument/:id", component: UpdateEntryDocumentComponent },
             { path: "showEntryDocument/:id", component: ShowDocumentEntryComponent },
             { path: "productCategories", component: ProductCategoryComponent },

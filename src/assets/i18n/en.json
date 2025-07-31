@@ -1,4 +1,11 @@
 { 
+  "PAY_BILL":" bay bill" ,
+  "PAY_RETURN_BILL" :"pay return bill",
+
+  "SELECT_RETEUN_SALE_BILL": "select return sale bill" ,
+  "SELECT_SALE_BILL": "select sale bill" , 
+  "SEARCH_BILL": "search bill ..",
+  "PAYMENT_TYPE" :"payment type",
   "ALL_DATA_SIMPLE_TEMPLATE": "All Data (Simple Template)",
   "SALES_ORDER"     : "sales order",
   "PURCHASES_ORDER" : "purchases order",

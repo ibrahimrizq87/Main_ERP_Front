@@ -1,130 +1,184 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators ,FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-import { AccountService } from '../../shared/services/account.service';
-import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
-import { Modal } from 'bootstrap';
-import { ToastrService } from 'ngx-toastr';
-
-
-
-// import { Component } from '@angular/core';
-// import { ActivatedRoute, Router } from '@angular/router';
-// import { FormBuilder, FormGroup, Validators ,} from '@angular/forms';
-// import { CommonModule } from '@angular/common';
-// import { ReactiveFormsModule } from '@angular/forms';
-// import { AccountService } from '../../shared/services/account.service';
-// import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
-// import { HttpErrorResponse } from '@angular/common/http';
-// import { Modal } from 'bootstrap';
-// import { TranslateModule } from '@ngx-translate/core';
-
+    import { Component } from '@angular/core';
+    import { ActivatedRoute, Router } from '@angular/router';
+    import { FormBuilder, FormGroup, Validators ,FormsModule} from '@angular/forms';
+    import { CommonModule } from '@angular/common';
+    import { ReactiveFormsModule } from '@angular/forms';
+    import { AccountService } from '../../shared/services/account.service';
+    import { PaymentDocumentService } from '../../shared/services/pyment_document.service';
+    import { HttpErrorResponse } from '@angular/common/http';
+    import { Modal } from 'bootstrap';
+    import { TranslateModule } from '@ngx-translate/core';
+    import { ToastrService } from 'ngx-toastr';
+    import { CurrencyService } from '../../shared/services/currency.service';
+    import { SalesService } from '../../shared/services/sales.service';
+    
 @Component({
   selector: 'app-update-payment-document',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule ,TranslateModule ,FormsModule],
+      imports: [CommonModule, ReactiveFormsModule,TranslateModule , FormsModule],
   templateUrl: './update-payment-document.component.html',
   styleUrl: './update-payment-document.component.css'
 })
 export class UpdatePaymentDocumentComponent {
-    transactionForm: FormGroup;
-    isLoading = false;
-    accounts:Account [] = [];
-    compony_accounts: Account [] = [];
-    notes: any;
-    currencies: any;
-    paymentDocument :Transaction|null = null;
-    delegates: Account [] = [];
-    creators: any;
-    parent_accounts: any;
-    type :string|null='';
-    parent_accounts_company: any;
-    msgError: string = '';
-    msgSuccess:string ='';
-    documentId :string =''; 
-
-    constructor(private route: ActivatedRoute
-      , private fb: FormBuilder,
-      private _AccountService: AccountService,
-      private _PaymentDocumentService: PaymentDocumentService
-      , private router: Router,
-      private toastr: ToastrService
-    ) {
-  
-      this.transactionForm = this.fb.group({
-        manual_reference: [''],
-        from_to_account: [null, Validators.required],
-        from_to_account_company: [null, Validators.required],
-        currency_id: [null, Validators.required],
-        delegate_id: [null],
-        date: [''],
-        amount: [null, [Validators.required, Validators.min(0)]],
-        organization: [''],
-        note: [''],
-        receiver: [''],
-        // payer: ['']
-      });
-  
+      transactionForm: FormGroup;
+      isLoading = false;
+      accounts:Account [] = [];
+      compony_accounts: Account [] = [];
+      notes: any;
+      currencies: any;
+      forignCurrencyName ='';
+      amountInLocalCurrency = 0;
+    
+      delegates: Account [] = [];
+      creators: any;
+      parent_accounts: any;
+      isSubmited = false;
+      parent_accounts_company: any;
+      needCurrecyPrice = false;
+      type: string | null = '';
+      pay_bill =false;
+    
+    
+      constructor(private router: Router,
+        private route: ActivatedRoute,
+        private fb: FormBuilder,
+        private _Router: Router,
+        private _CurrencyService:CurrencyService,
+        private _AccountService: AccountService,
+        private _PaymentDocumentService: PaymentDocumentService,
+        private _SalesService: SalesService,
+    
+        private toastr: ToastrService,
+      ) {
+    
+        this.transactionForm = this.fb.group({
+          manual_reference: [''],
+          from_to_account: [null, Validators.required],
+          from_to_account_company: [null, Validators.required],
+          note_id: [null],
+          sale_bill_id: [null],
+          delegate_id: [null],
+          date: [this.getTodayDate()],
+          amount: [null, [Validators.required, Validators.min(0)]],
+          organization: [''],
+          note: [''],
+          receiver: [''],
+          currency_value: [''],
+          payer: ['']
+        });
+    
+      }
+    
+    
+    togglePayBill(){
+    this.pay_bill = !this.pay_bill;
+    
+    if(this.selectedAccount){
+        if(this.type =='receipt'){
+              this.loadBills(this.selectedAccount.id);
+              }else if(this.type =='payment'){
+              this.loadReturnBills(this.selectedAccount.id);
+        }
     }
-
-  
-
+    
+    }
+    
+      caculateAmountInLocalCurrency() {
+        const amount =this.transactionForm.get('amount')?.value|| 0;
+        const currency_value = this.transactionForm.get('currency_value')?.value || 0;
+        this.amountInLocalCurrency = amount * currency_value;
+    
+        const value = this.transactionForm.get('amount')?.value | 0;
+        if(this.pay_bill && this.selectedBill){
+          const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
+          if(toBePaid < value){
+                this.transactionForm.patchValue({'amount':toBePaid});
+        }
+      }
+    
+    
+    
+      }
+      getTodayDate(): string {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      documentId='';
+      
       ngOnInit(): void {
+        this.getParams();
+        // this.loadDefaultCurrency();
+        this.loadCurrency();
         const documentId = this.route.snapshot.paramMap.get('id'); 
         if (documentId) {
           this.fetchPaymentDocumentData(documentId);
           this.documentId =documentId;
         }
-        // this.getParams();
-        this.loadDelegates();
+      }
     
+      loadCurrency(): void {
+        this._CurrencyService.viewAllCurrency().subscribe({
+          next: (response) => {
+            if (response) {
+              console.log(response);
+              this.currencies = response.data;
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
       }
 
 
-      removeCurrentDelegate(){
-        this.selecteddelegateAccount =null;
-       this.transactionForm.patchValue({'delegate_id':null});
-      }
-
+      msgError :any[] = [];
       fetchPaymentDocumentData(id:string){
         this._PaymentDocumentService.getDocumentById(id).subscribe({
           next: (response) => {
             if (response) {
-              const documentData = response.data ; 
-              console.log(documentData)
-              this.paymentDocument =documentData;
+              const documentData = response.data; 
 
-              if(this.paymentDocument?.delegate){
-                this.selecteddelegateAccount = this.paymentDocument?.delegate;
+              console.log('payment document: ', documentData );
+
+              if(documentData?.from_to_account_company){
+                this.selectedcompanyAccount = documentData?.from_to_account_company;
               }
-              if(this.paymentDocument?.from_to_account_company){
-                this.selectedcompanyAccount = this.paymentDocument?.from_to_account_company;
+              if(documentData?.from_to_account){
+                this.selectedAccount = documentData?.from_to_account;
               }
-              if(this.paymentDocument?.from_to_account){
-                this.selectedAccount = this.paymentDocument?.from_to_account;
-              }
-              if(this.paymentDocument?.type){
-                this.getLoadAccounts(this.paymentDocument?.type);
-              }
-             
+
+              
 
               this.transactionForm.patchValue({
-                manual_reference: this.paymentDocument?.manual_reference,
-                from_to_account: this.paymentDocument?.from_to_account.id,
-                from_to_account_company: this.paymentDocument?.from_to_account_company.id,
-                currency_id: this.paymentDocument?.currency_id,
-                delegate_id: this.paymentDocument?.delegate?.id,
-                date: this.paymentDocument?.date,
-                amount: this.paymentDocument?.amount,
-                organization: this.paymentDocument?.organization,
-                note: this.paymentDocument?.note,
-                receiver: this.paymentDocument?.receiver,
-                // payer: this.paymentDocument?.payer
-              });
-              
+                manual_reference: documentData?.manual_reference,
+                from_to_account: documentData?.from_to_account.id,
+                from_to_account_company: documentData?.from_to_account_company.id,
+                date: documentData?.date,
+                amount: documentData?.amount,
+                organization: documentData?.organization,
+                note: documentData?.note,
+                receiver: documentData?.receiver,
+                sale_bill_id: documentData.sale_bill?.id || null ,
+                currency_value: documentData.currency_price_value || '', 
+                });
+
+
+         
+
+                if(documentData.sale_bill){
+                  this.pay_bill =true;
+                  this.selectedBill = documentData.sale_bill;
+                }
+
+                if(documentData.currency_price_value>0){
+
+                
+                  this.amountInLocalCurrency = documentData?.amount * documentData.currency_price_value;
+                }
+                this.loadDefaultCurrency();
             }
           },
           error: (err: HttpErrorResponse) => {
@@ -133,36 +187,86 @@ export class UpdatePaymentDocumentComponent {
         });
       }
     
+    
+    
+      currency: any ;
+      loadDefaultCurrency() {
+        this._CurrencyService.getDefultCurrency().subscribe({
+          next: (response) => {
+            if (response) {
+              this.currency = response.data;
+              if(this.selectedcompanyAccount && this.selectedAccount){
+              if(this.currency.id != this.selectedcompanyAccount?.currency.id  ){
+                  this.needCurrecyPrice =true;
+                  this.forignCurrencyName = this.selectedcompanyAccount?.currency.name
+                  // cur
+              }    
+            
+             if( this.currency.id != this.selectedAccount?.currency.id ){
+                  this.needCurrecyPrice =true;
+                  this.forignCurrencyName = this.selectedAccount?.currency.name
+                  // cur
+              } 
+            }
+
+           
+            }
+          },
+          error: (err) => {
+            if (err.status == 404) {
+              this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+              this._Router.navigate(['/dashboard/currency']);
+    
+            }
+            console.log(err);
+          }
+        });
+      }
+    
+    
+    
+    
       handleReceipt() {
-        this.parent_accounts = [6];
+        this.parent_accounts = [611 , 621 , 622 , 623 ,624];
         this.parent_accounts_company = [111, 112, 113, 117, 118];
-        this.getAccounts(this.parent_accounts, this.parent_accounts_company);
+        this.loadAccounts(this.parent_accounts , 'accounts');
+        this.loadAccounts(this.parent_accounts_company , 'company') ;
+    
       }
       handlePayment() {
     
-        this.parent_accounts = [6, 113, 117, 118];
-        this.parent_accounts_company = [111, 112, 113, 117, 121, 211, 42, 6];
-        this.getAccounts(this.parent_accounts, this.parent_accounts_company);
+        this.parent_accounts = [611 , 621 , 622 , 623 ,624, 113, 117, 118];
+        this.parent_accounts_company = [111, 112, 113, 117, 121, 211, 42, 611 , 621 , 622 , 623 ,624];
+        this.loadAccounts(this.parent_accounts , 'accounts');
+        this.loadAccounts(this.parent_accounts_company , 'company') ;
+      }
+      handleCreditAndDebitNote(type:string) {
+    
+          this._AccountService.getAccountsCreditOrDebitNote(type,
+          this.searchQuery
+          ).subscribe({
+          next: (response) => {
+            if (response) {
+              console.log("my response:", response)
+              this.accounts = response.data.accounts;
+              this.compony_accounts = response.data.compony_accounts;
+              this.updateData();
+    
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        });
     
       }
-      handleCreditNote() {
-    
-        this.parent_accounts = [6];
-        this.parent_accounts_company = [211, 42, 513];
-        this.getAccounts(this.parent_accounts, this.parent_accounts_company);
-    
+      getParams() {
+        this.route.paramMap.subscribe(params => {
+          this.type = params.get('type');
+        });
+        this.handelType();
       }
-      handleDebitNote() {
-    
-        this.parent_accounts = [6];
-        this.parent_accounts_company = [112, 41];
-        this.getAccounts(this.parent_accounts, this.parent_accounts_company);
-    
-      }
-      getLoadAccounts(type:string) {
-        
-        this.type = type;
-    
+      handelType(){
         switch (this.type) {
           case 'receipt':
             this.handleReceipt();
@@ -172,68 +276,108 @@ export class UpdatePaymentDocumentComponent {
             this.handlePayment();
             break;
     
-          case 'creditNote':
-            this.type = 'credit_notification';
-            this.handleCreditNote();
+          case 'credit_note':
+            this.type = 'credit_note';
+            this.handleCreditAndDebitNote('credit_note');
             break;
     
-          case 'debitNote':
-            this.type = 'debit_notification';
+          case 'debit_note':
+            this.type = 'debit_note';
     
-            this.handleDebitNote();
+            this.handleCreditAndDebitNote('debit_note');
             break;
-    
-          // case 'bank-entry':
-          //   // this.handleBankEntry();
-          //   break;
     
           default:
             this.toastr.error('خطا في نوع المستند');
-            // alert('wrong document type please try to select a document');
+            this.router.navigate(['/dashboard/document/receipt/waiting' ]);
             break;
         }
-    
       }
-      loadDelegates() {
-        
-        this._AccountService.getAccountsByParent('623').subscribe({
+    
+    
+      loadAccounts(parent: number[] , type:string) {
+      this._AccountService.getAccountsByParents(parent,
+        this.searchQuery
+      ).subscribe({
           next: (response) => {
             if (response) {
-              this.delegates = response.data;
+              if(type == 'company'){
+                  this.compony_accounts = response.accounts;
+              }else{
+                this.accounts = response.accounts;
+              }
+              this.updateData();
             }
           },
           error: (err) => {
             console.error(err);
           }
         });
+        
+       
       }
+    
       getAccounts(parent: number[], parent_company: number[]) {
-        this._AccountService.getParentForDocument(parent, parent_company).subscribe({
+      this._AccountService.getParentForDocument(parent, parent_company).subscribe({
           next: (response) => {
             if (response) {
-              console.log("my response:", response)
-              this.currencies = response.currencies;
+              console.log("my response:", response);
               this.accounts = response.children;
               this.compony_accounts = response.children_company;
+              this.updateData();
             }
           },
           error: (err) => {
             console.error(err);
           }
         });
+        
+       
       }
     
-      handleForm(): void {
-        if (this.transactionForm.valid) {
-          this.isLoading = true;
     
+    
+    
+      handleForm(): void {
+    
+    
+        this.isSubmited = true;
+      let isCorrectCurrency = true;
+        if((this.selectedAccount?.currency.id != this.currency.id) && 
+        (this.selectedcompanyAccount?.currency.id != this.currency.id) && 
+        (this.selectedcompanyAccount?.currency.id != this.selectedAccount?.currency.id)){
+          alert('فى حالة وجود حساب بعملة اجنبية يجب ان يكو ن الحساب الاخر بنفس العملة او بعملة الشركة');
+          isCorrectCurrency = false;
+        }
+    
+    
+        if(this.pay_bill && !this.selectedBill){
+          alert('يجب اختيار فاتورة للتسدسد');
+          isCorrectCurrency = false;
+        }
+        if(this.needCurrecyPrice && this.transactionForm.get('currency_value')?.value == null){
+          isCorrectCurrency = false;
+        }
+    
+    
+    
+        if (this.transactionForm.valid && isCorrectCurrency) {
+          this.isLoading = true;
           const formData = new FormData();
           formData.append('manual_reference', this.transactionForm.get('manual_reference')?.value || '');
           formData.append('from_to_account', this.transactionForm.get('from_to_account')?.value);
           formData.append('from_to_account_company', this.transactionForm.get('from_to_account_company')?.value);
           formData.append('note_id', this.transactionForm.get('note_id')?.value || '');
-          formData.append('currency_id', this.transactionForm.get('currency_id')?.value);
-          formData.append('delegate_id', this.transactionForm.get('delegate_id')?.value || '');
+          if(this.transactionForm.get('currency_value')?.value){
+            formData.append('currency_price_value', this.transactionForm.get('currency_value')?.value);
+          }
+             if(this.pay_bill && this.transactionForm.get('sale_bill_id')?.value){
+              if(this.type =='receipt'){
+                formData.append('sale_bill_id', this.transactionForm.get('sale_bill_id')?.value);
+              }else if(this.type =='payment'){
+                formData.append('return_sale_bill', this.transactionForm.get('sale_bill_id')?.value);
+              }    
+        }   
           formData.append('date', this.transactionForm.get('date')?.value);
           formData.append('amount', this.transactionForm.get('amount')?.value);
     
@@ -247,15 +391,15 @@ export class UpdatePaymentDocumentComponent {
     
           this._PaymentDocumentService.updateDocumentById(this.documentId,formData).subscribe({
             next: (response) => {
-              this.toastr.success('تم تحديث مستند الدفع بنجاح');
               this.isLoading = false;
               if (response) {
-                this.router.navigate(['/dashboard/document/' + this.type +'/'+ this.paymentDocument?.status]);
+                this.toastr.success('تم اضافه المستند بنجاح');
+                this.router.navigate(['/dashboard/document/' + this.type +'/waiting']);
     
               }
             },
             error: (err: HttpErrorResponse) => {
-              this.toastr.error('حدث خطا اثناء تحديث مستند الدفع');
+              this.toastr.error('حدث خطا اثناء اضافه المستند');
               this.isLoading = false;
               console.log('error happend', err);
     
@@ -269,7 +413,6 @@ export class UpdatePaymentDocumentComponent {
     
     
     
-      // for pop up
       filteredAccounts: Account[] = [];
       selectedPopUP:string ='';
       searchQuery: string = '';
@@ -279,10 +422,33 @@ export class UpdatePaymentDocumentComponent {
       selectedcompanyAccount:Account | null= null;
     
       selectAccount(account:Account){
-    
+        
         if(this.selectedPopUP  == 'company'){
           this.selectedcompanyAccount = account;
           this.transactionForm.patchValue({'from_to_account_company':account.id})
+    
+    
+          this.needCurrecyPrice = false;
+          this.forignCurrencyName = account.currency.name;
+    
+          if(this.selectedAccount) {
+            if(this.selectedAccount.currency.id != this.currency.id){
+              this.needCurrecyPrice = true;
+              this.forignCurrencyName = account.currency.name;
+    
+            }      
+          }
+    
+          if(this.selectedcompanyAccount) {
+            if(this.selectedcompanyAccount.currency.id != this.currency.id){
+              this.needCurrecyPrice = true;
+              this.forignCurrencyName = account.currency.name;
+    
+            }      
+          }
+    
+    
+    
         }else if (this.selectedPopUP  == 'delegate'){
           this.selecteddelegateAccount = account;
           this.transactionForm.patchValue({'delegate_id':account.id})
@@ -291,10 +457,99 @@ export class UpdatePaymentDocumentComponent {
           this.selectedAccount = account;
           this.transactionForm.patchValue({'from_to_account':account.id})
     
+    
+          if(this.pay_bill){
+            if(this.type =='receipt'){
+              this.loadBills(account.id);
+              }else if(this.type =='payment'){
+              this.loadReturnBills(account.id);
+              }
+          }
+    
+          this.needCurrecyPrice = false;
+          if(this.selectedAccount) {
+            if(this.selectedAccount.currency.id != this.currency.id){
+              this.needCurrecyPrice = true;
+              this.forignCurrencyName = account.currency.name;
+    
+            }      
+          }
+    
+          if(this.selectedcompanyAccount) {
+            if(this.selectedcompanyAccount.currency.id != this.currency.id){
+              this.needCurrecyPrice = true;
+              this.forignCurrencyName = account.currency.name;
+    
+            }      
+          }
+    
+    
         }
+
+        this.selectedBill = null;
+          this.transactionForm.patchValue({'sale_bill_id':null})
+
+
         this.closeModal('shiftModal');
       }
     
+    
+    
+    
+    
+      loadReturnBills(clientId: string) {
+        this._SalesService.getReturnBillsByClientId(clientId).subscribe({
+          next: (response) => {
+            if (response) {
+              console.log("bills bills response:", response)
+              this.saleBills = response.data;
+    
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      }
+    
+    
+    
+    saleBills :any;
+    
+    
+      loadBills(clientId: string) {
+        this._SalesService.getBillsByClientId(clientId).subscribe({
+          next: (response) => {
+            if (response) {
+              console.log("bills bills response:", response)
+              this.saleBills = response.data;
+    
+            }
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      }
+    
+    
+    changeAmount(){
+      const value = this.transactionForm.get('amount')?.value | 0;
+      if(this.pay_bill && this.selectedBill){
+        const toBePaid =this.selectedBill.total - this.selectedBill.total_paid;
+        if(toBePaid < value){
+               this.transactionForm.patchValue({'amount':toBePaid});
+    
+        }
+      }
+    
+    
+    }
+    
+      removeCurrentDelegate(){
+        this.selecteddelegateAccount =null;
+       this.transactionForm.patchValue({'delegate_id':null});
+      }
     
         closeModal(modalId: string) {
           const modalElement = document.getElementById(modalId);
@@ -304,7 +559,17 @@ export class UpdatePaymentDocumentComponent {
           }
         }
       
+    selectBill(bill:any){
+      this.selectedBill = bill;
+      console.log(bill)
+      this.transactionForm.patchValue({sale_bill_id:bill.id,amount:bill.total-bill.total_paid});
+      this.closeModal('salesModal');
+    }
+    
+    
+        selectedBill:any;
         openModal(modalId: string , type:string) {
+          this.searchQuery ='';
     
           this.selectedPopUP = type;
           if(type == 'company'){
@@ -313,8 +578,19 @@ export class UpdatePaymentDocumentComponent {
             this.filteredAccounts =this.delegates;
           }else{
             this.filteredAccounts =this.accounts;
-    
           }
+          const modalElement = document.getElementById(modalId);
+          if (modalElement) {
+            const modal = new Modal(modalElement);
+            modal.show();
+          }
+        }
+    
+    
+          openSalesModal(modalId: string) {
+          this.searchQuery ='';
+    
+       
           const modalElement = document.getElementById(modalId);
           if (modalElement) {
             const modal = new Modal(modalElement);
@@ -325,29 +601,33 @@ export class UpdatePaymentDocumentComponent {
     
         
       onSearchChange(){
-    
-      
         if(this.selectedPopUP == 'company'){
-          this.filteredAccounts = this.compony_accounts.filter(account =>
-            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-      
-        }else if (this.selectedPopUP == 'delegate'){
-          this.filteredAccounts = this.delegates.filter(account =>
-            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-        }else{
-          this.filteredAccounts = this.accounts.filter(account =>
-            account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-          }
-       
+          this.handelType();
+        }
+        // else if (this.selectedPopUP == 'delegate'){
+        //   this.loadDelegates();
+        // }
+        else{
+          this.handelType();
+        }
       }
     
-    onCancel() {
-      this.transactionForm.reset();
-      this.router.navigate(['/dashboard/document/' + this.type +'/'+ this.paymentDocument?.status]);
-    }
+    
+        updateData(){
+        if(this.selectedPopUP == 'company'){
+          this.filteredAccounts = this.compony_accounts;
+        }
+        
+        // else if (this.selectedPopUP == 'delegate'){
+        //   this.filteredAccounts = this.delegates;
+        // }
+        
+        else{
+          this.filteredAccounts = this.accounts;
+        }
+      }
+    
+    
     }
     
     
@@ -356,26 +636,11 @@ export class UpdatePaymentDocumentComponent {
     interface Account {
       id: string;
       name: string;
+      currency: {
+        id: string;
+        name: string;
+      };
+      parent_id?: string;
+      child?: Account[];
+      showChildren?: boolean;
     }
-
-
-
-    interface Transaction {
-      id: number;
-      amount: string;
-      created_at: string;
-      updated_at: string;
-      creator_id: number;
-      currency_id: number;
-      date: string;
-      status:string;
-      delegate: Account | null;
-      from_to_account: Account;
-      from_to_account_company: Account;
-      manual_reference: string|null;
-      note: string | null;
-      organization: string | null;
-      receiver: string | null;
-      type: string; 
-    }
-    

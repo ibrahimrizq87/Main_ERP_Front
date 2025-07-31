@@ -1,4 +1,10 @@
 {
+  "PAY_RETURN_BILL" :"دفع فاتورة مردود المبياعات",
+  "PAY_BILL":" دفع فاتورة" ,
+  "SELECT_RETEUN_SALE_BILL": "اختر فاتورة مردود مبيعات" ,
+  "SELECT_SALE_BILL": "اختر فاتورة مبيعات" , 
+  "SEARCH_BILL": "بحث الفاتورة ...",
+  "PAYMENT_TYPE" :"طريقة الدفع",
   "ALL_DATA_SIMPLE_TEMPLATE": "كل البيانات (قالب مبسط)",
   "SALES_ORDER" : "ارسالية مبيعات" ,
   "PURCHASES_ORDER" : "ارسالية مشتريات",

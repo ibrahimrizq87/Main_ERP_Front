@@ -128,10 +128,13 @@ export class AddDocumentEntryComponent implements OnInit {
     });
   }
   loadAccounts() { 
-    this._AccountService.getAllChildren().subscribe({
+    this._AccountService.getAllChildren(
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
-          this.accounts = response.data;
+          this.accounts = response.data.accounts;
+          console.log('accounts' ,this.accounts);
         }
       },
       error: (err) => {
@@ -319,27 +322,30 @@ calculateTotals() {
       let amount = item.get('amount')?.value || 0;
       const type = item.get('type')?.value;
       const account = item.get('account')?.value;
+      console.log('account' ,account)
       if(account){
       if(account.currency.id != this.currency.id){
         amount = amount * parseFloat(this.entryForm.get('currency_value')?.value);
       }
       }
       if (type === 'debit') {
-
-        
         this.totalDebit += parseFloat(amount);
       } else if (type === 'credit') {
         this.totalCredit += parseFloat(amount);
       }
+      });
 
-    this.totalDifference = this.totalCredit -this.totalDebit;
-    if (this.totalDifference < 0){
-      this.totalDifference *= -1;
-      this.totalType = 'debit';
-    }else{
-      this.totalType = 'credit';
-    }
-    });
+      this.totalDifference = this.totalCredit -this.totalDebit;
+      if (this.totalDifference < 0){
+        this.totalDifference *= -1;
+        this.totalType = 'debit';
+      }else if (this.totalDifference > 0){
+        this.totalType = 'credit';
+      }else{
+        this.totalType = 'neutral';
+      }
+      console.log(this.totalCredit , this.totalDebit , this.totalDifference);
+
   }
 
   
@@ -380,12 +386,7 @@ calculateTotals() {
         this.entryForm.patchValue({'delegate_id':account.id})
   
       }
-      // const accomdkdcd =entryItem.at(this.popUpIndex).get('account')?.value;
-      // console.log('here 1',account);
-      //       console.log('here 2',      accomdkdcd         );
-
-            this.cdr.detectChanges();
-
+      this.cdr.detectChanges();
       this.closeModal('shiftModal');
 
     }
@@ -424,27 +425,7 @@ calculateTotals() {
           modal.show();
         }
       }
-    
-  
-      
-    onSearchChange(){
-  
-    
-      if(this.selectedPopUP == 'account'){
-        this.filteredAccounts = this.accounts.filter(account =>
-          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-    
-      }else if (this.selectedPopUP == 'delegate'){
-        this.filteredAccounts = this.delegates.filter(account =>
-          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
-     
     }
-  
-  
-  }
   
   
   

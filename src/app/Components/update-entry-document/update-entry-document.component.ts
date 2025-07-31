@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators ,FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyService } from '../../shared/services/currency.service';
@@ -11,13 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-update-entry-document',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,TranslateModule,FormsModule
-  ],
+  imports: [ReactiveFormsModule,CommonModule,TranslateModule,FormsModule],
   templateUrl: './update-entry-document.component.html',
   styleUrl: './update-entry-document.component.css'
 })
@@ -33,35 +31,8 @@ export class UpdateEntryDocumentComponent {
   totalCredit = 0;
   totalDifference = 0;
   totalType = '';
-
-   entryDocument: EntryDocument = {
-    id: 0,
-    date: "",
-    manual_reference: null,
-    note: null,
-    organization: null,
-    updated_at: "",
-    status:"",
-    currency: {
-        id: 0,
-        name: "",
-    },
-    delegate: {
-        id: '0',
-        name: "",
-    },
-    creator: {
-        id: 0,
-        name: "",
-        email: null,
-        phone: null,
-        role: null,
-        image: null,
-        created_at: "",
-        updated_at: "",
-    },
-    entryDocumentItems: [],
-};
+  needCurrecyPrice = false;
+  isSubmited = false;
 
 
   selectedAccounts: { index: number; account: Account }[] = [];
@@ -69,8 +40,9 @@ export class UpdateEntryDocumentComponent {
     private _CurrencyService:CurrencyService,
     private _AccountService:AccountService,
         private _Router: Router,
-        private cdr: ChangeDetectorRef,
             private route: ActivatedRoute,
+
+        private cdr: ChangeDetectorRef,
     private _EntryDocument :EntryDocumentService,
     private toastr: ToastrService
   ) {
@@ -79,8 +51,10 @@ export class UpdateEntryDocumentComponent {
       date: [this.getTodayDate()],
       // amount: ['', Validators.required],
       organization: ['', Validators.maxLength(255)],
-      currency_id: ['', Validators.required],
+      // currency_id: ['', Validators.required],
       delegate_id: [''],
+      currency_value: [''],
+
       note: ['', Validators.maxLength(255)],
       entryItems: this.fb.array([])
         });
@@ -90,15 +64,79 @@ export class UpdateEntryDocumentComponent {
 
 
   ngOnInit() {
-
+    // this.loadCurrencies();
+    this.loadDelegates();
+    this.loadAccounts();
     const groupId = this.route.snapshot.paramMap.get('id'); 
     if (groupId) {
       this.loadEntryDocument(groupId);
     }
-    this.loadCurrencies();
-    this.loadDelegates();
-    this.loadAccounts();
-    // this.loadEntryDocument();
+
+  }
+
+
+     loadEntryDocument(id:string) {
+    this._EntryDocument.getEntryDocumentById(id).subscribe({
+      next: (response) => {
+        if (response) {
+        const entryDocument = response.data ;
+
+        this.entryForm.patchValue({
+          manual_reference: entryDocument.manual_reference,
+          date: entryDocument.date,
+          organization: entryDocument.organization,
+          note: entryDocument.note,
+          currency_value: entryDocument.currency_price_value,
+
+          entryItems: []    
+        });
+
+
+        
+        // console.log(this.entryDocument.entryDocumentItems);
+        // console.log(this.entryDocument);
+
+        // entryDocument.entryDocumentItems.forEach((item:any) => {
+        // this.addEntryItem(item);
+        // });
+
+        // this.selecteddelegateAccount = this.entryDocument.delegate;
+
+        this.loadDefaultCurrency(entryDocument.entryDocumentItems);
+
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+  currency: any ;
+
+  loadDefaultCurrency(items:any[]) {
+    this._CurrencyService.getDefultCurrency().subscribe({
+      next: (response) => {
+        if (response) {
+          this.currency = response.data;
+
+        items.forEach((item:any) => {
+        this.addEntryItem(item);
+        });
+        this.calculateTotals();
+
+        }
+      },
+      error: (err) => {
+        if (err.status == 404) {
+          this.toastr.error('يجب اختيار عملة اساسية قبل القيام بأى عملية شراء او بيع');
+          this._Router.navigate(['/dashboard/currency']);
+
+        }
+        console.log(err);
+      }
+    });
   }
 
   getTodayDate(): string {
@@ -123,49 +161,6 @@ export class UpdateEntryDocumentComponent {
     });
   
    }
-
-
-
-   loadEntryDocument(id:string) {
-    this._EntryDocument.getEntryDocumentById(id).subscribe({
-      next: (response) => {
-        if (response) {
-        this.entryDocument = response.data ;
-
-        this.entryForm.patchValue({
-
-          manual_reference: this.entryDocument.manual_reference,
-          date: this.entryDocument.date,
-          // amount: ['', Validators.required],
-          organization: this.entryDocument.organization,
-          currency_id: this.entryDocument.currency.id,
-          delegate_id: this.entryDocument.delegate?.id,
-          note: this.entryDocument.note,
-          entryItems: []    
-        
-        });
-
-
-        
-        // console.log(this.entryDocument.entryDocumentItems);
-        // console.log(this.entryDocument);
-
-        this.entryDocument.entryDocumentItems.forEach((item) => {
-        this.addEntryItem(item);
-        });
-
-        this.selecteddelegateAccount = this.entryDocument.delegate;
-        this.calculateTotals();
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
-
-
-
   loadDelegates() {
     
     this._AccountService.getAccountsByParent('623').subscribe({
@@ -180,10 +175,13 @@ export class UpdateEntryDocumentComponent {
     });
   }
   loadAccounts() { 
-    this._AccountService.getAllChildren().subscribe({
+    this._AccountService.getAllChildren(
+      this.searchQuery
+    ).subscribe({
       next: (response) => {
         if (response) {
-          this.accounts = response.data;
+          this.accounts = response.data.accounts;
+          console.log('accounts' ,this.accounts);
         }
       },
       error: (err) => {
@@ -224,7 +222,7 @@ export class UpdateEntryDocumentComponent {
         entryItem.at(index).get('type')?.setValue('debit'); 
 
       }
-        this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
+       this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
       // alert('You cannot choose the same account with a different type (debit/credit)!');
       return;
     }
@@ -250,9 +248,19 @@ export class UpdateEntryDocumentComponent {
 
     
   }
-  addEntryItem(item:EntryDocumentItem|null =null) {
+
+    addEntryItem(item:any|null =null) {
     let entryItem;
     if(item){
+      console.log(item.account);
+
+
+
+      if(item.account.currency.id != this.currency.id){
+        this.needCurrecyPrice = true;
+        
+
+      }
       entryItem = this.fb.group({
         amount: [item.amount, Validators.required],
         type: [item.type, Validators.required],
@@ -269,20 +277,17 @@ export class UpdateEntryDocumentComponent {
     this.entryItems.push(entryItem);
   }
 
-  // Method to remove an entry item
   removeEntryItem(index: number) {
     this.entryItems.removeAt(index);
     this.calculateTotals();
+
   }
 
-  // Handle form submission
   handleSubmit() {
-    
-    if (this.entryForm.valid && this.entryItems.length>1 && this.totalDifference == 0) {
+    this.isSubmited = true;
+    if (this.entryForm.valid && this.entryItems.length>1 && this.totalDifference == 0 &&(this.needCurrecyPrice == false || this.entryForm.get('currency_value')?.value != null)) {
       this.isLoading = true;
-
-
-
+// console.log(this.entryForm.get('amount')?.value);
       const formData = new FormData();
       formData.append('manual_reference', this.entryForm.get('manual_reference')?.value || '');
       formData.append('date', this.entryForm.get('date')?.value );
@@ -290,6 +295,14 @@ export class UpdateEntryDocumentComponent {
       formData.append('currency_id', this.entryForm.get('currency_id')?.value );
       formData.append('delegate_id', this.entryForm.get('delegate_id')?.value || '');
       formData.append('note', this.entryForm.get('note')?.value || '');
+      formData.append('amount', this.totalCredit.toString() );
+
+      if(this.entryForm.get('currency_value')?.value){
+        
+        formData.append('currency_price_value', this.entryForm.get('currency_value')?.value);
+
+      }
+
       const entryItems = this.entryForm.get('entryItems') as FormArray;
       entryItems.controls.forEach((item, index) => {
         const entryData = {
@@ -302,29 +315,34 @@ export class UpdateEntryDocumentComponent {
         formData.append(`entryItems[${index}][type]`, entryData.type);
         formData.append(`entryItems[${index}][amount]`, entryData.amount);
       });
-      
 
-      this._EntryDocument.updateEntryDocument(formData , this.entryDocument.id.toString()).subscribe({
+
+      const documentId = this.route.snapshot.paramMap.get('id');
+      
+      if (documentId) {
+        this._EntryDocument.updateEntryDocument(formData, documentId).subscribe({
         next: (response) => {
-          this.toastr.success('تم تعديل القيد بنجاح');
           this.isLoading = false;
           if (response) {
-            this._Router.navigate(['/dashboard/documentEntry/'+this.entryDocument.status]); 
+            this.toastr.success('تم اضافه المستند بنجاح');
+            this._Router.navigate(['/dashboard/documentEntry/waiting']); 
           }
         },
         error: (err: HttpErrorResponse) => {
-          this.toastr.error('حدث خطا اثناء تعديل القيد');
+          this.toastr.error('حدث خطا اثناء اضافه المستند');
           this.isLoading = false;
           console.log(err);
         }
       });
-    }else if (this.entryForm.valid && this.entryItems.length<2){
-      this.toastr.error('you have to add at least 2 accounts');
+      }
       
-    // alert('you have to add at least 2 accounts');
+
+      
+    }else if (this.entryForm.valid && this.entryItems.length<2){   
+    alert('you have to add at least 2 accounts');
     }else if(this.totalDifference != 0){
-      this.toastr.error('credit must match debit');
-      // alert('credit must match debit');
+      alert('credit must match debit');
+    }else{
 
     }
   }
@@ -353,34 +371,45 @@ onAccountChange(selectedaccountID: string, index: number) {
   if (isDuplicate) {
     entryItem.at(index).get('account')?.setValue(null); 
     this.toastr.error('You cannot choose the same account with a different type (debit/credit)!');
-    // alert('You cannot choose the same account with a different type (debit/credit)!');
   }
 
 
   return isDuplicate;
 }
 
+
+
 calculateTotals() {
     this.totalDebit = 0;
     this.totalCredit = 0;
     this.entryItems.controls.forEach((item) => {
-      const amount = item.get('amount')?.value || 0;
+      let amount = item.get('amount')?.value || 0;
       const type = item.get('type')?.value;
-
+      const account = item.get('account')?.value;
+      console.log('account' ,account)
+      if(account){
+      if(account.currency.id != this.currency.id){
+        amount = amount * parseFloat(this.entryForm.get('currency_value')?.value);
+      }
+      }
       if (type === 'debit') {
         this.totalDebit += parseFloat(amount);
       } else if (type === 'credit') {
         this.totalCredit += parseFloat(amount);
       }
+      });
 
-    this.totalDifference = this.totalCredit -this.totalDebit;
-    if (this.totalDifference < 0){
-      this.totalDifference *= -1;
-      this.totalType = 'debit';
-    }else{
-      this.totalType = 'credit';
-    }
-    });
+      this.totalDifference = this.totalCredit -this.totalDebit;
+      if (this.totalDifference < 0){
+        this.totalDifference *= -1;
+        this.totalType = 'debit';
+      }else if (this.totalDifference > 0){
+        this.totalType = 'credit';
+      }else{
+        this.totalType = 'neutral';
+      }
+      console.log(this.totalCredit , this.totalDebit , this.totalDifference);
+
   }
 
   
@@ -391,32 +420,37 @@ calculateTotals() {
     searchQuery: string = '';
     selectedAccount:Account | null= null;
     selecteddelegateAccount:Account | null= null;
-  popUpIndex = -1;
+    popUpIndex = -1;
     selectedcompanyAccount:Account | null= null;
   
     selectAccount(account:Account){
       const entryItem = this.entryForm.get('entryItems') as FormArray;
     
+
       if(this.selectedPopUP  == 'account'){
         const isDoublicated = this.onAccountChange(account.id , this.popUpIndex);
         if(isDoublicated){
           this.closeModal('shiftModal');
           return;
         }
+
         entryItem.at(this.popUpIndex).get('account')?.setValue(account); 
         entryItem.at(this.popUpIndex).get('account_name')?.setValue(account.name); 
 
+
+        entryItem.controls.forEach((item) => {
+        if(item.get('account')?.value.currency.id != this.currency.id){
+          this.needCurrecyPrice = true;
+        }
+        })
+
+        this.calculateTotals();
       }else if (this.selectedPopUP  == 'delegate'){
         this.selecteddelegateAccount = account;
         this.entryForm.patchValue({'delegate_id':account.id})
   
       }
-      // const accomdkdcd =entryItem.at(this.popUpIndex).get('account')?.value;
-      // console.log('here 1',account);
-      //       console.log('here 2',      accomdkdcd         );
-
-            this.cdr.detectChanges();
-
+      this.cdr.detectChanges();
       this.closeModal('shiftModal');
 
     }
@@ -448,37 +482,20 @@ calculateTotals() {
         }else if (type == 'delegate'){
           this.filteredAccounts =this.delegates;
         }
-        // console.log('hrerererer');
         const modalElement = document.getElementById(modalId);
         if (modalElement) {
           const modal = new Modal(modalElement);
           modal.show();
         }
       }
-    
-  
-      
-    onSearchChange(){
-  
-    
-      if(this.selectedPopUP == 'account'){
-        this.filteredAccounts = this.accounts.filter(account =>
-          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-    
-      }else if (this.selectedPopUP == 'delegate'){
-        this.filteredAccounts = this.delegates.filter(account =>
-          account.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
-     
+
+
+      onCancel(): void {
+        this.entryForm.reset(); 
+        this._Router.navigate(['/dashboard/documentEntry/waiting']); 
+      }  
+
     }
-  
-  onCancel() {
-    this.entryForm.reset();
-    this._Router.navigate(['/dashboard/documentEntry/'+this.entryDocument.status]); 
-  }
-  }
   
   
   
@@ -486,44 +503,7 @@ calculateTotals() {
   interface Account {
     id: string;
     name: string;
+    parent_id?: string;
+    child?: Account[];
+    showChildren?: boolean;
   }
-
-
-interface Creator {
-    id: number;
-    name: string;
-    email: string | null;
-    phone: string | null;
-    role: string | null;
-    image: string | null;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Currency {
-    id: number;
-    name: string;
-}
-
-
-interface EntryDocumentItem {
-    id: number;
-    amount: string;
-    type: 'debit' | 'credit';
-    account: Account;
-    created_at: string;
-}
-
-interface EntryDocument {
-    id: number;
-    date: string;
-    manual_reference: string | null;
-    note: string | null;
-    organization: string | null;
-    updated_at: string;
-    currency: Currency;
-    delegate: Account |null;
-    creator: Creator;
-    status:string;
-    entryDocumentItems: EntryDocumentItem[];
-}

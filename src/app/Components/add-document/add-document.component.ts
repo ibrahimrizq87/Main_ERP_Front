@@ -110,7 +110,6 @@ if(this.selectedAccount){
   
   ngOnInit(): void {
     this.getParams();
-    // this.loadDelegates();
     this.loadDefaultCurrency();
     this.loadCurrency();
   }
@@ -220,21 +219,6 @@ if(this.selectedAccount){
         break;
     }
   }
-
-
-  // loadDelegates() {
-  //   this._AccountService.getAccountsByParent('623').subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         this.delegates = response.data;
-  //         this.updateData();
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     }
-  //   });
-  // }
 
 
   loadAccounts(parent: number[] , type:string) {
@@ -507,7 +491,8 @@ changeAmount(){
   
 selectBill(bill:any){
   this.selectedBill = bill;
-  this.transactionForm.patchValue({'sale_bill_id':bill.id});
+  console.log(bill)
+  this.transactionForm.patchValue({sale_bill_id:bill.id,amount:bill.total-bill.total_paid});
   this.closeModal('salesModal');
 }
 
