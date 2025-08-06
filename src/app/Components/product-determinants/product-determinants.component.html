@@ -8,7 +8,11 @@
     </span>
   </div>
   <a *ngIf="_PermissionService.hasPermission('determinants' , 'add_determinants')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductDeterminant"> 
-    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_DETERMINANT"|translate}}
+    </span>
   </a> 
 </div>  
 
@@ -52,9 +56,9 @@
           </td>
           <td (click)="$event.stopPropagation()" class="d-flex justify-content-center gap-2">
             <a *ngIf="_PermissionService.hasPermission('determinants' , 'edit_determinants')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-determinant', determinant.id]">
-              <i class="fa-solid fa-pencil btn1 bg-success rounded p-2"></i>
+              <i class="fa-solid fa-pencil btn1 text-primary rounded p-2"></i>
             </a>
-            <i *ngIf="_PermissionService.hasPermission('determinants' , 'delete_determinants')" class="fa-solid fa-trash-can btn1 bg-danger rounded p-2" (click)="deleteDeterminant(determinant.id)"></i>
+            <i *ngIf="_PermissionService.hasPermission('determinants' , 'delete_determinants')" class="fa-solid fa-trash-can btn1 text-danger rounded p-2" (click)="deleteDeterminant(determinant.id)"></i>
           </td>
         </tr>
       </tbody>

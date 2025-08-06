@@ -7,7 +7,11 @@
         </span>
     </div>
     <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-vecation">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+      <span class="rounded text-white iconPlus"> 
+  
+        <i class="fa-solid fa-plus  icon "></i>
+        {{"ADD_VECATION"|translate}}
+      </span>
     </a>
 </div>
 
@@ -42,15 +46,15 @@
                 <div class="d-flex justify-content-center gap-2">
                     <a class="nav-link" routerLinkActive="active"
                     [routerLink]="['/dashboard/show-vecation', vecation.id]">
-                    <i class="fa-solid fa-eye btn1 bg-primary rounded"
+                    <i class="fa-solid fa-eye btn1 text-success rounded"
                         title="{{ 'VIEW_vecation' | translate }}"></i>
                 </a>
                 <a class="nav-link" routerLinkActive="active"
                 [routerLink]="['/dashboard/update-vecation', vecation.id]">
-                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                <i class="fa-solid fa-pencil btn1 text-primary rounded"
                     title="{{ 'EDIT_vecation' | translate }}"></i>
             </a>
-            <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteVecation(vecation.id)"
+            <i class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteVecation(vecation.id)"
                 title="{{ 'DELETE_vecation' | translate }}"></i>
                 </div>
               </td>

@@ -59,4 +59,12 @@
     color:white;
     padding: 5px;
 }
-
+.fa-eye {
+  background-color: #F0FDF4;
+}
+.fa-pencil{
+  background-color: #EFF6FF;
+}
+.fa-trash-can{
+  background-color: #FEF2F2;
+}

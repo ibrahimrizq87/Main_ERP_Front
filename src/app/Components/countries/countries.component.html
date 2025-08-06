@@ -4,7 +4,11 @@
         <span class="text-muted">{{ 'manageCountry.dashboard' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'manageCountry.countries' | translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('countries' , 'add_countries')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCountry">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_COUNTRY"|translate}}
+          </span>
     </a>
 </div>
 
@@ -36,9 +40,9 @@
                 <td>{{ country.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('countries' , 'edit_countries')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCountry', country.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCountry.edit' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'manageCountry.edit' | translate }}"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('countries' , 'delete_countries')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCountry(country.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('countries' , 'delete_countries')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteCountry(country.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

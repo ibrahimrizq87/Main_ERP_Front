@@ -4,7 +4,11 @@
     <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'ACCOUNTING' | translate }}</span>
   </div>
   <a *ngIf="isAMainAccount" class="nav-link" routerLinkActive="active" (click)="addAccount()">
-    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_ACCOUNT"|translate}}
+    </span>
   </a> 
 </div>
 
@@ -53,12 +57,12 @@
         <td>{{ account.financial_condition }}</td>
         <td class="d-flex justify-content-around align-items-center">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showAccount', account.id]">
-            <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+            <i class="fa-solid fa-eye btn1 text-success rounded"></i>
           </a>
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateAccount', account.id]">
-            <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+            <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
           </a>
-          <i *ngIf="!account.hasChildren && account.can_delete" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteAccount(account.id)"></i>
+          <i *ngIf="!account.hasChildren && account.can_delete" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteAccount(account.id)"></i>
         </td>
       </tr>
     </tbody>

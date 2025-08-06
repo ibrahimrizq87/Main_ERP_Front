@@ -1,150 +1,149 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <div>
-    <h5>{{ 'MANAGE_USERS' | translate }}</h5>
-    <span class="text-muted">{{"DASHBOARD"| translate}} <i class="fa-solid fa-angle-right"></i> {{"USERS"|translate}}</span>
+    <div>
+      <h5>{{ 'MANAGE_USERS' | translate }}</h5>
+      <span class="text-muted">{{"DASHBOARD"| translate}} <i class="fa-solid fa-angle-right"></i> {{"USERS"|translate}}</span>
+    </div>
+    <a class="nav-link" routerLink="/dashboard/addUser">
+      <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_USER"|translate}}
+    </span>
+    </a>
   </div>
-  <a class="nav-link" routerLink="/dashboard/addUser">
-    <span class="rounded text-white iconPlus"> 
-
-    <i class="fa-solid fa-plus  icon "></i>
-    {{"ADD_USER"|translate}}
-  </span>
-  </a>
-</div>
-
-<div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="fw-bold">{{"USERS"|translate}}</span>
-      <div class="d-flex gap-2 justify-content-between align-items-center">
-        <!-- Items per page selector -->
-        <div class="d-flex align-items-center  w-100 gap-2">
-          <label >Items per page:</label>
-          <select 
-            [(ngModel)]="itemsPerPage" 
-            (ngModelChange)="onItemsPerPageChange()"
-            class="form-select form-select-sm" 
-            style="width: auto;">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-        
-        <!-- Search type selector -->
-        <select 
-          class="form-select" 
-          [(ngModel)]="searchType" 
-          (ngModelChange)="onSearchTypeChange()"
-        >
-          <option value="name">Search by Name</option>
-          <option value="user_name">Search by Username</option>
-          <option value="role">Search by Role</option>
-        </select>
-        
-        <!-- Dynamic search input based on search type -->
-        <div *ngIf="searchType === 'role'" class="w-100">
+  
+  <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="fw-bold">{{"USERS"|translate}}</span>
+        <div class="d-flex gap-2 justify-content-between align-items-center">
+          <div class="d-flex align-items-center  w-100 gap-2">
+            <label >{{"ITEMS_PER_PAGE"|translate}}:</label>
+            <select 
+              [(ngModel)]="itemsPerPage" 
+              (ngModelChange)="onItemsPerPageChange()"
+              class="form-select form-select-sm" 
+              style="width: auto;">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          
+          <!-- Search type selector -->
           <select 
             class="form-select" 
-            [(ngModel)]="selectedRole" 
-            (change)="onSearch()"
+            [(ngModel)]="searchType" 
+            (ngModelChange)="onSearchTypeChange()"
           >
-
-          <!-- 'client','employee','admin','delegate' -->
-            <option value="admin"> admin </option>
-            <option value="employee"> employee </option>
-            <option value="client"> client </option>
-            <option value="delegate"> delegate </option>
-
-            <!-- <option *ngFor="let role of roles" [value]="role.name">
-              {{ role.name }}
-            </option> -->
+            <option value="name">{{"SEARCH_BY_Name"|translate}}</option>
+            <option value="user_name">{{"SEARCH_BY_USERNAME"|translate}}</option>
+            <option value="role">{{"SEARCH_BY_ROLE"|translate}}</option>
           </select>
-        </div>
-        
-        <div *ngIf="searchType !== 'role'" class="w-100 d-flex justify-content-between align-items-center">
-          <input 
-            class="form-control search w-75" 
-            type="search" 
-            [placeholder]="'Search by ' + (searchType === 'name' ? 'name' : 'username')" 
-            [(ngModel)]="searchValue" 
-            (keyup.enter)="onSearch()"
-          />
-          <button class="btn btn-success ms-2  w-" (click)="onSearch()">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+          
+          <!-- Dynamic search input based on search type -->
+          <div *ngIf="searchType === 'role'" class="w-100">
+            <select 
+              class="form-select" 
+              [(ngModel)]="selectedRole" 
+              (change)="onSearch()"
+            >
+  
+            <!-- 'client','employee','admin','delegate' -->
+              <option value="admin"> {{"ADMIN"|translate}} </option>
+              <option value="employee"> {{"EMPLOYEE"|translate}} </option>
+              <option value="client"> {{"CLIENT"|translate}} </option>
+              <option value="delegate"> {{"DELEGATE"|translate}} </option>
+  
+              <!-- <option *ngFor="let role of roles" [value]="role.name">
+                {{ role.name }}
+              </option> -->
+            </select>
+          </div>
+          
+          <div *ngIf="searchType !== 'role'" class="w-100 d-flex justify-content-between align-items-center">
+            <input 
+              class="form-control search w-75" 
+              type="search" 
+              placeholder="{{ 'SEARCH' | translate }}"
+              [(ngModel)]="searchValue" 
+              (keyup.enter)="onSearch()"
+            />
+            <button class="btn btn-success ms-2  w-" (click)="onSearch()">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <table class="table mt-3">
-    <thead>
-      <tr>
-        <th class="bg-light" scope="col">#</th>
-        <th class="bg-light" scope="col">Username</th>
-        <th class="bg-light" scope="col">Name</th>
-        <th class="bg-light" scope="col">Image</th>
-        <th class="bg-light" scope="col">Role</th>
-
-        <th class="bg-light" scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
-        <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
-        <td>{{ user.user_name }}</td>
-        <td>{{ user.name }}</td>
-        <td>
-          <img 
-            [src]="user.image ? user.image : 'images/image.jpg'" 
-            alt="{{ user?.name || 'Default user' }}" 
-            width="80" 
-            height="60" 
-          />
-        </td>
-                <td>{{ user.admin_role ? user.admin_role : "---" }}</td>
-
-        <td>
-          <div class="d-flex justify-content-around align-items-center">
-            <a class="nav-link" [routerLink]="['/dashboard/showUser', user.id]">
-              <i class="fa-solid fa-eye btn1 text-success rounded"></i>
-            </a>
-            <a class="nav-link" [routerLink]="['/dashboard/updateUser', user.id]">
-              <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
-            </a>
-            <i class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteUser(user.id)"></i>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
   
-  <!-- Pagination Controls -->
-  <div class="d-flex justify-content-between align-items-center mt-4">
-    <div class="text-muted">
-      Showing 
-      {{ (currentPage - 1) * itemsPerPage + 1 }} 
-      to 
-      {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
-      of 
-      {{ totalItems }} 
-      entries
-    </div>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th class="bg-light" scope="col">#</th>
+          <th class="bg-light" scope="col">{{"USER_NAME"|translate}}</th>
+          <th class="bg-light" scope="col">{{"NAME"|translate}}</th>
+          <th class="bg-light" scope="col">{{"IMAGE"|translate}}</th>
+          <th class="bg-light" scope="col">{{"ROLE"|translate}}</th>
+  
+          <th class="bg-light" scope="col">{{"ACTIONS"|translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+          <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+          <td>{{ user.user_name }}</td>
+          <td>{{ user.name }}</td>
+          <td>
+            <img 
+              [src]="user.image ? user.image : 'images/image.jpg'" 
+              alt="{{ user?.name || 'Default user' }}" 
+              width="80" 
+              height="60" 
+            />
+          </td>
+                  <td>{{ user.admin_role ? user.admin_role : "---" }}</td>
+  
+          <td>
+            <div class="d-flex justify-content-around align-items-center">
+              <a class="nav-link" [routerLink]="['/dashboard/showUser', user.id]">
+                <i class="fa-solid fa-eye btn1 text-success rounded"></i>
+              </a>
+              <a class="nav-link" [routerLink]="['/dashboard/updateUser', user.id]">
+                <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
+              </a>
+              <i class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteUser(user.id)"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     
-    <pagination-controls 
-      (pageChange)="onPageChange($event)"
-      [maxSize]="5"
-      [directionLinks]="true"
-      [autoHide]="true"
-      [responsive]="true"
-      previousLabel="Previous"
-      nextLabel="Next"
-      screenReaderPaginationLabel="Pagination"
-      screenReaderPageLabel="Page"
-      screenReaderCurrentLabel="Current page">
-    </pagination-controls>
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <div class="text-muted">
+        Showing 
+        {{ (currentPage - 1) * itemsPerPage + 1 }} 
+        to 
+        {{ (currentPage * itemsPerPage) < totalItems ? currentPage * itemsPerPage : totalItems }} 
+        of 
+        {{ totalItems }} 
+        entries
+      </div>
+      
+      <pagination-controls 
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [directionLinks]="true"
+        [autoHide]="true"
+        [responsive]="true"
+        previousLabel="Previous"
+        nextLabel="Next"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="Page"
+        screenReaderCurrentLabel="Current page">
+      </pagination-controls>
+    </div>
   </div>
-</div>

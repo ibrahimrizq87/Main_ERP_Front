@@ -9,7 +9,11 @@
       {{ 'CHECK_OPERATION' | translate }}
   </a>
   <a  *ngIf="_PermissionService.hasPermission('banks' , 'add_banks')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addcheck">
-      <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_DOCUMENT"|translate}}
+    </span>
   </a>
 </div>
 
@@ -96,19 +100,19 @@
               <td class="d-flex justify-content-around align-items-center">
 
                 <a *ngIf="(status == 'waiting' || status == 'rejected')  && _PermissionService.hasPermission('checks' , 'edit_checks')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,check.id)">
-                    approve
+                    {{"APPROVE" | translate }}
                   </a>
                   <a  *ngIf="status == 'waiting' && _PermissionService.hasPermission('checks' , 'edit_checks')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',check.id)">
-                    reject
+                   {{"REJECT" | translate  }}
                   </a>
                   <a *ngIf="status == 'rejected' && check.number_of_moves<=1 && _PermissionService.hasPermission('checks' , 'edit_checks')" class="btn btn-success" (click)="ManageChangeStatus('waiting',check.id)">
-                    waiting
+                  {{"WAITING" | translate }}
                   </a>
 
-                  <i class="fa-solid fa-trash-can btn1 bg-danger rounded" *ngIf="status != 'approved'  && _PermissionService.hasPermission('checks' , 'delete_checks')" (click)="deleteCheck(check.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
+                  <i class="fa-solid fa-trash-can btn1 text-danger rounded" *ngIf="status != 'approved'  && _PermissionService.hasPermission('checks' , 'delete_checks')" (click)="deleteCheck(check.id)" title="{{ 'manageCountry.delete' | translate }}"></i>
 
                   <a *ngIf="_PermissionService.hasPermission('checks' , 'details_checks')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/check', check.id]">
-                      <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_CHECK' | translate }}"></i>
+                      <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'VIEW_CHECK' | translate }}"></i>
                   </a>
               </td>
           </tr>

@@ -9,14 +9,8 @@
         </div>
     </div>
 
-
-
-
-
     <div class="container">
-        <header
-            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li>
                     <a (click)="changeStatus('not_paid')" class="nav-link px-2"
@@ -30,20 +24,15 @@
                         {{ 'TO_BE_PAID' | translate }}
                     </a>
                 </li>
-
                 <li>
                     <a (click)="changeStatus('paid_historey')" class="nav-link px-2"
                         [ngClass]="{'active-tab': actionType === 'paid_historey', 'inactive-tab': actionType !== 'paid_historey'}">
                         {{ 'PAID_SALARIES' | translate }}
                     </a>
                 </li>
-
-
             </ul>
         </header>
     </div>
-
-    
 
     <div class="card mb-4">
         <div class="card-body">
@@ -53,7 +42,6 @@
                     <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId"
                         (change)="onEmployeeChange($event)">
                         <option value="all">{{ 'ALL_EMPLOYEES' | translate }}</option>
-
                         <option *ngFor="let employee of employees" [value]="employee.id">
                             {{ employee?.name }}
                         </option>
@@ -62,18 +50,15 @@
 
                 <div *ngIf="actionType == 'paid'" class="form-group col-md-3">
                     <label class="form-label">{{ 'ACCOUNT' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100"
-                        (click)="openModal('accountModal')">
+                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('accountModal')">
                         {{ selectedAccount ? selectedAccount.name : ('ACCOUNT' | translate) }}
                     </button>
                 </div>
 
                 <div *ngIf="actionType != 'not_paid' && needCurrencyPrice" class="form-group col-md-3">
                     <label class="form-label">{{ 'CURRENCY_VALUE' | translate }}</label>
-                      <input  type="number" class="form-control" [(ngModel)]="currnceyPrice"/>
-                 
+                    <input type="number" class="form-control" [(ngModel)]="currnceyPrice"/>
                 </div>
-
 
                 <div class="col-md-6 mb-3">
                     <label for="monthSelect" class="form-label">{{ 'SELECT_MONTH' | translate }}</label>
@@ -86,13 +71,9 @@
 
     <div *ngIf="isLoading" class="text-center">
         <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">{{ 'LOADING' | translate }}</span>
         </div>
     </div>
-
-
-
-
 
     <div *ngIf="salariesData && selectedEmployeeId != 'all' " class="card">
         <div class="card-body">
@@ -205,86 +186,76 @@
         </div>
     </div>
 
-
-
     <ng-container *ngIf="actionType == 'paid' || actionType == 'paid_historey'; else presentRecord">
         <div class="card mt-3">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">Salary Details</h5>
+                <h5 class="mb-0">{{ 'SALARY_DETAILS' | translate }}</h5>
             </div>
             <div *ngFor="let data of savedSalariesData" class="card-body rounded shadow border m-2">
                 <div class="row mb-2">
-                    <div class="col-md-3"><strong>Employee Name:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'EMPLOYEE_NAME' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.employee.name }}</div>
-                    <div class="col-md-3"><strong>Base Salary:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'BASE_SALARY' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.base_salary }}</div>
-                    <div class="col-md-3"><strong>Bonus:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'BONUS' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.bonus }}</div>
-                    <div class="col-md-3"><strong>Additional Bonus:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'ADDITIONAL_BONUS' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.additional_bonus }}</div>
-                    <div class="col-md-3"><strong>Deduction:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'DEDUCTION' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.deduction }}</div>
-                    <div class="col-md-3"><strong>Additional Deduction:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'ADDITIONAL_DEDUCTION' | translate }}:</strong></div>
                     <div class="col-md-3">{{ data.additional_deduction }}</div>
-                    <div class="col-md-3"><strong>Net Salary:</strong></div>
+                    <div class="col-md-3"><strong>{{ 'NET_SALARY' | translate }}:</strong></div>
                     <div class="col-md-3 text-success fw-bold">{{ data.net_salary }}</div>
 
                     <div class="col-md-2">
-                        <button (click)="paySalary(data)" *ngIf="data.status == 'not_paid'" class="btn btn-success"> pay </button>
+                        <button (click)="paySalary(data)" *ngIf="data.status == 'not_paid'" class="btn btn-success">{{ 'PAY' | translate }}</button>
                         <a *ngIf="data.status == 'not_paid'" class="nav-link" 
                            routerLinkActive="active" 
                            [routerLink]="['/dashboard/update-salary', data.id]">
                             <i class="fa-solid fa-pencil btn1 bg-primary rounded" 
                                title="{{ 'UPDATE' | translate }}"></i>
                         </a>
-                        <div *ngIf="data.status == 'paid'" class="badge bg-success">Paid</div>
+                        <div *ngIf="data.status == 'paid'" class="badge bg-success">{{ 'PAID' | translate }}</div>
                     </div>
 
                     <div class="col-md-2" *ngIf="data.need_currency_value">
-                        <label class="form-label">{{data.currency}} price =></label>
+                        <label class="form-label">{{data.currency}} {{ 'PRICE' | translate }} =></label>
                     </div>
 
                     <div class="col-md-2" *ngIf="data.need_currency_value && data.status == 'not_paid'">
-                        <!-- <label class="form-label">{{ 'CURRENCY_VALUE' | translate }}</label> -->
-                        <input  type="number" class="form-control" [(ngModel)]="data.currnceyPrice" placeholder="{{data.currency}} {{ 'CURRENCY_VALUE' | translate }}"/>
+                        <input type="number" class="form-control" [(ngModel)]="data.currnceyPrice" placeholder="{{data.currency}} {{ 'CURRENCY_VALUE' | translate }}"/>
                     </div>
-
-
                 </div>
             </div>
         </div>
     </ng-container>
 
-
     <ng-template #presentRecord>
         <div *ngIf="salariesData && selectedEmployeeId === 'all'" class="salary-container">
-
-            <button (click)="saveAll()" class="btn btn-success m-3">save all</button>
+            <button (click)="saveAll()" class="btn btn-success m-3">{{ 'SAVE_ALL' | translate }}</button>
             <div *ngFor="let item of salariesData" class="salary-card">
-
                 <div class="summary-row">
                     <div class="info-block">
-                        <div><strong>{{ 'employee_name' | translate }}:</strong> {{ item.employee.name }}</div>
-                        <div><strong>{{ 'base_salary' | translate }}:</strong> {{ item.salary.base_salary }} </div>
+                        <div><strong>{{ 'EMPLOYEE_NAME' | translate }}:</strong> {{ item.employee.name }}</div>
+                        <div><strong>{{ 'BASE_SALARY' | translate }}:</strong> {{ item.salary.base_salary }} </div>
                         <div>
-                            <strong>{{ 'total_salary' | translate }}:</strong>
-                        {{ floor((item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)) || 0) }}
+                            <strong>{{ 'TOTAL_SALARY' | translate }}:</strong>
+                            {{ floor((item.salary.base_salary + (item.bonus || 0) + (item.salary.bonus || 0) - (item.salary.deduction || 0) - (item.deduction || 0)) || 0) }}
                         </div>
                     </div>
-                    <div><strong>{{ 'bonus' | translate }}: </strong> {{ item.bonus || 0 }} </div>
-                    <div><strong>{{ 'deduction' | translate }}: </strong> {{ item.deduction || 0 }} </div>
+                    <div><strong>{{ 'BONUS' | translate }}: </strong> {{ item.bonus || 0 }} </div>
+                    <div><strong>{{ 'DEDUCTION' | translate }}: </strong> {{ item.deduction || 0 }} </div>
 
-                    <div>
-
-                    </div>
+                    <div></div>
                     <button class="btn btn-outline-success" (click)="showDetails(item)">
-                        show details
+                        {{ 'SHOW_DETAILS' | translate }}
                     </button>
                     <div style="display: flex; flex-direction: column; align-items: center;">
                         <button (click)="save(item)" class="btn btn-success"
-                        [disabled]="item.salary.is_salary || item.salary.has_future_days">
-                        save
-                    </button>
+                            [disabled]="item.salary.is_salary || item.salary.has_future_days">
+                            {{ 'SAVE' | translate }}
+                        </button>
                         <a *ngIf="!item.salary.is_salary && !item.salary.has_future_days" 
                            class="nav-link" 
                            routerLinkActive="active" 
@@ -299,97 +270,71 @@
                 </div>
 
                 <div *ngIf="item.expanded" class="details-section">
-
                     <div class="detail-row">
-                        <div>{{ 'absent_days' | translate }}: {{ item.salary.absent_days }}</div>
-                        <div>{{ 'late_days' | translate }}: {{ item.salary.lat_days }}</div>
-                        <div>{{ 'very_late_days' | translate }}: {{ item.salary.very_lat_days }}</div>
-                        <div>{{ 'no_checkout_days' | translate }}: {{ item.salary.no_checkout_days }}</div>
-                        <div>{{ 'leave_early_days' | translate }}: {{ item.salary.leave_early_days }}</div>
-                        <div>{{ 'paid_vacations' | translate }}: {{ item.salary.paid_vecations }}</div>
-                        <div>{{ 'unpaid_vacations' | translate }}: {{ item.salary.not_paid_vecations }}</div>
-                        <div>{{ 'public_vacation_days' | translate }}: {{ item.salary.public_vacation_days }}</div>
-                        <div>{{ 'future_days' | translate }}: {{ item.salary.future_days }}</div>
-                        <div>{{ 'total_hours_for_bonus' | translate }}: {{ item.salary.total_hours_for_bonus }}</div>
-                        <div>{{ 'deduction' | translate }}: {{ item.salary.deduction }}</div>
-                        <div>{{ 'bonus' | translate }}: {{ item.salary.bonus }}</div>
-
-
-
+                        <div>{{ 'ABSENT_DAYS' | translate }}: {{ item.salary.absent_days }}</div>
+                        <div>{{ 'LATE_DAYS' | translate }}: {{ item.salary.lat_days }}</div>
+                        <div>{{ 'VERY_LATE_DAYS' | translate }}: {{ item.salary.very_lat_days }}</div>
+                        <div>{{ 'NO_CHECKOUT_DAYS' | translate }}: {{ item.salary.no_checkout_days }}</div>
+                        <div>{{ 'LEAVE_EARLY_DAYS' | translate }}: {{ item.salary.leave_early_days }}</div>
+                        <div>{{ 'PAID_VACATIONS' | translate }}: {{ item.salary.paid_vecations }}</div>
+                        <div>{{ 'UNPAID_VACATIONS' | translate }}: {{ item.salary.not_paid_vecations }}</div>
+                        <div>{{ 'PUBLIC_VACATION_DAYS' | translate }}: {{ item.salary.public_vacation_days }}</div>
+                        <div>{{ 'FUTURE_DAYS' | translate }}: {{ item.salary.future_days }}</div>
+                        <div>{{ 'TOTAL_HOURS_FOR_BONUS' | translate }}: {{ item.salary.total_hours_for_bonus }}</div>
+                        <div>{{ 'DEDUCTION' | translate }}: {{ item.salary.deduction }}</div>
+                        <div>{{ 'BONUS' | translate }}: {{ item.salary.bonus }}</div>
                     </div>
 
                     <div class="form-section">
                         <div class="input-group">
-                            <label>{{ 'bonus' | translate }}</label>
+                            <label>{{ 'BONUS' | translate }}</label>
                             <input type="number" [(ngModel)]="item.bonus" />
                         </div>
                         <div class="input-group">
-                            <label>{{ 'deduction' | translate }}</label>
+                            <label>{{ 'DEDUCTION' | translate }}</label>
                             <input type="number" [(ngModel)]="item.deduction" />
                         </div>
                         <div class="input-group">
-                            <label>{{ 'reason' | translate }}</label>
+                            <label>{{ 'REASON' | translate }}</label>
                             <input type="text" [(ngModel)]="item.reason" />
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
         <div *ngIf="!isLoading && !salariesData && (selectedEmployeeId || selectedMonth)" class="alert alert-info">
             {{ 'NO_SALARIES_DATA_FOUND' | translate }}
         </div>
-
     </ng-template>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shiftModalLabel">{{ 'mainAccountNav.selectAccount' | translate }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('accountModal')"></button>
-      </div>
-      <div class="modal-body">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shiftModalLabel">{{ 'SELECT_ACCOUNT' | translate }}</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeModal('accountModal')"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control mb-3" [placeholder]="'SEARCH_ACCOUNT' | translate"
+                    [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
 
-        <input type="text" class="form-control mb-3" [placeholder]="'mainAccountNav.searchAccount' | translate"
-          [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" />
-
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{{ 'mainAccountNav.accountName' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
-              style="cursor: pointer;">
-              <td>{{ i + 1 }}</td>
-              <td>{{ account.name }}</td>
-
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ 'ACCOUNT_NAME' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let account of filteredAccounts; let i = index" (click)="selectAccount(account)"
+                            style="cursor: pointer;">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ account.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

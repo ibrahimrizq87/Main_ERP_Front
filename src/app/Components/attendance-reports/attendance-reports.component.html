@@ -15,8 +15,8 @@
                  <div class="col-md-4 mb-3">
                     <label for="employeeType" class="form-label">{{ 'SELECT_TYPE' | translate }}</label>
                     <select id="employeeType" class="form-select" (change)="onTypeChange()" [(ngModel)]="type">
-                        <option  value="day"> Day </option>
-                        <option  value="employee"> Employee </option>
+                        <option  value="day"> {{"DAY"|translate}} </option>
+                        <option  value="employee"> {{"EMPLOYEE"|translate}} </option>
 
                     </select>
                 </div>
@@ -76,7 +76,7 @@
                 <th>{{ 'CHECK_OUT' | translate }}</th>
                 <th>{{ 'VACATION' | translate }}</th>
                 <th>{{ 'VACATION_REQUEST' | translate }}</th>
-                <th>{{ 'ACTION' | translate }}</th>
+                <th>{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>
         <tbody>
@@ -102,8 +102,8 @@
                     <td>{{ record?.attendance.vacation?.reason || 'N/A' }}</td>
                     <td>{{ record?.attendance.vacationRequest || 'N/A' }}</td>
                     <td>
-                        <button (click)="approveAttendance(record.attendance, true)" *ngIf="!record.attendance.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record.attendance)">Approve</button>
-                        <button (click)="approveAttendance(record.attendance, false)" *ngIf="record.attendance.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record.attendance)">Reject</button>
+                        <button (click)="approveAttendance(record.attendance, true)" *ngIf="!record.attendance.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record.attendance)">{{"APPROVE"|translate}}</button>
+                        <button (click)="approveAttendance(record.attendance, false)" *ngIf="record.attendance.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record.attendance)">{{"REJECT"|translate}}</button>
                     
                     <a *ngIf="record?.attendance.attendance" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>

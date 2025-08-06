@@ -4,7 +4,11 @@
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'CATEGORIES' | translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('product_categories' , 'add_product_categories')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCategory">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_CATEGORY"|translate}}
+          </span>
     </a>
 </div>
 
@@ -19,7 +23,7 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">Code</th>
+                <th class="bg-light" scope="col">{{"CODE"|translate}}</th>
                 <th class="bg-light" scope="col">{{ 'CATEGORY_NAME' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
@@ -34,9 +38,9 @@
                 </td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('product_categories' , 'edit_product_categories')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateproductCategory', category.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('product_categories' , 'delete_product_categories')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCategory(category.id)"></i>
+                    <i *ngIf="_PermissionService.hasPermission('product_categories' , 'delete_product_categories')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteCategory(category.id)"></i>
                 </td>
             </tr>
         </tbody>

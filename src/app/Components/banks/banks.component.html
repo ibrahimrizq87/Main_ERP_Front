@@ -6,7 +6,11 @@
 
     </div>
     <a *ngIf="_PermissionService.hasPermission('banks' , 'add_banks')"  class="nav-link" routerLinkActive="active" routerLink="/dashboard/addBank">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_BANK"|translate}}
+          </span>
     </a>
 </div>
 
@@ -41,9 +45,9 @@
                 <td>{{ bank.type }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('banks' , 'edit_banks')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateBank', bank.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_BANK' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT_BANK' | translate }}"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('banks' , 'delete_banks')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBank(bank.id)" title="{{ 'DELETE_BANK' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('banks' , 'delete_banks')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteBank(bank.id)" title="{{ 'DELETE_BANK' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

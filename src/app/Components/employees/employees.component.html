@@ -7,7 +7,11 @@
         </span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('employees' , 'add_employees')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-employee">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+      <span class="rounded text-white iconPlus"> 
+  
+        <i class="fa-solid fa-plus  icon "></i>
+        {{"ADD_EMPLOYEE"|translate}}
+      </span>
     </a>
 </div>
 
@@ -52,21 +56,21 @@
                 <div class="d-flex justify-content-center gap-2">
                     <a *ngIf="_PermissionService.hasPermission('employees' , 'details_employees')" class="nav-link" routerLinkActive="active"
                     [routerLink]="['/dashboard/show-employee', employee.id]">
-                    <i class="fa-solid fa-eye btn1 bg-primary rounded"
+                    <i class="fa-solid fa-eye btn1 text-success rounded"
                         title="{{ 'VIEW_EMPLOYEE' | translate }}"></i>
                 </a>
                 <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')  && !employee.delegate"  class="nav-link" routerLinkActive="active"
                 [routerLink]="['/dashboard/update-employee', employee.id]">
-                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                <i class="fa-solid fa-pencil btn1 text-primary rounded"
                     title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
             </a>
 
             <a  *ngIf="_PermissionService.hasPermission('employees' , 'edit_employees')  && employee.delegate"  class="nav-link" routerLinkActive="active"
                 [routerLink]="['/dashboard/update-delegate', employee.delegate.id]">
-                <i class="fa-solid fa-pencil btn1 bg-success rounded"
+                <i class="fa-solid fa-pencil btn1 text-primary rounded"
                     title="{{ 'EDIT_EMPLOYEE' | translate }}"></i>
             </a>
-            <i  *ngIf="_PermissionService.hasPermission('employees' , 'delete_employees')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteEmployee(employee.id)"
+            <i  *ngIf="_PermissionService.hasPermission('employees' , 'delete_employees')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteEmployee(employee.id)"
                 title="{{ 'DELETE_EMPLOYEE' | translate }}"></i>
                 </div>
               </td>

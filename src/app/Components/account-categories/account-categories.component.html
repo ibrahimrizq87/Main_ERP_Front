@@ -6,7 +6,11 @@
         </span>
     </div>
     <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-account-category/{{type}}">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+      <span class="rounded text-white iconPlus"> 
+  
+        <i class="fa-solid fa-plus  icon "></i>
+        {{"ADD_ACCOUNT_CATEGORY"|translate}}
+      </span>
     </a>
 </div>
 
@@ -92,9 +96,9 @@
                   
 
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-account-category/'+entry.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
                     </a>
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>
+                    <i class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

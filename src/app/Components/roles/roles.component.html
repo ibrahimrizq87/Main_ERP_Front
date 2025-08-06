@@ -4,7 +4,11 @@
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'ROLES' | translate }}</span>
     </div>
     <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/addRole">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_ROLE"|translate}}
+          </span>
     </a>
 </div>
 
@@ -32,7 +36,7 @@
                 <td>{{ role.guard_name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                    
-                    <i class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteRole(role.id)"></i>
+                    <i class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteRole(role.id)"></i>
                 </td>
             </tr>
         </tbody>
