@@ -72,7 +72,13 @@ export class StocktakingsComponent implements OnInit {
 
 
 
-    this._StocktakingService.viewAllStocktakings().subscribe({
+    this._StocktakingService.viewAllStocktakings(
+      storeName,
+      startDate,
+      endDate,
+      day
+
+    ).subscribe({
       next: (response) => {
         if (response) {
           console.log(response);
@@ -86,15 +92,16 @@ export class StocktakingsComponent implements OnInit {
     });
   }
   filterStocktakings(): void {
-    if (this.searchQuery.trim() === '') {
-      this.filteredStocktakings = this.stocktakings;  
-    } else {
-      this.filteredStocktakings = this.stocktakings.filter(stocktaking =>
-        stocktaking.aribic_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        stocktaking.english_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        stocktaking.type_bank.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
+    this.loadStocktakings();
+    // if (this.searchQuery.trim() === '') {
+    //   this.filteredStocktakings = this.stocktakings;  
+    // } else {
+    //   this.filteredStocktakings = this.stocktakings.filter(stocktaking =>
+    //     stocktaking.aribic_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+    //     stocktaking.english_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+    //     stocktaking.type_bank.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //   );
+    // }
   }
   deleteStocktaking(stocktakingId: number): void {
     if (confirm('Are you sure you want to delete this stocktaking?')) {
