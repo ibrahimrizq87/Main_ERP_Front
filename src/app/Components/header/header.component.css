@@ -1,17 +1,139 @@
-.logoimg{
-    width:11%;
-}
-.dropdown{
-    background-color: #F5F5F5;
-}
-.navbar{
-    background-color: #FFFFFF;
-}
-.dropdown-menu {
-    display: none;
+.logoimg {
+    width: 15%;
   }
   
-.dropdown-menu.show {
+  .navbar {
+    background-color: #FFFFFF;
+    direction: rtl;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+ 
+  .navbar-brand {
+    margin-right: 90px;
+  }
+
+  
+  /* User Card Styles */
+  .user-card {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+    
+  }
+  
+  .user-card:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .user-avatar {
+    margin-left: 8px;
+    font-size: 24px;
+    color: #6c757d;
+  }
+  
+  .user-name {
+    font-weight: 500;
+    color: #343a40;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .dropdown-arrow {
+    margin-right: 8px;
+    font-size: 12px;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+  }
+  
+  .dropdown-arrow.rotated {
+    transform: rotate(180deg);
+  }
+  
+  /* Dropdown Menu Styles */
+  .dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    min-width: 160px;
+    padding: 8px 0;
+    margin-top: 8px;
+  }
+  
+  .dropdown-menu.show {
     display: block;
   }
   
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: #dc3545;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: right;
+    font-weight: 500;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #dc3545;
+  }
+  
+  .dropdown-item i {
+    font-size: 14px;
+  }
+  
+  /* RTL Support */
+  [dir="rtl"] .user-card {
+    flex-direction: row-reverse;
+  }
+  
+  [dir="rtl"] .user-avatar {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+  
+  [dir="rtl"] .dropdown-arrow {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  
+  [dir="rtl"] .dropdown-item {
+    text-align: left;
+  }
+  #navbarSupportedContent{
+    margin-right: 600px;
+  }
+  /* Responsive Design */
+  @media (max-width: 991px) {
+    .user-card {
+      justify-content: center;
+      margin: 10px 0;
+    }
+    #navbarSupportedContent{
+        margin-right: 0px;
+      }
+  }
+  
+  /* Animation for smooth dropdown */
+  .dropdown-menu {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+  }
