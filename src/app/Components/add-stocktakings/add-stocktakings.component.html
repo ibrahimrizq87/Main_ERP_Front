@@ -20,18 +20,6 @@
             </div>
             <div class="card-body pb-5">
               <div class="row">
-                <!-- <div class="form-group col-md-6">
-                  <label for="store_id" class="form-label large-text">{{ 'STORE' | translate }}</label>
-                  <select id="store_id" formControlName="store_id" class="form-control" (change)="onStoreChange($event)"
-                    [class.is-invalid]="!selectedStore && isSubmited">
-                    <option value="">{{ 'SELECT_STORE' | translate }}</option>
-                    <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
-                  </select>
-                  <div class="invalid-feedback" *ngIf="!selectedStore && isSubmited">
-                    {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
-                  </div>
-                </div> -->
-
                    <div class="form-group col-md-6">
                   <div class="form-group col-md-6">
                     <label class="form-label">{{ 'STORE' | translate }}</label>
@@ -45,8 +33,6 @@
                       {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
                     </div>
                   </div>
-
-
 
                   <div class="invalid-feedback" *ngIf="!selectedStoreObject  && isSubmited">
                     {{ 'Store' | translate }} {{ 'IS_REQUIRED' | translate }}
