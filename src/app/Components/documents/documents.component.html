@@ -4,7 +4,11 @@
       <span class="text-muted">{{ 'paymentDocuments.DASHBOARD' | translate }} <i class="fa-solid fa-angle-right"></i>{{ 'paymentDocuments.PAYMENT_DOCUMENT' | translate }}</span>
   </div>
   <a  *ngIf="_PermissionService.hasPermission('payment-documents' , 'add_payment-documents')"  class="nav-link" [routerLink]="addDocumentRouterLink">
-    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_DOCUMENT"|translate}}
+    </span>
   </a>
 </div> 
 
@@ -168,12 +172,12 @@
                     </a>
 
                   <a *ngIf="_PermissionService.hasPermission('payment-documents' , 'details_payment-documents')" class="nav-link" [routerLink]="['/dashboard/showPaymentDocument', document.id]">
-                    <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+                    <i class="fa-solid fa-eye btn1 text-success rounded"></i>
                   </a>
                   <a *ngIf=" status!= 'approved' && _PermissionService.hasPermission('payment-documents' , 'edit_payment-documents')" class="nav-link" [routerLink]="['/dashboard/updatePaymentDocument', document.id , type]">
-                    <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+                    <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
                   </a>
-                  <i *ngIf=" status!= 'approved' && _PermissionService.hasPermission('payment-documents' , 'delete_payment-documents')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDocument(document.id)"></i>
+                  <i *ngIf=" status!= 'approved' && _PermissionService.hasPermission('payment-documents' , 'delete_payment-documents')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteDocument(document.id)"></i>
                  </div>
               </td>
           </tr>

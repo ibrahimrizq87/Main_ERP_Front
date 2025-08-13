@@ -4,7 +4,11 @@
       <span class="text-muted">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'PURCHASES' | translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('return_purchase_bills' , 'add_return_purchase_bills')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-return-purchase">
-      <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+      <span class="rounded text-white iconPlus"> 
+  
+        <i class="fa-solid fa-plus  icon "></i>
+        {{"ADD_RETURN_PURCHASE"|translate}}
+      </span>
     </a>
   </div>
  
@@ -160,13 +164,13 @@
   
   
               <a *ngIf="status == 'waiting' || status == 'rejected'" class="btn btn-info" (click)="ManageChangeStatus('approved' ,purchase.id)">
-                approve
+                {{"APPROVE" | translate}}
               </a>
               <a  *ngIf="status == 'approved' || status == 'waiting'"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',purchase.id)">
-                reject
+                {{ 'REJECT' | translate }}
               </a>
               <a *ngIf="status == 'rejected'" class="btn btn-success" (click)="ManageChangeStatus('waiting',purchase.id)">
-                waiting
+                {{ 'WAITING' | translate }}
               </a>
   
   
@@ -174,13 +178,13 @@
   
   
             <a *ngIf="_PermissionService.hasPermission('return_purchase_bills' , 'details_return_purchase_bills')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-return-purchase', purchase.id]">
-              <i class="fa-solid fa-eye btn1 bg-primary rounded"></i>
+              <i class="fa-solid fa-eye btn1 text-success rounded"></i>
             </a>
   
               <a *ngIf="status != 'approved' && _PermissionService.hasPermission('return_purchase_bills' , 'edit_return_purchase_bills')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-return-purchase', purchase.id]">
-                <i class="fa-solid fa-pencil btn1 bg-success rounded"></i>
+                <i class="fa-solid fa-pencil btn1 text-primary rounded"></i>
               </a>
-              <i *ngIf="status != 'approved' && _PermissionService.hasPermission('return_purchase_bills' , 'delete_return_purchase_bills')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deletePurchase(purchase.id)"></i>
+              <i *ngIf="status != 'approved' && _PermissionService.hasPermission('return_purchase_bills' , 'delete_return_purchase_bills')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deletePurchase(purchase.id)"></i>
             </div>
           </td>
         </tr>

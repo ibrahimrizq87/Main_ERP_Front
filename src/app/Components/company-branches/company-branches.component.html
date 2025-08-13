@@ -8,7 +8,11 @@
             <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{  'COMPANY_BRANCHES'| translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('company_branches' , 'add_company_branches')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCompanyBranch">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_COMPANY_BRANCH"|translate}}
+          </span>
     </a>
 </div>
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
@@ -21,7 +25,7 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">ID</th>
+                <th class="bg-light" scope="col">{{"ID"|translate}}</th>
                 <th class="bg-light" scope="col">{{ 'COMPANY_NAME' | translate }}</th>
                 <th class="bg-light" scope="col">{{'latitude'|translate}} </th>
                 <th class="bg-light" scope="col">{{'LONG'|translate}} </th>
@@ -39,12 +43,12 @@
                 <td>{{companyBranch.radius_km }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('company_branches' , 'details_company_branches')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showCompanyBranch', companyBranch.id]">
-                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'managecompanyBranch.view' | translate }}"></i>    
+                        <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'managecompanyBranch.view' | translate }}"></i>    
                     </a>
                     <a *ngIf="_PermissionService.hasPermission('company_branches' , 'edit_company_branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCompanyBranch', companyBranch.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'managecompanyBranch.edit' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'managecompanyBranch.edit' | translate }}"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('company_branches' , 'delete_company_branches')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCompanyBranch(companyBranch.id)" title="{{ 'manageColor.delete' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('company_branches' , 'delete_company_branches')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteCompanyBranch(companyBranch.id)" title="{{ 'manageColor.delete' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

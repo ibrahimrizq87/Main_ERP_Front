@@ -1,20 +1,36 @@
-<nav class="navbar navbar-expand-lg  shadow rounded" style="width: 90%; margin: 20px auto;">
-    <div class="container">
-        
-      <a class="navbar-brand" href="#">
-        <img src="images/logoallparts.png" class="logoimg"/>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="d-flex" *ngIf="isLoggedIn">
-          <button class="btn btn-danger" (click)="logout()">
-            <i class="fas fa-sign-out-alt me-1"></i> Logout
-          </button>
+<nav class="navbar navbar-expand-lg shadow rounded pt-3 pb-3 mb-2">
+  <div class="nav">
+    <a class="navbar-brand" href="#">
+      <img src="images/logoallparts.png" class="logoimg"/>
+    </a>
+    
+    <div id="navbarSupportedContent">
+      <div *ngIf="isLoggedIn">
+        <!-- User Card with Dropdown -->
+        <div class="dropdown">
+          <div class="user-card" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleUserDropdown()">
+            <!-- User Avatar -->
+            <div class="user-avatar">
+              <img *ngIf="user_image" [src]="user_image" alt="User Image" class="user-image">
+              <i *ngIf="!user_image" class="fas fa-user-circle"></i>
+            </div>
+            <!-- User Name -->
+            <span class="user-name">{{ user_name }}</span>
+            <!-- Dropdown Arrow -->
+            <i class="fas fa-chevron-down dropdown-arrow" [class.rotated]="isUserDropdownOpen"></i>
+          </div>
+          
+          <!-- Dropdown Menu -->
+          <ul class="dropdown-menu dropdown-menu-end" [class.show]="isUserDropdownOpen">
+            <li>
+              <button class="dropdown-item" (click)="logout()">
+                <i class="fas fa-sign-out-alt ms-2 mt-1"></i>
+                تسجيل الخروج
+              </button>
+            </li>
+          </ul>
         </div>
-     
       </div>
-        
     </div>
-  </nav>
+  </div>
+</nav>

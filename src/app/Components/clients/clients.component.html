@@ -6,7 +6,11 @@
         </span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('clients' , 'add_clients')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-client">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_CLIENT"|translate}}
+          </span>
     </a>
 </div>
 
@@ -62,9 +66,9 @@
                 </td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('clients' , 'edit_clients')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-client/', client.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_CLIENT' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT_CLIENT' | translate }}"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('clients' , 'delete_clients')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteClient(client.id)" title="{{ 'DELETE_CLIENT' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('clients' , 'delete_clients')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteClient(client.id)" title="{{ 'DELETE_CLIENT' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

@@ -7,7 +7,11 @@
     </span>
   </div>
   <a *ngIf="_PermissionService.hasPermission('product_branches' , 'add_product_branches')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductBranch">
-    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_PRODUCT_BRANCH"|translate}}
+    </span>
   </a>
 </div>
 
@@ -15,7 +19,8 @@
 <div *ngIf="_PermissionService.hasPermission('product_branches' , 'edit_product_branches')"  class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
     <a (click)="openModal('ImportForm')" class="btn btn-outline-info ms-2">
-      export or import product Branches
+      <!-- export or import product Branches -->
+       {{'EXPORT_OR_IMPORT_PRODUCT_BRANCHES' | translate}}  
     </a>
   </header>
 </div>
@@ -62,12 +67,12 @@
 
         <td class="d-flex justify-content-center gap-3 align-items-center">
           <a  *ngIf="_PermissionService.hasPermission('product_branches' , 'details_product_branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showProductBranch', branch.id]">
-            <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>
+            <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'VIEW_BRANCH' | translate }}"></i>
           </a>
           <a  *ngIf="_PermissionService.hasPermission('product_branches' , 'edit_product_branches')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateProductBranch', branch.id]">
-            <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+            <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT' | translate }}"></i>
           </a>
-          <i  *ngIf="_PermissionService.hasPermission('product_branches' , 'delete_product_branches')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteBranch(branch.id)"></i>
+          <i  *ngIf="_PermissionService.hasPermission('product_branches' , 'delete_product_branches')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteBranch(branch.id)"></i>
         </td>
       </tr>
     </tbody>
@@ -136,10 +141,10 @@
                         
 
                         <div class="form-group col-md-6 mt-2">
-                          <label for="file" class="form-label">{{ 'ACTION' | translate }}</label>
+                          <label for="file" class="form-label">{{ 'ACTIONS' | translate }}</label>
                           <br>
-                          <a (click)="handleExport()" class="btn btn-outline-success me-3">{{ 'EXPORT' | translate }}</a>
-                          <a  (click)="handleForm()" class="btn btn-outline-info">{{ 'IMPORT' | translate }}</a>
+                          <a (click)="handleExport()" class="btn btn-outline-success ">{{ 'EXPORT' | translate }}</a>
+                          <a  (click)="handleForm()" class="btn btn-outline-info me-3">{{ 'IMPORT' | translate }}</a>
                         </div>
                       </div>
                     </div>

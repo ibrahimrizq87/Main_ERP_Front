@@ -183,7 +183,8 @@ import { UpdatePurchaseOrderComponent } from './Components/update-purchase-order
 
 
 export const routes: Routes = [
-    { path: "", component: HomeComponent },
+    // { path: "", component: HomeComponent },
+    { path: "", component: LoginComponent },
     { path: "login", component: LoginComponent },
     { path: "register", component: RegisterComponent },
     { path: "loginClient", component: LoginClientComponent },

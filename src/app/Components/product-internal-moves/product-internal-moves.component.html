@@ -5,7 +5,11 @@
       {{ 'PRODUCT_INTERNAL_MOVES' | translate }}</span>
   </div>
   <a *ngIf="_PermissionService.hasPermission('product_internal_moves' , 'add_product_internal_moves')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addProductInternalMoves">
-    <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+    <span class="rounded text-white iconPlus"> 
+  
+      <i class="fa-solid fa-plus  icon "></i>
+      {{"ADD_PRODUCT_INTERNAL_MOVE"| translate}}
+    </span>
   </a>
 </div>
 <div class="container">
@@ -130,27 +134,27 @@
           <div class="d-flex justify-content-around align-items-center">
             <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-info"
               (click)="ManageChangeStatus('approved' ,productMove.id)">
-              approve
+              {{"APPROVE"|translate}}
             </a>
             <a *ngIf="(status == 'waiting') && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-danger"
               (click)="ManageChangeStatus('rejected',productMove.id)">
-              reject
+              {{"REJECT"|translate}}
             </a>
             <a *ngIf="status == 'rejected' && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')" class="btn btn-success"
               (click)="ManageChangeStatus('waiting',productMove.id)">
-              waiting
+              {{"WAITING"|translate}}
             </a>
 
             <a *ngIf="_PermissionService.hasPermission('product_internal_moves' , 'details_product_internal_moves')" class="nav-link" routerLinkActive="active"
               [routerLink]="['/dashboard/showProductInternalMoves', productMove.id]">
-              <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW' | translate }}"></i>
+              <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'VIEW' | translate }}"></i>
             </a>
 
             <a *ngIf="status != 'approved' && _PermissionService.hasPermission('product_internal_moves' , 'edit_product_internal_moves')"  class="nav-link" routerLinkActive="active"
               [routerLink]="['/dashboard/updateProductInternalMoves', productMove.id]">
-              <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT' | translate }}"></i>
+              <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT' | translate }}"></i>
             </a> 
-            <i *ngIf="status != 'approved' && _PermissionService.hasPermission('product_internal_moves' , 'delete_product_internal_moves')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteProductMove(productMove.id)"
+            <i *ngIf="status != 'approved' && _PermissionService.hasPermission('product_internal_moves' , 'delete_product_internal_moves')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteProductMove(productMove.id)"
               title="{{ 'DELETE' | translate }}"></i>
           </div>
         </td>

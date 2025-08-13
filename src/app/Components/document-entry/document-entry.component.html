@@ -6,7 +6,11 @@
         </span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('entry-documents' , 'add_entry-documents')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addDocumentEntry">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+      <span class="rounded text-white iconPlus"> 
+  
+        <i class="fa-solid fa-plus  icon "></i>
+        {{"ADD_DOCUMENT"|translate}}
+      </span>
     </a>
 </div>
 
@@ -155,22 +159,22 @@
                 <td class="d-flex justify-content-center gap-3 align-items-center">
 
                   <a *ngIf="(status == 'waiting' || status == 'rejected') && _PermissionService.hasPermission('entry-documents' , 'details_entry-documents')" class="btn btn-info" (click)="ManageChangeStatus('approved' ,entry.id)">
-                    approve
+                    {{ 'APPROVE' | translate }}
                   </a>
                   <a  *ngIf="status == 'waiting' && _PermissionService.hasPermission('entry-documents' , 'details_entry-documents')"   class="btn btn-danger" (click)="ManageChangeStatus('rejected',entry.id)">
-                    reject
+                    {{ 'REJECT' | translate  }}
                   </a>
                   <a *ngIf="status == 'rejected' && _PermissionService.hasPermission('entry-documents' , 'details_entry-documents')" class="btn btn-success" (click)="ManageChangeStatus('waiting',entry.id)">
-                    waiting
+                    {{ 'WAITING' | translate }}
                   </a>
                     <a *ngIf="_PermissionService.hasPermission('entry-documents' , 'details_entry-documents')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showEntryDocument', entry.id]">
-                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'VIEW_DOCUMENT' | translate }}"></i> 
+                        <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'VIEW_DOCUMENT' | translate }}"></i> 
                     </a>
 
                     <a *ngIf="status != 'approved' && _PermissionService.hasPermission('entry-documents' , 'edit_entry-documents')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateEntryDocument', entry.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'EDIT_DOCUMENT' | translate }}"></i>
                     </a>
-                    <i *ngIf="status != 'approved' && _PermissionService.hasPermission('entry-documents' , 'delete_entry-documents')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>
+                    <i *ngIf="status != 'approved' && _PermissionService.hasPermission('entry-documents' , 'delete_entry-documents')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteDocument(entry.id)" title="{{ 'DELETE_DOCUMENT' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

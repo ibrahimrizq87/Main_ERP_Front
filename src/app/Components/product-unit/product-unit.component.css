@@ -1,10 +1,10 @@
 span {
-    font-size: 12px ;
+    font-size: 12px  ;
 }
 .iconPlus{
-    background-color: #145388;
+    background-color: #003E29;
     padding: 11px;
-    font-size: 10px;
+    font-size: 15px;
 
 }
 .vendortable{
@@ -20,12 +20,13 @@ span {
 }
 .btn1{
     color:white;
-    padding: 5px;
+    padding: 6px;
 }
-
 i{
     cursor: pointer;
 }
+
+
 
 thead {
     background-color:black !important;
@@ -33,13 +34,21 @@ thead {
 tr,th,td{
     text-align: center;
 }
+i{
+    cursor:pointer
+}
+.icon{
+    border :#FFFFFF 1px solid;
+    border-radius: 20%;
+    padding: 2px 2px 1px 2px;
 
-
-
-
-.disabled-link {
-  pointer-events: none;
-  color: gray;
-  cursor: not-allowed;
-  text-decoration: none;
+}
+.fa-eye {
+    background-color: #F0FDF4;
+}
+.fa-pencil{
+    background-color: #EFF6FF;
+}
+.fa-trash-can{
+    background-color: #FEF2F2;
 }

@@ -5,7 +5,11 @@
             <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{  'manageColor.colors'| translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('colors' , 'add_colors')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-color">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_COLOR"|translate}}
+          </span>
     </a>
 </div>
 
@@ -44,9 +48,9 @@
                 <td>{{ color.color }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a  *ngIf="_PermissionService.hasPermission('colors' , 'edit_colors')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/update-color', color.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageColor.edit' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'manageColor.edit' | translate }}"></i>
                     </a>
-                    <i  *ngIf="_PermissionService.hasPermission('colors' , 'delete_colors')"  class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteColor(color.id)" title="{{ 'manageColor.delete' | translate }}"></i>
+                    <i  *ngIf="_PermissionService.hasPermission('colors' , 'delete_colors')"  class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteColor(color.id)" title="{{ 'manageColor.delete' | translate }}"></i>
                 </td>
             </tr>
         </tbody>

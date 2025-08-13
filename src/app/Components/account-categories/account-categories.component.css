@@ -1,10 +1,10 @@
 span {
-    font-size: 12px ;
+    font-size: 12px  ;
 }
 .iconPlus{
-    background-color: #145388;
+    background-color: #003E29;
     padding: 11px;
-    font-size: 10px;
+    font-size: 15px;
 
 }
 .vendortable{
@@ -20,12 +20,13 @@ span {
 }
 .btn1{
     color:white;
-    padding: 5px;
+    padding: 6px;
 }
-
 i{
     cursor: pointer;
 }
+
+
 
 thead {
     background-color:black !important;
@@ -53,4 +54,13 @@ tr,th,td{
     color: #0056b3; /* Darker blue on hover */
     cursor: pointer;
 
-  }
+}
+.fa-eye {
+    background-color: #F0FDF4;
+}
+.fa-pencil{
+    background-color: #EFF6FF;
+}
+.fa-trash-can{
+    background-color: #FEF2F2;
+}

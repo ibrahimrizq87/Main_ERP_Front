@@ -4,7 +4,11 @@
         <span class="text-muted">{{ 'manageCity.dashboard' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'manageCity.cities' | translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('cities' , 'add_cities')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/addCity">
-        <i class="fa-solid fa-plus text-white iconPlus rounded"></i>
+        <span class="rounded text-white iconPlus"> 
+  
+            <i class="fa-solid fa-plus  icon "></i>
+            {{"ADD_CITY"|translate}}
+          </span>
     </a>
 </div>
 
@@ -39,12 +43,12 @@
                 <td>{{ city.name }}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
                     <a *ngIf="_PermissionService.hasPermission('cities' , 'details_cities')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showCity',city.id]">
-                        <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>
+                        <i class="fa-solid fa-eye btn1 text-success rounded" title="{{ 'manageCity.view' | translate }}"></i>
                     </a>
                     <a *ngIf="_PermissionService.hasPermission('cities' , 'edit_cities')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/updateCity',city.id]">
-                        <i class="fa-solid fa-pencil btn1 bg-success rounded" title="{{ 'manageCity.edit' | translate }}"></i>
+                        <i class="fa-solid fa-pencil btn1 text-primary rounded" title="{{ 'manageCity.edit' | translate }}"></i>
                     </a>
-                    <i *ngIf="_PermissionService.hasPermission('cities' , 'delete_cities')" class="fa-solid fa-trash-can btn1 bg-danger rounded" (click)="deleteCity(city.id)" title="{{ 'manageCity.delete' | translate }}"></i>
+                    <i *ngIf="_PermissionService.hasPermission('cities' , 'delete_cities')" class="fa-solid fa-trash-can btn1 text-danger rounded" (click)="deleteCity(city.id)" title="{{ 'manageCity.delete' | translate }}"></i>
                 </td>
             </tr>
         </tbody>
