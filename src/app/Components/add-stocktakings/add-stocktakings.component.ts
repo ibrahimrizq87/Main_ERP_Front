@@ -131,6 +131,7 @@ const modalElement = document.getElementById('storeModal');
    selectStore(store: any) {
     this.stocktackingForm.patchValue({ store_id: store.id });
       this.selectedStore = store.id;
+      this.selectedStoreObject = store;
     this.loadProductBranches(this.selectedStore);
 
       this.closeStoreModal(); // Close modal after selection

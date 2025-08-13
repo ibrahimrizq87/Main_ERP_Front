@@ -1,4 +1,5 @@
 {
+  "WORKER_NAME" : "اسم العامل",
   "PAY_RETURN_BILL" :"دفع فاتورة مردود المبياعات",
   "PAY_BILL":" دفع فاتورة" ,
   "SELECT_RETEUN_SALE_BILL": "اختر فاتورة مردود مبيعات" ,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
@@ -34,8 +34,30 @@ getDifference(differenceData: FormData): Observable<any> {
 save(saveData: FormData): Observable<any> {
   return this._HttpClient.post(`${this.baseURL}/general/store-stocktakings/save`, saveData ,{ headers:this.getHeadersWithToken() }) ;
  }
-viewAllStocktakings(): Observable<any> {
- return this._HttpClient.get(`${this.baseURL}/general/store-stocktakings/get-all`,{ headers:this.getHeadersWithToken()  });
+viewAllStocktakings(
+
+
+
+      storeName: string = '',
+      startDate: string = '',
+      endDate: string = '',
+      day: string = '',
+ 
+
+
+): Observable<any> {
+
+   let params = new HttpParams();
+                if (storeName !== '') params = params.set('searchTerm', storeName);
+                if (startDate) params = params.set('startDate', startDate);
+                if (endDate) params = params.set('endDate', endDate);
+                if (day) params = params.set('day', day);
+
+                
+ return this._HttpClient.get(`${this.baseURL}/general/store-stocktakings/get-all`,{ headers:this.getHeadersWithToken(),
+
+  params: params
+   });
 }
 viewStocktakingsById(id:any): Observable<any>{
  return this._HttpClient.get(this.baseURL+"/general/store-stocktakings/get-by-id/"+id, { headers:this.getHeadersWithToken() });

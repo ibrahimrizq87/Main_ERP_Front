@@ -52,9 +52,11 @@
 
  
     <div class="col-md-2">
-      <label class="form-label mb-1">{{ 'STORE' | translate }}</label>
+      <label class="form-label mb-1">{{ 'SEARCH' | translate }}</label>
       <input type="text" class="form-control" 
-             [(ngModel)]="filters.storeName">
+             [(ngModel)]="filters.storeName"
+             (ngModelChange)="filterStocktakings()"
+             >
     </div>
 
     <div class="col-md-1 d-flex align-items-end">
@@ -79,7 +81,7 @@
 
 
 <div class="vendortable rounded mt-4 shadow-sm p-4 bg-white">
-    <div class="container">
+    <!-- <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="fw-bold">{{ 'STOCKTAKING_LIST' | translate }}</span>
             <input class="form-control search w-25" 
@@ -90,7 +92,7 @@
             (ngModelChange)="filterStocktakings()">
           
         </div>
-    </div>
+    </div> -->
 
     <table class="table mt-3">
         <thead>
@@ -98,15 +100,21 @@
   
                 <th class="bg-light" scope="col">#</th>
                 <th class="bg-light" scope="col">{{ 'STORE' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'WORKER_NAME' | translate }}</th>
+                <th class="bg-light" scope="col">{{ 'CATEGORY' | translate }}</th>
+
                 <th class="bg-light" scope="col">{{ 'DATE' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'APPROVED_BY' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACTIONS' | translate }}</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let stocktaking of filteredStocktakings; let i = index">
+            <tr *ngFor="let stocktaking of stocktakings; let i = index">
                 <th scope="row">{{ stocktaking.id  }}</th>
                 <td>{{ stocktaking.store.name}}</td>
+                <td>{{ stocktaking.worker_name ?? "--"}}</td>
+                <td>{{ stocktaking.productCategory ? stocktaking.productCategory.name : "--"}}</td>
+
                 <td>{{ stocktaking.date }}</td>
                 <td>{{ stocktaking.approved_by || "N/A"}}</td>
                 <td class="d-flex justify-content-center gap-3 align-items-center">
