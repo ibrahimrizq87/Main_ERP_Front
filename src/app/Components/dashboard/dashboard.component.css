@@ -1,18 +1,101 @@
+/* Prevent body scrolling and set up full height layout */
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent page-level scrolling */
+    margin: 0;
+    padding: 0;
+}
+
 #dashboard {
-    background-color: #F8FAF9;
+    /* background-color: #F8FAF9; */
     direction: rtl;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent dashboard from scrolling */
 }
 
 .logoimg {
     width: 100px;
 }
 
+/* Container fluid adjustments for full height */
+#dashboard .container-fluid {
+    height: calc(100vh - 80px); /* Subtract header height (adjust as needed) */
+    padding: 0;
+}
+
+#dashboard .row {
+    height: 100%;
+    margin: 0;
+}
+
+/* Sidebar with independent scrolling */
 .sidebar {
     background-color: #FFFFFF;
-    height: 100vh;
-    overflow: auto;
+    height: 100%; /* Full height of parent container */
+    overflow-y: auto; /* Enable vertical scrolling for sidebar only */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
     padding-top: 10px;
     border-right: 1px solid #ddd;
+    /* Custom scrollbar styling for better appearance */
+    scrollbar-width: thin;
+    scrollbar-color: #003E29 #f1f1f1;
+}
+
+/* Webkit browsers scrollbar styling for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #003E29;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #002818;
+}
+
+/* Profile content with independent scrolling */
+.profile-content {
+    background-color: #dddddd15;
+    padding: 10px;
+    border-radius: 10px;
+    height: 100%; /* Full height of parent container */
+    overflow-y: auto; /* Enable vertical scrolling for content only */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+/* Webkit browsers scrollbar styling for profile content */
+.profile-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.profile-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.profile-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Container inside profile content */
+.mycontainer {
+    min-height: 100%; /* Ensure content can expand */
+    padding: 20px;
 }
 
 .nav-item {
@@ -65,17 +148,6 @@
     border-radius: 3px;
 }
 
-/* Layout classes */
-/* .nested {
-    margin-left: 40px !important;
-} */
-
-/* .nested-inside { */
-    /* margin-left: 10px !important; */
-    /* border-left: 2px solid #ccc; */
-    /* padding-left: 10px; */
-/* } */
-
 /* Font size adjustments */
 .nested .nav-link,
 .nested-inside .nav-link {
@@ -87,11 +159,43 @@
     padding: 6px 10px;
 }
 
-.profile-content {
-    background-color: #FDFEFE;
-}
-
 /* Additional utility classes */
 .nav-link {
     transition: background-color 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #dashboard .container-fluid {
+        height: auto;
+    }
+    
+    .sidebar {
+        height: auto;
+        max-height: 50vh;
+    }
+    
+    .profile-content {
+        height: auto;
+        max-height: 50vh;
+    }
+    
+    html, body {
+        overflow: auto; /* Allow scrolling on mobile */
+    }
+    
+    #dashboard {
+        height: auto;
+        overflow: visible;
+    }
+}
+
+/* Ensure router-outlet content doesn't break the layout */
+router-outlet {
+    display: block;
+}
+
+/* Fix for any sticky elements that might interfere */
+.sticky-top {
+    position: static !important;
 }
