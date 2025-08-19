@@ -86,4 +86,61 @@ export class EmployeesComponent {
       });
     }
   }
+
+
+
+
+selectedFile: File | null = null;
+
+onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    this.selectedFile = input.files[0];
+  }
+}
+
+
+importVendors(): void {
+  if (!this.selectedFile) return;
+
+  const formData = new FormData();
+  formData.append('file', this.selectedFile);
+  this._EmployeeService.importEmployees(formData).subscribe({
+      next: (response) => {
+            this.toastr.success('تمت العملية بنجاح');
+            console.log(response)
+
+      },
+      error: (err) => {
+        console.error("Error:", err);
+        this.toastr.error('حدث خطا ');
+
+      }
+    });
+
+}
+
+fileName: string = 'employees_template';
+
+  exportVendors(){
+
+    const name = this.fileName || 'vendors_template';
+    this._EmployeeService.exportEmployeesTemplate().subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name+'.xlsx'); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error("Error downloading file:", err);
+      }
+    });
+  }
+
+
 }

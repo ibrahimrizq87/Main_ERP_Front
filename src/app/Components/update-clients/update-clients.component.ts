@@ -166,6 +166,7 @@ removeCurrentDelegate(){
       next: (response) => {
         if (response) {
           const client =  response.data;
+          console.log(client);
           this.clientForm.patchValue({
             ar: client.account.name_lang.ar,
             en: client.account.name_lang.en,

@@ -84,5 +84,21 @@ export class ClientService {
       headers:this.getHeadersWithToken(),
     params:params });
   }
+
+
+  importClients( data: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/clients/import-excel`, data, { headers: this.getHeadersWithToken() });
+  }
+
+
+  exportClientsTemplate(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/clients/export-template`, { 
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+  });
+  }
+
+
+
  
 }

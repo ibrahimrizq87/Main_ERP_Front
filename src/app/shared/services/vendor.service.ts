@@ -64,4 +64,22 @@ export class VendorService {
     storeData.append('_method', 'PUT');
     return this._HttpClient.post(`${this.baseURL}/general/vendors/${store_id}`, storeData, { headers:this.getHeadersWithToken()  });
   }
+
+
+
+
+  importVendors( data: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/vendors/import-excel`, data, { headers: this.getHeadersWithToken() });
+  }
+
+
+  exportVendorsTemplate(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/vendors/export-template`, { 
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+  });
+}
+
+
+
 }

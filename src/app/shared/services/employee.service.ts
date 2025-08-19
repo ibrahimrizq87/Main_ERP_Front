@@ -89,4 +89,24 @@ export class EmployeeService {
       params: params})
   }
 
+
+
+
+
+  importEmployees( data: FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/employees/import-employees`, data, { headers: this.getHeadersWithToken() });
+  }
+
+
+  exportEmployeesTemplate(): Observable<any> {
+    return this._HttpClient.get(`${this.baseURL}/general/employees/export-employees`, { 
+      headers: this.getHeadersWithToken(),
+      responseType: 'blob' 
+  });
+}
+
+
+
+
+
 }
