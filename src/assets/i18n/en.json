@@ -1162,5 +1162,6 @@
   "CASH":" Cash",
   "MONTHLY":" Monthly",
   "BILL_NUMBER":" Bill Number",
-  "UPDATE_COLOR":" Update Color"
+  "UPDATE_COLOR":" Update Color",
+  "STOCKTAKINGS_DETAILS":" Stocktakings Details"
 }

@@ -1161,5 +1161,6 @@
 "hourly": "بالساعة",
 "commission": "عمولة",
 "none":"لا شيء",
-"UPDATE_COLOR":"تحديث اللون"
+"UPDATE_COLOR":"تحديث اللون",
+"STOCKTAKINGS_DETAILS":"تفاصيل جرد المخزون"
   }

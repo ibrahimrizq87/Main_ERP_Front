@@ -3,11 +3,11 @@ import { StocktakingService } from '../../shared/services/stocktaking.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-view-stocktakings',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateModule],
   templateUrl: './view-stocktakings.component.html',
   styleUrl: './view-stocktakings.component.css'
 })
