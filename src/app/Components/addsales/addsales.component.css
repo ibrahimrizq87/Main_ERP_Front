@@ -1,35 +1,144 @@
-span {
-    font-size: 12px ;
+/* src/app/Components/add-company-branch/add-company-branch.component.css */
+
+.map-container {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  margin-top: 10px;
+  position: relative;
+  z-index: 1;
 }
-label{
-    font-size: 14px;
-    margin-top:15px;
+
+.em-card {
+  transition: all 0.3s ease;
 }
-.card-header h5 {
-    font-size: 15px;
-     
-  }
+
+.em-card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.form-control {
+  border-radius: 6px;
+  padding: 10px 15px;
+  border: 1px solid #ced4da;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23343a40' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+}
 
 .card-header {
-    position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.alert-info {
+  background-color: #e6f7ff;
+  border-color: #b3e0ff;
+  color: #0070cc;
+}
+
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content {
+  margin: 10px 15px;
+  line-height: 1.5;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2);
+}
+
+.location-marker {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
   }
-
-.card-header ::after {
-    content: '';         
-    position: absolute;
-    top: 25%;               
-    left:0 ;              
-    height: 50%;          
-    width: 3px;           
-    background-color: #145388; 
+  
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+  }
+  
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  min-height: 400px;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
 }
 
-
-
-
-.disabled-option {
-  background-color: #e9ecef;
-  color: #6c757d;
-  pointer-events: none; /* prevents hover and click, if desired */
-  user-select: none;
+.leaflet-control-attribution {
+  font-size: 10px;
 }
+span {
+  font-size: 12px ;
+}
+label{
+  font-size: 14px;
+  margin-top:15px;
+}
+.card-header h5 {
+  font-size: 20px;
+ font-family:  Montserrat-Arabic, sans-serif;
+font-weight: 500;
+}
+.card-header {
+  background-color: #E6ECEA;
+  color: black;
+
+}
+.btn-primary {
+  background-color: #003E29;
+  border-color: #003E29;
+}
+/* .card-header ::after {
+  content: '';         
+  position: absolute;
+  top: 25%;               
+  left:0 ;              
+  height: 50%;          
+  width: 3px;           
+  background-color: #145388; 
+} */

@@ -1163,5 +1163,8 @@
   "MONTHLY":" Monthly",
   "BILL_NUMBER":" Bill Number",
   "UPDATE_COLOR":" Update Color",
-  "STOCKTAKINGS_DETAILS":" Stocktakings Details"
+  "STOCKTAKINGS_DETAILS":" Stocktakings Details",
+  "ADD_RETURN_PURCHASE_BILL":" Add Return Purchase Bill",
+  "UPDATE_RETURN_SALES_BILL":" Update Return Sales Bill",
+  "UPDATE_DOCUMENT":" Update Document"
 }

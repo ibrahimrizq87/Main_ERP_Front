@@ -55,8 +55,10 @@ i{
 
 .nav-link.active-tab {
   font-weight: bold;
-  color: #007bff !important; /* Blue text */
-  border-bottom: 2px solid #007bff;
+  background-color: #003E29 !important; /* Blue text */
+  color: white;
+  border-bottom: 2px solid #003E29;
+  border-radius: 5px;
 }
 
 
@@ -66,7 +68,9 @@ i{
 }
 
 .nav-link:hover {
-  color: #0056b3; /* Darker blue on hover */
+  background-color: #003E29; /* Darker blue on hover */
   cursor: pointer;
+  color: white; 
+  border-radius: 5px;
 
 }

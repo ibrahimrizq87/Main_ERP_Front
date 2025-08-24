@@ -1162,5 +1162,13 @@
 "commission": "عمولة",
 "none":"لا شيء",
 "UPDATE_COLOR":"تحديث اللون",
-"STOCKTAKINGS_DETAILS":"تفاصيل جرد المخزون"
+"STOCKTAKINGS_DETAILS":"تفاصيل جرد المخزون",
+"ADD_RETURN_PURCHASE_BILL":"إضافة فاتورة مرتجع شراء",
+"ADD_SALES_BILL":"إضافة فاتورة مبيعات",
+"ADD_PURCHASE_BILL":"إضافة فاتورة شراء",
+"ADD_RETURN_SALES_BILL":"إضافة فاتورة مرتجع مبيعات",
+"UPDATE_RETURN_PURCHASE_BILL":"تحديث فاتورة مرتجع شراء",
+"UPDATE_SALES_BILL":"تحديث فاتورة مبيعات",
+"UPDATE_RETURN_SALES_BILL":"تحديث فاتورة مرتجع مبيعات",
+"UPDATE_DOCUMENT":"تحديث المستند"
   }

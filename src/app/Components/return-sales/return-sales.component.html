@@ -2,7 +2,7 @@
     <div>
         <h5>{{ 'MANAGE_SALES' | translate }}</h5>
         <span class="text-muted">{{ 'DASHBOARD' | translate }} <i
-                [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'SALES' | translate }}</span>
+                [ngClass]="'fa-solid ' + ('icon-class' | translate)"></i> {{ 'RETURN_SALES' | translate }}</span>
     </div>
     <a *ngIf="_PermissionService.hasPermission('return_sale_bills' , 'add_return_sale_bills')" class="nav-link" routerLinkActive="active" routerLink="/dashboard/add-return-sale">
       <span class="rounded text-white iconPlus"> 
@@ -103,7 +103,7 @@
       </select>
     </div>
     <div class="col-md-1 d-flex align-items-end">
-      <button class="btn btn-primary w-100 py-2" 
+      <button class="btn btn-success w-100 py-2" 
               (click)="loadSales(status)">
         <i class="fa-solid fa-search me-1"></i>
         {{ 'Search' | translate }}
