@@ -858,7 +858,7 @@
   "ENTER_PAYMENT_FEE_ACCOUNT_DETAILS": "أدخل تفاصيل حساب رسوم الدفع",
   "ENTER_SAVING_ACCOUNT_DETAILS": "أدخل تفاصيل حساب التوفير",
   "MAX_LENGTH_IS_255": "الحد الأقصى للطول هو 255",
-  "UPDATE_BANK_BRANCHES": "تحديث فروع البنوك",
+  "UPDATE_BANK_BRANCH": "تحديث فروع البنك",
   "UPDATE_BRANCH": "تحديث الفرع",
   "MANAGE_CITY": "إدارة المدينة",
   "UPDATE_CITY": "تحديث المدينة",
@@ -1171,4 +1171,5 @@
 "UPDATE_SALES_BILL":"تحديث فاتورة مبيعات",
 "UPDATE_RETURN_SALES_BILL":"تحديث فاتورة مرتجع مبيعات",
 "UPDATE_DOCUMENT":"تحديث المستند"
+
   }
