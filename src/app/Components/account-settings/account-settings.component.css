@@ -11,4 +11,7 @@
     font-size: 13px;
     color: #6c757d;
   }
-  
+  .btn-primary {
+    background-color: #003E29;
+    border-color: #003E29;
+  }

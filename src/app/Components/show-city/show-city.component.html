@@ -3,15 +3,15 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card shadow rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
-              <h5>City Details</h5>
+            <div class="card-header text-center text-black rounded-top pt-3">
+              <h5>{{"CITY_DETAILS"|translate}}</h5>
             </div>
             <div class="card-body pb-5">
               <div class="row">
   
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label class="fw-bold">ID:</label>
+                    <label class="fw-bold">{{"ID"|translate}}:</label>
                     <p class="text-muted">{{ cityData?.id || 'غير متوفر' }}</p>
                   </div>
                 </div>
@@ -38,16 +38,19 @@
                 </div>
   
               </div>
+              <div class="mt-5 mb-2">
+                <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/city">
+                  <button type="button" class="btn btn-primary px-4">رجوع</button>
+                </a>
+              </div>
             </div>
+            
           </div>
+        
         </div>
       </div>
   
-      <div class="mt-4 mb-4">
-        <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/city">
-          <button type="button" class="btn btn-primary px-4">رجوع</button>
-        </a>
-      </div>
+   
     </div>
   </div>
   

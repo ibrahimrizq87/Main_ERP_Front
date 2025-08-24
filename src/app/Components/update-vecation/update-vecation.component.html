@@ -1,17 +1,17 @@
-<div class="mt-3 mb-3">
+<!-- <div class="mt-3 mb-3">
     <h5 class="large-text">{{ 'UPDATE_VECATION' | translate }}</h5>
     <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i
             [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i>
         {{ 'VECATIONS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'UPDATE_VECATION' |
         translate }}</span>
-</div>
+</div> -->
 <div class="mt-4 mb-4">
     <form [formGroup]="vecationForm" (ngSubmit)="handleForm()">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card shadow em-card rounded-lg">
-                        <div class="card-header bg-white text-black rounded-top pt-3">
+                        <div class="card-header text-center text-black rounded-top pt-3">
                             <h5 class="large-text">{{ 'UPDATE_VECATION' | translate }}</h5>
                         </div>
                         <div class="card-body pb-5">
@@ -61,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <div class="mt-4 mb-4 d-flex justify-content-evenly w-25">
+                            <div class="mt-5 mb-3 d-flex justify-content-evenly w-25">
                                 <button type="submit" class="btn btn-primary px-4">
                                     <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
                                     {{ 'UPDATE' | translate }}

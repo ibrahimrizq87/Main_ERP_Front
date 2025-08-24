@@ -138,6 +138,7 @@ getRowClass(record: any): string {
       next: (response) => {
         if (response) {
           this.employees = response.data.employees;
+          console.log(this.employees);
         }
       },
       error: (err) => {

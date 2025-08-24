@@ -1,7 +1,9 @@
 .nav-link.active-tab {
     font-weight: bold;
-    color: #007bff !important; /* Blue text */
-    border-bottom: 2px solid #007bff;
+    background-color:  #003E29 !important; 
+    color: white !important; 
+    border-bottom: 2px solid #003E29;
+    border-radius: 5px;
   }
   
 
@@ -11,5 +13,7 @@
   }
   
   .nav-link:hover {
-    color: #0056b3; /* Darker blue on hover */
+    background-color: #003E29 !important ; 
+    color: white; 
+    border-radius: 5px;
   }

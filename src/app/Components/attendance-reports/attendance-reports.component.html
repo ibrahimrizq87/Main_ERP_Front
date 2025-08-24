@@ -27,7 +27,7 @@
                     <select id="employeeSelect" class="form-select" [(ngModel)]="selectedEmployeeId" (change)="onEmployeeChange()">
                         <option value="" disabled selected>{{ 'SELECT_EMPLOYEE' | translate }}</option>
                         <option *ngFor="let employee of employees" [value]="employee.id">
-                            {{ employee?.account?.name }}
+                            {{ employee?.name }}
                         </option>
                     </select>
                 </div>
@@ -151,8 +151,8 @@
                     <td>{{ record?.vacation?.reason || 'N/A' }}</td>
                     <td>{{ record?.vacationRequest || 'N/A' }}</td>
                     <td class="d-flex justify-content-between">
-                        <button (click)="approveAttendance(record, true)" *ngIf="!record.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record)">Approve</button>
-                        <button (click)="approveAttendance(record, false)" *ngIf="record.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record)">Reject</button>
+                        <button (click)="approveAttendance(record, true)" *ngIf="!record.attendance?.approved_by_manager" class="btn btn-success" [disabled]="needApproval(record)">{{"APPROVE"|translate}}</button>
+                        <button (click)="approveAttendance(record, false)" *ngIf="record.attendance?.approved_by_manager" class="btn btn-danger" [disabled]="needApproval(record)">{{"REJECT"|translate}}</button>
                     
                     <a *ngIf="record?.attendance && _PermissionService.hasPermission('attendances' , 'details_attendances')" class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/show-attendance',record?.attendance?.id]">
                         <i class="fa-solid fa-eye btn1 bg-primary rounded" title="{{ 'manageCity.view' | translate }}"></i>

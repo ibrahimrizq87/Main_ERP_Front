@@ -1145,5 +1145,26 @@
 
   "ADD_PRODUCT_INTERNAL_MOVE":"Add Product Internal Move",
   "APPROVED_BY":"Approved By",
-  "ADD_STOCKTAKINGS":"Add Stocktakings"
+  "ADD_STOCKTAKINGS":"Add Stocktakings",
+  "NAME_IS_REQUIRED": "Name is Required",
+  "USER_NAME_IS_REQUIRED":" User Name is Required",
+  "ADD_NEW_USER":" Add New User",
+  "PASSWORD_IS_REQUIRED":" Password is Required",
+  "UPDATE_USER":" Update User",
+  "VECATION_DETAILS":" Vacation Details",
+  "CITY_DETAILS":" City Details",
+  "UPDATE_COUNTRY":" Update Country",
+  "EXPORT_ACCOUNTS":" Export Accounts",
+  "IMPORT_ACCOUNTS":" Import Accounts",
+  "CAN_DELETE":" Can Delete",
+  "UPDATE_CLIENT":" Update Client",
+  "max_sales_amount":" Max Sales Amount" ,
+  "CASH":" Cash",
+  "MONTHLY":" Monthly",
+  "BILL_NUMBER":" Bill Number",
+  "UPDATE_COLOR":" Update Color",
+  "STOCKTAKINGS_DETAILS":" Stocktakings Details",
+  "ADD_RETURN_PURCHASE_BILL":" Add Return Purchase Bill",
+  "UPDATE_RETURN_SALES_BILL":" Update Return Sales Bill",
+  "UPDATE_DOCUMENT":" Update Document"
 }
