@@ -1,15 +1,15 @@
-<div class="mt-3 mb-3">
+<!-- <div class="mt-3 mb-3">
   <h5 class="large-text">{{ 'UPDATE_EMPLOYEE' | translate }}</h5>
   <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> 
     {{ 'EMPLOYEES' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'UPDATE_EMPLOYEE' | translate }}</span>
-</div>
+</div> -->
 <div class="mt-4 mb-4">
   <form [formGroup]="employeeForm" (ngSubmit)="handleForm()">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
           <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
+            <div class="card-header text-center text-black rounded-top pt-3">
               <h5 class="large-text">{{ 'UPDATE_EMPLOYEE' | translate }}</h5>
             </div>
             <div class="card-body pb-5">
@@ -400,7 +400,9 @@
                   <div class="invalid-feedback mt-2" *ngIf="employeeForm.get('vacation_days')?.invalid && isSubmitted">
                     {{ 'PLEASE_SELECT_AT_LEAST_ONE_DAY' | translate }}
                   </div>
+                
                 </div>
+              
               </div>
 
               <div class="d-flex justify-content-between w-25 mt-5">

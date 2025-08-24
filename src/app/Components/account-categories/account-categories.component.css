@@ -40,8 +40,10 @@ tr,th,td{
 
 .nav-link.active-tab {
     font-weight: bold;
-    color: #007bff !important; /* Blue text */
-    border-bottom: 2px solid #007bff;
+    background-color: #003E29 !important; /* Blue text */
+    color: white !important; /* White text */
+    border-bottom: 2px solid #003E29 !important; /* Blue underline */
+    border-radius: 5px;
   }
   
 
@@ -51,7 +53,9 @@ tr,th,td{
   }
   
   .nav-link:hover {
-    color: #0056b3; /* Darker blue on hover */
+    background-color: #003E29; 
+    color: white; 
+    border-radius: 5px; 
     cursor: pointer;
 
 }

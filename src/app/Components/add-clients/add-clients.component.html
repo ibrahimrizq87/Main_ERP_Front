@@ -123,13 +123,13 @@
                         <label for="payment_type" class="form-label large-text">{{ 'PRICE_CATEGORY' | translate }}</label>
                         <select id="payment_type" (change)="onPriceCategoryChange($event)" formControlName="payment_type" class="form-control">
                           <option value="cash">
-                            cash
+                            {{"CASH"|translate}}
                           </option>
                           <option value="mounthly">
-                            mounthly
+                            {{"MOUNTHLY"|translate}}
                           </option>
                           <option value="bill_no">
-                            bill number
+                            {{"BILL_NUMBER"|translate}}
                           </option>
                         </select>
                  

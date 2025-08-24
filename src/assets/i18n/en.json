@@ -1157,5 +1157,10 @@
   "EXPORT_ACCOUNTS":" Export Accounts",
   "IMPORT_ACCOUNTS":" Import Accounts",
   "CAN_DELETE":" Can Delete",
-  "UPDATE_CLIENT":" Update Client"
+  "UPDATE_CLIENT":" Update Client",
+  "max_sales_amount":" Max Sales Amount" ,
+  "CASH":" Cash",
+  "MONTHLY":" Monthly",
+  "BILL_NUMBER":" Bill Number",
+  "UPDATE_COLOR":" Update Color"
 }

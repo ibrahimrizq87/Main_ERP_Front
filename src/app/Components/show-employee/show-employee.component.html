@@ -3,7 +3,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
+            <div class="card-header text-center text-black rounded-top pt-3">
               <h5>{{ 'EMPLOYEE_DETAILS' | translate }}</h5>
             </div>
   
@@ -110,21 +110,20 @@
   
                 <!-- Creator -->
                 <div class="col-md-4">
-                  <strong>{{ 'CREATED_BY' | translate }}:</strong>
+                  <strong>{{ 'CREATOR' | translate }}:</strong>
                   <p>{{ employeeData.creator.name }}</p>
                 </div>
   
-                <div class="col-md-4">
-                  <strong>{{ 'CREATOR_USERNAME' | translate }}:</strong>
-                  <p>{{ employeeData?.creator?.user_name }}</p>
-                </div>
+               
   
               </div> <!-- end row -->
+              <button class="btn btn-primary mt-3" (click)="goBack()">
+                <i class="fa-solid fa-arrow-left"></i> {{ 'BACK' | translate }} 
+                </button>
             </div> <!-- end card-body -->
+           
           </div> <!-- end card -->
-          <button class="btn btn-primary mt-3" (click)="goBack()">
-            <i class="fa-solid fa-arrow-left"></i> {{ 'BACK' | translate }} 
-            </button>
+      
         </div>
       </div>
     </div>
