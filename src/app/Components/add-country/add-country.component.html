@@ -1,7 +1,7 @@
-<div class="mt-3 mb-3">
+<!-- <div class="mt-3 mb-3">
     <h5>{{ 'addCountry.manage_country' | translate }}</h5>
     <span class="text-muted">{{ 'addCountry.dashboard' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'addCountry.country' | translate }} <i [ngClass]="'fa-solid ' + ('icon-class' | translate)" ></i> {{ 'addCountry.create_country' | translate }}</span>
-  </div>
+  </div> -->
   
   <div class="mt-4 mb-4">
     <form [formGroup]="countryForm" (ngSubmit)="handleForm()">
@@ -9,7 +9,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card shadow em-card rounded-lg">
-              <div class="card-header bg-white text-black rounded-top pt-3">
+              <div class="card-header text-center text-black rounded-top pt-3">
                 <h5>{{ 'addCountry.add_country' | translate }}</h5>
               </div>
               <div class="card-body pb-5">
@@ -35,17 +35,18 @@
                     </div>
                   </div>
                 </div>
+                <div class="mt-5 mb-2">
+                  <button [disabled]="countryForm.invalid" type="submit" class="btn btn-primary px-4">
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'addCountry.save' | translate }}
+                  </button>
+                </div>
               </div>
               
-
+            
               
             </div>
           </div>
-          <div class="mt-4 mb-4">
-            <button [disabled]="countryForm.invalid" type="submit" class="btn btn-primary px-4">
-              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>{{ 'addCountry.save' | translate }}
-            </button>
-          </div>
+        
         </div>
       </div>
     </form>

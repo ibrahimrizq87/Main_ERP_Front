@@ -1,7 +1,7 @@
 <div class="container my-4">
     <div class="card shadow-lg rounded-4 border-0">
-        <div class="card-header rounded-top py-3 px-4 d-flex align-items-center justify-content-between">
-            <h4 class="mb-0">Vecation Details</h4>
+        <div class="card-header rounded-top py-3 px-4 text-center">
+            <h4 class="mb-0">{{"VECATION_DETAILS"|translate}}</h4>
 
         </div>
 
@@ -9,17 +9,18 @@
             <div class="row g-4">
                 <div class="col-md-6">
 
-                    <p><strong> Start Date:</strong> {{ vecationData?.start_date||'N/A' }}</p>
-                    <p><strong> End Date:</strong> {{ vecationData?.end_date }}</p>
-                    <p><strong> Reason:</strong> {{ vecationData?.reason }}</p>
-                    <p><strong>Created At:</strong> {{ vecationData?.created_at }}</p>
+                    <p><strong> {{"START_DATE"|translate}}:</strong> {{ vecationData?.start_date||'N/A' }}</p>
+                    <p><strong> {{"END_DATE"|translate}}:</strong> {{ vecationData?.end_date }}</p>
+                    <p><strong> {{"REASON"|translate}}:</strong> {{ vecationData?.reason }}</p>
+                    <p><strong>{{"CREATED_AT"|translate}}:</strong> {{ vecationData?.created_at }}</p>
                  
                 </div>
             </div>
+            <div class="card-footer text-end bg-white px-4 py-3">
+                <a class="btn btn-secondary px-4" routerLink="/dashboard/vecations">{{"BACK"|translate}}</a>
+            </div>
         </div>
 
-        <div class="card-footer text-end bg-white px-4 py-3">
-            <a class="btn btn-secondary px-4" routerLink="/dashboard/vecations">Back</a>
-        </div>
+       
     </div>
 </div>

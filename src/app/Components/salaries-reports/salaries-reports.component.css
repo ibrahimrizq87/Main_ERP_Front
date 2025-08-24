@@ -5,9 +5,11 @@
 
 
 .active-tab {
-    color: #0d6efd;
+    background-color: #003E29;
+    color:white;
     font-weight: bold;
-    border-bottom: 2px solid #0d6efd;
+    border-bottom: 2px solid #003E29;
+    border-radius: 5px;
   }
   
   .inactive-tab {
@@ -15,9 +17,12 @@
   }
   
   .inactive-tab:hover {
-    color: #0d6efd;
+    background-color: #003E29;
+    color: white;
     cursor: pointer;
+    border-radius: 5px;
   }
+  
   
   .nav-link {
     transition: all 0.3s ease;

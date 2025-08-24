@@ -1,0 +1,30 @@
+span {
+    font-size: 12px ;
+}
+label{
+    font-size: 14px;
+    margin-top:15px;
+}
+.card-header h5 {
+    font-size: 20px;
+   font-family:  Montserrat-Arabic, sans-serif;
+  font-weight: 500;
+  }
+  .card-header {
+    background-color: #E6ECEA;
+    color: black;
+  
+  }
+  .btn-primary {
+    background-color: #003E29;
+    border-color: #003E29;
+  }
+  /* .card-header ::after {
+    content: '';         
+    position: absolute;
+    top: 25%;               
+    left:0 ;              
+    height: 50%;          
+    width: 3px;           
+    background-color: #145388; 
+  } */

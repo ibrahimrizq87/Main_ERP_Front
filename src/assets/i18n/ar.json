@@ -1141,7 +1141,17 @@
  
 "ADD_PRODUCT_INTERNAL_MOVE": "إضافة نقل داخلي للمنتج"  ,
 "APPROVED_BY": "وافق عليه" ,
-"ADD_STOCKTAKINGS": "إضافة جرد المخزون"  
-  
-
+"ADD_STOCKTAKINGS": "إضافة جرد المخزون"  ,
+"NAME_IS_REQUIRED":"الاسم مطلوب"  ,
+"USER_NAME_IS_REQUIRED":"اسم المستخدم مطلوب"  ,
+"ADD_NEW_USER":"إضافة مستخدم جديد"  ,
+"PASSWORD_IS_REQUIRED":"كلمة المرور مطلوبة" ,
+"UPDATE_USER":"تحديث المستخدم" ,
+"VECATION_DETAILS":" تفاصيل الإجازة" ,
+"CITY_DETAILS":"تفاصيل المدينة" ,
+"UPDATE_COUNTRY":"تحديث البلد" ,
+"EXPORT_ACCOUNTS":"تصدير الحسابات" ,
+"IMPORT_ACCOUNTS":"استيراد الحسابات" ,
+"CAN_DELETE":"يمكن الحذف" ,
+"UPDATE_CLIENT":"تحديث العميل" 
   }
