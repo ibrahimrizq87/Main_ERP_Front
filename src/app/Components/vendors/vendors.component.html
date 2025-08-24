@@ -54,7 +54,7 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col">ID</th>
                 <th class="bg-light" scope="col">{{ 'NAME' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'IMAGE' | translate }}</th>
@@ -63,7 +63,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let currency of vendors; let i = index">
-                <th scope="row">{{ currency.id }}</th>
+                <th scope="row">{{ currency.account_id }}</th>
                 <td>{{ currency.name }}</td>
                 <td>{{ currency.account_category }}</td>
 

@@ -74,13 +74,13 @@ export class EmployeeService {
 
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
 
   ): Observable<any> {
  let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
 
 
 

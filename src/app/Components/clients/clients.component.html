@@ -59,7 +59,7 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th class="bg-light" scope="col">#</th>
+                <th class="bg-light" scope="col"></th>
                 <th class="bg-light" scope="col">{{ 'CLIENT_NAME' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
                 <th class="bg-light" scope="col">{{ 'DELEGATE' | translate }}</th>
@@ -71,7 +71,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let client of clients | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
-                <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+                <th scope="row">{{client.account_id}}</th>
                 <td>{{ client.name }}</td>
                 <td>{{ client.account_category ? client.account_category : "---" }}</td>
                 <td>{{ client.delegate ? client.delegate : "--" }}</td>

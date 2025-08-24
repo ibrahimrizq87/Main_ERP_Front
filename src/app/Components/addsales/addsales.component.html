@@ -429,7 +429,7 @@
               <td> <img [src]="account.image ? account.image : 'images/image.jpg'"
                   alt="{{ account.account?.name || 'Default user' }}" width="80" height="60" /></td>
               <td>{{ account.account.name }}</td>
-              <td>{{ account.delegate.name }}</td>
+              <td>{{ account.delegate?.name }}</td>
               <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
 
 

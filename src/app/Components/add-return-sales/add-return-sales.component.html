@@ -188,20 +188,10 @@
   
                             </div>
   
-  
-                            <!-- <div class="d-flex align-items-center mb-2">
-                              <input formControlName="barcode" list="barcodeList" type="text" class="form-control me-2"
-                                placeholder="Enter barcode" (change)="onBarcodeSelect($event ,i)" />
-                              <datalist id="barcodeList">
-                                <option *ngFor="let barcode of item.get('productSerialNumbers')?.value"
-                                  [value]="barcode.serial_number">
-                                  {{ barcode.serial_number }}
-                                </option>
-                              </datalist>
-                            </div> -->
 
 
-                                            <div class="d-flex align-items-center mb-2 position-relative">
+
+                          <div class="d-flex align-items-center mb-2 position-relative">
                                      <input type="text" class="form-control" formControlName="barcode"
                               placeholder="Type to serial number..." (focus)="onFocus(i)" (blur)="onInputBlur()"
                               (input)="searchSerialNumber($event ,i)" />
@@ -390,7 +380,7 @@
                     height="60" 
                   /></td>
               <td>{{ account.account.name }}</td>
-              <td>{{ account.delegate.name }}</td>
+              <td>{{ account.delegate?.name }}</td>
               <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
 
 

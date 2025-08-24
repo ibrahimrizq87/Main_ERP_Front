@@ -215,7 +215,7 @@
                     height="60" 
                   /></td>
               <td>{{ account.account.name }}</td>
-              <td>{{ account.delegate.name }}</td>
+              <td>{{ account.delegate?.name }}</td>
               <td>{{ account.is_suspended ? "Susbended" : "clear" }}</td>
             </tr>
           </tbody>

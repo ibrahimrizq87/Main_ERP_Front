@@ -49,7 +49,7 @@
         <table class="table align-middle text-center">
           <thead class="table-light">
             <tr>
-              <th scope="col">#</th>
+              <th scope="col">ID</th>
               <th scope="col">{{ 'NAME' | translate }}</th>
               <th scope="col">{{ 'ACCOUNT_CATEGORY' | translate }}</th>
               <th scope="col">{{ 'IMAGE' | translate }}</th>
@@ -58,7 +58,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let employee of employees; let i = index">
-              <td class="align-middle">{{ employee.id }}</td>
+              <td class="align-middle">{{ employee.account_id }}</td>
               <td class="align-middle">{{ employee.name }}</td>
               <td class="align-middle">{{ employee.account_category }}</td>
               <td class="align-middle">

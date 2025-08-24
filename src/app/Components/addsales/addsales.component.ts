@@ -876,6 +876,7 @@ storeSearchTerm = '';
 
 
   selectProduct(productBranchStore: any , index:number|null = null) {
+
     const itemsArray = this.saleForm.get('items') as FormArray;
     const itemGroup = itemsArray.at(index != null ? index :this.productIndex) as FormGroup;
 
@@ -883,10 +884,9 @@ storeSearchTerm = '';
     console.log('productBranchStore', productBranchStore);
     itemGroup.patchValue({ product_id: productBranchStore.branch.id });
     itemGroup.patchValue({ color: productBranchStore.branch.color });
+    if(productBranchStore.prices){
 
-
-    productBranchStore.prices.forEach((price: any) => {
-
+      productBranchStore.prices.forEach((price: any) => {
       if (price.id == this.selectedClient.price_category?.id) {
         itemGroup.patchValue({ priceRanges: price.prices });
         console.log('price ranges', price.prices);
@@ -897,14 +897,20 @@ storeSearchTerm = '';
           }
         })
       }
-
-
     });
 
+
+    }
 
     if (!itemGroup.get('price')?.value) {
       itemGroup.patchValue({ price: productBranchStore.branch.default_price });
     }
+
+
+
+
+
+
 
     // console.log(productBranchStore.product.id, this.selectedStore, index != null ? index :this.productIndex );
 
@@ -999,8 +1005,8 @@ selectedOrderId = '';
 
 
               this.items.clear();
-  this.selectedOrderId = id;
-   this.selectedStore = response.data.store.id;
+              this.selectedOrderId = id;
+              this.selectedStore = response.data.store.id;
 
               console.log('my store_id' ,this.selectedStore);
               this.saleForm.patchValue({store_id: this.selectedStore});

@@ -47,7 +47,7 @@ export class ProductCategoriesService {
     parent_id: string = '',
 
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
   ): Observable<any> {
 
         let params = new HttpParams();
@@ -56,7 +56,7 @@ export class ProductCategoriesService {
                           if (parent_id !== '') params = params.set('parent_id', parent_id);
 
                           if (page !== 1) params = params.set('page', page);
-                          if (perPage !== 20) params = params.set('per_page', perPage);
+                          if (perPage !== 10) params = params.set('per_page', perPage);
                           
     return this._HttpClient.get(`${this.baseURL}/general/product-categories`,{ headers:this.getHeadersWithToken() });
   }

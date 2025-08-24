@@ -67,36 +67,11 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  // filteredClients(): any[] {
-  //   if (!this.searchTerm) {
-  //     this.totalItems = this.clients.length;
-  //     return this.clients;
-  //   }
 
-  //   const lowerTerm = this.searchTerm.toLowerCase();
-  //   return this.clients.filter((client) => {
-  //     return (
-  //       (client.name?.toLowerCase() || '').includes(lowerTerm) ||
-  //       (client.account_category?.toLowerCase() || '').includes(lowerTerm) ||
-  //       (client.delegate?.toLowerCase() || '').includes(lowerTerm) ||
-  //       (client.price_category?.toLowerCase() || '').includes(lowerTerm) ||
-  //       (client.is_suspended?.toString().toLowerCase() || '').includes(lowerTerm)
-  //     );
-  //   });
-  // }
-
-  // updatePagination(): void {
-  //   this.totalItems = this.filteredClients().length;
-  // }
-
-  // onSearchChange(): void {
-  //   this.currentPage = 1;
-  //   this.updatePagination();
-
-  // }
 
   onPageChange(page: number): void {
     this.currentPage = page;
+    this.loadClients();
   }
 
   onItemsPerPageChange(): void {

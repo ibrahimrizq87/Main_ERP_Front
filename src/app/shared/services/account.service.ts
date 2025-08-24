@@ -118,12 +118,12 @@ export class AccountService {
   getAllChildren(
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
   ): Observable<any> {
       let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
 
     return this._HttpClient.get(`${this.baseURL}/general/accounts/all-children`, { headers: this.getHeadersWithToken(),
        params: params
@@ -198,13 +198,13 @@ export class AccountService {
   getParentForDocument(parent: number[], parent_company: number[],
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
 
   ): Observable<any> {
     let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
     return this._HttpClient.post(this.baseURL + "/general/accounts/get-accounts-for-document",
       { "parent": parent, 'parent_company': parent_company }, { headers: this.getHeadersWithToken(),
         params:params
@@ -214,13 +214,13 @@ export class AccountService {
   getAccountsCreditOrDebitNote(type:string,
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
 
   ): Observable<any> {
      let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
     return this._HttpClient.get(this.baseURL + "/general/accounts/get-accounts-credit-debit-nots/"+type, { 
       headers: this.getHeadersWithToken(),
     params:params });
@@ -234,13 +234,13 @@ export class AccountService {
     getAccountsByParents(parents:number [],
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
 
   ): Observable<any> {
      let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
 
       parents.forEach(parent => {
         params = params.append('parent[]', parent); 
@@ -259,12 +259,12 @@ export class AccountService {
     getAssetEquations(
       searchTerm: string = '',
       page: number = 1,
-      perPage: number = 20
+      perPage: number = 10
   ): Observable<any> {
      let params = new HttpParams();
               if (searchTerm !== '') params = params.set('searchTerm', searchTerm);
               if (page !== 1) params = params.set('page', page);
-              if (perPage !== 20) params = params.set('per_page', perPage);
+              if (perPage !== 10) params = params.set('per_page', perPage);
 
 
 

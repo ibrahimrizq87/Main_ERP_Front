@@ -170,7 +170,7 @@ removeCurrentDelegate(){
           this.clientForm.patchValue({
             ar: client.account.name_lang.ar,
             en: client.account.name_lang.en,
-            delegate_id: client.delegate.id,
+            delegate_id: client.delegate?.id,
             price_category_id: client.price_category.id,
             account_category_id: client.account_category.id,
             currency_id: client.currency_id,
