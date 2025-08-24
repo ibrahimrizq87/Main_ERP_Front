@@ -50,7 +50,7 @@
 
                 <div *ngIf="actionType == 'paid'" class="form-group col-md-3">
                     <label class="form-label">{{ 'ACCOUNT' | translate }}</label>
-                    <button type="button" class="btn btn-outline-primary w-100" (click)="openModal('accountModal')">
+                    <button type="button" class="btn btn-outline-success w-100" (click)="openModal('accountModal')">
                         {{ selectedAccount ? selectedAccount.name : ('ACCOUNT' | translate) }}
                     </button>
                 </div>

@@ -1,16 +1,16 @@
-<div class="mt-3 mb-3">
+<!-- <div class="mt-3 mb-3">
   <h5 class="large-text">{{ 'ADD_DELEGATE' | translate }}</h5>
   <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i
       [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CATEGORY' | translate }} <i
       [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> {{ 'CREATE_CATEGORY' | translate }}</span>
-</div>
+</div> -->
 <div class="mt-4 mb-4">
   <form [formGroup]="delegateForm" (ngSubmit)="handleForm()">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
           <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
+            <div class="card-header text-center text-black rounded-top pt-3">
               <h5 class="large-text">{{ 'ADD_DELEGATE' | translate }}</h5>
             </div>
 
@@ -50,19 +50,19 @@
 
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="user_name" class="form-label">User Name</label>
+                  <label for="user_name" class="form-label">{{"USER_NAME"|translate}}</label>
                   <input id="user_name" formControlName="user_name" type="text" class="form-control"
-                    placeholder="Enter User Name" required />
+                  placeholder="{{ 'USER_NAME' | translate }}" required />
                   <div class="alert alert-danger"
                     *ngIf="delegateForm.get('user_name')?.errors && delegateForm.get('user_name')?.touched">
-                    <p *ngIf="delegateForm.get('user_name')?.getError('required')">User Name is Required</p>
+                    <p *ngIf="delegateForm.get('user_name')?.getError('required')">{{"USER_NAME_IS_REQUIRED"|translate}}</p>
                   </div>
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label for="password" class="form-label"> Password</label>
+                  <label for="password" class="form-label"> {{"PASSWORD"|translate}}</label>
                   <input id="password" formControlName="password" type="password" class="form-control"
-                    placeholder="Enter User Password" required />
+                    placeholder="{{'PASSWORD'|translate}}" required />
                   <div class="alert alert-danger"
                     *ngIf="delegateForm.get('password')?.errors && delegateForm.get('password')?.touched">
                     <p *ngIf="delegateForm.get('password')?.getError('required')">Password is Required</p>
@@ -372,17 +372,18 @@
                     </div>
                   </div>
                 </div>
+                <div class="mt-5 mb-3">
+                  <button type="submit" class="btn btn-primary px-4 large-text">
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                  </button>
+                </div>
               </div>
 
             </div>
 
 
           </div>
-          <div class="mt-4 mb-4">
-            <button type="submit" class="btn btn-primary px-4 large-text">
-              <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
-            </button>
-          </div>
+       
           <div *ngIf="msgErrors && msgErrors.length>0" class="alert alert-danger mt-3">
             <ul>
               <li *ngFor="let error of msgErrors">{{ error }}</li>

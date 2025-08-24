@@ -1,7 +1,7 @@
 <div class="container my-5">
     <div *ngIf="stocktakingData" class="card shadow-lg border-0 rounded-4">
-      <div class="card-header rounded-top">
-        <h4 class="mb-0">Stocktaking Details</h4>
+      <div class="card-header text-center rounded-top">
+        <h4 class="mb-0">{{"STOCKTAKINGS_DETAILS"|translate}}</h4>
       </div>
   
       <div class="card-body">
@@ -9,22 +9,22 @@
         <div class="row mb-4">
           
           <div class="col-md-6">
-            <p><strong>Worker Name:</strong> {{ stocktakingData.worker_name }}</p>
-            <p><strong>Note:</strong> {{ stocktakingData.note }}</p>
+            <p><strong>{{"WORKER_NAME"|translate}}:</strong> {{ stocktakingData.worker_name }}</p>
+            <p><strong>{{"NOTE"|translate}}:</strong> {{ stocktakingData.note }}</p>
 
           </div>
 
           <div class="col-md-6">
-            <p><strong>Date:</strong> {{ stocktakingData.date }}</p>
-            <p><strong>created at:</strong> {{ stocktakingData.created_at }}</p>
+            <p><strong>:{{"DATE"|translate}}</strong> {{ stocktakingData.date }}</p>
+            <p><strong>{{"CREATED_AT"|translate}}:</strong> {{ stocktakingData.created_at }}</p>
 
           </div>
           <div class="col-md-6">
             <p>
-              <strong>Store:</strong> {{ stocktakingData.store?.name }}
+              <strong>{{"STORE"|translate}}:</strong> {{ stocktakingData.store?.name }}
             </p>
             <p>
-              <strong>Approved:</strong>
+              <strong>{{"APPROVED"|translate}}:</strong>
               <span [ngClass]="stocktakingData.approved ? 'text-success' : 'text-danger'">
                 {{ stocktakingData.approved ? 'Yes' : 'No' }}
               </span>
@@ -34,7 +34,7 @@
   
        
         <div *ngIf="stocktakingData.approved_by || stocktakingData.approved_user" class="mb-4">
-          <p><strong>Approved By:</strong> {{ stocktakingData.approved_by || stocktakingData.approved_user }}</p>
+          <p><strong>{{"APPROVED_BY"|translate}}:</strong> {{ stocktakingData.approved_by || stocktakingData.approved_user }}</p>
         </div>
   
        
@@ -42,11 +42,11 @@
           <table class="table table-bordered table-striped">
             <thead class="table-light">
               <tr>
-                <th>Barcode</th>
-                <th>Product </th>
-                <th>Determinants</th>
-                <th>Quantity</th>
-                <th>Type</th>
+                <th>{{"BARCODE"|translate}}</th>
+                <th>{{"PRODUCT"|translate}} </th>
+                <th>{{"DETERMINANTS"|translate}}</th>
+                <th>{{"QUANTITY"|translate}}</th>
+                <th>{{"TYPE"|translate}}</th>
               </tr>
             </thead>
             <tbody>

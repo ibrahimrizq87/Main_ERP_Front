@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CityService } from '../../shared/services/city.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-show-city',
   standalone: true,
-  imports: [ RouterModule],
+  imports: [ RouterModule,TranslateModule],
   templateUrl: './show-city.component.html',
   styleUrl: './show-city.component.css'
 })

@@ -2,7 +2,7 @@ span {
     font-size: 12px ;
   }
   .iconPlus{
-    background-color: #145388;
+    background-color: #003E29;
     padding: 11px;
     font-size: 10px;
   
@@ -36,20 +36,22 @@ span {
 
 
 
-  .nav-link.active-tab {
+  .nav-link.active {
     font-weight: bold;
-    color: #007bff !important; /* Blue text */
-    border-bottom: 2px solid #007bff;
-  }
+    background-color: #003E29 !important;
+    color: white !important;
+    border-bottom: 2px solid #003E29 !important;
+}
   
   
   .nav-link {
+    
     color: #6c757d; /* Gray text */
     transition: color 0.3s;
   }
   
   .nav-link:hover {
-    color: #0056b3; /* Darker blue on hover */
+    background-color: #003E29; 
     cursor: pointer;
   
   }

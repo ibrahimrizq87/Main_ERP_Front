@@ -1,15 +1,15 @@
-<div class="mt-3 mb-3">
+<!-- <div class="mt-3 mb-3">
     <h5 class="large-text">{{ 'ADD_CLIENT' | translate }}</h5>
     <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> 
       {{ 'CLIENT' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_CATEGORY' | translate }}</span>
-  </div>
+  </div> -->
   <div class="mt-4 mb-4">
     <form [formGroup]="clientForm" (ngSubmit)="handleForm()">
         <div class="container">
           <div class="row">
             <div class="col-md-12">
               <div class="card shadow em-card rounded-lg">
-                <div class="card-header bg-white text-black rounded-top pt-3">
+                <div class="card-header text-center text-black rounded-top pt-3">
                   <h5 class="large-text">{{ 'ADD_CLIENT' | translate }}</h5>
                 </div>
                 <div class="card-body pb-5">
@@ -53,22 +53,22 @@
 
 
                            <div class="form-group col-md-6">
-                  <label for="user_name" class="form-label">User Name</label>
+                  <label for="user_name" class="form-label">{{"USER_NAME"|translate}}</label>
                   <input id="user_name" formControlName="user_name" type="text" class="form-control"
-                    placeholder="Enter User Name" required />
+                  placeholder="{{ 'USER_NAME' | translate }}" required />
                   <div class="alert alert-danger"
                     *ngIf="clientForm.get('user_name')?.errors && clientForm.get('user_name')?.touched">
-                    <p *ngIf="clientForm.get('user_name')?.getError('required')">User Name is Required</p>
+                    <p *ngIf="clientForm.get('user_name')?.getError('required')">{{"USER_NAME_IS_REQUIRED"|translate}}</p>
                   </div>
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label for="password" class="form-label"> Password</label>
+                  <label for="password" class="form-label">{{"PASSWORD"|translate}}</label>
                   <input id="password" formControlName="password" type="password" class="form-control"
                     placeholder="Enter User Password" required />
                   <div class="alert alert-danger"
                     *ngIf="clientForm.get('password')?.errors && clientForm.get('password')?.touched">
-                    <p *ngIf="clientForm.get('password')?.getError('required')">Password is Required</p>
+                    <p *ngIf="clientForm.get('password')?.getError('required')">{{"PASSWORD_IS_REQUIRED"|translate}}</p>
 
                   </div>
                 </div>
@@ -123,13 +123,13 @@
                         <label for="payment_type" class="form-label large-text">{{ 'PRICE_CATEGORY' | translate }}</label>
                         <select id="payment_type" (change)="onPriceCategoryChange($event)" formControlName="payment_type" class="form-control">
                           <option value="cash">
-                            cash
+                            {{"CASH"|translate}}
                           </option>
                           <option value="mounthly">
-                            mounthly
+                            {{"MOUNTHLY"|translate}}
                           </option>
                           <option value="bill_no">
-                            bill number
+                            {{"BILL_NUMBER"|translate}}
                           </option>
                         </select>
                  

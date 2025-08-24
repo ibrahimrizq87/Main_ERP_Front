@@ -46,11 +46,11 @@ export class DashboardComponent {
     }
     
     // Close all other dropdowns
-    Object.keys(this.dropdownStates).forEach(key => {
-      if (key !== dropdownId) {
-        this.dropdownStates[key] = false;
-      }
-    });
+    // Object.keys(this.dropdownStates).forEach(key => {
+    //   if (key !== dropdownId) {
+    //     this.dropdownStates[key] = false;
+    //   }
+    // });
     
     // Toggle the clicked dropdown
     this.dropdownStates[dropdownId] = !this.dropdownStates[dropdownId];

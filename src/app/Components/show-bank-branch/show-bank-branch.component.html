@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card shadow em-card rounded-lg">
-          <div class="card-header bg-white text-black rounded-top pt-3">
+          <div class="card-header text-center text-black rounded-top pt-3">
             <h5>{{ 'BANK_BRANCH_INFORMATION' | translate }}</h5>
           </div>
           <div class="card-body pb-5">
@@ -60,15 +60,17 @@
                 </div>
               </div>
             </div>
+            <div class="mt-5 mb-3">
+              <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/bankBranch">
+                <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
+              </a>
+            </div>
           </div>
+       
         </div>
       </div>
     </div>
 
-    <div class="mt-4 mb-4">
-      <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/bankBranch">
-        <button type="button" class="btn btn-primary px-4">{{ 'BACK' | translate }}</button>
-      </a>
-    </div>
+  
   </div>
 </div>

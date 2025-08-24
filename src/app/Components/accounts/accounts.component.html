@@ -1,15 +1,15 @@
 
 <div class="container">
-  <header class="d-flex flex-wrap align-items-center justify-content-center  py-3 mb-4 border-bottom">
+  <header class="d-flex flex-wrap align-items-center justify-content-center gap-2  py-3 mb-4 border-bottom">
   <!-- <a (click)="openModal('ImportForm')" class="btn btn-outline-info">
     export or import products
   </a> -->
 
-  <a (click)="exportAccounts()" class="btn btn-outline-info">
-    Export Accounts
+  <a (click)="exportAccounts()" class="btn btn-outline-success">
+    {{ 'EXPORT_ACCOUNTS' | translate }}
   </a>
-  <a (click)="openModal('ImportForm')" class="btn btn-outline-info ms-3">
-    Import Accounts
+  <a (click)="openModal('ImportForm')" class="btn btn-outline-success ms-3">
+    {{ 'IMPORT_ACCOUNTS' | translate }}
   </a>
   </header>
 </div>

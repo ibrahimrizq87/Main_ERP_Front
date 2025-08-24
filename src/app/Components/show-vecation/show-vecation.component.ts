@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { VectionService } from '../../shared/services/vection.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-show-vecation',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule,TranslateModule],
   templateUrl: './show-vecation.component.html',
   styleUrl: './show-vecation.component.css'
 })

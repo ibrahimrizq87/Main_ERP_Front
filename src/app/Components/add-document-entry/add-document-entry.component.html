@@ -2,7 +2,7 @@
   <h5 class="large-text">{{ 'MANAGE_ENTRY_DOCUMENTS' | translate }}</h5>
   <span class="text-muted large-text">{{ 'DASHBOARD' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'ENTRY_DOCUMENTS' | translate }} <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)" ></i> {{ 'CREATE_DOCUMENT' | translate }}</span>
 </div> -->
-<h5 class="large-text mb-2">{{ 'MANAGE_ENTRY_DOCUMENTS' | translate }}</h5>
+<!-- <h5 class="large-text mb-2">{{ 'MANAGE_ENTRY_DOCUMENTS' | translate }}</h5>
 <span class="text-muted">
   {{ 'DASHBOARD' | translate }} 
   <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
@@ -11,7 +11,7 @@
   <i [ngClass]="'fa-solid ' + ('ICON_CLASS' | translate)"></i> 
   &nbsp; / &nbsp;
   {{ 'CREATE_DOCUMENT' | translate }}
-</span>
+</span> -->
 
 <div class="mt-4 mb-4">
   <form [formGroup]="entryForm" (ngSubmit)="handleSubmit()">
@@ -19,8 +19,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card shadow em-card rounded-lg">
-            <div class="card-header bg-white text-black rounded-top pt-3">
-              <h5 class="large-text">{{ 'DOCUMENT_DETAILS' | translate }}</h5>
+            <div class="card-header text-center text-black rounded-top pt-3">
+              <h5 class="large-text">{{ 'CREATE_DOCUMENT' | translate }}</h5>
             </div>
             <div class="card-body pb-5">
               <div class="row">
@@ -153,17 +153,18 @@
                     <p><strong>{{ 'DIFFERENCE' | translate }}:</strong> {{ totalDifference }} || {{ totalType }}</p>
                   </div> -->
                 </div>
+                <div class="mt-4 mb-4">
+                  <button [disabled]="entryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="mt-4 mb-4">
-          <button [disabled]="entryForm.invalid" type="submit" class="btn btn-primary px-4 large-text">
-            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i> {{ 'SAVE' | translate }}
-          </button>
-        </div>
+       
       </div>
     </div>
   </form>
