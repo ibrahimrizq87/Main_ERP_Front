@@ -1,0 +1,72 @@
+<div class="container">
+  <h2>{{"UPDATE_PRICE_FOR_BILL_ID"|translate}} {{ billId }}</h2>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading">
+    <p>{{"LOADING"|translate}}</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !isLoading" class="error alert alert-danger">
+    <p>{{ error }}</p>
+    <button class="btn btn-secondary" (click)="getBillItems(billId!)">{{"TRY_AGAIN"|translate}}</button>
+  </div>
+
+  <!-- Success message -->
+  <div *ngIf="successMessage" class="success alert alert-success">
+    <p>{{ successMessage }}</p>
+  </div>
+
+  <!-- Price table -->
+  <div *ngIf="!isLoading && !error && categories.length > 0 && items.length > 0">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>{{"ITEMS"|translate}}</th>
+            <th *ngFor="let category of categories; trackBy: trackByCategory">
+              {{ category.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; trackBy: trackByItem">
+            <td class="item-name">
+              <strong>{{ item.name }}</strong>
+              <div *ngIf="item.color" class="item-details">
+              {{"COLOR"|translate}}: {{ item.color.color }}
+              </div>
+              <div *ngIf="item.determinants && item.determinants.length > 0" class="item-details">
+                {{"DETERMINANTS"|translate}}:
+                <span *ngFor="let det of item.determinants; let last = last">
+                  {{ det.name }}{{ !last ? ', ' : '' }}
+                </span>
+              </div>
+            </td>
+            <td *ngFor="let category of categories; trackBy: trackByCategory">
+              <input 
+                type="number" 
+                class="form-control price-input"
+                [(ngModel)]="priceInputs[item.id][category.id]"
+                placeholder="{{ 'ENTER_PRICE' | translate }}"
+                min="0"
+                
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-end mt-3">
+      <button class="btn btn-primary" (click)="updatePrices()" [disabled]="isLoading">
+        {{ isLoading ? ('UPDATING' | translate) + '...' : ('UPDATE_PRICES' | translate) }}
+      </button>
+    </div>
+  </div>
+
+  <!-- No data state -->
+  <div *ngIf="!isLoading && !error && (categories.length === 0 || items.length === 0)" class="no-data">
+    <p>{{"NO_DATA_AVAILABLE_FOR_THIS_BILL"|translate}}...</p>
+  </div>
+</div>

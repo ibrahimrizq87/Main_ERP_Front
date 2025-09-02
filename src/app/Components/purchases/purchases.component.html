@@ -158,7 +158,7 @@
     <tbody>
       <tr *ngFor="let purchase of filteredPurchases; let i = index">
         <th scope="row">{{ purchase.id }}</th>
-        <td>{{ purchase.vendor.name }}</td>
+        <td>{{ purchase.vendor }}</td>
         <td>{{ purchase.date || 'N/A' }}</td>
         <td>{{ purchase.total }}</td>
         <td>{{ purchase.payment_type }}</td>
@@ -179,8 +179,9 @@
             </a>
 
 
-          
-
+            <a class="btn1 btn_set_price" routerLinkActive="active" [routerLink]="['/dashboard/category-prices', purchase.id]">
+                        {{ purchase.sale_prices_is_set ? ('UPDATE_PRICES' | translate) : ('SET_PRICES' | translate) }}
+                      </a>
 
           <a *ngIf="_PermissionService.hasPermission('purchase_bills' , 'details_purchase_bills')"  class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard/showPurchase', purchase.id]">
             <i class="fa-solid fa-eye btn1 text-success rounded"></i>

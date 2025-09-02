@@ -1166,5 +1166,16 @@
   "STOCKTAKINGS_DETAILS":" Stocktakings Details",
   "ADD_RETURN_PURCHASE_BILL":" Add Return Purchase Bill",
   "UPDATE_RETURN_SALES_BILL":" Update Return Sales Bill",
-  "UPDATE_DOCUMENT":" Update Document"
+  "UPDATE_DOCUMENT":" Update Document",
+  "ADD_HOURLY_BONUS_AFTER_TIME":" Add Hourly Bonus After Time",
+  "IMPORT_EMPLOYEES":" Import Employees",
+  "EXPORT_EMPLOYEES":" Export Employees",
+  "FILENAME":" Filename",
+  "ITEMS":" Items",
+  "UPDATE_PRICE_FOR_BILL_ID":" Update Price for Bill ID",
+  "UPDATING": "Updating",
+"ENTER_PRICE":" Enter Price",
+"TRY_AGAIN":" Try Again",
+"NO_DATA_AVAILABLE_FOR_THIS_BILL":" No Data Available for this Bill",
+"SET_PRICES":" Set Prices"
 }

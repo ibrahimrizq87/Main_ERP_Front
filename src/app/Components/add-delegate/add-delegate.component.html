@@ -115,6 +115,13 @@
                       [class.is-invalid]="isSubmitted && delegateForm.get('location_attendance_needed')?.invalid">
                   </div>
                 </div>
+                  <!-- 'bonus' => 'nullable|numeric|min:0' -->
+                  <div class="col-md-6">
+                    <label class="form-label large-text">{{ 'BONUS' | translate }}</label>
+                    <input formControlName="bonus" type="number" min="0" step="0.01" class="form-control"
+                      placeholder="{{ 'BONUS' | translate }}"
+                      [class.is-invalid]="isSubmitted && delegateForm.get('bonus')?.invalid">
+                  </div>
                 <div class="col-md-6">
                   <select id="company_branch" class="form-control" formControlName="company_branch_id"
                     [class.is-invalid]="delegateForm.get('company_branch_id')?.errors && isSubmitted"

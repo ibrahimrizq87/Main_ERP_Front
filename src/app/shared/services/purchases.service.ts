@@ -191,6 +191,15 @@ export class PurchasesService {
     
   }
 
+  // Route::post('/update-prices', [PurchaseBillController::class, 'updateSellPrice']);
 
+  //   Route::get('/get-items-by-id/{id}', [PurchaseBillController::class, 'getBillItems']);
+ getBillItemsById(id:any): Observable<any>{
+    return this._HttpClient.get(this.baseURL+"/general/purchases-bills/get-items-by-id/"+id, { headers: this.getHeadersWithToken() })
+    
+  }
+  UpdatePurchasePrices(data:FormData): Observable<any> {
+    return this._HttpClient.post(`${this.baseURL}/general/purchases-bills/update-prices`,data ,{headers: this.getHeadersWithToken() });
+  }
 
 }

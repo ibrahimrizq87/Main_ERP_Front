@@ -663,7 +663,7 @@ selectPurchaseOrder(order:any){
                 this.toastr.success('تم اضافه الفاتوره بنجاح');
                 console.log(response);
                 this.isLoading = false;
-                this._Router.navigate(['/dashboard/purchases/waiting']);
+                this._Router.navigate(['/dashboard/category-prices', response.data.id]);
               }
             },
 
@@ -694,9 +694,9 @@ selectPurchaseOrder(order:any){
           next: (response) => {
             if (response) {
               this.toastr.success('تم اضافه الفاتوره بنجاح');
-              console.log(response);
+              console.log(response.data.id);
               this.isLoading = false;
-              this._Router.navigate(['/dashboard/purchases/waiting']);
+              this._Router.navigate(['/dashboard/category-prices', response.data.id]);
             }
           },
 

@@ -83,6 +83,7 @@ onCurrencyChange(event:Event){
       start_time: ['', Validators.required],
       end_time: ['', Validators.required],
       location_attendance_needed: [false],
+      bonus: ['', [Validators.min(0)]],
       company_branch_id: [''],
       phones: this.fb.array([]),
       addresses: this.fb.array([]),
@@ -266,7 +267,7 @@ onVacationDayChange(day: string, event: Event) {
       formData.append('join_date', this.delegateForm.get('join_date')?.value);
       formData.append('start_time', this.delegateForm.get('start_time')?.value);
       formData.append('end_time', this.delegateForm.get('end_time')?.value);
-
+      formData.append('bonus', this.delegateForm.get('bonus')?.value || '');
       const locationAttendanceValue = this.delegateForm.get('location_attendance_needed')?.value ? 1 : 0;
       formData.append('location_attendance_needed', locationAttendanceValue.toString());
       formData.append('company_branch_id', this.delegateForm.get('company_branch_id')?.value || '');
