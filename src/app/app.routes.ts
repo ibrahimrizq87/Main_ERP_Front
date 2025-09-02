@@ -180,6 +180,7 @@ import { AttendanceSheetOperationsComponent } from './Components/attendance-shee
 import { UpdateReturnPurchaseComponent } from './Components/update-return-purchase/update-return-purchase.component';
 import { UpdateSaleOrderComponent } from './Components/update-sale-order/update-sale-order.component';
 import { UpdatePurchaseOrderComponent } from './Components/update-purchase-order/update-purchase-order.component';
+import { CategoryPriceComponent } from './Components/category-price/category-price.component';
 
 
 export const routes: Routes = [
@@ -442,7 +443,9 @@ export const routes: Routes = [
             { path: "addStocktakings", component: AddStocktakingsComponent },
             { path: "updateStocktakings/:id", component: UpdateStocktakingsComponent },
             { path: "showStocktakings/:id", component: ViewStocktakingsComponent },
-            {path:"earnings-and-losses", component: EarningsAndLossesComponent}
+            {path:"earnings-and-losses", component: EarningsAndLossesComponent},
+
+            {path:"category-prices/:id",component:CategoryPriceComponent}
 
 
 

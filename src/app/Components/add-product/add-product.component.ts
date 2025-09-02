@@ -146,7 +146,7 @@ loadDeterminants(): void {
       need_customer_details :this.fb.control(false), 
       product_description:[null],
       determinant_id:[null],
-      image: this.fb.control(null, [this.validateImage.bind(this),Validators.required]),
+      image: this.fb.control(null, [this.validateImage.bind(this)]),
       unit_id: this.fb.control(null, [Validators.required]),
       prices: this.fb.array([]),
       colors:  this.fb.array([]),
@@ -244,24 +244,36 @@ loadDeterminants(): void {
     if (file) {
       this.selectedFile = file;
       this.productForm.patchValue({ image: file });
+    } else {
+      this.selectedFile = null;
+      this.productForm.patchValue({ image: null });
     }
   }
 
   
 
   validateImage(control: AbstractControl): ValidationErrors | null {
-    const file = this.selectedFile;
-    if (file) {
-      const fileType = file.type;
-      const fileSize = file.size;
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-      if (!allowedTypes.includes(fileType)) {
-        return { invalidFileType: true };
-      }
-      if (fileSize > this.maxImageSize) {
-        return { fileTooLarge: true };
-      }
+    const file = control.value;
+    if (!file) {
+      return null; // Allow null values
     }
+    
+    if (typeof file === 'string') {
+      return null; // Allow string values (might be URLs from backend)
+    }
+  
+    const fileType = file.type;
+    const fileSize = file.size;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    
+    if (!allowedTypes.includes(fileType)) {
+      return { invalidFileType: true };
+    }
+    
+    if (fileSize > this.maxImageSize) {
+      return { fileTooLarge: true };
+    }
+    
     return null;
   }
 
@@ -348,7 +360,9 @@ loadDeterminants(): void {
       formData.append('name[en]', this.productForm.get('product_name_en')?.value);
       formData.append('product_unit_id', this.productForm.get('unit_id')?.value);
       formData.append('product_category_id', this.productForm.get('product_category_id')?.value);
-      formData.append('cover_image', this.productForm.get('image')?.value);
+      if (this.productForm.get('image')?.value) {
+        formData.append('cover_image', this.productForm.get('image')?.value);
+      }
       formData.append('description', this.productForm.get('product_description')?.value || '');
  
       formData.append('barcode', this.barcode);

@@ -171,6 +171,24 @@
                     placeholder="{{ 'end_time' | translate }}"
                     [class.is-invalid]="isSubmitted && employeeForm.get('end_time')?.invalid">
                 </div>
+                
+                <!-- 'add_hourly_bonus_after_time' => 'required|boolean' -->
+                <div class="col-md-6">
+                  <div class="d-flex gap-2 align-items-center mt-4">
+                    <label class="form-label large-text">{{ 'ADD_HOURLY_BONUS_AFTER_TIME' | translate }}</label>
+                    <input formControlName="add_hourly_bonus_after_time" type="checkbox" class="form-check-input"
+                      [class.is-invalid]="isSubmitted && employeeForm.get('add_hourly_bonus_after_time')?.invalid">
+                  </div>
+                </div>
+                
+                <!-- 'bonus' => 'nullable|numeric|min:0' -->
+                <div class="col-md-6">
+                  <label class="form-label large-text">{{ 'BONUS' | translate }}</label>
+                  <input formControlName="bonus" type="number" min="0" step="0.01" class="form-control"
+                    placeholder="{{ 'BONUS' | translate }}"
+                    [class.is-invalid]="isSubmitted && employeeForm.get('bonus')?.invalid">
+                </div>
+                
                 <!-- daily_attendance_needed' => 'required|boolean', -->
                 <div class="row">
                   <div class="d-flex  gap-2">

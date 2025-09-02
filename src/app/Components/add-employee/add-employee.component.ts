@@ -70,6 +70,8 @@ export class AddEmployeeComponent {
       hourly_bonus_amount: [''],
       start_time: ['', Validators.required],
       end_time: ['', Validators.required],
+      add_hourly_bonus_after_time: [false, Validators.required],
+      bonus: ['', [Validators.min(0)]],
       location_attendance_needed: [false],
       company_branch_id: [''],
       vacation_days: this.fb.array([]),
@@ -109,18 +111,27 @@ onVacationDayChange(day: string, event: Event) {
     }
   }
   validateImage(control: AbstractControl): ValidationErrors | null {
-    const file = this.selectedFile;
-    if (file) {
-      const fileType = file.type;
-      const fileSize = file.size;
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-      if (!allowedTypes.includes(fileType)) {
-        return { invalidFileType: true };
-      }
-      if (fileSize > this.maxImageSize) {
-        return { fileTooLarge: true };
-      }
+    const file = control.value;
+    if (!file) {
+      return null; // Allow null values
     }
+    
+    if (typeof file === 'string') {
+      return null; // Allow string values (might be URLs from backend)
+    }
+  
+    const fileType = file.type;
+    const fileSize = file.size;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    
+    if (!allowedTypes.includes(fileType)) {
+      return { invalidFileType: true };
+    }
+    
+    if (fileSize > this.maxImageSize) {
+      return { fileTooLarge: true };
+    }
+    
     return null;
   }
   loadCountries(): void {
@@ -265,9 +276,13 @@ onVacationDayChange(day: string, event: Event) {
       });
       formData.append('bonus_type', this.employeeForm.get('bonus_type')?.value);
       formData.append('hourly_bonus_amount', this.employeeForm.get('hourly_bonus_amount')?.value || '');
-
       formData.append('start_time', this.employeeForm.get('start_time')?.value);
       formData.append('end_time', this.employeeForm.get('end_time')?.value);
+      
+      // Add the new fields
+      const addHourlyBonusAfterTimeValue = this.employeeForm.get('add_hourly_bonus_after_time')?.value ? 1 : 0;
+      formData.append('add_hourly_bonus_after_time', addHourlyBonusAfterTimeValue.toString());
+      formData.append('bonus', this.employeeForm.get('bonus')?.value || '');
 
       const locationAttendanceValue = this.employeeForm.get('location_attendance_needed')?.value ? 1 : 0;
       formData.append('location_attendance_needed', locationAttendanceValue.toString());

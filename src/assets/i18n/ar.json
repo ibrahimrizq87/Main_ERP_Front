@@ -1170,6 +1170,17 @@
 "UPDATE_RETURN_PURCHASE_BILL":"تحديث فاتورة مرتجع شراء",
 "UPDATE_SALES_BILL":"تحديث فاتورة مبيعات",
 "UPDATE_RETURN_SALES_BILL":"تحديث فاتورة مرتجع مبيعات",
-"UPDATE_DOCUMENT":"تحديث المستند"
-
+"UPDATE_DOCUMENT":"تحديث المستند",
+"ADD_HOURLY_BONUS_AFTER_TIME":"إضافة مكافأة بالساعة بعد الوقت",
+"IMPORT_EMPLOYEES":"استيراد الموظفين",
+"EXPORT_EMPLOYEES":"تصدير الموظفين",
+"FILENAME":"اسم الملف",
+"ITEMS":" العناصر",
+"UPDATE_PRICES":"تحديث الأسعار",
+"UPDATING":"جار التحديث",
+"UPDATE_PRICE_FOR_BILL_ID":"تحديث السعر لمعرف الفاتورة",
+"TRY_AGAIN":"حاول مرة أخرى",
+"NO_DATA_AVAILABLE_FOR_THIS_BILL":"لا توجد بيانات لهذه الفاتورة",
+"ENTER_PRICE":"أدخل السعر",
+"SET_PRICES":"تعيين الأسعار"
   }

@@ -74,3 +74,10 @@ i{
   border-radius: 5px;
 
 }
+.btn_set_price{
+  background-color: #003E29;
+  color: white;
+  border-radius: 20px;
+  padding: 5px 15px;
+  text-decoration: none;
+}
