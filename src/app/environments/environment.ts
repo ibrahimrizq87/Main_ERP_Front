@@ -1,6 +1,8 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://erpdata.albarkastore.io/api',
+    apiUrl: 'http://127.0.0.1:8000/api',
+    // apiUrl: 'https://erpdata.albarkastore.io/api',
+
     firebase:{
       apiKey: "AIzaSyDct657Dtk1MklP9NN5GyCDq2t0ferjpDQ",
       authDomain: "food-5c754.firebaseapp.com",

@@ -32,6 +32,10 @@ export class CategoryPriceComponent implements OnInit {
     
   ) {}
 
+  setPriceItem(price:number , item :any , category:any){
+    this.priceInputs[item.id][category.id] = price;
+  }
+
   ngOnInit(): void {
     this.getBillIdFromRoute();
   }
@@ -71,8 +75,8 @@ export class CategoryPriceComponent implements OnInit {
     this.priceInputs = {};
     this.items.forEach(item => {
       this.priceInputs[item.id] = {};
-      this.categories.forEach(category => {
-        this.priceInputs[item.id][category.id] = 0;
+      item.prices_with_categories.forEach((category : any) => {
+        this.priceInputs[item.id][category.id] = category.price;
       });
     });
   }
@@ -88,7 +92,7 @@ export class CategoryPriceComponent implements OnInit {
     // Add each item individually to FormData
     let itemIndex = 0;
     this.items.forEach(item => {
-      this.categories.forEach(category => {
+      item.prices_with_categories.forEach((category:any) => {
         const price = this.priceInputs[item.id][category.id];
         if (price > 0) {
           formData.append(`items[${itemIndex}][product_branch_id]`, item.id);

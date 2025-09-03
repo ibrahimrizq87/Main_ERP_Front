@@ -43,7 +43,7 @@
                 </span>
               </div>
             </td>
-            <td *ngFor="let category of categories; trackBy: trackByCategory">
+            <td *ngFor="let category of item.prices_with_categories; trackBy: trackByCategory">
               <input 
                 type="number" 
                 class="form-control price-input"
