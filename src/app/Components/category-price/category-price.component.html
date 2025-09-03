@@ -39,8 +39,11 @@
               <div *ngIf="item.determinants && item.determinants.length > 0" class="item-details">
                 {{"DETERMINANTS"|translate}}:
                 <span *ngFor="let det of item.determinants; let last = last">
-                  {{ det.name }}{{ !last ? ', ' : '' }}
+                  {{ det.determinant }}:{{ det.value }}<span *ngIf="!last">, </span>
                 </span>
+              </div>
+              <div *ngIf="!item.determinants || item.determinants.length === 0" class="item-details">
+                {{"NO_DETERMINANTS"|translate}}
               </div>
             </td>
             <td *ngFor="let category of item.prices_with_categories; trackBy: trackByCategory">
